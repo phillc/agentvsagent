@@ -1,0 +1,15 @@
+{
+  "name": "paths",
+  "description": "An awesome real time application",
+  "version": "0.0.1",
+  "author": "Phillip <spyyderz@gmail.com>",
+  "private": true,
+  "engines": { "node": ">= 0.8.0" },
+  "dependencies": {
+    "coffee-script": "1.4.x"
+  },
+  "devDependencies": {
+    "mocha": "1.7.0",
+    "should": "1.2.1"
+  }
+}
