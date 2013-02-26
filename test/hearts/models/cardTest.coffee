@@ -3,8 +3,8 @@ require("chai").should()
 
 describe "Card", ->
   it "has a suit", ->
-    new Card(4, 'spades').suit.should.equal('spades')
+    new Card('spades', 4).suit.should.equal('spades')
 
   it "has a rank", ->
-    new Card(4, 'spades').rank.should.equal(4)
+    new Card('spades', 4).rank.should.equal(4)
 
