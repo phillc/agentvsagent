@@ -6,7 +6,8 @@
   "private": true,
   "engines": { "node": ">= 0.8.0" },
   "dependencies": {
-    "coffee-script": "1.4.x"
+    "coffee-script": "1.4.x",
+    "thrift": "latest"
   },
   "devDependencies": {
     "mocha": "1.7.0",
