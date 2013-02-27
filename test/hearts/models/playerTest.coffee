@@ -2,8 +2,20 @@ Player = require("../../../app/hearts/models/player")
 require("chai").should()
 
 describe "Player", ->
-  it "has an empty held pile", ->
-    new Player().held.cards.should.eql([])
+  beforeEach ->
+    @player = new Player()
 
-  it "has an empty taken hands", ->
-    new Player().taken.should.eql([])
+  it "has an empty held pile", ->
+    @player.held.cards.should.eql([])
+
+  it "has an empty taken tricks", ->
+    @player.taken.should.eql([])
+
+  describe "#getCardsToPass", ->
+    it "gets the cards to pass from the agent", (done) ->
+      @player.getCardsToPass ->
+        done()
+
+    it "calls the callback", (done) ->
+      @player.getCardsToPass done
+

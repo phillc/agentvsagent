@@ -2,18 +2,17 @@ Pile = require "./pile"
 Card = require "./card"
 
 module.exports = class Game
-
   constructor: (player1, player2, player3, player4) ->
     @players = [player1, player2, player3, player4]
 
   play: ->
-    # loop until player reaches 100 (term: rounds)
+    # loop until player reaches 100 (term: rounds, sequence)
       # createDeck
       # shuffle
       # deal
       # pass
-      # loop 13
-        # 4x
+      # loop 13 (term: tricks)
+        # 4x (term: rotation)
           # get moves
         # get winner
 
@@ -26,6 +25,11 @@ module.exports = class Game
 
     pile
 
+  deal: (deck) ->
+    deck.moveCardsTo(13, @players[0].held)
+    deck.moveCardsTo(13, @players[1].held)
+    deck.moveCardsTo(13, @players[2].held)
+    deck.moveCardsTo(13, @players[3].held)
 
-
+  passCards: (stategy) ->
 

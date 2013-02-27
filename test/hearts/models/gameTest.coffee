@@ -21,7 +21,32 @@ describe "Game", ->
       @deck.cards.length.should.equal(52)
 
   describe "#deal", ->
+    beforeEach ->
+      @game.deal(@game.createDeck())
+
     it "gives 13 cards to each player", ->
-      @player1.cards.length.should.equal(13)
+      @player1.held.cards.length.should.equal(13)
+      @player2.held.cards.length.should.equal(13)
+      @player3.held.cards.length.should.equal(13)
+      @player4.held.cards.length.should.equal(13)
+
+  describe "#passCards", ->
+    describe "on the right turn", ->
+      beforeEach ->
+        @game.passCards("right")
+
+      it "asks each player for"
+
+    describe "on the left turn", ->
+      beforeEach ->
+        @game.passCards("left")
+
+    describe "on the across turn", ->
+      beforeEach ->
+        @game.passCards("across")
+
+    describe "on the hold turn", ->
+      beforeEach ->
+        @game.passCards("hold")
 
 
