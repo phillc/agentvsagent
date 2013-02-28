@@ -5,11 +5,8 @@ require 'hearts'
 socket = Thrift::Socket.new('127.0.0.1', 4001)
 transport = Thrift::FramedTransport.new(socket)
 protocol = Thrift::BinaryProtocol.new(transport)
-client = Hearts::Client.new(protocol)
+client = AgentVsAgent::Hearts::Client.new(protocol)
 
-transport.open
-
-puts "RESPONSE: #{client.get_game}"
 
 class RandomBot
   def initialize game
@@ -17,20 +14,25 @@ class RandomBot
   end
 
   def run
-    @game.get_game
+    @agent = @game.start_agent
     play
-    transport.close
   end
 
   def play
-    hand = @game.get_hand
-    received_cards = @game.pass_cards hand.first(3)
-    trick = @game.get_trick
-    @game.play_card hand.first
+    hand = @game.get_hand @agent
+    puts hand.inspect
+    # received_cards = @game.pass_cards @agent, hand.first(3)
+    # 13.times {
+    #   trick = @game.get_trick @agent
+    #   @game.play_card @agent, hand.first
+    # }
+    # @game.get_round_results @agent
   end
 end
 
+transport.open
 bot = RandomBot.new(client)
 bot.run
+transport.close
 
 

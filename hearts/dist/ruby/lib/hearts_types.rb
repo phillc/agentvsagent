@@ -6,23 +6,75 @@
 
 require 'thrift'
 
-class Card
-  include ::Thrift::Struct, ::Thrift::Struct_Union
-  SUIT = 1
-  RANK = 2
-
-  FIELDS = {
-    SUIT => {:type => ::Thrift::Types::STRING, :name => 'suit'},
-    RANK => {:type => ::Thrift::Types::STRING, :name => 'rank'}
-  }
-
-  def struct_fields; FIELDS; end
-
-  def validate
-    raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field suit is unset!') unless @suit
-    raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field rank is unset!') unless @rank
+module AgentVsAgent
+  module Suit
+    CLUBS = 21
+    DIAMONDS = 22
+    SPADES = 23
+    HEARTS = 24
+    VALUE_MAP = {21 => "CLUBS", 22 => "DIAMONDS", 23 => "SPADES", 24 => "HEARTS"}
+    VALID_VALUES = Set.new([CLUBS, DIAMONDS, SPADES, HEARTS]).freeze
   end
 
-  ::Thrift::Struct.generate_accessors self
-end
+  module Rank
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIZE = 6
+    SEVEN = 7
+    EIGHT = 8
+    NINE = 9
+    TEN = 10
+    JACK = 11
+    QUEEN = 12
+    KING = 13
+    ACE = 1
+    VALUE_MAP = {2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE", 6 => "SIZE", 7 => "SEVEN", 8 => "EIGHT", 9 => "NINE", 10 => "TEN", 11 => "JACK", 12 => "QUEEN", 13 => "KING", 1 => "ACE"}
+    VALID_VALUES = Set.new([TWO, THREE, FOUR, FIVE, SIZE, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE]).freeze
+  end
 
+  class Card
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUIT = 1
+    RANK = 2
+
+    FIELDS = {
+      SUIT => {:type => ::Thrift::Types::I32, :name => 'suit', :enum_class => ::AgentVsAgent::Suit},
+      RANK => {:type => ::Thrift::Types::I32, :name => 'rank', :enum_class => ::AgentVsAgent::Rank}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field suit is unset!') unless @suit
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field rank is unset!') unless @rank
+      unless @suit.nil? || ::AgentVsAgent::Suit::VALID_VALUES.include?(@suit)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field suit!')
+      end
+      unless @rank.nil? || ::AgentVsAgent::Rank::VALID_VALUES.include?(@rank)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field rank!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class Agent
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    TOKEN = 1
+
+    FIELDS = {
+      TOKEN => {:type => ::Thrift::Types::STRING, :name => 'token'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field token is unset!') unless @token
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+end

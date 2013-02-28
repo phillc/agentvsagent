@@ -7,3 +7,5 @@
 require 'thrift'
 require 'hearts_types'
 
+module AgentVsAgent
+end

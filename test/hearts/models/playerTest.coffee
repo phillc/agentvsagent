@@ -1,4 +1,4 @@
-Player = require("../../../app/hearts/models/player")
+Player = require("../../../hearts/server/models/player")
 require("chai").should()
 
 describe "Player", ->
@@ -9,13 +9,13 @@ describe "Player", ->
     @player.held.cards.should.eql([])
 
   it "has an empty taken tricks", ->
-    @player.taken.should.eql([])
+    @player.takenTricks.should.eql([])
 
-  describe "#getCardsToPass", ->
-    it "gets the cards to pass from the agent", (done) ->
-      @player.getCardsToPass ->
-        done()
+  # describe "#getCardsToPass", ->
+  #   it "gets the cards to pass from the agent", (done) ->
+  #     @player.getCardsToPass ->
+  #       done()
 
-    it "calls the callback", (done) ->
-      @player.getCardsToPass done
+  #   it "calls the callback", (done) ->
+  #     @player.getCardsToPass done
 

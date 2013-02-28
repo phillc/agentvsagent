@@ -8,10 +8,10 @@ var Thrift = require('thrift').Thrift;
 var ttypes = require('./hearts_types');
 //HELPER FUNCTIONS AND STRUCTURES
 
-Hearts_get_game_args = function(args) {
+Hearts_start_agent_args = function(args) {
 };
-Hearts_get_game_args.prototype = {};
-Hearts_get_game_args.prototype.read = function(input) {
+Hearts_start_agent_args.prototype = {};
+Hearts_start_agent_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -29,14 +29,14 @@ Hearts_get_game_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_game_args.prototype.write = function(output) {
-  output.writeStructBegin('Hearts_get_game_args');
+Hearts_start_agent_args.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_start_agent_args');
   output.writeFieldStop();
   output.writeStructEnd();
   return;
 };
 
-Hearts_get_game_result = function(args) {
+Hearts_start_agent_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -44,8 +44,8 @@ Hearts_get_game_result = function(args) {
     }
   }
 };
-Hearts_get_game_result.prototype = {};
-Hearts_get_game_result.prototype.read = function(input) {
+Hearts_start_agent_result.prototype = {};
+Hearts_start_agent_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -59,8 +59,9 @@ Hearts_get_game_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool();
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new ttypes.Agent();
+        this.success.read(input);
       } else {
         input.skip(ftype);
       }
@@ -77,11 +78,11 @@ Hearts_get_game_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_game_result.prototype.write = function(output) {
-  output.writeStructBegin('Hearts_get_game_result');
+Hearts_start_agent_result.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_start_agent_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -89,16 +90,16 @@ Hearts_get_game_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_play_card_args = function(args) {
-  this.card = null;
+Hearts_get_hand_args = function(args) {
+  this.agent = null;
   if (args) {
-    if (args.card !== undefined) {
-      this.card = args.card;
+    if (args.agent !== undefined) {
+      this.agent = args.agent;
     }
   }
 };
-Hearts_play_card_args.prototype = {};
-Hearts_play_card_args.prototype.read = function(input) {
+Hearts_get_hand_args.prototype = {};
+Hearts_get_hand_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -113,8 +114,8 @@ Hearts_play_card_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.card = new ttypes.Card();
-        this.card.read(input);
+        this.agent = new ttypes.Agent();
+        this.agent.read(input);
       } else {
         input.skip(ftype);
       }
@@ -131,11 +132,11 @@ Hearts_play_card_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_play_card_args.prototype.write = function(output) {
-  output.writeStructBegin('Hearts_play_card_args');
-  if (this.card !== null && this.card !== undefined) {
-    output.writeFieldBegin('card', Thrift.Type.STRUCT, 1);
-    this.card.write(output);
+Hearts_get_hand_args.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_get_hand_args');
+  if (this.agent !== null && this.agent !== undefined) {
+    output.writeFieldBegin('agent', Thrift.Type.STRUCT, 1);
+    this.agent.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -143,7 +144,7 @@ Hearts_play_card_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_play_card_result = function(args) {
+Hearts_get_hand_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -151,8 +152,8 @@ Hearts_play_card_result = function(args) {
     }
   }
 };
-Hearts_play_card_result.prototype = {};
-Hearts_play_card_result.prototype.read = function(input) {
+Hearts_get_hand_result.prototype = {};
+Hearts_get_hand_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -166,8 +167,22 @@ Hearts_play_card_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool();
+      if (ftype == Thrift.Type.LIST) {
+        var _size0 = 0;
+        var _rtmp34;
+        this.success = [];
+        var _etype3 = 0;
+        _rtmp34 = input.readListBegin();
+        _etype3 = _rtmp34.etype;
+        _size0 = _rtmp34.size;
+        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        {
+          var elem6 = null;
+          elem6 = new ttypes.Card();
+          elem6.read(input);
+          this.success.push(elem6);
+        }
+        input.readListEnd();
       } else {
         input.skip(ftype);
       }
@@ -184,11 +199,20 @@ Hearts_play_card_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_play_card_result.prototype.write = function(output) {
-  output.writeStructBegin('Hearts_play_card_result');
+Hearts_get_hand_result.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_get_hand_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
+    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
+    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
+    for (var iter7 in this.success)
+    {
+      if (this.success.hasOwnProperty(iter7))
+      {
+        iter7 = this.success[iter7];
+        iter7.write(output);
+      }
+    }
+    output.writeListEnd();
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -203,22 +227,22 @@ HeartsClient = exports.Client = function(output, pClass) {
     this._reqs = {};
 };
 HeartsClient.prototype = {};
-HeartsClient.prototype.get_game = function(callback) {
+HeartsClient.prototype.start_agent = function(callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
-  this.send_get_game();
+  this.send_start_agent();
 };
 
-HeartsClient.prototype.send_get_game = function() {
+HeartsClient.prototype.send_start_agent = function() {
   var output = new this.pClass(this.output);
-  output.writeMessageBegin('get_game', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_get_game_args();
+  output.writeMessageBegin('start_agent', Thrift.MessageType.CALL, this.seqid);
+  var args = new Hearts_start_agent_args();
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_get_game = function(input,mtype,rseqid) {
+HeartsClient.prototype.recv_start_agent = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -227,32 +251,32 @@ HeartsClient.prototype.recv_get_game = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_get_game_result();
+  var result = new Hearts_start_agent_result();
   result.read(input);
   input.readMessageEnd();
 
   if (null !== result.success) {
     return callback(null, result.success);
   }
-  return callback('get_game failed: unknown result');
+  return callback('start_agent failed: unknown result');
 };
-HeartsClient.prototype.play_card = function(card, callback) {
+HeartsClient.prototype.get_hand = function(agent, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
-  this.send_play_card(card);
+  this.send_get_hand(agent);
 };
 
-HeartsClient.prototype.send_play_card = function(card) {
+HeartsClient.prototype.send_get_hand = function(agent) {
   var output = new this.pClass(this.output);
-  output.writeMessageBegin('play_card', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_play_card_args();
-  args.card = card;
+  output.writeMessageBegin('get_hand', Thrift.MessageType.CALL, this.seqid);
+  var args = new Hearts_get_hand_args();
+  args.agent = agent;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
+HeartsClient.prototype.recv_get_hand = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -261,14 +285,14 @@ HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_play_card_result();
+  var result = new Hearts_get_hand_result();
   result.read(input);
   input.readMessageEnd();
 
   if (null !== result.success) {
     return callback(null, result.success);
   }
-  return callback('play_card failed: unknown result');
+  return callback('get_hand failed: unknown result');
 };
 HeartsProcessor = exports.Processor = function(handler) {
   this._handler = handler
@@ -288,26 +312,26 @@ HeartsProcessor.prototype.process = function(input, output) {
   }
 }
 
-HeartsProcessor.prototype.process_get_game = function(seqid, input, output) {
-  var args = new Hearts_get_game_args();
+HeartsProcessor.prototype.process_start_agent = function(seqid, input, output) {
+  var args = new Hearts_start_agent_args();
   args.read(input);
   input.readMessageEnd();
-  this._handler.get_game(function (err, result) {
-    var result = new Hearts_get_game_result((err != null ? err : {success: result}));
-    output.writeMessageBegin("get_game", Thrift.MessageType.REPLY, seqid);
+  this._handler.start_agent(function (err, result) {
+    var result = new Hearts_start_agent_result((err != null ? err : {success: result}));
+    output.writeMessageBegin("start_agent", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
     output.flush();
   })
 }
 
-HeartsProcessor.prototype.process_play_card = function(seqid, input, output) {
-  var args = new Hearts_play_card_args();
+HeartsProcessor.prototype.process_get_hand = function(seqid, input, output) {
+  var args = new Hearts_get_hand_args();
   args.read(input);
   input.readMessageEnd();
-  this._handler.play_card(args.card, function (err, result) {
-    var result = new Hearts_play_card_result((err != null ? err : {success: result}));
-    output.writeMessageBegin("play_card", Thrift.MessageType.REPLY, seqid);
+  this._handler.get_hand(args.agent, function (err, result) {
+    var result = new Hearts_get_hand_result((err != null ? err : {success: result}));
+    output.writeMessageBegin("get_hand", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
     output.flush();

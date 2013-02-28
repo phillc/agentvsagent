@@ -7,125 +7,127 @@
 require 'thrift'
 require 'hearts_types'
 
-module Hearts
-  class Client
-    include ::Thrift::Client
+module AgentVsAgent
+  module Hearts
+    class Client
+      include ::Thrift::Client
 
-    def get_game()
-      send_get_game()
-      return recv_get_game()
+      def start_agent()
+        send_start_agent()
+        return recv_start_agent()
+      end
+
+      def send_start_agent()
+        send_message('start_agent', Start_agent_args)
+      end
+
+      def recv_start_agent()
+        result = receive_message(Start_agent_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'start_agent failed: unknown result')
+      end
+
+      def get_hand(agent)
+        send_get_hand(agent)
+        return recv_get_hand()
+      end
+
+      def send_get_hand(agent)
+        send_message('get_hand', Get_hand_args, :agent => agent)
+      end
+
+      def recv_get_hand()
+        result = receive_message(Get_hand_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_hand failed: unknown result')
+      end
+
     end
 
-    def send_get_game()
-      send_message('get_game', Get_game_args)
+    class Processor
+      include ::Thrift::Processor
+
+      def process_start_agent(seqid, iprot, oprot)
+        args = read_args(iprot, Start_agent_args)
+        result = Start_agent_result.new()
+        result.success = @handler.start_agent()
+        write_result(result, oprot, 'start_agent', seqid)
+      end
+
+      def process_get_hand(seqid, iprot, oprot)
+        args = read_args(iprot, Get_hand_args)
+        result = Get_hand_result.new()
+        result.success = @handler.get_hand(args.agent)
+        write_result(result, oprot, 'get_hand', seqid)
+      end
+
     end
 
-    def recv_get_game()
-      result = receive_message(Get_game_result)
-      return result.success unless result.success.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_game failed: unknown result')
+    # HELPER FUNCTIONS AND STRUCTURES
+
+    class Start_agent_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+
+      FIELDS = {
+
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
     end
 
-    def play_card(card)
-      send_play_card(card)
-      return recv_play_card()
+    class Start_agent_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Agent}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
     end
 
-    def send_play_card(card)
-      send_message('play_card', Play_card_args, :card => card)
+    class Get_hand_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      AGENT = 1
+
+      FIELDS = {
+        AGENT => {:type => ::Thrift::Types::STRUCT, :name => 'agent', :class => ::AgentVsAgent::Agent}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
     end
 
-    def recv_play_card()
-      result = receive_message(Play_card_result)
-      return result.success unless result.success.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'play_card failed: unknown result')
+    class Get_hand_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
     end
 
-  end
-
-  class Processor
-    include ::Thrift::Processor
-
-    def process_get_game(seqid, iprot, oprot)
-      args = read_args(iprot, Get_game_args)
-      result = Get_game_result.new()
-      result.success = @handler.get_game()
-      write_result(result, oprot, 'get_game', seqid)
-    end
-
-    def process_play_card(seqid, iprot, oprot)
-      args = read_args(iprot, Play_card_args)
-      result = Play_card_result.new()
-      result.success = @handler.play_card(args.card)
-      write_result(result, oprot, 'play_card', seqid)
-    end
-
-  end
-
-  # HELPER FUNCTIONS AND STRUCTURES
-
-  class Get_game_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class Get_game_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::BOOL, :name => 'success'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class Play_card_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    CARD = 1
-
-    FIELDS = {
-      CARD => {:type => ::Thrift::Types::STRUCT, :name => 'card', :class => ::Card}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class Play_card_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::BOOL, :name => 'success'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
   end
 
 end
-
