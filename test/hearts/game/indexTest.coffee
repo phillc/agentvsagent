@@ -1,5 +1,4 @@
-Game = require("../../../hearts/server/models/game")
-Player = require("../../../hearts/server/models/player")
+Game = require("../../../hearts/game")
 require("chai").should()
 
 # describe "Game", ->

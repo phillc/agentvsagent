@@ -8,10 +8,10 @@ var Thrift = require('thrift').Thrift;
 var ttypes = require('./hearts_types');
 //HELPER FUNCTIONS AND STRUCTURES
 
-Hearts_start_agent_args = function(args) {
+Hearts_enter_arena_args = function(args) {
 };
-Hearts_start_agent_args.prototype = {};
-Hearts_start_agent_args.prototype.read = function(input) {
+Hearts_enter_arena_args.prototype = {};
+Hearts_enter_arena_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -29,14 +29,14 @@ Hearts_start_agent_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_start_agent_args.prototype.write = function(output) {
-  output.writeStructBegin('Hearts_start_agent_args');
+Hearts_enter_arena_args.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_enter_arena_args');
   output.writeFieldStop();
   output.writeStructEnd();
   return;
 };
 
-Hearts_start_agent_result = function(args) {
+Hearts_enter_arena_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -44,8 +44,8 @@ Hearts_start_agent_result = function(args) {
     }
   }
 };
-Hearts_start_agent_result.prototype = {};
-Hearts_start_agent_result.prototype.read = function(input) {
+Hearts_enter_arena_result.prototype = {};
+Hearts_enter_arena_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -78,8 +78,8 @@ Hearts_start_agent_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_start_agent_result.prototype.write = function(output) {
-  output.writeStructBegin('Hearts_start_agent_result');
+Hearts_enter_arena_result.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_enter_arena_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
     this.success.write(output);
@@ -227,22 +227,22 @@ HeartsClient = exports.Client = function(output, pClass) {
     this._reqs = {};
 };
 HeartsClient.prototype = {};
-HeartsClient.prototype.start_agent = function(callback) {
+HeartsClient.prototype.enter_arena = function(callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
-  this.send_start_agent();
+  this.send_enter_arena();
 };
 
-HeartsClient.prototype.send_start_agent = function() {
+HeartsClient.prototype.send_enter_arena = function() {
   var output = new this.pClass(this.output);
-  output.writeMessageBegin('start_agent', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_start_agent_args();
+  output.writeMessageBegin('enter_arena', Thrift.MessageType.CALL, this.seqid);
+  var args = new Hearts_enter_arena_args();
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_start_agent = function(input,mtype,rseqid) {
+HeartsClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -251,14 +251,14 @@ HeartsClient.prototype.recv_start_agent = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_start_agent_result();
+  var result = new Hearts_enter_arena_result();
   result.read(input);
   input.readMessageEnd();
 
   if (null !== result.success) {
     return callback(null, result.success);
   }
-  return callback('start_agent failed: unknown result');
+  return callback('enter_arena failed: unknown result');
 };
 HeartsClient.prototype.get_hand = function(agent, callback) {
   this.seqid += 1;
@@ -312,13 +312,13 @@ HeartsProcessor.prototype.process = function(input, output) {
   }
 }
 
-HeartsProcessor.prototype.process_start_agent = function(seqid, input, output) {
-  var args = new Hearts_start_agent_args();
+HeartsProcessor.prototype.process_enter_arena = function(seqid, input, output) {
+  var args = new Hearts_enter_arena_args();
   args.read(input);
   input.readMessageEnd();
-  this._handler.start_agent(function (err, result) {
-    var result = new Hearts_start_agent_result((err != null ? err : {success: result}));
-    output.writeMessageBegin("start_agent", Thrift.MessageType.REPLY, seqid);
+  this._handler.enter_arena(function (err, result) {
+    var result = new Hearts_enter_arena_result((err != null ? err : {success: result}));
+    output.writeMessageBegin("enter_arena", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
     output.flush();

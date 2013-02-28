@@ -1,5 +1,5 @@
 Pile = require "./pile"
-types = require "../../lib/hearts_types"
+types = require "../lib/hearts_types"
 
 module.exports = class Game
   constructor: (player1, player2, player3, player4) ->

@@ -1,9 +1,12 @@
-service = require './service'
+Service = require './service'
 MatchMaker = require './matchmaker'
+Arena = require './arena'
+IdGenerator = require './idgenerator'
 
-matchMaker = new MatchMaker
+idGenerator = new IdGenerator()
+arena = new Arena(idGenerator)
 
-serviceServer = service.createServer(matchMaker)
-serviceServer.listen(4001)
+# matchMaker = new MatchMaker()
+service = new Service(arena)
+service.start()
 
-console.log "Service listening on", serviceServer.address()

@@ -1,4 +1,4 @@
-Player = require("../../../hearts/server/models/player")
+Player = require("../../../hearts/game/player")
 require("chai").should()
 
 describe "Player", ->

@@ -29,11 +29,12 @@ struct Card {
 }
 
 struct Agent {
-  1: required string token
+  1: required string gameId
+  2: required string agentId
 }
 
 service Hearts {
-  Agent start_agent(),
+  Agent enter_arena(),
   list<Card> get_hand(1: Agent agent),
   #bool play_card(1: Agent, 2:Card card),
   #list<Card> get_trick(1: Agent)

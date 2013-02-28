@@ -1,7 +1,12 @@
 thrift = require 'thrift'
-Hearts = require './lib/hearts'
+Hearts = require '../lib/hearts'
 Handler = require './handler'
 
-exports.createServer = (matchMaker) ->
-    thrift.createServer Hearts, new Handler(matchMaker)
+module.exports = class Service
+  constructor: (arena) ->
+    @server = thrift.createServer Hearts, new Handler(arena)
+
+  start: ->
+    @server.listen(4001)
+    console.log "Service listening on", @server.address()
 

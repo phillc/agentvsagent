@@ -14,7 +14,7 @@ class RandomBot
   end
 
   def run
-    @agent = @game.start_agent
+    @agent = @game.enter_arena
     play
   end
 

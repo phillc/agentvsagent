@@ -1,14 +1,12 @@
 types = require '../lib/hearts_types'
-Player = require './player'
 
 module.exports = class Handler
-  constructor: (@matchMaker) ->
+  constructor: (@arena) ->
 
-  start_agent: (result) ->
-    player = new Player()
-    playerId = @matchMaker.addPlayer player
+  enter_arena: (result) ->
+    player = @arena.createPlayer()
     console.log "get_game called"
-    result null, new types.Agent(token: playerId)
+    result null, new types.Agent(agentId: player.id, gameId: "12345")
   get_hand: (agent, result) ->
     # player = @matchMaker.players[agent.token]
     # player.get_hand result

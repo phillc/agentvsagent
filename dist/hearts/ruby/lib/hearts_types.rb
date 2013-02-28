@@ -62,16 +62,19 @@ module AgentVsAgent
 
   class Agent
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    TOKEN = 1
+    GAMEID = 1
+    AGENTID = 2
 
     FIELDS = {
-      TOKEN => {:type => ::Thrift::Types::STRING, :name => 'token'}
+      GAMEID => {:type => ::Thrift::Types::STRING, :name => 'gameId'},
+      AGENTID => {:type => ::Thrift::Types::STRING, :name => 'agentId'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field token is unset!') unless @token
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field gameId is unset!') unless @gameId
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field agentId is unset!') unless @agentId
     end
 
     ::Thrift::Struct.generate_accessors self

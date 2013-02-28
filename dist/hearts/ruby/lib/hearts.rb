@@ -12,19 +12,19 @@ module AgentVsAgent
     class Client
       include ::Thrift::Client
 
-      def start_agent()
-        send_start_agent()
-        return recv_start_agent()
+      def enter_arena()
+        send_enter_arena()
+        return recv_enter_arena()
       end
 
-      def send_start_agent()
-        send_message('start_agent', Start_agent_args)
+      def send_enter_arena()
+        send_message('enter_arena', Enter_arena_args)
       end
 
-      def recv_start_agent()
-        result = receive_message(Start_agent_result)
+      def recv_enter_arena()
+        result = receive_message(Enter_arena_result)
         return result.success unless result.success.nil?
-        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'start_agent failed: unknown result')
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'enter_arena failed: unknown result')
       end
 
       def get_hand(agent)
@@ -47,11 +47,11 @@ module AgentVsAgent
     class Processor
       include ::Thrift::Processor
 
-      def process_start_agent(seqid, iprot, oprot)
-        args = read_args(iprot, Start_agent_args)
-        result = Start_agent_result.new()
-        result.success = @handler.start_agent()
-        write_result(result, oprot, 'start_agent', seqid)
+      def process_enter_arena(seqid, iprot, oprot)
+        args = read_args(iprot, Enter_arena_args)
+        result = Enter_arena_result.new()
+        result.success = @handler.enter_arena()
+        write_result(result, oprot, 'enter_arena', seqid)
       end
 
       def process_get_hand(seqid, iprot, oprot)
@@ -65,7 +65,7 @@ module AgentVsAgent
 
     # HELPER FUNCTIONS AND STRUCTURES
 
-    class Start_agent_args
+    class Enter_arena_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
 
       FIELDS = {
@@ -80,7 +80,7 @@ module AgentVsAgent
       ::Thrift::Struct.generate_accessors self
     end
 
-    class Start_agent_result
+    class Enter_arena_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
 

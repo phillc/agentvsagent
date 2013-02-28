@@ -93,10 +93,14 @@ Card.prototype.write = function(output) {
 };
 
 Agent = module.exports.Agent = function(args) {
-  this.token = null;
+  this.gameId = null;
+  this.agentId = null;
   if (args) {
-    if (args.token !== undefined) {
-      this.token = args.token;
+    if (args.gameId !== undefined) {
+      this.gameId = args.gameId;
+    }
+    if (args.agentId !== undefined) {
+      this.agentId = args.agentId;
     }
   }
 };
@@ -116,14 +120,18 @@ Agent.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRING) {
-        this.token = input.readString();
+        this.gameId = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
-      case 0:
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.agentId = input.readString();
+      } else {
         input.skip(ftype);
-        break;
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -135,9 +143,14 @@ Agent.prototype.read = function(input) {
 
 Agent.prototype.write = function(output) {
   output.writeStructBegin('Agent');
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRING, 1);
-    output.writeString(this.token);
+  if (this.gameId !== null && this.gameId !== undefined) {
+    output.writeFieldBegin('gameId', Thrift.Type.STRING, 1);
+    output.writeString(this.gameId);
+    output.writeFieldEnd();
+  }
+  if (this.agentId !== null && this.agentId !== undefined) {
+    output.writeFieldBegin('agentId', Thrift.Type.STRING, 2);
+    output.writeString(this.agentId);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

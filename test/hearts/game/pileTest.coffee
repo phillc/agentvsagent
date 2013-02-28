@@ -1,4 +1,4 @@
-Pile = require("../../../hearts/server/models/pile")
+Pile = require("../../../hearts/game/pile")
 # Card = require("../../../hearts/server/models/card")
 require("chai").should()
 

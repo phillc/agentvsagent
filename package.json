@@ -1,13 +1,14 @@
 {
-  "name": "paths",
-  "description": "An awesome real time application",
+  "name": "agentvsagent",
+  "description": "Agent vs Agent",
   "version": "0.0.1",
   "author": "Phillip <spyyderz@gmail.com>",
   "private": true,
   "engines": { "node": ">= 0.8.0" },
   "dependencies": {
     "coffee-script": "1.4.x",
-    "thrift": "latest"
+    "thrift": "0.7.x",
+    "node-uuid": "1.4.x"
   },
   "devDependencies": {
     "mocha": "1.7.0",
