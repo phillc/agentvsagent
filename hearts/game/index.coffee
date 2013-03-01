@@ -1,9 +1,15 @@
 Pile = require "./pile"
+IdGenerator = require '../idgenerator'
 types = require "../lib/hearts_types"
 
 module.exports = class Game
   constructor: (player1, player2, player3, player4) ->
+    @id = IdGenerator.generate()
     @players = [player1, player2, player3, player4]
+
+  start: ->
+    for player in @players
+      player.emit 'start', @id
 
   play: ->
     # loop until player reaches 100 (term: rounds, sequence)

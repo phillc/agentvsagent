@@ -28,15 +28,20 @@ struct Card {
   2: required Rank rank
 }
 
-struct Agent {
-  1: required string gameId
+struct Ticket {
+  1: required string gameId,
   2: required string agentId
 }
 
+struct EntryResponse {
+  1: optional Ticket ticket,
+  2: optional string message
+}
+
 service Hearts {
-  Agent enter_arena(),
-  list<Card> get_hand(1: Agent agent),
-  #bool play_card(1: Agent, 2:Card card),
+  EntryResponse enter_arena(),
+  list<Card> get_hand(1: Ticket ticket),
+  #bool play_card(1: Ticket ticket, 2:Card card),
   #list<Card> get_trick(1: Agent)
 }
 

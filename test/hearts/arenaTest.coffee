@@ -1,11 +1,9 @@
 Arena = require '../../hearts/arena'
-IdGenerator = require '../../hearts/idgenerator'
 require("chai").should()
 
 describe "Arena", ->
   beforeEach ->
-    @idGenerator = new IdGenerator()
-    @arena = new Arena(@idGenerator)
+    @arena = new Arena()
 
   describe "#createPlayer", ->
     it "adds players", ->
@@ -16,10 +14,6 @@ describe "Arena", ->
     it "emits an event", (done) ->
       @arena.on 'newPlayer', done
       @arena.createPlayer()
-
-    it "returns a player with an id", ->
-      @idGenerator.generate = -> "123"
-      @arena.createPlayer().id.should.equal("123")
 
   describe "#removePlayer", ->
     beforeEach ->
@@ -39,19 +33,18 @@ describe "Arena", ->
       for _ in [1..10]
         @arena.createPlayer()
       @arena.waitingRoom.length.should.equal(10)
-      Object.keys(@arena.matches).length.should.equal(0)
+      Object.keys(@arena.runningMatches).length.should.equal(0)
       @matchedPlayers = @arena.waitingRoom[2..5]
 
     it "removes the players from the waiting room", ->
-      @returnValue = @arena.createMatch @matchedPlayers
+      @arena.createMatch @matchedPlayers
       @arena.waitingRoom.length.should.equal(6)
 
     it "creates a match out of the players", ->
-      @returnValue = @arena.createMatch @matchedPlayers
-      Object.keys(@arena.matches).length.should.equal(1)
+      @arena.createMatch @matchedPlayers
+      Object.keys(@arena.runningMatches).length.should.equal(1)
 
     it "returns the match id", ->
-      @idGenerator.generate = -> "567"
-      @returnValue = @arena.createMatch @matchedPlayers
-      @returnValue.should.equal("567")
+      returnValue = @arena.createMatch @matchedPlayers
+      returnValue.should.equal(Object.keys(@arena.runningMatches)[0])
 

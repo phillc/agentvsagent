@@ -3,12 +3,12 @@ Player = require './player'
 Game = require './game'
 
 module.exports = class Arena extends EventEmitter
-  constructor: (@idGenerator) ->
+  constructor: ->
     @waitingRoom = []
-    @matches = {}
+    @runningMatches = {}
 
   createPlayer: ->
-    player = new Player(@idGenerator.generate())
+    player = new Player()
     @waitingRoom.push player
     @emit 'newPlayer'
     player
@@ -17,12 +17,12 @@ module.exports = class Arena extends EventEmitter
     @waitingRoom.splice(@waitingRoom.indexOf(player), 1)
 
   createMatch: (players) ->
-    id = @idGenerator.generate()
     for player in players
       @removePlayer(player)
 
     game = new Game(players...)
-    @matches[id] = game
-    id
+    @runningMatches[game.id] = game
+    game.start() #untested
+    game.id
 
 

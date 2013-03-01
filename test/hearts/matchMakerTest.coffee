@@ -1,15 +1,14 @@
 MatchMaker = require '../../hearts/matchmaker'
 Arena = require '../../hearts/arena'
-IdGenerator = require '../../hearts/idgenerator'
 Player = require '../../hearts/player'
 require("chai").should()
 
 describe "MatchMaker", ->
-  describe "#findMatch", ->
-    beforeEach ->
-      @arena = new Arena(new IdGenerator())
-      @matchMaker = new MatchMaker(@arena)
+  beforeEach ->
+    @arena = new Arena()
+    @matchMaker = new MatchMaker(@arena)
 
+  describe "#findMatch", ->
     it "does nothing if there are only three players", ->
       @arena.createPlayer()
       @arena.createPlayer()
@@ -17,7 +16,7 @@ describe "MatchMaker", ->
 
       @matchMaker.findMatch()
 
-      Object.keys(@arena.matches).length.should.equal(0)
+      Object.keys(@arena.runningMatches).length.should.equal(0)
       @arena.waitingRoom.length.should.equal(3)
 
     it "creates a game if there are four players", ->
@@ -28,7 +27,7 @@ describe "MatchMaker", ->
 
       @matchMaker.findMatch()
 
-      Object.keys(@arena.matches).length.should.equal(1)
+      Object.keys(@arena.runningMatches).length.should.equal(1)
       @arena.waitingRoom.length.should.equal(0)
 
     it "creates a game if there are five players", ->
@@ -40,6 +39,17 @@ describe "MatchMaker", ->
 
       @matchMaker.findMatch()
 
-      Object.keys(@arena.matches).length.should.equal(1)
+      Object.keys(@arena.runningMatches).length.should.equal(1)
       @arena.waitingRoom.length.should.equal(1)
+
+  describe "#start", ->
+    it "automatically finds matches as players join", ->
+      Object.keys(@arena.runningMatches).length.should.equal(0)
+      @matchMaker.start()
+      @arena.createPlayer()
+      @arena.createPlayer()
+      @arena.createPlayer()
+      @arena.createPlayer()
+      Object.keys(@arena.runningMatches).length.should.equal(1)
+
 

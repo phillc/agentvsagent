@@ -4,9 +4,17 @@ module.exports = class Handler
   constructor: (@arena) ->
 
   enter_arena: (result) ->
-    player = @arena.createPlayer()
     console.log "get_game called"
-    result null, new types.Agent(agentId: player.id, gameId: "12345")
+
+    player = @arena.createPlayer()
+    player.waitForGame (gameId) =>
+      ticket = new types.Ticket(agentId: player.id, gameId: gameId)
+      response = new types.EntryResponse(ticket: ticket)
+
+      #player disconnected before response returned
+      #if this were updatred in npm, would be fine
+      result null, response
+
   get_hand: (agent, result) ->
     # player = @matchMaker.players[agent.token]
     # player.get_hand result

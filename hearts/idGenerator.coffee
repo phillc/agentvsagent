@@ -1,6 +1,6 @@
 uuid = require 'node-uuid'
 
-module.exports = class IdGenerator
+module.exports =
   generate: ->
     uuid.v4()
 

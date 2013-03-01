@@ -60,7 +60,7 @@ module AgentVsAgent
     ::Thrift::Struct.generate_accessors self
   end
 
-  class Agent
+  class Ticket
     include ::Thrift::Struct, ::Thrift::Struct_Union
     GAMEID = 1
     AGENTID = 2
@@ -75,6 +75,24 @@ module AgentVsAgent
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field gameId is unset!') unless @gameId
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field agentId is unset!') unless @agentId
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class EntryResponse
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    TICKET = 1
+    MESSAGE = 2
+
+    FIELDS = {
+      TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket, :optional => true},
+      MESSAGE => {:type => ::Thrift::Types::STRING, :name => 'message', :optional => true}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
     end
 
     ::Thrift::Struct.generate_accessors self

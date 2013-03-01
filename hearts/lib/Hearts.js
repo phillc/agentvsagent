@@ -60,7 +60,7 @@ Hearts_enter_arena_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.STRUCT) {
-        this.success = new ttypes.Agent();
+        this.success = new ttypes.EntryResponse();
         this.success.read(input);
       } else {
         input.skip(ftype);
@@ -91,10 +91,10 @@ Hearts_enter_arena_result.prototype.write = function(output) {
 };
 
 Hearts_get_hand_args = function(args) {
-  this.agent = null;
+  this.ticket = null;
   if (args) {
-    if (args.agent !== undefined) {
-      this.agent = args.agent;
+    if (args.ticket !== undefined) {
+      this.ticket = args.ticket;
     }
   }
 };
@@ -114,8 +114,8 @@ Hearts_get_hand_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.agent = new ttypes.Agent();
-        this.agent.read(input);
+        this.ticket = new ttypes.Ticket();
+        this.ticket.read(input);
       } else {
         input.skip(ftype);
       }
@@ -134,9 +134,9 @@ Hearts_get_hand_args.prototype.read = function(input) {
 
 Hearts_get_hand_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_hand_args');
-  if (this.agent !== null && this.agent !== undefined) {
-    output.writeFieldBegin('agent', Thrift.Type.STRUCT, 1);
-    this.agent.write(output);
+  if (this.ticket !== null && this.ticket !== undefined) {
+    output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
+    this.ticket.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -260,17 +260,17 @@ HeartsClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
   }
   return callback('enter_arena failed: unknown result');
 };
-HeartsClient.prototype.get_hand = function(agent, callback) {
+HeartsClient.prototype.get_hand = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
-  this.send_get_hand(agent);
+  this.send_get_hand(ticket);
 };
 
-HeartsClient.prototype.send_get_hand = function(agent) {
+HeartsClient.prototype.send_get_hand = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_hand', Thrift.MessageType.CALL, this.seqid);
   var args = new Hearts_get_hand_args();
-  args.agent = agent;
+  args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
@@ -329,7 +329,7 @@ HeartsProcessor.prototype.process_get_hand = function(seqid, input, output) {
   var args = new Hearts_get_hand_args();
   args.read(input);
   input.readMessageEnd();
-  this._handler.get_hand(args.agent, function (err, result) {
+  this._handler.get_hand(args.ticket, function (err, result) {
     var result = new Hearts_get_hand_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_hand", Thrift.MessageType.REPLY, seqid);
     result.write(output);

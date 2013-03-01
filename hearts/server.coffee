@@ -1,12 +1,12 @@
 Service = require './service'
 MatchMaker = require './matchmaker'
 Arena = require './arena'
-IdGenerator = require './idgenerator'
 
-idGenerator = new IdGenerator()
-arena = new Arena(idGenerator)
+arena = new Arena()
 
-# matchMaker = new MatchMaker()
+matchMaker = new MatchMaker(arena)
+matchMaker.start()
+
 service = new Service(arena)
 service.start()
 

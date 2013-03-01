@@ -27,13 +27,13 @@ module AgentVsAgent
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'enter_arena failed: unknown result')
       end
 
-      def get_hand(agent)
-        send_get_hand(agent)
+      def get_hand(ticket)
+        send_get_hand(ticket)
         return recv_get_hand()
       end
 
-      def send_get_hand(agent)
-        send_message('get_hand', Get_hand_args, :agent => agent)
+      def send_get_hand(ticket)
+        send_message('get_hand', Get_hand_args, :ticket => ticket)
       end
 
       def recv_get_hand()
@@ -57,7 +57,7 @@ module AgentVsAgent
       def process_get_hand(seqid, iprot, oprot)
         args = read_args(iprot, Get_hand_args)
         result = Get_hand_result.new()
-        result.success = @handler.get_hand(args.agent)
+        result.success = @handler.get_hand(args.ticket)
         write_result(result, oprot, 'get_hand', seqid)
       end
 
@@ -85,7 +85,7 @@ module AgentVsAgent
       SUCCESS = 0
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Agent}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::EntryResponse}
       }
 
       def struct_fields; FIELDS; end
@@ -98,10 +98,10 @@ module AgentVsAgent
 
     class Get_hand_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      AGENT = 1
+      TICKET = 1
 
       FIELDS = {
-        AGENT => {:type => ::Thrift::Types::STRUCT, :name => 'agent', :class => ::AgentVsAgent::Agent}
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket}
       }
 
       def struct_fields; FIELDS; end

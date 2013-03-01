@@ -1,16 +1,29 @@
 Game = require("../../../hearts/game")
+Player = require("../../../hearts/player")
 require("chai").should()
 
-# describe "Game", ->
-  # beforeEach ->
-  #   @player1 = new Player()
-  #   @player2 = new Player()
-  #   @player3 = new Player()
-  #   @player4 = new Player()
-  #   @game = new Game(@player1, @player2, @player3, @player4)
+describe "Game", ->
+  beforeEach ->
+    @player1 = new Player()
+    @player2 = new Player()
+    @player3 = new Player()
+    @player4 = new Player()
+    @game = new Game(@player1, @player2, @player3, @player4)
 
-  # it "has players", ->
-  #   @game.players.length.should.equal(4)
+  it "has an id", ->
+    @game.should.have.property('id')
+
+  it "has players", ->
+    @game.players.length.should.equal(4)
+
+  describe "#start", ->
+    it "emits a start game event on the players", (done) ->
+      @player1.once 'start', (gameId) =>
+        gameId.should.equal(@game.id)
+        done()
+
+      @game.start()
+
 
   # describe "#createDeck", ->
   #   beforeEach ->

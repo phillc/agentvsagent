@@ -92,7 +92,7 @@ Card.prototype.write = function(output) {
   return;
 };
 
-Agent = module.exports.Agent = function(args) {
+Ticket = module.exports.Ticket = function(args) {
   this.gameId = null;
   this.agentId = null;
   if (args) {
@@ -104,8 +104,8 @@ Agent = module.exports.Agent = function(args) {
     }
   }
 };
-Agent.prototype = {};
-Agent.prototype.read = function(input) {
+Ticket.prototype = {};
+Ticket.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -141,8 +141,8 @@ Agent.prototype.read = function(input) {
   return;
 };
 
-Agent.prototype.write = function(output) {
-  output.writeStructBegin('Agent');
+Ticket.prototype.write = function(output) {
+  output.writeStructBegin('Ticket');
   if (this.gameId !== null && this.gameId !== undefined) {
     output.writeFieldBegin('gameId', Thrift.Type.STRING, 1);
     output.writeString(this.gameId);
@@ -151,6 +151,73 @@ Agent.prototype.write = function(output) {
   if (this.agentId !== null && this.agentId !== undefined) {
     output.writeFieldBegin('agentId', Thrift.Type.STRING, 2);
     output.writeString(this.agentId);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+EntryResponse = module.exports.EntryResponse = function(args) {
+  this.ticket = null;
+  this.message = null;
+  if (args) {
+    if (args.ticket !== undefined) {
+      this.ticket = args.ticket;
+    }
+    if (args.message !== undefined) {
+      this.message = args.message;
+    }
+  }
+};
+EntryResponse.prototype = {};
+EntryResponse.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ticket = new ttypes.Ticket();
+        this.ticket.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.message = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+EntryResponse.prototype.write = function(output) {
+  output.writeStructBegin('EntryResponse');
+  if (this.ticket !== null && this.ticket !== undefined) {
+    output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
+    this.ticket.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.message !== null && this.message !== undefined) {
+    output.writeFieldBegin('message', Thrift.Type.STRING, 2);
+    output.writeString(this.message);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

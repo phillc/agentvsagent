@@ -14,12 +14,18 @@ class RandomBot
   end
 
   def run
-    @agent = @game.enter_arena
-    play
+    puts "Entering arena"
+    response = @game.enter_arena
+    @ticket = response.ticket
+    if @ticket
+      puts "Got a ticket! #{@ticket.inspect}"
+      play
+    end
   end
 
   def play
-    hand = @game.get_hand @agent
+    puts "playing"
+    hand = @game.get_hand @ticket
     puts hand.inspect
     # received_cards = @game.pass_cards @agent, hand.first(3)
     # 13.times {
@@ -30,6 +36,7 @@ class RandomBot
   end
 end
 
+puts "Opening connection"
 transport.open
 bot = RandomBot.new(client)
 bot.run

@@ -19,6 +19,7 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
+    rake (10.0.3)
     rb-fsevent (0.9.3)
     slop (3.4.3)
     terminal-table (1.4.5)
@@ -31,4 +32,5 @@ DEPENDENCIES
   foreman
   guard
   guard-shell
+  rake
   rb-fsevent
