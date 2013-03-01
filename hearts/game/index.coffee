@@ -7,9 +7,15 @@ module.exports = class Game
     @id = IdGenerator.generate()
     @players = [player1, player2, player3, player4]
 
+  getPlayer: (playerId) ->
+    for player in @players
+      return player if player.id == playerId
+
   start: ->
+    console.log "Starting game with players:", @players
     for player in @players
       player.emit 'start', @id
+    @play()
 
   play: ->
     # loop until player reaches 100 (term: rounds, sequence)

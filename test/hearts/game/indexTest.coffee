@@ -1,6 +1,6 @@
 Game = require("../../../hearts/game")
 Player = require("../../../hearts/player")
-require("chai").should()
+should = require("chai").should()
 
 describe "Game", ->
   beforeEach ->
@@ -15,6 +15,13 @@ describe "Game", ->
 
   it "has players", ->
     @game.players.length.should.equal(4)
+
+  describe "#getPlayer", ->
+    it "returns a player by id", ->
+      @game.getPlayer(@player4.id).id.should.equal(@player4.id)
+
+    it "returns nothing if player doesn't exist", ->
+      should.not.exist(@game.getPlayer("foo"))
 
   describe "#start", ->
     it "emits a start game event on the players", (done) ->

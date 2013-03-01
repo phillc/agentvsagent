@@ -27,6 +27,21 @@ module AgentVsAgent
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'enter_arena failed: unknown result')
       end
 
+      def get_game_info(ticket)
+        send_get_game_info(ticket)
+        return recv_get_game_info()
+      end
+
+      def send_get_game_info(ticket)
+        send_message('get_game_info', Get_game_info_args, :ticket => ticket)
+      end
+
+      def recv_get_game_info()
+        result = receive_message(Get_game_info_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_game_info failed: unknown result')
+      end
+
       def get_hand(ticket)
         send_get_hand(ticket)
         return recv_get_hand()
@@ -52,6 +67,13 @@ module AgentVsAgent
         result = Enter_arena_result.new()
         result.success = @handler.enter_arena()
         write_result(result, oprot, 'enter_arena', seqid)
+      end
+
+      def process_get_game_info(seqid, iprot, oprot)
+        args = read_args(iprot, Get_game_info_args)
+        result = Get_game_info_result.new()
+        result.success = @handler.get_game_info(args.ticket)
+        write_result(result, oprot, 'get_game_info', seqid)
       end
 
       def process_get_hand(seqid, iprot, oprot)
@@ -86,6 +108,38 @@ module AgentVsAgent
 
       FIELDS = {
         SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::EntryResponse}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Get_game_info_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      TICKET = 1
+
+      FIELDS = {
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Get_game_info_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::GameInfo}
       }
 
       def struct_fields; FIELDS; end

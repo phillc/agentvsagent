@@ -34,6 +34,15 @@ module AgentVsAgent
     VALID_VALUES = Set.new([TWO, THREE, FOUR, FIVE, SIZE, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE]).freeze
   end
 
+  module Position
+    WEST = 1
+    NORTH = 2
+    EAST = 3
+    SOUTH = 4
+    VALUE_MAP = {1 => "WEST", 2 => "NORTH", 3 => "EAST", 4 => "SOUTH"}
+    VALID_VALUES = Set.new([WEST, NORTH, EAST, SOUTH]).freeze
+  end
+
   class Card
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SUIT = 1
@@ -93,6 +102,26 @@ module AgentVsAgent
     def struct_fields; FIELDS; end
 
     def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GameInfo
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    POSITION = 1
+
+    FIELDS = {
+      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field position is unset!') unless @position
+      unless @position.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@position)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field position!')
+      end
     end
 
     ::Thrift::Struct.generate_accessors self

@@ -16,13 +16,16 @@ module.exports = class Arena extends EventEmitter
   removePlayer: (player) ->
     @waitingRoom.splice(@waitingRoom.indexOf(player), 1)
 
-  createMatch: (players) ->
+  createGame: (players) ->
     for player in players
       @removePlayer(player)
 
     game = new Game(players...)
-    @runningMatches[game.id] = game
-    game.start() #untested
-    game.id
 
+    @runningMatches[game.id] = game
+    game.start()
+    game
+
+  getGame: (gameId) ->
+    @runningMatches[gameId]
 

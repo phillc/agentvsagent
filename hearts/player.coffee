@@ -13,7 +13,7 @@ module.exports = class Player extends EventEmitter
 
   waitForGame: (callback) ->
     if @_waitForGame
-      callback @_waitForGame 
+      callback @_waitForGame
     else
       @removeAllListeners 'start'
       @once 'start', callback

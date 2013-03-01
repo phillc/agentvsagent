@@ -1,5 +1,6 @@
+Factory = require './factory'
 Arena = require '../../hearts/arena'
-require("chai").should()
+should = require("chai").should()
 
 describe "Arena", ->
   beforeEach ->
@@ -28,7 +29,7 @@ describe "Arena", ->
       @arena.waitingRoom[0].should.equal(@player1)
       @arena.waitingRoom[1].should.equal(@player3)
 
-  describe "#createMatch", ->
+  describe "#createGame", ->
     beforeEach ->
       for _ in [1..10]
         @arena.createPlayer()
@@ -37,14 +38,23 @@ describe "Arena", ->
       @matchedPlayers = @arena.waitingRoom[2..5]
 
     it "removes the players from the waiting room", ->
-      @arena.createMatch @matchedPlayers
+      @arena.createGame @matchedPlayers
       @arena.waitingRoom.length.should.equal(6)
 
-    it "creates a match out of the players", ->
-      @arena.createMatch @matchedPlayers
+    it "creates a game out of the players", ->
+      @arena.createGame @matchedPlayers
       Object.keys(@arena.runningMatches).length.should.equal(1)
 
-    it "returns the match id", ->
-      returnValue = @arena.createMatch @matchedPlayers
-      returnValue.should.equal(Object.keys(@arena.runningMatches)[0])
+    it "returns the game", ->
+      game = @arena.createGame @matchedPlayers
+      game.id.should.equal(Object.keys(@arena.runningMatches)[0])
+
+  describe "#getGame", ->
+    it "returns the game", ->
+      gameId = Factory.createGame(arena: @arena).id
+      game = @arena.getGame gameId
+      game.id.should.equal(gameId)
+
+    it "returns nothing if there is no game", ->
+      should.not.exist(@arena.getGame("foo"))
 

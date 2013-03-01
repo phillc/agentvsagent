@@ -1,8 +1,8 @@
 require 'pty'
 
 desc "run ruby random bots"
-task :bots, :number do |t, args|
-  args.with_defaults number: 4
+task :bots, :number, :sleep do |t, args|
+  args.with_defaults number: 4, sleep: 0.1
   command = 'cd dist/hearts/ruby && ruby random_bot.rb'
 
   pids = []
@@ -22,7 +22,7 @@ task :bots, :number do |t, args|
         puts "The child process exited!"
       end
     end
-    sleep 1
+    sleep args.sleep.to_f
   end
 
   pids.each{|pid| Process.wait(pid)}

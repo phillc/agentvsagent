@@ -23,6 +23,13 @@ enum Rank {
   ACE = 1
 }
 
+enum Position {
+  WEST = 1,
+  NORTH = 2,
+  EAST = 3,
+  SOUTH = 4
+}
+
 struct Card {
   1: required Suit suit,
   2: required Rank rank
@@ -38,8 +45,13 @@ struct EntryResponse {
   2: optional string message
 }
 
+struct GameInfo {
+  1: required Position position
+}
+
 service Hearts {
   EntryResponse enter_arena(),
+  GameInfo get_game_info(1: Ticket ticket),
   list<Card> get_hand(1: Ticket ticket),
   #bool play_card(1: Ticket ticket, 2:Card card),
   #list<Card> get_trick(1: Agent)

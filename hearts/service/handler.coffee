@@ -4,8 +4,6 @@ module.exports = class Handler
   constructor: (@arena) ->
 
   enter_arena: (result) ->
-    console.log "get_game called"
-
     player = @arena.createPlayer()
     player.waitForGame (gameId) =>
       ticket = new types.Ticket(agentId: player.id, gameId: gameId)
@@ -15,8 +13,13 @@ module.exports = class Handler
       #if this were updatred in npm, would be fine
       result null, response
 
-  get_hand: (agent, result) ->
-    # player = @matchMaker.players[agent.token]
-    # player.get_hand result
-    console.log "nada"
+  get_game_info: (ticket, result) ->
+    position = types.Position[Object.keys(types.Position)[0]]
+    gameInfo = new types.GameInfo(position: position)
+
+    result null, gameInfo
+
+  get_hand: (ticket, result) ->
+    @arena.getGame(ticket.gameId).getPlayer(ticket.playerId)
+
     result null, [new types.Card(rank: "3", suit: types.Suit.CLUBS)]

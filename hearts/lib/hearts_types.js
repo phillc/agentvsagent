@@ -26,6 +26,12 @@ ttypes.Rank = {
 'KING' : 13,
 'ACE' : 1
 };
+ttypes.Position = {
+'WEST' : 1,
+'NORTH' : 2,
+'EAST' : 3,
+'SOUTH' : 4
+};
 Card = module.exports.Card = function(args) {
   this.suit = null;
   this.rank = null;
@@ -218,6 +224,59 @@ EntryResponse.prototype.write = function(output) {
   if (this.message !== null && this.message !== undefined) {
     output.writeFieldBegin('message', Thrift.Type.STRING, 2);
     output.writeString(this.message);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+GameInfo = module.exports.GameInfo = function(args) {
+  this.position = null;
+  if (args) {
+    if (args.position !== undefined) {
+      this.position = args.position;
+    }
+  }
+};
+GameInfo.prototype = {};
+GameInfo.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.position = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+GameInfo.prototype.write = function(output) {
+  output.writeStructBegin('GameInfo');
+  if (this.position !== null && this.position !== undefined) {
+    output.writeFieldBegin('position', Thrift.Type.I32, 1);
+    output.writeI32(this.position);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
