@@ -1,3 +1,5 @@
+require 'pty'
+
 desc "run ruby random bots"
 task :bots, :number do |t, args|
   args.with_defaults number: 4
@@ -7,7 +9,18 @@ task :bots, :number do |t, args|
   args.number.to_i.times do |i|
     pids << fork do
       STDOUT.sync = true
-      exec command
+
+      begin
+        PTY.spawn(command) do |stdin, stdout, pid|
+          begin
+            stdin.each { |line| print "[#{i}] #{line}" }
+          rescue Errno::EIO
+            puts "Errno:EIO error, but this probably just means that the process has finished giving output"
+          end
+        end
+      rescue PTY::ChildExited
+        puts "The child process exited!"
+      end
     end
     sleep 1
   end
