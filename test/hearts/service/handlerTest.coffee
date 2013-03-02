@@ -32,7 +32,8 @@ describe "Handler", ->
         gameInfo.position.should.equal(types.Position.WEST)
         done()
 
-  describe.only "#get_hand", ->
+  # describe.only "#get_hand", ->
+  describe "#get_hand", ->
     beforeEach ->
       @game = Factory.createGame(arena: @arena)
       @ticket = new types.Ticket(agentId: "123", gameId: @game.id)

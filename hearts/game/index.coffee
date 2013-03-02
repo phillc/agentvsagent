@@ -29,13 +29,6 @@ module.exports = class Game
         # get winner
 
 
-  createDeck: ->
-    pile = new Pile()
-    for _, suit of types.Suit
-      for _, rank in types.Card
-        pile.addCard(new types.Card(suit: suit, rank: rank))
-
-    pile
 
   deal: (deck) ->
     deck.moveCardsTo(13, @players[0].held)
@@ -43,5 +36,7 @@ module.exports = class Game
     deck.moveCardsTo(13, @players[2].held)
     deck.moveCardsTo(13, @players[3].held)
 
-  passCards: (stategy) ->
+  # passCards: (stategy) ->
+
+
 

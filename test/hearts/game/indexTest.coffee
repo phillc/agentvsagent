@@ -32,7 +32,7 @@ describe "Game", ->
       @game.start()
 
 
-  # describe "#createDeck", ->
+  # describe.only "#createDeck", ->
   #   beforeEach ->
   #     @deck = @game.createDeck()
 
