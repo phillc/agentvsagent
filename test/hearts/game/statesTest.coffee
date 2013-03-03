@@ -24,16 +24,16 @@ describe "states", ->
       @state.run()
       console.log "GAME:   ", @game
 
-      players = [
+      positions = [
         @game.north.id
         @game.east.id
         @game.south.id
         @game.west.id
       ]
 
-      players.should.eql [
-        @game.players.map (player) -> player.id
-      ]
+      players = @game.players.map (player) -> player.id
+
+      positions.sort().should.eql players.sort()
 
     it "emits a start game event on the players", (done) ->
       @player1.once 'start', (gameId) =>
@@ -71,14 +71,16 @@ describe "states", ->
 
   describe "Dealing", ->
     beforeEach ->
+      new states.StartingRound(@game).run()
+      @nextStateCalls = 0
       @state = new states.Dealing(@game)
 
     it "deals cards to all players", ->
       @state.run()
-      @game.players[0].held.cards.should.have.length(13)
-      @game.players[1].held.cards.should.have.length(13)
-      @game.players[2].held.cards.should.have.length(13)
-      @game.players[3].held.cards.should.have.length(13)
+      @game.currentRound.north.dealt.cards.should.have.length(13)
+      @game.currentRound.east.dealt.cards.should.have.length(13)
+      @game.currentRound.south.dealt.cards.should.have.length(13)
+      @game.currentRound.west.dealt.cards.should.have.length(13)
 
     it "goes to the next state", ->
       @state.run()

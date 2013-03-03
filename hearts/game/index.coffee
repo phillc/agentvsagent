@@ -1,4 +1,4 @@
-Pile = require "./pile"
+# Pile = require "./pile"
 IdGenerator = require '../idgenerator'
 states = require './states'
 # Engine = 

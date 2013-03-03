@@ -1,5 +1,6 @@
 und = require 'underscore'
-Pile = require './Pile'
+Pile = require './pile'
+Round = require './round'
 
 class State
   constructor: (@game) ->
@@ -23,26 +24,7 @@ exports.StartingGame = class StartingGame extends State
 
 exports.StartingRound = class StartingRound extends State
   run: ->
-    #####
-    console.log "SETTING ROUND"
-    @game.currentRound =
-      north:
-        dealt: []
-        passed: []
-        played: []
-      east:
-        dealt: []
-        passed: []
-        played: []
-      south:
-        dealt: []
-        passed: []
-        played: []
-      west:
-        dealt: []
-        passed: []
-        played: []
-    #####
+    @game.currentRound = new Round()
     @game.stack.push("startingTrick")
     @game.stack.push("passing")
     @game.stack.push("dealing")
@@ -54,10 +36,10 @@ exports.Dealing = class Dealing extends State
 
     # @game.positions.leftOf(@game.currentDealer)
     # players = @game.positions.fromLeftOf(@game.currentDealer)
-    deck.moveCardsTo(13, @game.players[0].held)
-    deck.moveCardsTo(13, @game.players[1].held)
-    deck.moveCardsTo(13, @game.players[2].held)
-    deck.moveCardsTo(13, @game.players[3].held)
+    deck.moveCardsTo(13, @game.currentRound.north.dealt)
+    deck.moveCardsTo(13, @game.currentRound.east.dealt)
+    deck.moveCardsTo(13, @game.currentRound.south.dealt)
+    deck.moveCardsTo(13, @game.currentRound.west.dealt)
     @game.nextState()
 
 exports.Passing = class Passing extends State
