@@ -2,13 +2,10 @@ Card = require("./card")
 
 module.exports = class Pile
   @createDeck: ->
-    pile = new Pile()
-    for card in Card.all()
-      pile.addCard(card)
-    pile
+    new Pile(Card.all())
 
-  constructor: ->
-    @cards = []
+  constructor: (cards) ->
+    @cards = cards || []
 
   addCard: (card) ->
     @cards.push card
@@ -19,5 +16,12 @@ module.exports = class Pile
   moveCardsTo: (number, otherPile) ->
     movedCards = @cards.splice(0, number)
     for card in movedCards
+      otherPile.addCard(card)
+
+  moveAllCardsTo: (otherPile) ->
+    @moveCardsTo @cards.length, otherPile
+
+  copyAllCardsTo: (otherPile) ->
+    for card in @cards
       otherPile.addCard(card)
 

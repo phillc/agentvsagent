@@ -1,3 +1,4 @@
+Pile = require './pile'
 class Action
   constructor: (@player) ->
 
@@ -8,8 +9,8 @@ exports.PassCards = class PassCards extends Action
     super(player)
 
   run: (game) ->
-    console.log game
-    game.currentRound.north.passedCards = @cards
+    position = @game.positionOf(player)
+    (new Pile(@cards)).copyAllCardsTo game.currentRound[position].passed
 
 exports.PlayCard = class PlayCard extends Action
 

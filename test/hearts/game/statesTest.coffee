@@ -1,6 +1,9 @@
 Game = require("../../../hearts/game")
+Pile = require("../../../hearts/game/pile")
+Card = require("../../../hearts/game/card")
 Player = require("../../../hearts/player")
 states = require("../../../hearts/game/states")
+actions = require("../../../hearts/game/actions")
 require("should")
 
 describe "states", ->
@@ -25,10 +28,10 @@ describe "states", ->
       console.log "GAME:   ", @game
 
       positions = [
-        @game.north.id
-        @game.east.id
-        @game.south.id
-        @game.west.id
+        @game.northPlayer.id
+        @game.eastPlayer.id
+        @game.southPlayer.id
+        @game.westPlayer.id
       ]
 
       players = @game.players.map (player) -> player.id
@@ -88,11 +91,30 @@ describe "states", ->
 
   describe "Passing", ->
     beforeEach ->
-      @state = new states.Passing(@game)
+      new states.StartingRound(@game).run()
+      @nextStateCalls = 0
+      @state = new states.Passing(@game, "left")
 
-    it "get cards from all players", ->
-      @state.run()
+    it "get cards from players", ->
+      cards = Card.all()[0..2]
+      action = new actions.PassCards(@game.northPlayer, cards)
+
+      @state.handleAction(action)
+
+      @game.currentRound.north.passed.cards.should.eql(cards)
 
     it "goes to the next state after all four have passed cards", ->
-      @state.run()
+      cards = Card.all()[0..2]
+      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.eastPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.southPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.westPlayer, cards)
       @nextStateCalls.should.equal(1)
+
+    it "does not go to the next state if the same player passes four times", ->
+      cards = Card.all()[0..2]
+      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
+      @nextStateCalls.should.equal(0)

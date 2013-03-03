@@ -1,5 +1,7 @@
 Factory = require "../factory"
 actions = require("../../../hearts/game/actions")
+Card = require("../../../hearts/game/card")
+Pile = require("../../../hearts/game/pile")
 require("should")
 
 describe "actions", ->
@@ -11,14 +13,20 @@ describe "actions", ->
       @game.nextState = =>
         @nextStateCalls++
 
-      @player = @game.players[0]
       @game.states.startingRound.run()
-      @action = new actions.PassCards(@player, ["1"])
 
     it "applies the passed cards for the player", ->
-      @action.run(@game)
+      allCards = Card.all()
+      northCards = allCards[0..3]
+      southCards = allCards[7..15]
+      northAction = new actions.PassCards(@game.northPlayer, northCards)
+      southAction = new actions.PassCards(@game.southPlayer, southCards)
 
-      @game.currentRound.north.passedCards[0].should.equal("1")
+      northAction.run(@game)
+      southAction.run(@game)
+
+      @game.currentRound.north.passed.cards.should.eql(northCards)
+      @game.currentRound.south.passed.cards.should.eql(southCards)
 
 
 

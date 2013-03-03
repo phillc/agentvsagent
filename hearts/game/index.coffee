@@ -25,7 +25,7 @@ module.exports = class Game
       startingRound: new states.StartingRound(this)
       startingTrick: {run: ->}
       dealing: {run: ->}
-      passing: {run: ->}
+      passingRight: new states.Passing(this, "right")
       endingGame: {run: ->}#new states.EndGame(this)
 
     # DATA
@@ -42,7 +42,8 @@ module.exports = class Game
 
   nextState: ->
     console.log "stack",  @stack
-    @states[@stack.pop()].run()
+    @currentState = @states[@stack.pop()]
+    @currentState.run()
 
   start: ->
     @stack.push("startingGame")
@@ -52,8 +53,8 @@ module.exports = class Game
   # transition: (state) ->
   #   @states[state].run
 
-  # handleAction: (action) ->
-  #   @currentState.handleAction(action)
+  handleAction: (action) ->
+    @currentState.handleAction(action)
 
 
 

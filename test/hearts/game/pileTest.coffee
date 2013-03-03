@@ -43,8 +43,37 @@ describe "Pile", ->
 
       @otherPile = new Pile()
 
-    it "removes the first n cards to the other pile", ->
+    it "moves the first n cards to the other pile", ->
       @pile.moveCardsTo(2, @otherPile)
 
       @pile.cards.length.should.equal(1)
       @otherPile.cards.length.should.equal(2)
+
+  describe "#moveAllCardsTo", ->
+    beforeEach ->
+      @pile.addCard(new Card('clubs', 2))
+      @pile.addCard(new Card('diamonds', 9))
+      @pile.addCard(new Card('spades', 3))
+
+      @otherPile = new Pile()
+
+    it "moves all cards to the other pile", ->
+      @pile.moveAllCardsTo(@otherPile)
+
+      @pile.cards.length.should.equal(0)
+      @otherPile.cards.length.should.equal(3)
+
+  describe "#copyAllCardsTo", ->
+    beforeEach ->
+      @pile.addCard(new Card('clubs', 2))
+      @pile.addCard(new Card('diamonds', 9))
+      @pile.addCard(new Card('spades', 3))
+
+      @otherPile = new Pile()
+
+    it "copies all cards to the other pile", ->
+      @pile.copyAllCardsTo(@otherPile)
+
+      @pile.cards.length.should.equal(3)
+      @otherPile.cards.length.should.equal(3)
+

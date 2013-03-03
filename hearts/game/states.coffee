@@ -5,13 +5,15 @@ Round = require './round'
 class State
   constructor: (@game) ->
 
+  run: ->
+
   handleAction: (action) ->
     false
 
 exports.StartingGame = class StartingGame extends State
   run: ->
     console.log "Starting game with players:", @players
-    positions = ["north", "east", "west", "south"]
+    positions = ["northPlayer", "eastPlayer", "westPlayer", "southPlayer"]
 
     for player in und.shuffle(@game.players)
       @game[positions.shift()] = player
@@ -43,15 +45,20 @@ exports.Dealing = class Dealing extends State
     @game.nextState()
 
 exports.Passing = class Passing extends State
-  run: ->
-    @game.nextState()
+  @directions =
+    left: null
+    right: null
+    across: null
+
+  constructor: (game, direction) ->
+    @strategy = Passing.directions[direction]
+    super(game)
 
   handleAction: (action) ->
-    recordAction
+    action.run(@game)
 
-    if allPlayersPassed
-      broadcast
-      proceed()
+    if @game.currentRound.allHavePassed()
+      @game.nextState()
 
 exports.PlayingTrick = class PlayingTrick extends State
   run: ->

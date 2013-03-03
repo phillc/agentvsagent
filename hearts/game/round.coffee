@@ -1,14 +1,12 @@
-Pile = require './pile'
-
-class Position
-  constructor: ->
-    @dealt = new Pile()
-    @passed = new Pile()
-    @played = new Pile()
+Seat = require './seat'
 
 module.exports = class Round
   constructor: ->
-    @north = new Position()
-    @east = new Position()
-    @south = new Position()
-    @west = new Position()
+    @north = new Seat()
+    @east = new Seat()
+    @south = new Seat()
+    @west = new Seat()
+
+  allHavePassed: ->
+    @north.hasPassed() && @east.hasPassed() && @south.hasPassed() && @west.hasPassed()
+
