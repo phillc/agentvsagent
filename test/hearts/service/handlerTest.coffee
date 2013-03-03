@@ -12,6 +12,8 @@ describe "Handler", ->
     @arena.createPlayer()
     @handler = new Handler(@arena)
 
+  it "implements everything declared in the service"
+
   describe "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
       @handler.enter_arena (err, response) ->
@@ -29,11 +31,11 @@ describe "Handler", ->
     it "returns game info", (done) ->
       @handler.get_game_info @ticket, (err, gameInfo) ->
         should.not.exist(err)
-        gameInfo.position.should.equal(types.Position.WEST)
+        gameInfo.position.should.equal(types.Position.NORTH)
         done()
 
-  # describe.only "#get_hand", ->
-  describe "#get_hand", ->
+  describe.skip "#get_hand", ->
+  # describe "#get_hand", ->
     beforeEach ->
       @game = Factory.createGame(arena: @arena)
       @ticket = new types.Ticket(agentId: "123", gameId: @game.id)

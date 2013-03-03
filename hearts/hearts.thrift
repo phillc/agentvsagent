@@ -8,6 +8,7 @@ enum Suit {
 }
 
 enum Rank {
+  ACE = 1,
   TWO = 2,
   THREE = 3,
   FOUR = 4,
@@ -19,15 +20,14 @@ enum Rank {
   TEN = 10,
   JACK = 11,
   QUEEN = 12,
-  KING = 13,
-  ACE = 1
+  KING = 13
 }
 
 enum Position {
-  WEST = 1,
-  NORTH = 2,
-  EAST = 3,
-  SOUTH = 4
+  NORTH = 1,
+  EAST = 2,
+  SOUTH = 3,
+  WEST = 4
 }
 
 struct Card {
@@ -52,6 +52,7 @@ struct GameInfo {
 service Hearts {
   EntryResponse enter_arena(),
   GameInfo get_game_info(1: Ticket ticket),
+  #get_hand needs to return previous hand, or need yet another step
   list<Card> get_hand(1: Ticket ticket),
   #bool play_card(1: Ticket ticket, 2:Card card),
   #list<Card> get_trick(1: Agent)

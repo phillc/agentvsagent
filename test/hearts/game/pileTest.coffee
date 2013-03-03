@@ -34,17 +34,17 @@ describe "Pile", ->
 
     it "returns all the hearts", ->
       @pile.allOfSuit(Suit.HEARTS).length.should.equal(13)
-# 
-#   describe "#moveCardsTo", ->
-#     beforeEach ->
-#       @pile.addCard(new Card('clubs', 2))
-#       @pile.addCard(new Card('diamonds', 9))
-#       @pile.addCard(new Card('spades', 3))
-# 
-#       @otherPile = new Pile()
-# 
-#     it "removes the first n cards to the other pile", ->
-#       @pile.moveCardsTo(2, @otherPile)
-# 
-#       @pile.cards.length.should.equal(1)
-#       @otherPile.cards.length.should.equal(2)
+
+  describe "#moveCardsTo", ->
+    beforeEach ->
+      @pile.addCard(new Card('clubs', 2))
+      @pile.addCard(new Card('diamonds', 9))
+      @pile.addCard(new Card('spades', 3))
+
+      @otherPile = new Pile()
+
+    it "removes the first n cards to the other pile", ->
+      @pile.moveCardsTo(2, @otherPile)
+
+      @pile.cards.length.should.equal(1)
+      @otherPile.cards.length.should.equal(2)

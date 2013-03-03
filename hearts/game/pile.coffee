@@ -16,8 +16,8 @@ module.exports = class Pile
   allOfSuit: (suit) ->
     @cards.filter (card) -> card.suit == suit
 
-  # moveCardsTo: (number, otherPile) ->
-  #   movedCards = @cards.splice(0, number)
-  #   for card in movedCards
-  #     otherPile.addCard(card)
+  moveCardsTo: (number, otherPile) ->
+    movedCards = @cards.splice(0, number)
+    for card in movedCards
+      otherPile.addCard(card)
 

@@ -12,6 +12,7 @@ ttypes.Suit = {
 'HEARTS' : 24
 };
 ttypes.Rank = {
+'ACE' : 1,
 'TWO' : 2,
 'THREE' : 3,
 'FOUR' : 4,
@@ -23,14 +24,13 @@ ttypes.Rank = {
 'TEN' : 10,
 'JACK' : 11,
 'QUEEN' : 12,
-'KING' : 13,
-'ACE' : 1
+'KING' : 13
 };
 ttypes.Position = {
-'WEST' : 1,
-'NORTH' : 2,
-'EAST' : 3,
-'SOUTH' : 4
+'NORTH' : 1,
+'EAST' : 2,
+'SOUTH' : 3,
+'WEST' : 4
 };
 Card = module.exports.Card = function(args) {
   this.suit = null;
