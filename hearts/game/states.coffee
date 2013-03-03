@@ -1,3 +1,4 @@
+und = require 'underscore'
 Pile = require './Pile'
 
 class State
@@ -9,7 +10,11 @@ class State
 exports.StartingGame = class StartingGame extends State
   run: ->
     console.log "Starting game with players:", @players
-    for player in @game.players
+    positions = ["north", "east", "west", "south"]
+
+    for player in und.shuffle(@game.players)
+      @game[positions.shift()] = player
+
       player.emit 'start', @game.id
 
     @game.stack.push("endingGame")
@@ -18,7 +23,27 @@ exports.StartingGame = class StartingGame extends State
 
 exports.StartingRound = class StartingRound extends State
   run: ->
-    @game.stack.push("startTrick")
+    #####
+    console.log "SETTING ROUND"
+    @game.currentRound =
+      north:
+        dealt: []
+        passed: []
+        played: []
+      east:
+        dealt: []
+        passed: []
+        played: []
+      south:
+        dealt: []
+        passed: []
+        played: []
+      west:
+        dealt: []
+        passed: []
+        played: []
+    #####
+    @game.stack.push("startingTrick")
     @game.stack.push("passing")
     @game.stack.push("dealing")
     @game.nextState()

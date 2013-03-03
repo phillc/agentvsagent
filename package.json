@@ -8,7 +8,8 @@
   "dependencies": {
     "coffee-script": "1.4.x",
     "thrift": "0.7.x",
-    "node-uuid": "1.4.x"
+    "node-uuid": "1.4.x",
+    "underscore": "1.4.x"
   },
   "devDependencies": {
     "mocha": "1.7.0",

@@ -8,8 +8,8 @@ describe "Player", ->
   it "has an id", ->
     @player.should.have.property('id')
 
-  it "has an empty held pile", ->
-    @player.held.cards.should.eql([])
+  # it "has an empty held pile", ->
+  #   @player.held.cards.should.eql([])
 
   describe "#waitForGame", ->
     it "returns the gameId if previously broadcasted", (done) ->

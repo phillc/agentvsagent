@@ -5,7 +5,7 @@ Pile = require "./game/Pile"
 module.exports = class Player extends EventEmitter
   constructor: ->
     @id = IdGenerator.generate()
-    @held = new Pile()
+    # @held = new Pile()
     # @takenTricks = []
 
     @once 'start', (gameId) =>

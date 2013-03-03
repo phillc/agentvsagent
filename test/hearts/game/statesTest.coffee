@@ -20,6 +20,21 @@ describe "states", ->
     beforeEach ->
       @state = new states.StartingGame(@game)
 
+    it.only "assigns each player a position", ->
+      @state.run()
+      console.log "GAME:   ", @game
+
+      players = [
+        @game.north.id
+        @game.east.id
+        @game.south.id
+        @game.west.id
+      ]
+
+      players.should.eql [
+        @game.players.map (player) -> player.id
+      ]
+
     it "emits a start game event on the players", (done) ->
       @player1.once 'start', (gameId) =>
         gameId.should.equal(@game.id)
@@ -48,7 +63,7 @@ describe "states", ->
       @game.stack.should.have.length(3)
       @game.stack[2].should.equal("dealing")
       @game.stack[1].should.equal("passing")
-      @game.stack[0].should.equal("startTrick")
+      @game.stack[0].should.equal("startingTrick")
 
     it "goes to the next state", ->
       @state.run()
