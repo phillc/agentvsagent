@@ -23,25 +23,39 @@ module.exports = class Game
     @states =
       startingGame: new states.StartingGame(this)
       startingRound: new states.StartingRound(this)
-      startingTrick: {run: ->}
-      dealing: {run: ->}
+      startingTrick: new states.StartingTrick(this)
+      dealing: new states.Dealing(this)
       passingRight: new states.Passing(this, "right")
+      waitingForCardFromNorth: new states.WaitingForCard(this, "north")
+      waitingForCardFromEast: new states.WaitingForCard(this, "east")
+      waitingForCardFromSouth: new states.WaitingForCard(this, "south")
+      waitingForCardFromWest: new states.WaitingForCard(this, "west")
       endingGame: {run: ->}#new states.EndGame(this)
 
     # DATA
-    @north = null
-    @east = null
-    @south = null
-    @west = null
+    @northPlayer = null
+    @eastPlayer = null
+    @southPlayer = null
+    @westPlayer = null
     @rounds = []
     @currentRound = null
+
+  positionOf: (player) ->
+    if @northPlayer == player
+      "north"
+    else if @eastPlayer == player
+      "east"
+    else if @southPlayer == player
+      "south"
+    else if @westPlayer == player
+      "west"
 
   getPlayer: (playerId) ->
     for player in @players
       return player if player.id == playerId
 
   nextState: ->
-    console.log "stack",  @stack
+    console.log "nextState:: stack",  @stack
     @currentState = @states[@stack.pop()]
     @currentState.run()
 

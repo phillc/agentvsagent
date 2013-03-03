@@ -28,7 +28,7 @@ exports.StartingRound = class StartingRound extends State
   run: ->
     @game.currentRound = new Round()
     @game.stack.push("startingTrick")
-    @game.stack.push("passing")
+    @game.stack.push("passingRight")
     @game.stack.push("dealing")
     @game.nextState()
 
@@ -45,32 +45,48 @@ exports.Dealing = class Dealing extends State
     @game.nextState()
 
 exports.Passing = class Passing extends State
-  @directions =
-    left: null
-    right: null
-    across: null
+  # @directions =
+  #   left: null
+  #   right: null
+  #   across: null
 
   constructor: (game, direction) ->
-    @strategy = Passing.directions[direction]
+    # @strategy = Passing.directions[direction]
     super(game)
 
   handleAction: (action) ->
-    action.run(@game)
+    action.execute(@game)
 
     if @game.currentRound.allHavePassed()
       @game.nextState()
 
-exports.PlayingTrick = class PlayingTrick extends State
+exports.StartingTrick = class StartingTrick extends State
   run: ->
-    new Hand(start: North)
-    new WaitForCard(north, hand)
+    @game.currentRound.tricks.push({})
+    @game.stack.push("waitingForCardFromNorth")
+    @game.stack.push("waitingForCardFromWest")
+    @game.stack.push("waitingForCardFromSouth")
+    @game.stack.push("waitingForCardFromEast")
+
+exports.WaitingForCard = class WaitingForCard extends State
+  constructor: (game, @position) ->
+    super(game)
 
   handleAction: (action) ->
-    new WaitForCard(east, hand)
-    new WaitForCard(south, hand)
-    new WaitForCard(west, hand)
-    new EndTrick
-    proceed()
+    action.execute(@game)
+    @game.nextState()
+
+# exports.PlayingTrick = class PlayingTrick extends State
+#   run: ->
+#     new Hand(start: North)
+#     new WaitForCard(north, hand)
+# 
+#   handleAction: (action) ->
+#     new WaitForCard(east, hand)
+#     new WaitForCard(south, hand)
+#     new WaitForCard(west, hand)
+#     new EndTrick
+#     proceed()
 # 
 # class WaitForCard
 #   player

@@ -25,7 +25,6 @@ describe "states", ->
 
     it "assigns each player a position", ->
       @state.run()
-      console.log "GAME:   ", @game
 
       positions = [
         @game.northPlayer.id
@@ -65,7 +64,7 @@ describe "states", ->
       @state.run()
       @game.stack.should.have.length(3)
       @game.stack[2].should.equal("dealing")
-      @game.stack[1].should.equal("passing")
+      @game.stack[1].should.equal("passingRight")
       @game.stack[0].should.equal("startingTrick")
 
     it "goes to the next state", ->
@@ -91,6 +90,7 @@ describe "states", ->
 
   describe "Passing", ->
     beforeEach ->
+      new states.StartingGame(@game).run()
       new states.StartingRound(@game).run()
       @nextStateCalls = 0
       @state = new states.Passing(@game, "left")
@@ -118,3 +118,49 @@ describe "states", ->
       @state.handleAction new actions.PassCards(@game.northPlayer, cards)
       @state.handleAction new actions.PassCards(@game.northPlayer, cards)
       @nextStateCalls.should.equal(0)
+
+  describe "StartingTrick", ->
+    beforeEach ->
+      new states.StartingGame(@game).run()
+      new states.StartingRound(@game).run()
+      @nextStateCalls = 0
+
+    it "adds a trick to the round", ->
+      @game.currentRound.tricks.should.have.length(0)
+      state = new states.StartingTrick(@game).run()
+      @game.currentRound.tricks.should.have.length(1)
+      state = new states.StartingTrick(@game).run()
+      @game.currentRound.tricks.should.have.length(2)
+
+    it "adds waiting for cards", ->
+      @game.stack.splice(0, @game.stack.length)
+      @game.stack.should.have.length(0)
+      state = new states.StartingTrick(@game).run()
+      @game.stack.should.have.length(4)
+      @game.stack[3].should.equal("waitingForCardFromEast")
+      @game.stack[2].should.equal("waitingForCardFromSouth")
+      @game.stack[1].should.equal("waitingForCardFromWest")
+      @game.stack[0].should.equal("waitingForCardFromNorth")
+
+  describe "WaitingForCard", ->
+    beforeEach ->
+      new states.StartingGame(@game).run()
+      new states.StartingRound(@game).run()
+      new states.StartingTrick(@game).run()
+      @nextStateCalls = 0
+      @state = new states.WaitingForCard(@game, "north")
+
+    it "applies the card to the player", ->
+      card = Card.all()[0]
+      action = new actions.PlayCard(@game.northPlayer, card)
+      @state.handleAction(action)
+
+      console.log @game.currentRound.tricks
+      @game.currentRound.tricks[0].north.should.equal(card)
+
+    it "goes to the next state", ->
+      card = Card.all()[0]
+      action = new actions.PlayCard(@game.northPlayer, card)
+      @state.handleAction(action)
+
+      @nextStateCalls.should.equal(1)

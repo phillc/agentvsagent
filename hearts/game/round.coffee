@@ -7,6 +7,9 @@ module.exports = class Round
     @south = new Seat()
     @west = new Seat()
 
+    @tricks = []
+
+
   allHavePassed: ->
     @north.hasPassed() && @east.hasPassed() && @south.hasPassed() && @west.hasPassed()
 
