@@ -1,5 +1,5 @@
 types = require("../../hearts/lib/hearts_types")
-require("chai").should()
+require("should")
 
 describe "types", ->
   describe "Card", ->

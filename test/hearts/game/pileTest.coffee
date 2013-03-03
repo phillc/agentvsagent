@@ -1,7 +1,7 @@
 Pile = require("../../../hearts/game/pile")
 Card = require("../../../hearts/game/card")
 Suit = require("../../../hearts/game/suit")
-require("chai").should()
+require("should")
 
 describe "Pile", ->
   beforeEach ->

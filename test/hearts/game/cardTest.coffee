@@ -2,7 +2,7 @@ Card = require("../../../hearts/game/card")
 Suit = require("../../../hearts/game/suit")
 Rank = require("../../../hearts/game/rank")
 
-require("chai").should()
+require("should")
 
 describe "Card", ->
   beforeEach ->

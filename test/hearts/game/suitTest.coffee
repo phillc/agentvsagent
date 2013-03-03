@@ -1,5 +1,5 @@
 Suit = require("../../../hearts/game/suit")
-require("chai").should()
+require("should")
 
 describe "Suit", ->
   beforeEach ->

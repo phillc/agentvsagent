@@ -1,6 +1,6 @@
 Factory = require "../factory"
 actions = require("../../../hearts/game/actions")
-require("chai").should()
+require("should")
 
 describe "actions", ->
   describe "PassCards", ->

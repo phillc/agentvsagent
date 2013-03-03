@@ -2,7 +2,7 @@ Arena = require '../../../hearts/arena'
 Handler = require '../../../hearts/service/handler'
 types = require '../../../hearts/lib/hearts_types'
 Factory = require '../factory'
-should = require("chai").should()
+should = require("should")
 
 describe "Handler", ->
   beforeEach ->

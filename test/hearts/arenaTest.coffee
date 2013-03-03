@@ -1,6 +1,6 @@
 Factory = require './factory'
 Arena = require '../../hearts/arena'
-should = require("chai").should()
+should = require("should")
 
 describe "Arena", ->
   beforeEach ->

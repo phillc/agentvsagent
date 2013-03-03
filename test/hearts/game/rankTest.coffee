@@ -1,5 +1,5 @@
 Rank = require("../../../hearts/game/rank")
-require("chai").should()
+require("should")
 
 describe "Rank", ->
   beforeEach ->

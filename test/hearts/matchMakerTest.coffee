@@ -1,7 +1,7 @@
 MatchMaker = require '../../hearts/matchmaker'
 Arena = require '../../hearts/arena'
 Player = require '../../hearts/player'
-require("chai").should()
+require("should")
 
 describe "MatchMaker", ->
   beforeEach ->

@@ -1,7 +1,7 @@
 Game = require("../../../hearts/game")
 Player = require("../../../hearts/player")
 states = require("../../../hearts/game/states")
-require("chai").should()
+require("should")
 
 describe "states", ->
   beforeEach ->
@@ -20,7 +20,7 @@ describe "states", ->
     beforeEach ->
       @state = new states.StartingGame(@game)
 
-    it.only "assigns each player a position", ->
+    it "assigns each player a position", ->
       @state.run()
       console.log "GAME:   ", @game
 

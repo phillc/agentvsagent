@@ -1,6 +1,6 @@
 Game = require("../../../hearts/game")
 Player = require("../../../hearts/player")
-should = require("chai").should()
+should = require("should")
 
 describe "Game", ->
   beforeEach ->
