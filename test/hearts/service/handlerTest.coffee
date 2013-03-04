@@ -4,6 +4,7 @@ Card = require '../../../hearts/game/card'
 Suit = require '../../../hearts/game/suit'
 Rank = require '../../../hearts/game/rank'
 types = require '../../../hearts/lib/hearts_types'
+Hearts = require '../../../hearts/lib/hearts'
 Factory = require '../factory'
 should = require("should")
 
@@ -15,7 +16,16 @@ describe "Handler", ->
     @arena.createPlayer()
     @handler = new Handler(@arena)
 
-  it "implements everything declared in the service"
+  it.only "implements everything declared in the service", ->
+    # Object.keys(Hearts.Client.prototype).filter (method) ->
+    methods = Object.keys(Hearts.Client.prototype).filter (method) ->
+      method[0..3] != "send" && method[0..3] != "recv"
+
+    for method in methods
+      @handler.should.have.property method
+
+    Object.keys(Handler.prototype).length.should.equal(methods.length)
+
 
   describe "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
