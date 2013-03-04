@@ -8,12 +8,9 @@ describe "Player", ->
   it "has an id", ->
     @player.should.have.property('id')
 
-  # it "has an empty held pile", ->
-  #   @player.held.cards.should.eql([])
-
   describe "#waitForGame", ->
     it "returns the gameId if previously broadcasted", (done) ->
-      @player.emit "start", "12345"
+      @player.emit "started", "12345"
       @player.waitForGame (gameId) ->
         gameId.should.equal("12345")
         done()
@@ -22,16 +19,17 @@ describe "Player", ->
       @player.waitForGame (gameId) ->
         gameId.should.equal("12345")
         done()
-      @player.emit "start", "12345"
-# 
-#   it "has an empty taken tricks", ->
-#     @player.takenTricks.should.eql([])
+      @player.emit "started", "12345"
 
-  # describe "#getCardsToPass", ->
-  #   it "gets the cards to pass from the agent", (done) ->
-  #     @player.getCardsToPass ->
-  #       done()
+  describe "#waitForHand", ->
+    it "returns the cards if previously broadcasted", (done) ->
+      @player.emit "dealt", ["1", "2"]
+      @player.waitForHand (cards) ->
+        cards.should.eql ["1", "2"]
+        done()
 
-  #   it "calls the callback", (done) ->
-  #     @player.getCardsToPass done
-
+    it "returns the gameId if later broadcasted", (done) ->
+      @player.waitForHand (cards) ->
+        cards.should.eql ["1", "2"]
+        done()
+      @player.emit "dealt", ["1", "2"]

@@ -18,7 +18,7 @@ exports.StartingGame = class StartingGame extends State
     for player in und.shuffle(@game.players)
       @game[positions.shift()] = player
 
-      player.emit 'start', @game.id
+      player.emit 'started', @game.id
 
     @game.stack.push("endingGame")
     @game.stack.push("startingRound")
@@ -39,9 +39,17 @@ exports.Dealing = class Dealing extends State
     # @game.positions.leftOf(@game.currentDealer)
     # players = @game.positions.fromLeftOf(@game.currentDealer)
     deck.moveCardsTo(13, @game.currentRound.north.dealt)
+    @game.northPlayer.emit 'dealt', @game.currentRound.north.dealt.cards
+
     deck.moveCardsTo(13, @game.currentRound.east.dealt)
+    @game.eastPlayer.emit 'dealt', @game.currentRound.east.dealt.cards
+
     deck.moveCardsTo(13, @game.currentRound.south.dealt)
+    @game.southPlayer.emit 'dealt', @game.currentRound.south.dealt.cards
+
     deck.moveCardsTo(13, @game.currentRound.west.dealt)
+    @game.westPlayer.emit 'dealt', @game.currentRound.west.dealt.cards
+
     @game.nextState()
 
 exports.Passing = class Passing extends State

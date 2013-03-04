@@ -37,8 +37,8 @@ describe "states", ->
 
       positions.sort().should.eql players.sort()
 
-    it "emits a start game event on the players", (done) ->
-      @player1.once 'start', (gameId) =>
+    it "emits a started event on the players", (done) ->
+      @player1.once 'started', (gameId) =>
         gameId.should.equal(@game.id)
         done()
 
@@ -73,7 +73,8 @@ describe "states", ->
 
   describe "Dealing", ->
     beforeEach ->
-      new states.StartingRound(@game).run()
+      @game.states.startingGame.run()
+      @game.states.startingRound.run()
       @nextStateCalls = 0
       @state = new states.Dealing(@game)
 
@@ -87,6 +88,13 @@ describe "states", ->
     it "goes to the next state", ->
       @state.run()
       @nextStateCalls.should.equal(1)
+
+    it "emits a dealt event on the players", (done) ->
+      @player1.once 'dealt', (cards) =>
+        cards.should.have.length(13)
+        done()
+
+      @state.run()
 
   describe "Passing", ->
     beforeEach ->

@@ -1,4 +1,32 @@
+Suit = require '../game/suit'
+Rank = require '../game/rank'
 types = require '../lib/hearts_types'
+
+mapSuitToThrift = (suit) ->
+  switch suit
+    when Suit.CLUBS then types.Suit.CLUBS
+    when Suit.DIAMONDS then types.Suit.DIAMONDS
+    when Suit.SPADES then types.Suit.SPADES
+    when Suit.HEARTS then types.Suit.HEARTS
+
+mapRankToThrift = (rank) ->
+  switch rank
+    when Rank.TWO then types.Rank.TWO
+    when Rank.THREE then types.Rank.THREE
+    when Rank.FOUR then types.Rank.FOUR
+    when Rank.FIVE then types.Rank.FIVE
+    when Rank.SIX then types.Rank.SIX
+    when Rank.SEVEN then types.Rank.SEVEN
+    when Rank.EIGHT then types.Rank.EIGHT
+    when Rank.NINE then types.Rank.NINE
+    when Rank.TEN then types.Rank.TEN
+    when Rank.JACK then types.Rank.JACK
+    when Rank.QUEEN then types.Rank.QUEEN
+    when Rank.KING then types.Rank.KING
+    when Rank.ACE then types.Rank.ACE
+
+mapCardToThrift = (card) ->
+  new types.Card(suit: mapSuitToThrift(card.suit), rank: mapRankToThrift(card.rank))
 
 module.exports = class Handler
   constructor: (@arena) ->
@@ -20,6 +48,11 @@ module.exports = class Handler
     result null, gameInfo
 
   get_hand: (ticket, result) ->
-    @arena.getGame(ticket.gameId).getPlayer(ticket.playerId)
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
 
-    result null, [new types.Card(rank: "3", suit: types.Suit.CLUBS)]
+    player.waitForHand (cards) =>
+      thriftCards = cards.map (card) ->
+        mapCardToThrift(card)
+      result null, thriftCards
+

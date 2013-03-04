@@ -9,7 +9,6 @@ module.exports = class Round
 
     @tricks = []
 
-
   allHavePassed: ->
     @north.hasPassed() && @east.hasPassed() && @south.hasPassed() && @west.hasPassed()
 
