@@ -12,6 +12,9 @@ module.exports = class Player extends EventEmitter
     @once 'dealt', (hand) =>
       @_waitForHand = hand
 
+    @once 'passed', (hand) =>
+      @_waitForPassed = hand
+
   #thinking this belongs elsewhere
   waitForGame: (callback) ->
     if @_waitForGame
@@ -21,10 +24,15 @@ module.exports = class Player extends EventEmitter
       @once 'started', callback
 
   waitForHand: (callback) ->
-    console.log "wait for hand"
-    console.log "@_waitForHand", @_waitForHand
     if @_waitForHand
       callback @_waitForHand
     else
       @removeAllListeners 'dealt'
       @once 'dealt', callback
+
+  waitForPassed: (callback) ->
+    if @_waitForPassed
+      callback @_waitForPassed
+    else
+      @removeAllListeners 'passed'
+      @once 'passed', callback

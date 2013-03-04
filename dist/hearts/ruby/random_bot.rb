@@ -29,7 +29,8 @@ class RandomBot
     puts "game info: #{game_info.inspect}"
     hand = @game.get_hand @ticket
     puts "hand: #{hand.inspect}"
-    # received_cards = @game.pass_cards @agent, hand.first(3)
+    received_cards = @game.pass_cards @ticket, hand.first(3)
+    puts "received cards: #{received_cards.inspect}"
     # 13.times {
     #   trick = @game.get_trick @agent
     #   @game.play_card @agent, hand.first

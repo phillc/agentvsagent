@@ -1,5 +1,6 @@
 Suit = require '../game/suit'
 Rank = require '../game/rank'
+actions = require '../game/actions'
 types = require '../lib/hearts_types'
 
 mapSuitToThrift = (suit) ->
@@ -39,6 +40,7 @@ module.exports = class Handler
 
       #player disconnected before response returned
       #if this were updatred in npm, would be fine
+      # so either need to wrap in a try, or somehow get that newest version
       result null, response
 
   get_game_info: (ticket, result) ->
@@ -55,4 +57,17 @@ module.exports = class Handler
       thriftCards = cards.map (card) ->
         mapCardToThrift(card)
       result null, thriftCards
+
+  pass_cards: (ticket, cards, result) ->
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
+
+    #CARD NEEDS TO BE MAPPED
+    action = new actions.PassCards(player, cards)
+    game.handleAction(action)
+
+    player.waitForPassed (cards) =>
+      result null, cards
+
+
 

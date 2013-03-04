@@ -66,6 +66,10 @@ exports.Passing = class Passing extends State
     action.execute(@game)
 
     if @game.currentRound.allHavePassed()
+      @game.northPlayer.emit 'passed', @game.currentRound.east.passed.cards
+      @game.eastPlayer.emit 'passed', @game.currentRound.south.passed.cards
+      @game.southPlayer.emit 'passed', @game.currentRound.west.passed.cards
+      @game.westPlayer.emit 'passed', @game.currentRound.north.passed.cards
       @game.nextState()
 
 exports.StartingTrick = class StartingTrick extends State

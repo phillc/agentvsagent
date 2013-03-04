@@ -33,3 +33,17 @@ describe "Player", ->
         cards.should.eql ["1", "2"]
         done()
       @player.emit "dealt", ["1", "2"]
+
+  describe "#waitForPassed", ->
+    it "returns the cards if previously broadcasted", (done) ->
+      @player.emit "passed", ["1", "2"]
+      @player.waitForPassed (cards) ->
+        cards.should.eql ["1", "2"]
+        done()
+
+    it "returns the gameId if later broadcasted", (done) ->
+      @player.waitForPassed (cards) ->
+        cards.should.eql ["1", "2"]
+        done()
+      @player.emit "passed", ["1", "2"]
+

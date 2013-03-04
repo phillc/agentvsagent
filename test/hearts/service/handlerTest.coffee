@@ -46,6 +46,8 @@ describe "Handler", ->
         gameInfo.position.should.equal(types.Position.NORTH)
         done()
 
+    it "returns players position"
+
   describe "#get_hand", ->
     beforeEach ->
       @game = Factory.createGame(arena: @arena)
@@ -111,3 +113,6 @@ describe "Handler", ->
         cards[12].rank.should.equal types.Rank.SEVEN
         done()
 
+  describe "pass_cards", ->
+    it "does something"
+    it "returns something"

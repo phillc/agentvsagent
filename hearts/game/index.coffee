@@ -1,17 +1,5 @@
-# Pile = require "./pile"
 IdGenerator = require '../idgenerator'
 states = require './states'
-# Engine = 
-
-# class GameManager
-# class Engine
-# class GameState
-# class StartingGame
-# class Deal
-# class WaitingForPlayer extends GameState
-#   constructor: (@position) ->
-# class EndTurn
-# 
 
 module.exports = class Game
   constructor: (player1, player2, player3, player4) ->
@@ -63,47 +51,6 @@ module.exports = class Game
     @stack.push("startingGame")
     @nextState()
 
-
-  # transition: (state) ->
-  #   @states[state].run
-
   handleAction: (action) ->
     @currentState.handleAction(action)
-
-
-
-
-    # stateObjects
-
-
-    # @play()
-
-  # play: ->
-  #   state =# new GameState
-  #     positions:
-  #       north: @players[0]
-  #       east: @players[1]
-  #       south: @players[2]
-  #       west: @players[3]
-
-
-
-
-
-    # loop until player reaches 100 (term: rounds, sequence)
-      # createDeck
-      # shuffle
-      # deal
-      # pass
-      # loop 13 (term: tricks)
-        # 4x (term: rotation)
-          # get moves
-        # get winner
-
-
-
-
-  # passCards: (stategy) ->
-
-
 

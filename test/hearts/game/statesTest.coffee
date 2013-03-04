@@ -111,11 +111,15 @@ describe "states", ->
 
       @game.currentRound.north.passed.cards.should.eql(cards)
 
-    it "goes to the next state after all four have passed cards", ->
+    it "goes to the next state and emits an event after all four have passed cards", (done) ->
       cards = Card.all()[0..2]
       @state.handleAction new actions.PassCards(@game.northPlayer, cards)
       @state.handleAction new actions.PassCards(@game.eastPlayer, cards)
       @state.handleAction new actions.PassCards(@game.southPlayer, cards)
+      @game.northPlayer.once 'passed', (cards) ->
+        cards.should.have.length(3)
+        done()
+
       @state.handleAction new actions.PassCards(@game.westPlayer, cards)
       @nextStateCalls.should.equal(1)
 
