@@ -60,6 +60,14 @@ describe "Handler", ->
           new Card(Suit.DIAMONDS, Rank.ACE)
           new Card(Suit.HEARTS, Rank.EIGHT)
           new Card(Suit.SPADES, Rank.QUEEN)
+          new Card(Suit.SPADES, Rank.NINE)
+          new Card(Suit.HEARTS, Rank.TEN)
+          new Card(Suit.DIAMONDS, Rank.KING)
+          new Card(Suit.CLUBS, Rank.THREE)
+          new Card(Suit.HEARTS, Rank.FIVE)
+          new Card(Suit.HEARTS, Rank.JACK)
+          new Card(Suit.CLUBS, Rank.SIX)
+          new Card(Suit.SPADES, Rank.SEVEN)
         ]
         callback(cards)
 
@@ -76,5 +84,21 @@ describe "Handler", ->
         cards[3].rank.should.equal types.Rank.EIGHT
         cards[4].suit.should.equal types.Suit.SPADES
         cards[4].rank.should.equal types.Rank.QUEEN
+        cards[5].suit.should.equal types.Suit.SPADES
+        cards[5].rank.should.equal types.Rank.NINE
+        cards[6].suit.should.equal types.Suit.HEARTS
+        cards[6].rank.should.equal types.Rank.TEN
+        cards[7].suit.should.equal types.Suit.DIAMONDS
+        cards[7].rank.should.equal types.Rank.KING
+        cards[8].suit.should.equal types.Suit.CLUBS
+        cards[8].rank.should.equal types.Rank.THREE
+        cards[9].suit.should.equal types.Suit.HEARTS
+        cards[9].rank.should.equal types.Rank.FIVE
+        cards[10].suit.should.equal types.Suit.HEARTS
+        cards[10].rank.should.equal types.Rank.JACK
+        cards[11].suit.should.equal types.Suit.CLUBS
+        cards[11].rank.should.equal types.Rank.SIX
+        cards[12].suit.should.equal types.Suit.SPADES
+        cards[12].rank.should.equal types.Rank.SEVEN
         done()
 

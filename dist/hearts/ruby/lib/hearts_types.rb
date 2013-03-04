@@ -22,7 +22,7 @@ module AgentVsAgent
     THREE = 3
     FOUR = 4
     FIVE = 5
-    SIZE = 6
+    SIX = 6
     SEVEN = 7
     EIGHT = 8
     NINE = 9
@@ -30,8 +30,8 @@ module AgentVsAgent
     JACK = 11
     QUEEN = 12
     KING = 13
-    VALUE_MAP = {1 => "ACE", 2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE", 6 => "SIZE", 7 => "SEVEN", 8 => "EIGHT", 9 => "NINE", 10 => "TEN", 11 => "JACK", 12 => "QUEEN", 13 => "KING"}
-    VALID_VALUES = Set.new([ACE, TWO, THREE, FOUR, FIVE, SIZE, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING]).freeze
+    VALUE_MAP = {1 => "ACE", 2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE", 6 => "SIX", 7 => "SEVEN", 8 => "EIGHT", 9 => "NINE", 10 => "TEN", 11 => "JACK", 12 => "QUEEN", 13 => "KING"}
+    VALID_VALUES = Set.new([ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING]).freeze
   end
 
   module Position

@@ -13,7 +13,7 @@ enum Rank {
   THREE = 3,
   FOUR = 4,
   FIVE = 5,
-  SIZE = 6,
+  SIX = 6,
   SEVEN = 7,
   EIGHT = 8,
   NINE = 9,
