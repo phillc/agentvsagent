@@ -21,21 +21,18 @@ module.exports = class Game
       endingGame: {run: ->}#new states.EndGame(this)
 
     # DATA
-    @northPlayer = null
-    @eastPlayer = null
-    @southPlayer = null
-    @westPlayer = null
+    @positions = {}
     @rounds = []
     @currentRound = null
 
   positionOf: (player) ->
-    if @northPlayer == player
+    if @positions.north == player
       "north"
-    else if @eastPlayer == player
+    else if @positions.east == player
       "east"
-    else if @southPlayer == player
+    else if @positions.south == player
       "south"
-    else if @westPlayer == player
+    else if @positions.west == player
       "west"
 
   getPlayer: (playerId) ->

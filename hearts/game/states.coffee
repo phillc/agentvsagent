@@ -13,10 +13,10 @@ class State
 exports.StartingGame = class StartingGame extends State
   run: ->
     console.log "Starting game with players:", @players
-    positions = ["northPlayer", "eastPlayer", "westPlayer", "southPlayer"]
+    positions = ["north", "east", "west", "south"]
 
     for player in und.shuffle(@game.players)
-      @game[positions.shift()] = player
+      @game.positions[positions.shift()] = player
 
       player.emit 'started', @game.id
 
@@ -39,16 +39,16 @@ exports.Dealing = class Dealing extends State
     # @game.positions.leftOf(@game.currentDealer)
     # players = @game.positions.fromLeftOf(@game.currentDealer)
     deck.moveCardsTo(13, @game.currentRound.north.dealt)
-    @game.northPlayer.emit 'dealt', @game.currentRound.north.dealt.cards
+    @game.positions.north.emit 'dealt', @game.currentRound.north.dealt.cards
 
     deck.moveCardsTo(13, @game.currentRound.east.dealt)
-    @game.eastPlayer.emit 'dealt', @game.currentRound.east.dealt.cards
+    @game.positions.east.emit 'dealt', @game.currentRound.east.dealt.cards
 
     deck.moveCardsTo(13, @game.currentRound.south.dealt)
-    @game.southPlayer.emit 'dealt', @game.currentRound.south.dealt.cards
+    @game.positions.south.emit 'dealt', @game.currentRound.south.dealt.cards
 
     deck.moveCardsTo(13, @game.currentRound.west.dealt)
-    @game.westPlayer.emit 'dealt', @game.currentRound.west.dealt.cards
+    @game.positions.west.emit 'dealt', @game.currentRound.west.dealt.cards
 
     @game.nextState()
 
@@ -66,10 +66,10 @@ exports.Passing = class Passing extends State
     action.execute(@game)
 
     if @game.currentRound.allHavePassed()
-      @game.northPlayer.emit 'passed', @game.currentRound.east.passed.cards
-      @game.eastPlayer.emit 'passed', @game.currentRound.south.passed.cards
-      @game.southPlayer.emit 'passed', @game.currentRound.west.passed.cards
-      @game.westPlayer.emit 'passed', @game.currentRound.north.passed.cards
+      @game.positions.north.emit 'passed', @game.currentRound.east.passed.cards
+      @game.positions.east.emit 'passed', @game.currentRound.south.passed.cards
+      @game.positions.south.emit 'passed', @game.currentRound.west.passed.cards
+      @game.positions.west.emit 'passed', @game.currentRound.north.passed.cards
       @game.nextState()
 
 exports.StartingTrick = class StartingTrick extends State

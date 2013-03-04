@@ -19,8 +19,8 @@ describe "actions", ->
       allCards = Card.all()
       northCards = allCards[0..3]
       southCards = allCards[7..15]
-      northAction = new actions.PassCards(@game.northPlayer, northCards)
-      southAction = new actions.PassCards(@game.southPlayer, southCards)
+      northAction = new actions.PassCards(@game.positions.north, northCards)
+      southAction = new actions.PassCards(@game.positions.south, southCards)
 
       northAction.execute(@game)
       southAction.execute(@game)
@@ -35,7 +35,7 @@ describe "actions", ->
 
     it "applies the card", ->
       card = Card.all()[0]
-      action = new actions.PlayCard(@game.northPlayer, card)
+      action = new actions.PlayCard(@game.positions.north, card)
       action.execute(@game)
 
       @game.currentRound.tricks[0].north.should.equal(card)

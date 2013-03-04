@@ -27,10 +27,10 @@ describe "states", ->
       @state.run()
 
       positions = [
-        @game.northPlayer.id
-        @game.eastPlayer.id
-        @game.southPlayer.id
-        @game.westPlayer.id
+        @game.positions.north.id
+        @game.positions.east.id
+        @game.positions.south.id
+        @game.positions.west.id
       ]
 
       players = @game.players.map (player) -> player.id
@@ -105,7 +105,7 @@ describe "states", ->
 
     it "get cards from players", ->
       cards = Card.all()[0..2]
-      action = new actions.PassCards(@game.northPlayer, cards)
+      action = new actions.PassCards(@game.positions.north, cards)
 
       @state.handleAction(action)
 
@@ -113,22 +113,22 @@ describe "states", ->
 
     it "goes to the next state and emits an event after all four have passed cards", (done) ->
       cards = Card.all()[0..2]
-      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
-      @state.handleAction new actions.PassCards(@game.eastPlayer, cards)
-      @state.handleAction new actions.PassCards(@game.southPlayer, cards)
-      @game.northPlayer.once 'passed', (cards) ->
+      @state.handleAction new actions.PassCards(@game.positions.north, cards)
+      @state.handleAction new actions.PassCards(@game.positions.east, cards)
+      @state.handleAction new actions.PassCards(@game.positions.south, cards)
+      @game.positions.north.once 'passed', (cards) ->
         cards.should.have.length(3)
         done()
 
-      @state.handleAction new actions.PassCards(@game.westPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.positions.west, cards)
       @nextStateCalls.should.equal(1)
 
     it "does not go to the next state if the same player passes four times", ->
       cards = Card.all()[0..2]
-      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
-      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
-      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
-      @state.handleAction new actions.PassCards(@game.northPlayer, cards)
+      @state.handleAction new actions.PassCards(@game.positions.north, cards)
+      @state.handleAction new actions.PassCards(@game.positions.north, cards)
+      @state.handleAction new actions.PassCards(@game.positions.north, cards)
+      @state.handleAction new actions.PassCards(@game.positions.north, cards)
       @nextStateCalls.should.equal(0)
 
   describe "StartingTrick", ->
@@ -164,7 +164,7 @@ describe "states", ->
 
     it "applies the card to the player", ->
       card = Card.all()[0]
-      action = new actions.PlayCard(@game.northPlayer, card)
+      action = new actions.PlayCard(@game.positions.north, card)
       @state.handleAction(action)
 
       console.log @game.currentRound.tricks
@@ -172,7 +172,7 @@ describe "states", ->
 
     it "goes to the next state", ->
       card = Card.all()[0]
-      action = new actions.PlayCard(@game.northPlayer, card)
+      action = new actions.PlayCard(@game.positions.north, card)
       @state.handleAction(action)
 
       @nextStateCalls.should.equal(1)
