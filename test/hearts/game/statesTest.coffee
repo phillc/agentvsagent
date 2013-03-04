@@ -167,7 +167,6 @@ describe "states", ->
       action = new actions.PlayCard(@game.positions.north, card)
       @state.handleAction(action)
 
-      console.log @game.currentRound.tricks
       @game.currentRound.tricks[0].north.should.equal(card)
 
     it "goes to the next state", ->

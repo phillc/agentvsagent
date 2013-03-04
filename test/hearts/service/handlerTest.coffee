@@ -114,5 +114,47 @@ describe "Handler", ->
         done()
 
   describe "pass_cards", ->
-    it "does something"
-    it "returns something"
+    beforeEach ->
+      @game = Factory.createGame(arena: @arena)
+      @game.states.startingGame.run()
+      @game.states.dealing.run()
+      @game.stack.push("passingRight")
+      @game.nextState()
+      @northTicket = new types.Ticket(agentId: @game.positions.north.id, gameId: @game.id)
+      @eastTicket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
+      @southTicket = new types.Ticket(agentId: @game.positions.south.id, gameId: @game.id)
+      @westTicket = new types.Ticket(agentId: @game.positions.west.id, gameId: @game.id)
+      @northPassed = [
+        new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.THREE)
+        new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.TWO)
+        new types.Card(suit: types.Suit.SPADES, rank: types.Rank.QUEEN)
+      ]
+      @eastPassed = [
+        new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.FOUR)
+        new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.THREE)
+        new types.Card(suit: types.Suit.SPADES, rank: types.Rank.KING)
+      ]
+      @southPassed = [
+        new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.FIVE)
+        new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.FOUR)
+        new types.Card(suit: types.Suit.SPADES, rank: types.Rank.ACE)
+      ]
+      @westPassed = [
+        new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.SIX)
+        new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.FIVE)
+        new types.Card(suit: types.Suit.SPADES, rank: types.Rank.TWO)
+      ]
+
+    it "passes the card", ->
+      @handler.pass_cards @westTicket, @westPassed, ->
+      @game.currentRound.west.passed.cards.should.have.length(3)
+
+    it "returns the cards passed to the west player", (done) ->
+      @handler.pass_cards @northTicket, @northPassed, ->
+      @handler.pass_cards @eastTicket, @eastPassed, ->
+      @handler.pass_cards @southTicket, @southPassed, ->
+      @handler.pass_cards @westTicket, @westPassed, (err, cards) =>
+        cards.should.eql(@northPassed)
+        done()
+
+

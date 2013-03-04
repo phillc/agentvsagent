@@ -39,7 +39,7 @@ module.exports = class Handler
       response = new types.EntryResponse(ticket: ticket)
 
       #player disconnected before response returned
-      #if this were updatred in npm, would be fine
+      #if this were updated in npm, would be fine
       # so either need to wrap in a try, or somehow get that newest version
       result null, response
 
@@ -59,6 +59,7 @@ module.exports = class Handler
       result null, thriftCards
 
   pass_cards: (ticket, cards, result) ->
+    console.log "PASS CARDS", ticket, cards
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 

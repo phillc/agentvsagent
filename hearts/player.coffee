@@ -12,10 +12,9 @@ module.exports = class Player extends EventEmitter
     @once 'dealt', (hand) =>
       @_waitForHand = hand
 
-    @once 'passed', (hand) =>
-      @_waitForPassed = hand
+    @once 'passed', (cards) =>
+      @_waitForPassed = cards
 
-  #thinking this belongs elsewhere
   waitForGame: (callback) ->
     if @_waitForGame
       callback @_waitForGame
