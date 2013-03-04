@@ -57,6 +57,21 @@ module AgentVsAgent
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_hand failed: unknown result')
       end
 
+      def pass_cards(ticket, cards)
+        send_pass_cards(ticket, cards)
+        return recv_pass_cards()
+      end
+
+      def send_pass_cards(ticket, cards)
+        send_message('pass_cards', Pass_cards_args, :ticket => ticket, :cards => cards)
+      end
+
+      def recv_pass_cards()
+        result = receive_message(Pass_cards_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'pass_cards failed: unknown result')
+      end
+
     end
 
     class Processor
@@ -81,6 +96,13 @@ module AgentVsAgent
         result = Get_hand_result.new()
         result.success = @handler.get_hand(args.ticket)
         write_result(result, oprot, 'get_hand', seqid)
+      end
+
+      def process_pass_cards(seqid, iprot, oprot)
+        args = read_args(iprot, Pass_cards_args)
+        result = Pass_cards_result.new()
+        result.success = @handler.pass_cards(args.ticket, args.cards)
+        write_result(result, oprot, 'pass_cards', seqid)
       end
 
     end
@@ -167,6 +189,40 @@ module AgentVsAgent
     end
 
     class Get_hand_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Pass_cards_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      TICKET = 1
+      CARDS = 2
+
+      FIELDS = {
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket},
+        CARDS => {:type => ::Thrift::Types::LIST, :name => 'cards', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Pass_cards_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
 

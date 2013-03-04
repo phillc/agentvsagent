@@ -54,6 +54,7 @@ service Hearts {
   GameInfo get_game_info(1: Ticket ticket),
   #get_hand needs to return previous hand, or need yet another step
   list<Card> get_hand(1: Ticket ticket),
+  list<Card> pass_cards(1:Ticket ticket, 2: list<Card> cards)
   #bool play_card(1: Ticket ticket, 2:Card card),
   #list<Card> get_trick(1: Agent)
 }

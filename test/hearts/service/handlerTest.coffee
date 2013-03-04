@@ -16,8 +16,7 @@ describe "Handler", ->
     @arena.createPlayer()
     @handler = new Handler(@arena)
 
-  it.only "implements everything declared in the service", ->
-    # Object.keys(Hearts.Client.prototype).filter (method) ->
+  it "implements everything declared in the service", ->
     methods = Object.keys(Hearts.Client.prototype).filter (method) ->
       method[0..3] != "send" && method[0..3] != "recv"
 
