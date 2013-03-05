@@ -18,6 +18,7 @@ module.exports = class Game
       waitingForCardFromEast: new states.WaitingForCard(this, "east")
       waitingForCardFromSouth: new states.WaitingForCard(this, "south")
       waitingForCardFromWest: new states.WaitingForCard(this, "west")
+      endingTrick: new states.EndingTrick(this)
       endingGame: {run: ->}#new states.EndGame(this)
 
     # DATA

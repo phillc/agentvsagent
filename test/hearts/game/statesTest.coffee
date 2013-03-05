@@ -144,34 +144,62 @@ describe "states", ->
       state = new states.StartingTrick(@game).run()
       @game.currentRound.tricks.should.have.length(2)
 
-    it "adds waiting for cards", ->
+    it "adds the next states", ->
       @game.stack.splice(0, @game.stack.length)
       @game.stack.should.have.length(0)
       state = new states.StartingTrick(@game).run()
-      @game.stack.should.have.length(4)
-      @game.stack[3].should.equal("waitingForCardFromEast")
-      @game.stack[2].should.equal("waitingForCardFromSouth")
-      @game.stack[1].should.equal("waitingForCardFromWest")
-      @game.stack[0].should.equal("waitingForCardFromNorth")
+      @game.stack.should.have.length(5)
+      @game.stack[4].should.equal("waitingForCardFromEast")
+      @game.stack[3].should.equal("waitingForCardFromSouth")
+      @game.stack[2].should.equal("waitingForCardFromWest")
+      @game.stack[1].should.equal("waitingForCardFromNorth")
+      @game.stack[0].should.equal("endingTrick")
 
   describe "WaitingForCard", ->
     beforeEach ->
-      new states.StartingGame(@game).run()
-      new states.StartingRound(@game).run()
-      new states.StartingTrick(@game).run()
+      @game.states.startingGame.run()
+      @game.states.startingRound.run()
+      @game.states.startingTrick.run()
       @nextStateCalls = 0
-      @state = new states.WaitingForCard(@game, "north")
 
     it "applies the card to the player", ->
+      state = new states.WaitingForCard(@game, "north")
       card = Card.all()[0]
       action = new actions.PlayCard(@game.positions.north, card)
-      @state.handleAction(action)
+      state.handleAction(action)
 
       @game.currentRound.tricks[0].north.should.equal(card)
 
+    it "emits an event on the player with the current trick", (done) ->
+      @game.positions.north.once 'turn', (trick) =>
+        trick.should.equal @game.currentRound.tricks[0]
+        done()
+      state = new states.WaitingForCard(@game, "north").run()
+
+
     it "goes to the next state", ->
+      state = new states.WaitingForCard(@game, "north")
       card = Card.all()[0]
       action = new actions.PlayCard(@game.positions.north, card)
-      @state.handleAction(action)
+      state.handleAction(action)
 
+      @nextStateCalls.should.equal(1)
+
+  describe "EndingTrick", ->
+    beforeEach ->
+      @game.states.startingGame.run()
+      @game.states.startingRound.run()
+      @game.states.startingTrick.run()
+      @nextStateCalls = 0
+
+    it "emits end trick event on each player", (done) ->
+      @game.positions.north.once 'endTrick', (trick) =>
+        trick.should.equal @game.currentRound.tricks[0]
+        done()
+
+      new states.EndingTrick(@game).run()
+
+
+    it "goes to the next state", ->
+      new states.EndingTrick(@game).run()
       @nextStateCalls.should.equal(1)

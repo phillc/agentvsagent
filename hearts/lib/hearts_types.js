@@ -284,3 +284,121 @@ GameInfo.prototype.write = function(output) {
   return;
 };
 
+Trick = module.exports.Trick = function(args) {
+  this.leader = null;
+  this.north = null;
+  this.east = null;
+  this.south = null;
+  this.west = null;
+  if (args) {
+    if (args.leader !== undefined) {
+      this.leader = args.leader;
+    }
+    if (args.north !== undefined) {
+      this.north = args.north;
+    }
+    if (args.east !== undefined) {
+      this.east = args.east;
+    }
+    if (args.south !== undefined) {
+      this.south = args.south;
+    }
+    if (args.west !== undefined) {
+      this.west = args.west;
+    }
+  }
+};
+Trick.prototype = {};
+Trick.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.leader = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.north = new ttypes.Card();
+        this.north.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.east = new ttypes.Card();
+        this.east.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.south = new ttypes.Card();
+        this.south.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.west = new ttypes.Card();
+        this.west.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+Trick.prototype.write = function(output) {
+  output.writeStructBegin('Trick');
+  if (this.leader !== null && this.leader !== undefined) {
+    output.writeFieldBegin('leader', Thrift.Type.I32, 1);
+    output.writeI32(this.leader);
+    output.writeFieldEnd();
+  }
+  if (this.north !== null && this.north !== undefined) {
+    output.writeFieldBegin('north', Thrift.Type.STRUCT, 2);
+    this.north.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.east !== null && this.east !== undefined) {
+    output.writeFieldBegin('east', Thrift.Type.STRUCT, 3);
+    this.east.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.south !== null && this.south !== undefined) {
+    output.writeFieldBegin('south', Thrift.Type.STRUCT, 4);
+    this.south.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.west !== null && this.west !== undefined) {
+    output.writeFieldBegin('west', Thrift.Type.STRUCT, 5);
+    this.west.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+

@@ -74,41 +74,32 @@ exports.Passing = class Passing extends State
 
 exports.StartingTrick = class StartingTrick extends State
   run: ->
-    @game.currentRound.tricks.push({})
+    @game.currentRound.tricks.push({leader: "north"})
+    @game.stack.push("endingTrick")
     @game.stack.push("waitingForCardFromNorth")
     @game.stack.push("waitingForCardFromWest")
     @game.stack.push("waitingForCardFromSouth")
     @game.stack.push("waitingForCardFromEast")
 
+    # nextstate
+
 exports.WaitingForCard = class WaitingForCard extends State
   constructor: (game, @position) ->
     super(game)
+
+  run: ->
+    @game.positions[@position].emit 'turn', @game.currentRound.tricks[0]
 
   handleAction: (action) ->
     action.execute(@game)
     @game.nextState()
 
-# exports.PlayingTrick = class PlayingTrick extends State
-#   run: ->
-#     new Hand(start: North)
-#     new WaitForCard(north, hand)
-# 
-#   handleAction: (action) ->
-#     new WaitForCard(east, hand)
-#     new WaitForCard(south, hand)
-#     new WaitForCard(west, hand)
-#     new EndTrick
-#     proceed()
-# 
-# class WaitForCard
-#   player
-# 
-#   if action not by player
-#     raise
-#   else
-#     gameState.next
-# 
-# class EndTrick
+exports.EndingTrick = class EndingTrick extends State
+  run: ->
+    for player in @game.players
+      player.emit 'endTrick', @game.currentRound.tricks[0]
+    @game.nextState()
+# class EndRound
 #   tallyScore
 #   if any over 100
 #     gameState.push new EndGame

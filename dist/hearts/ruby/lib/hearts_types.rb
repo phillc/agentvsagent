@@ -127,4 +127,32 @@ module AgentVsAgent
     ::Thrift::Struct.generate_accessors self
   end
 
+  class Trick
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    LEADER = 1
+    NORTH = 2
+    EAST = 3
+    SOUTH = 4
+    WEST = 5
+
+    FIELDS = {
+      LEADER => {:type => ::Thrift::Types::I32, :name => 'leader', :enum_class => ::AgentVsAgent::Position},
+      NORTH => {:type => ::Thrift::Types::STRUCT, :name => 'north', :class => ::AgentVsAgent::Card, :optional => true},
+      EAST => {:type => ::Thrift::Types::STRUCT, :name => 'east', :class => ::AgentVsAgent::Card, :optional => true},
+      SOUTH => {:type => ::Thrift::Types::STRUCT, :name => 'south', :class => ::AgentVsAgent::Card, :optional => true},
+      WEST => {:type => ::Thrift::Types::STRUCT, :name => 'west', :class => ::AgentVsAgent::Card, :optional => true}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field leader is unset!') unless @leader
+      unless @leader.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@leader)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field leader!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
 end

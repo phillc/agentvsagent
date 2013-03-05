@@ -72,6 +72,36 @@ module AgentVsAgent
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'pass_cards failed: unknown result')
       end
 
+      def get_trick(ticket)
+        send_get_trick(ticket)
+        return recv_get_trick()
+      end
+
+      def send_get_trick(ticket)
+        send_message('get_trick', Get_trick_args, :ticket => ticket)
+      end
+
+      def recv_get_trick()
+        result = receive_message(Get_trick_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_trick failed: unknown result')
+      end
+
+      def play_card(ticket, card)
+        send_play_card(ticket, card)
+        return recv_play_card()
+      end
+
+      def send_play_card(ticket, card)
+        send_message('play_card', Play_card_args, :ticket => ticket, :card => card)
+      end
+
+      def recv_play_card()
+        result = receive_message(Play_card_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'play_card failed: unknown result')
+      end
+
     end
 
     class Processor
@@ -103,6 +133,20 @@ module AgentVsAgent
         result = Pass_cards_result.new()
         result.success = @handler.pass_cards(args.ticket, args.cards)
         write_result(result, oprot, 'pass_cards', seqid)
+      end
+
+      def process_get_trick(seqid, iprot, oprot)
+        args = read_args(iprot, Get_trick_args)
+        result = Get_trick_result.new()
+        result.success = @handler.get_trick(args.ticket)
+        write_result(result, oprot, 'get_trick', seqid)
+      end
+
+      def process_play_card(seqid, iprot, oprot)
+        args = read_args(iprot, Play_card_args)
+        result = Play_card_result.new()
+        result.success = @handler.play_card(args.ticket, args.card)
+        write_result(result, oprot, 'play_card', seqid)
       end
 
     end
@@ -228,6 +272,72 @@ module AgentVsAgent
 
       FIELDS = {
         SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Get_trick_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      TICKET = 1
+
+      FIELDS = {
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Get_trick_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Play_card_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      TICKET = 1
+      CARD = 2
+
+      FIELDS = {
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket},
+        CARD => {:type => ::Thrift::Types::STRUCT, :name => 'card', :class => ::AgentVsAgent::Card}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Play_card_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick}
       }
 
       def struct_fields; FIELDS; end

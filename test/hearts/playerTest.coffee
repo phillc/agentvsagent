@@ -28,7 +28,7 @@ describe "Player", ->
         cards.should.eql ["1", "2"]
         done()
 
-    it "returns the gameId if later broadcasted", (done) ->
+    it "returns the cards if later broadcasted", (done) ->
       @player.waitForHand (cards) ->
         cards.should.eql ["1", "2"]
         done()
@@ -41,9 +41,35 @@ describe "Player", ->
         cards.should.eql ["1", "2"]
         done()
 
-    it "returns the gameId if later broadcasted", (done) ->
+    it "returns the cards if later broadcasted", (done) ->
       @player.waitForPassed (cards) ->
         cards.should.eql ["1", "2"]
         done()
       @player.emit "passed", ["1", "2"]
+
+  describe "#waitForTurn", ->
+    it "returns the trick if previously broadcasted", (done) ->
+      @player.emit "turn", {leader: "north"}
+      @player.waitForTurn (trick) ->
+        trick.should.eql {leader: "north"}
+        done()
+
+    it "returns the trick if later broadcasted", (done) ->
+      @player.waitForTurn (trick) ->
+        trick.should.eql {leader: "north"}
+        done()
+      @player.emit "turn", {leader: "north"}
+
+  describe "#waitForTrickFinished", ->
+    it "returns the hand if previously broadcasted", (done) ->
+      @player.emit "endTrick", {leader: "north"}
+      @player.waitForTrickFinished (trick) ->
+        trick.should.eql {leader: "north"}
+        done()
+
+    it "returns the hand if later broadcasted", (done) ->
+      @player.waitForTrickFinished (trick) ->
+        trick.should.eql {leader: "north"}
+        done()
+      @player.emit "endTrick", {leader: "north"}
 

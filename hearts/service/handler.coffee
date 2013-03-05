@@ -1,33 +1,53 @@
 Suit = require '../game/suit'
 Rank = require '../game/rank'
+Card = require '../game/card'
 actions = require '../game/actions'
 types = require '../lib/hearts_types'
 
+suitMapping = [
+  [Suit.CLUBS, types.Suit.CLUBS]
+  [Suit.DIAMONDS, types.Suit.DIAMONDS]
+  [Suit.SPADES, types.Suit.SPADES]
+  [Suit.HEARTS, types.Suit.HEARTS]
+]
+
+rankMapping = [
+  [Rank.TWO, types.Rank.TWO]
+  [Rank.THREE, types.Rank.THREE]
+  [Rank.FOUR, types.Rank.FOUR]
+  [Rank.FIVE, types.Rank.FIVE]
+  [Rank.SIX, types.Rank.SIX]
+  [Rank.SEVEN, types.Rank.SEVEN]
+  [Rank.EIGHT, types.Rank.EIGHT]
+  [Rank.NINE, types.Rank.NINE]
+  [Rank.TEN, types.Rank.TEN]
+  [Rank.JACK, types.Rank.JACK]
+  [Rank.QUEEN, types.Rank.QUEEN]
+  [Rank.KING, types.Rank.KING]
+  [Rank.ACE, types.Rank.ACE]
+]
+
 mapSuitToThrift = (suit) ->
-  switch suit
-    when Suit.CLUBS then types.Suit.CLUBS
-    when Suit.DIAMONDS then types.Suit.DIAMONDS
-    when Suit.SPADES then types.Suit.SPADES
-    when Suit.HEARTS then types.Suit.HEARTS
+  for mapping in suitMapping
+    return mapping[1] if suit == mapping[0]
+
+mapThriftToSuit = (thriftSuit) ->
+  for mapping in suitMapping
+    return mapping[0] if thriftSuit == mapping[1]
 
 mapRankToThrift = (rank) ->
-  switch rank
-    when Rank.TWO then types.Rank.TWO
-    when Rank.THREE then types.Rank.THREE
-    when Rank.FOUR then types.Rank.FOUR
-    when Rank.FIVE then types.Rank.FIVE
-    when Rank.SIX then types.Rank.SIX
-    when Rank.SEVEN then types.Rank.SEVEN
-    when Rank.EIGHT then types.Rank.EIGHT
-    when Rank.NINE then types.Rank.NINE
-    when Rank.TEN then types.Rank.TEN
-    when Rank.JACK then types.Rank.JACK
-    when Rank.QUEEN then types.Rank.QUEEN
-    when Rank.KING then types.Rank.KING
-    when Rank.ACE then types.Rank.ACE
+  for mapping in rankMapping
+    return mapping[1] if rank == mapping[0]
+
+mapThriftToRank = (thriftRank) ->
+  for mapping in rankMapping
+    return mapping[0] if thriftRank == mapping[1]
 
 mapCardToThrift = (card) ->
   new types.Card(suit: mapSuitToThrift(card.suit), rank: mapRankToThrift(card.rank))
+
+mapThriftToCard = (thriftCard) ->
+  new Card(mapThriftToSuit(thriftCard.suit), mapThriftToRank(thriftCard.rank))
 
 module.exports = class Handler
   constructor: (@arena) ->
@@ -64,11 +84,29 @@ module.exports = class Handler
     player = game.getPlayer(ticket.agentId)
 
     #CARD NEEDS TO BE MAPPED
-    action = new actions.PassCards(player, cards)
+    mappedCards = cards.map (thriftCard) -> mapThriftToCard(thriftCard)
+    action = new actions.PassCards(player, mappedCards)
     game.handleAction(action)
 
     player.waitForPassed (cards) =>
       result null, cards
 
+  get_trick: (ticket, result) ->
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
 
+    player.waitForTurn (trick) =>
+      # TRICK NEED MAPPING
+      result null, trick
+
+  play_card: (ticket, card, result) ->
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
+
+    action = new actions.PlayCard(player, mapThriftToCard(card))
+    game.handleAction(action)
+
+    player.waitForTrickFinished (trick) =>
+      # TRICK NEED MAPPING
+      result null, trick
 
