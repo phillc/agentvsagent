@@ -156,12 +156,12 @@ describe "Handler", ->
       @handler.pass_cards @eastTicket, @eastPassed, ->
       @handler.pass_cards @southTicket, @southPassed, ->
       @handler.pass_cards @westTicket, @westPassed, (err, cards) =>
-        cards[0].suit.should.equal(Suit.HEARTS)
-        cards[0].rank.should.equal(Rank.THREE)
-        cards[1].suit.should.equal(Suit.CLUBS)
-        cards[1].rank.should.equal(Rank.TWO)
-        cards[2].suit.should.equal(Suit.SPADES)
-        cards[2].rank.should.equal(Rank.QUEEN)
+        cards[0].suit.should.equal(types.Suit.HEARTS)
+        cards[0].rank.should.equal(types.Rank.THREE)
+        cards[1].suit.should.equal(types.Suit.CLUBS)
+        cards[1].rank.should.equal(types.Rank.TWO)
+        cards[2].suit.should.equal(types.Suit.SPADES)
+        cards[2].rank.should.equal(types.Rank.QUEEN)
         done()
 
   describe "#get_trick", ->
@@ -174,8 +174,14 @@ describe "Handler", ->
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
     it "returns the current trick", (done) ->
+      @game.currentRound.tricks[0].leader = "north"
+      @game.currentRound.tricks[0].east = new Card(Suit.HEARTS, Rank.NINE)
+      should.not.exist(@game.currentRound.tricks[0].west)
+
       @handler.get_trick @ticket, (error, trick) =>
-        trick.should.equal @game.currentRound.tricks[0]
+        trick.leader.should.equal(types.Position.NORTH)
+        trick.east.suit.should.equal types.Suit.HEARTS
+        trick.east.rank.should.equal types.Rank.NINE
         done()
 
   describe "#play_card", ->
@@ -198,7 +204,9 @@ describe "Handler", ->
     it "returns the result of trick", (done) ->
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card, (error, trick) =>
-        trick.should.equal @game.currentRound.tricks[0]
+        trick.leader.should.equal(types.Position.NORTH)
+        trick.east.suit.should.equal types.Suit.DIAMONDS
+        trick.east.rank.should.equal types.Rank.TWO
         done()
 
       @game.stack.push("endingTrick")

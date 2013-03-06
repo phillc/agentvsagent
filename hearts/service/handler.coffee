@@ -49,6 +49,22 @@ mapCardToThrift = (card) ->
 mapThriftToCard = (thriftCard) ->
   new Card(mapThriftToSuit(thriftCard.suit), mapThriftToRank(thriftCard.rank))
 
+mapLeaderToThrift = (leader) ->
+  switch leader
+    when "north" then types.Position.NORTH
+    when "east" then types.Position.EAST
+    when "south" then types.Positions.SOUTH
+    when "west" then types.Positions.WEST
+
+
+mapTrickToThrift = (trick) ->
+  thriftTrick = new types.Trick leader: mapLeaderToThrift(trick.leader)
+  thriftTrick.north = mapCardToThrift(trick.north) if trick.north
+  thriftTrick.east = mapCardToThrift(trick.east) if trick.east
+  thriftTrick.south = mapCardToThrift(trick.south) if trick.south
+  thriftTrick.west = mapCardToThrift(trick.west) if trick.west
+  thriftTrick
+
 module.exports = class Handler
   constructor: (@arena) ->
 
@@ -80,24 +96,25 @@ module.exports = class Handler
 
   pass_cards: (ticket, cards, result) ->
     console.log "PASS CARDS", ticket, cards
+    #What if they send a blank ticket?
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
-    #CARD NEEDS TO BE MAPPED
     mappedCards = cards.map (thriftCard) -> mapThriftToCard(thriftCard)
     action = new actions.PassCards(player, mappedCards)
     game.handleAction(action)
 
     player.waitForPassed (cards) =>
-      result null, cards
+      thriftCards = cards.map (card) ->
+        mapCardToThrift(card)
+      result null, thriftCards
 
   get_trick: (ticket, result) ->
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
     player.waitForTurn (trick) =>
-      # TRICK NEED MAPPING
-      result null, trick
+      result null, mapTrickToThrift(trick)
 
   play_card: (ticket, card, result) ->
     game = @arena.getGame(ticket.gameId)
@@ -107,6 +124,5 @@ module.exports = class Handler
     game.handleAction(action)
 
     player.waitForTrickFinished (trick) =>
-      # TRICK NEED MAPPING
-      result null, trick
+      result null, mapTrickToThrift(trick)
 
