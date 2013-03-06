@@ -26,8 +26,10 @@ exports.StartingGame = class StartingGame extends State
 
 exports.StartingRound = class StartingRound extends State
   run: ->
-    @game.currentRound = new Round()
-    @game.stack.push("startingTrick")
+    @game.rounds.push(new Round())
+
+    for _ in [1..13]
+      @game.stack.push("startingTrick")
     @game.stack.push("passingRight")
     @game.stack.push("dealing")
     @game.nextState()
@@ -38,17 +40,17 @@ exports.Dealing = class Dealing extends State
 
     # @game.positions.leftOf(@game.currentDealer)
     # players = @game.positions.fromLeftOf(@game.currentDealer)
-    deck.moveCardsTo(13, @game.currentRound.north.dealt)
-    @game.positions.north.emit 'dealt', @game.currentRound.north.dealt.cards
+    deck.moveCardsTo(13, @game.currentRound().north.dealt)
+    @game.positions.north.emit 'dealt', @game.currentRound().north.dealt.cards
 
-    deck.moveCardsTo(13, @game.currentRound.east.dealt)
-    @game.positions.east.emit 'dealt', @game.currentRound.east.dealt.cards
+    deck.moveCardsTo(13, @game.currentRound().east.dealt)
+    @game.positions.east.emit 'dealt', @game.currentRound().east.dealt.cards
 
-    deck.moveCardsTo(13, @game.currentRound.south.dealt)
-    @game.positions.south.emit 'dealt', @game.currentRound.south.dealt.cards
+    deck.moveCardsTo(13, @game.currentRound().south.dealt)
+    @game.positions.south.emit 'dealt', @game.currentRound().south.dealt.cards
 
-    deck.moveCardsTo(13, @game.currentRound.west.dealt)
-    @game.positions.west.emit 'dealt', @game.currentRound.west.dealt.cards
+    deck.moveCardsTo(13, @game.currentRound().west.dealt)
+    @game.positions.west.emit 'dealt', @game.currentRound().west.dealt.cards
 
     @game.nextState()
 
@@ -65,16 +67,16 @@ exports.Passing = class Passing extends State
   handleAction: (action) ->
     action.execute(@game)
 
-    if @game.currentRound.allHavePassed()
-      @game.positions.north.emit 'passed', @game.currentRound.east.passed.cards
-      @game.positions.east.emit 'passed', @game.currentRound.south.passed.cards
-      @game.positions.south.emit 'passed', @game.currentRound.west.passed.cards
-      @game.positions.west.emit 'passed', @game.currentRound.north.passed.cards
+    if @game.currentRound().allHavePassed()
+      @game.positions.north.emit 'passed', @game.currentRound().east.passed.cards
+      @game.positions.east.emit 'passed', @game.currentRound().south.passed.cards
+      @game.positions.south.emit 'passed', @game.currentRound().west.passed.cards
+      @game.positions.west.emit 'passed', @game.currentRound().north.passed.cards
       @game.nextState()
 
 exports.StartingTrick = class StartingTrick extends State
   run: ->
-    @game.currentRound.tricks.push({leader: "north"})
+    @game.currentRound().tricks.push({leader: "north"})
     @game.stack.push("endingTrick")
     @game.stack.push("waitingForCardFromNorth")
     @game.stack.push("waitingForCardFromWest")
@@ -88,7 +90,7 @@ exports.WaitingForCard = class WaitingForCard extends State
     super(game)
 
   run: ->
-    @game.positions[@position].emit 'turn', @game.currentRound.tricks[0]
+    @game.positions[@position].emit 'turn', @game.currentRound().tricks[0]
 
   handleAction: (action) ->
     action.execute(@game)
@@ -97,7 +99,7 @@ exports.WaitingForCard = class WaitingForCard extends State
 exports.EndingTrick = class EndingTrick extends State
   run: ->
     for player in @game.players
-      player.emit 'endTrick', @game.currentRound.tricks[0]
+      player.emit 'endTrick', @game.currentRound().tricks[0]
     @game.nextState()
 # class EndRound
 #   tallyScore

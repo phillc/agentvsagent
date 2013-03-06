@@ -33,12 +33,14 @@ class RandomBot
     puts "received cards: #{received_cards.inspect}"
     hand = hand + received_cards
 
-    trick = @game.get_trick @ticket
-    puts "current trick: #{trick}"
-    # 13.times {
-    #   trick = @game.get_trick @ticket
-    #   @game.play_card @ticket, hand.first
-    # }
+    13.times {
+      trick = @game.get_trick @ticket
+      puts "current trick: #{trick.inspect}"
+
+      sleep 0.5
+
+      @game.play_card @ticket, hand.pop
+    }
     # @game.get_round_results @ticket
   end
 end

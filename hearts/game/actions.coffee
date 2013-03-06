@@ -11,7 +11,7 @@ exports.PassCards = class PassCards extends Action
   execute: (game) ->
     position = game.positionOf(@player)
     console.log "PASSING CARDS", @player.id, @cards
-    (new Pile(@cards)).copyAllCardsTo game.currentRound[position].passed
+    (new Pile(@cards)).copyAllCardsTo game.currentRound()[position].passed
 
 exports.PlayCard = class PlayCard extends Action
   constructor: (player, @card) ->
@@ -20,4 +20,4 @@ exports.PlayCard = class PlayCard extends Action
   execute: (game) ->
     console.log "PLAYING CARD", @player.id, @card
     position = game.positionOf(@player)
-    game.currentRound.tricks[0][position] = @card
+    game.currentRound().tricks[0][position] = @card

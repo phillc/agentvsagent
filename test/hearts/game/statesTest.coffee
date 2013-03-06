@@ -62,9 +62,10 @@ describe "states", ->
     it "pushes the next states on the stack", ->
       @game.stack.should.have.length(0)
       @state.run()
-      @game.stack.should.have.length(3)
-      @game.stack[2].should.equal("dealing")
-      @game.stack[1].should.equal("passingRight")
+      @game.stack.should.have.length(15)
+      @game.stack[14].should.equal("dealing")
+      @game.stack[13].should.equal("passingRight")
+      @game.stack[12].should.equal("startingTrick")
       @game.stack[0].should.equal("startingTrick")
 
     it "goes to the next state", ->
@@ -80,10 +81,10 @@ describe "states", ->
 
     it "deals cards to all players", ->
       @state.run()
-      @game.currentRound.north.dealt.cards.should.have.length(13)
-      @game.currentRound.east.dealt.cards.should.have.length(13)
-      @game.currentRound.south.dealt.cards.should.have.length(13)
-      @game.currentRound.west.dealt.cards.should.have.length(13)
+      @game.currentRound().north.dealt.cards.should.have.length(13)
+      @game.currentRound().east.dealt.cards.should.have.length(13)
+      @game.currentRound().south.dealt.cards.should.have.length(13)
+      @game.currentRound().west.dealt.cards.should.have.length(13)
 
     it "goes to the next state", ->
       @state.run()
@@ -109,7 +110,7 @@ describe "states", ->
 
       @state.handleAction(action)
 
-      @game.currentRound.north.passed.cards.should.eql(cards)
+      @game.currentRound().north.passed.cards.should.eql(cards)
 
     it "goes to the next state and emits an event after all four have passed cards", (done) ->
       cards = Card.all()[0..2]
@@ -138,11 +139,11 @@ describe "states", ->
       @nextStateCalls = 0
 
     it "adds a trick to the round", ->
-      @game.currentRound.tricks.should.have.length(0)
+      @game.currentRound().tricks.should.have.length(0)
       state = new states.StartingTrick(@game).run()
-      @game.currentRound.tricks.should.have.length(1)
+      @game.currentRound().tricks.should.have.length(1)
       state = new states.StartingTrick(@game).run()
-      @game.currentRound.tricks.should.have.length(2)
+      @game.currentRound().tricks.should.have.length(2)
 
     it "adds the next states", ->
       @game.stack.splice(0, @game.stack.length)
@@ -173,11 +174,11 @@ describe "states", ->
       action = new actions.PlayCard(@game.positions.north, card)
       state.handleAction(action)
 
-      @game.currentRound.tricks[0].north.should.equal(card)
+      @game.currentRound().tricks[0].north.should.equal(card)
 
     it "emits an event on the player with the current trick", (done) ->
       @game.positions.north.once 'turn', (trick) =>
-        trick.should.equal @game.currentRound.tricks[0]
+        trick.should.equal @game.currentRound().tricks[0]
         done()
       state = new states.WaitingForCard(@game, "north").run()
 
@@ -199,7 +200,7 @@ describe "states", ->
 
     it "emits end trick event on each player", (done) ->
       @game.positions.north.once 'endTrick', (trick) =>
-        trick.should.equal @game.currentRound.tricks[0]
+        trick.should.equal @game.currentRound().tricks[0]
         done()
 
       new states.EndingTrick(@game).run()

@@ -24,7 +24,9 @@ module.exports = class Game
     # DATA
     @positions = {}
     @rounds = []
-    @currentRound = null
+
+  currentRound: ->
+    @rounds[@rounds.length - 1]
 
   positionOf: (player) ->
     if @positions.north == player

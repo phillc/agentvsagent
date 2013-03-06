@@ -53,7 +53,7 @@ describe "Handler", ->
   describe "#get_hand", ->
     beforeEach ->
       @game = Factory.createGame(arena: @arena)
-      @player = @game.players[0]
+      @player = @game.positions.west
       @ticket = new types.Ticket(agentId: @player.id, gameId: @game.id)
       @game.states.startingGame.run()
       @game.states.dealing.run()
@@ -149,9 +149,9 @@ describe "Handler", ->
 
     it "passes the card", ->
       @handler.pass_cards @westTicket, @westPassed, ->
-      @game.currentRound.west.passed.cards.should.have.length(3)
-      @game.currentRound.west.passed.cards[0].suit.should.equal(Suit.HEARTS)
-      @game.currentRound.west.passed.cards[0].rank.should.equal(Rank.SIX)
+      @game.currentRound().west.passed.cards.should.have.length(3)
+      @game.currentRound().west.passed.cards[0].suit.should.equal(Suit.HEARTS)
+      @game.currentRound().west.passed.cards[0].rank.should.equal(Rank.SIX)
 
     it "returns the cards passed to the west player", (done) ->
       @handler.pass_cards @northTicket, @northPassed, ->
@@ -176,9 +176,9 @@ describe "Handler", ->
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
     it "returns the current trick", (done) ->
-      @game.currentRound.tricks[0].leader = "north"
-      @game.currentRound.tricks[0].east = new Card(Suit.HEARTS, Rank.NINE)
-      should.not.exist(@game.currentRound.tricks[0].west)
+      @game.currentRound().tricks[0].leader = "north"
+      @game.currentRound().tricks[0].east = new Card(Suit.HEARTS, Rank.NINE)
+      should.not.exist(@game.currentRound().tricks[0].west)
 
       @handler.get_trick @ticket, (error, trick) =>
         trick.leader.should.equal(types.Position.NORTH)
@@ -199,8 +199,8 @@ describe "Handler", ->
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card
 
-      @game.currentRound.tricks[0].east.suit.should.equal(Suit.DIAMONDS)
-      @game.currentRound.tricks[0].east.rank.should.equal(Rank.TWO)
+      @game.currentRound().tricks[0].east.suit.should.equal(Suit.DIAMONDS)
+      @game.currentRound().tricks[0].east.rank.should.equal(Rank.TWO)
 
 
     it "returns the result of trick", (done) ->

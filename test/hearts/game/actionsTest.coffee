@@ -25,8 +25,8 @@ describe "actions", ->
       northAction.execute(@game)
       southAction.execute(@game)
 
-      @game.currentRound.north.passed.cards.should.eql(northCards)
-      @game.currentRound.south.passed.cards.should.eql(southCards)
+      @game.currentRound().north.passed.cards.should.eql(northCards)
+      @game.currentRound().south.passed.cards.should.eql(southCards)
 
   describe "PlayCard", ->
     beforeEach ->
@@ -38,6 +38,6 @@ describe "actions", ->
       action = new actions.PlayCard(@game.positions.north, card)
       action.execute(@game)
 
-      @game.currentRound.tricks[0].north.should.equal(card)
+      @game.currentRound().tricks[0].north.should.equal(card)
 
 
