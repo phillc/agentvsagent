@@ -81,7 +81,7 @@ exports.StartingTrick = class StartingTrick extends State
     @game.stack.push("waitingForCardFromSouth")
     @game.stack.push("waitingForCardFromEast")
 
-    # nextstate
+    @game.nextState()
 
 exports.WaitingForCard = class WaitingForCard extends State
   constructor: (game, @position) ->

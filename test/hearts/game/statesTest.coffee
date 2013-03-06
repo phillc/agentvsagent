@@ -155,6 +155,11 @@ describe "states", ->
       @game.stack[1].should.equal("waitingForCardFromNorth")
       @game.stack[0].should.equal("endingTrick")
 
+    it "goes to the next state", ->
+      new states.StartingTrick(@game).run()
+
+      @nextStateCalls.should.equal(1)
+
   describe "WaitingForCard", ->
     beforeEach ->
       @game.states.startingGame.run()
