@@ -174,11 +174,11 @@ describe "states", ->
       action = new actions.PlayCard(@game.positions.north, card)
       state.handleAction(action)
 
-      @game.currentRound().tricks[0].north.should.equal(card)
+      @game.currentRound().currentTrick().north.should.equal(card)
 
     it "emits an event on the player with the current trick", (done) ->
       @game.positions.north.once 'turn', (trick) =>
-        trick.should.equal @game.currentRound().tricks[0]
+        trick.should.equal @game.currentRound().currentTrick()
         done()
       state = new states.WaitingForCard(@game, "north").run()
 
@@ -200,7 +200,7 @@ describe "states", ->
 
     it "emits end trick event on each player", (done) ->
       @game.positions.north.once 'endTrick', (trick) =>
-        trick.should.equal @game.currentRound().tricks[0]
+        trick.should.equal @game.currentRound().currentTrick()
         done()
 
       new states.EndingTrick(@game).run()

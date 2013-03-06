@@ -90,7 +90,7 @@ exports.WaitingForCard = class WaitingForCard extends State
     super(game)
 
   run: ->
-    @game.positions[@position].emit 'turn', @game.currentRound().tricks[0]
+    @game.positions[@position].emit 'turn', @game.currentRound().currentTrick()
 
   handleAction: (action) ->
     action.execute(@game)
@@ -99,7 +99,7 @@ exports.WaitingForCard = class WaitingForCard extends State
 exports.EndingTrick = class EndingTrick extends State
   run: ->
     for player in @game.players
-      player.emit 'endTrick', @game.currentRound().tricks[0]
+      player.emit 'endTrick', @game.currentRound().currentTrick()
     @game.nextState()
 # class EndRound
 #   tallyScore

@@ -176,9 +176,9 @@ describe "Handler", ->
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
     it "returns the current trick", (done) ->
-      @game.currentRound().tricks[0].leader = "north"
-      @game.currentRound().tricks[0].east = new Card(Suit.HEARTS, Rank.NINE)
-      should.not.exist(@game.currentRound().tricks[0].west)
+      @game.currentRound().currentTrick().leader = "north"
+      @game.currentRound().currentTrick().east = new Card(Suit.HEARTS, Rank.NINE)
+      should.not.exist(@game.currentRound().currentTrick().west)
 
       @handler.get_trick @ticket, (error, trick) =>
         trick.leader.should.equal(types.Position.NORTH)
@@ -199,8 +199,8 @@ describe "Handler", ->
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card
 
-      @game.currentRound().tricks[0].east.suit.should.equal(Suit.DIAMONDS)
-      @game.currentRound().tricks[0].east.rank.should.equal(Rank.TWO)
+      @game.currentRound().currentTrick().east.suit.should.equal(Suit.DIAMONDS)
+      @game.currentRound().currentTrick().east.rank.should.equal(Rank.TWO)
 
 
     it "returns the result of trick", (done) ->

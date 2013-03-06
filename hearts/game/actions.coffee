@@ -20,4 +20,4 @@ exports.PlayCard = class PlayCard extends Action
   execute: (game) ->
     console.log "PLAYING CARD", @player.id, @card
     position = game.positionOf(@player)
-    game.currentRound().tricks[0][position] = @card
+    game.currentRound().currentTrick()[position] = @card
