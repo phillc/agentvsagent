@@ -16,4 +16,11 @@ lib-cov:
 stats:
 	gitstats . gen/stats
 
+setup:
+	npm install
+	brew install haskell-platform
+	brew install thrift --with-haskell
+	gem install thrift
+
+
 .PHONY: test stats clean all
