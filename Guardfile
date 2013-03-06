@@ -62,6 +62,7 @@ guard :thrift, all_on_start: true,
                           "dist/hearts/nodejs/lib" => "js:node",
                           "dist/hearts/java/lib" => "java",
                           "dist/hearts/haskell/lib" => "hs",
+                          "dist/hearts/go/lib" => "go",
                           "dist/hearts/ruby/lib" => "rb" } do
   watch('hearts/hearts.thrift')
 end
