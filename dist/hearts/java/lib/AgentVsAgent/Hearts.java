@@ -1260,7 +1260,7 @@ public class Hearts {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Ticket.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_game_info_args.class, metaDataMap);
@@ -1434,6 +1434,9 @@ public class Hearts {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
+      if (ticket == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'ticket' was not present! Struct: " + toString());
+      }
       // check for sub-struct validity
       if (ticket != null) {
         ticket.validate();
@@ -1520,25 +1523,15 @@ public class Hearts {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, get_game_info_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetTicket()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetTicket()) {
-          struct.ticket.write(oprot);
-        }
+        struct.ticket.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_game_info_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.ticket = new Ticket();
-          struct.ticket.read(iprot);
-          struct.setTicketIsSet(true);
-        }
+        struct.ticket = new Ticket();
+        struct.ticket.read(iprot);
+        struct.setTicketIsSet(true);
       }
     }
 
@@ -1978,7 +1971,7 @@ public class Hearts {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Ticket.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_hand_args.class, metaDataMap);
@@ -2152,6 +2145,9 @@ public class Hearts {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
+      if (ticket == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'ticket' was not present! Struct: " + toString());
+      }
       // check for sub-struct validity
       if (ticket != null) {
         ticket.validate();
@@ -2238,25 +2234,15 @@ public class Hearts {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, get_hand_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetTicket()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetTicket()) {
-          struct.ticket.write(oprot);
-        }
+        struct.ticket.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_hand_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.ticket = new Ticket();
-          struct.ticket.read(iprot);
-          struct.setTicketIsSet(true);
-        }
+        struct.ticket = new Ticket();
+        struct.ticket.read(iprot);
+        struct.setTicketIsSet(true);
       }
     }
 
@@ -2750,9 +2736,9 @@ public class Hearts {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Ticket.class)));
-      tmpMap.put(_Fields.CARDS, new org.apache.thrift.meta_data.FieldMetaData("cards", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.CARDS, new org.apache.thrift.meta_data.FieldMetaData("cards", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
               new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -3016,6 +3002,12 @@ public class Hearts {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
+      if (ticket == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'ticket' was not present! Struct: " + toString());
+      }
+      if (cards == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'cards' was not present! Struct: " + toString());
+      }
       // check for sub-struct validity
       if (ticket != null) {
         ticket.validate();
@@ -3133,24 +3125,12 @@ public class Hearts {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, pass_cards_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetTicket()) {
-          optionals.set(0);
-        }
-        if (struct.isSetCards()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetTicket()) {
-          struct.ticket.write(oprot);
-        }
-        if (struct.isSetCards()) {
+        struct.ticket.write(oprot);
+        {
+          oprot.writeI32(struct.cards.size());
+          for (Card _iter12 : struct.cards)
           {
-            oprot.writeI32(struct.cards.size());
-            for (Card _iter12 : struct.cards)
-            {
-              _iter12.write(oprot);
-            }
+            _iter12.write(oprot);
           }
         }
       }
@@ -3158,26 +3138,21 @@ public class Hearts {
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, pass_cards_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(2);
-        if (incoming.get(0)) {
-          struct.ticket = new Ticket();
-          struct.ticket.read(iprot);
-          struct.setTicketIsSet(true);
-        }
-        if (incoming.get(1)) {
+        struct.ticket = new Ticket();
+        struct.ticket.read(iprot);
+        struct.setTicketIsSet(true);
+        {
+          org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+          struct.cards = new ArrayList<Card>(_list13.size);
+          for (int _i14 = 0; _i14 < _list13.size; ++_i14)
           {
-            org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.cards = new ArrayList<Card>(_list13.size);
-            for (int _i14 = 0; _i14 < _list13.size; ++_i14)
-            {
-              Card _elem15; // required
-              _elem15 = new Card();
-              _elem15.read(iprot);
-              struct.cards.add(_elem15);
-            }
+            Card _elem15; // required
+            _elem15 = new Card();
+            _elem15.read(iprot);
+            struct.cards.add(_elem15);
           }
-          struct.setCardsIsSet(true);
         }
+        struct.setCardsIsSet(true);
       }
     }
 
@@ -3666,7 +3641,7 @@ public class Hearts {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Ticket.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_trick_args.class, metaDataMap);
@@ -3840,6 +3815,9 @@ public class Hearts {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
+      if (ticket == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'ticket' was not present! Struct: " + toString());
+      }
       // check for sub-struct validity
       if (ticket != null) {
         ticket.validate();
@@ -3926,25 +3904,15 @@ public class Hearts {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, get_trick_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetTicket()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetTicket()) {
-          struct.ticket.write(oprot);
-        }
+        struct.ticket.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_trick_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.ticket = new Ticket();
-          struct.ticket.read(iprot);
-          struct.setTicketIsSet(true);
-        }
+        struct.ticket = new Ticket();
+        struct.ticket.read(iprot);
+        struct.setTicketIsSet(true);
       }
     }
 
@@ -4389,9 +4357,9 @@ public class Hearts {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.TICKET, new org.apache.thrift.meta_data.FieldMetaData("ticket", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Ticket.class)));
-      tmpMap.put(_Fields.CARD, new org.apache.thrift.meta_data.FieldMetaData("card", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.CARD, new org.apache.thrift.meta_data.FieldMetaData("card", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(play_card_args.class, metaDataMap);
@@ -4635,6 +4603,12 @@ public class Hearts {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
+      if (ticket == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'ticket' was not present! Struct: " + toString());
+      }
+      if (card == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'card' was not present! Struct: " + toString());
+      }
       // check for sub-struct validity
       if (ticket != null) {
         ticket.validate();
@@ -4738,36 +4712,19 @@ public class Hearts {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, play_card_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetTicket()) {
-          optionals.set(0);
-        }
-        if (struct.isSetCard()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetTicket()) {
-          struct.ticket.write(oprot);
-        }
-        if (struct.isSetCard()) {
-          struct.card.write(oprot);
-        }
+        struct.ticket.write(oprot);
+        struct.card.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, play_card_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(2);
-        if (incoming.get(0)) {
-          struct.ticket = new Ticket();
-          struct.ticket.read(iprot);
-          struct.setTicketIsSet(true);
-        }
-        if (incoming.get(1)) {
-          struct.card = new Card();
-          struct.card.read(iprot);
-          struct.setCardIsSet(true);
-        }
+        struct.ticket = new Ticket();
+        struct.ticket.read(iprot);
+        struct.setTicketIsSet(true);
+        struct.card = new Card();
+        struct.card.read(iprot);
+        struct.setCardIsSet(true);
       }
     }
 

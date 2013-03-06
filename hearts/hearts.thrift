@@ -60,14 +60,13 @@ struct Trick {
 
 service Hearts {
   EntryResponse enter_arena(),
-  GameInfo get_game_info(1: Ticket ticket),
-  #get_hand needs to return previous hand, or need yet another step
-  list<Card> get_hand(1: Ticket ticket),
-  list<Card> pass_cards(1:Ticket ticket, 2: list<Card> cards),
-  Trick get_trick(1:Ticket ticket),
-  Trick play_card(1: Ticket ticket, 2:Card card),
+  GameInfo get_game_info(1: required Ticket ticket),
+  list<Card> get_hand(1: required Ticket ticket),
+  list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards),
+  Trick get_trick(1: required Ticket ticket),
+  Trick play_card(1: required Ticket ticket, 2: required Card card),
   # OR just make play_card return the trick
-  # Trick get_trick_result(1:Ticket ticket),
-  #list<Card> get_trick(1: Agent)
+  # Trick get_trick_result(1: required Ticket ticket),
+  #list<Card> get_trick(1: required Agent)
 }
 

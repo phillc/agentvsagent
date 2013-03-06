@@ -195,6 +195,7 @@ module AgentVsAgent
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
       end
 
       ::Thrift::Struct.generate_accessors self
@@ -227,6 +228,7 @@ module AgentVsAgent
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
       end
 
       ::Thrift::Struct.generate_accessors self
@@ -261,6 +263,8 @@ module AgentVsAgent
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field cards is unset!') unless @cards
       end
 
       ::Thrift::Struct.generate_accessors self
@@ -293,6 +297,7 @@ module AgentVsAgent
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
       end
 
       ::Thrift::Struct.generate_accessors self
@@ -327,6 +332,8 @@ module AgentVsAgent
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field card is unset!') unless @card
       end
 
       ::Thrift::Struct.generate_accessors self
