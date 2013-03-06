@@ -19,12 +19,12 @@ func Usage() {
   fmt.Fprint(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:\n")
   flag.PrintDefaults()
   fmt.Fprint(os.Stderr, "Functions:\n")
-  fmt.Fprint(os.Stderr, "  enter_arena() (retval136 *EntryResponse, err os.Error)\n")
-  fmt.Fprint(os.Stderr, "  get_game_info(ticket *Ticket) (retval137 *GameInfo, err os.Error)\n")
-  fmt.Fprint(os.Stderr, "  get_hand(ticket *Ticket) (retval138 thrift.TList, err os.Error)\n")
-  fmt.Fprint(os.Stderr, "  pass_cards(ticket *Ticket, cards thrift.TList) (retval139 thrift.TList, err os.Error)\n")
-  fmt.Fprint(os.Stderr, "  get_trick(ticket *Ticket) (retval140 *Trick, err os.Error)\n")
-  fmt.Fprint(os.Stderr, "  play_card(ticket *Ticket, card *Card) (retval141 *Trick, err os.Error)\n")
+  fmt.Fprint(os.Stderr, "  enter_arena() (retval137 *EntryResponse, err os.Error)\n")
+  fmt.Fprint(os.Stderr, "  get_game_info(ticket *Ticket) (retval138 *GameInfo, err os.Error)\n")
+  fmt.Fprint(os.Stderr, "  get_hand(ticket *Ticket) (retval139 thrift.TList, err os.Error)\n")
+  fmt.Fprint(os.Stderr, "  pass_cards(ticket *Ticket, cards thrift.TList) (retval140 thrift.TList, err os.Error)\n")
+  fmt.Fprint(os.Stderr, "  get_trick(ticket *Ticket) (retval141 *Trick, err os.Error)\n")
+  fmt.Fprint(os.Stderr, "  play_card(ticket *Ticket, card *Card) (retval142 *Trick, err os.Error)\n")
   fmt.Fprint(os.Stderr, "\n")
   os.Exit(0)
 }
@@ -128,19 +128,19 @@ func main() {
       fmt.Fprint(os.Stderr, "GetGameInfo requires 1 args\n")
       flag.Usage()
     }
-    arg142 := flag.Arg(1)
-    mbTrans143 := thrift.NewTMemoryBufferLen(len(arg142))
-    defer mbTrans143.Close()
-    _, err144 := mbTrans143.WriteString(arg142)
-    if err144 != nil {
+    arg143 := flag.Arg(1)
+    mbTrans144 := thrift.NewTMemoryBufferLen(len(arg143))
+    defer mbTrans144.Close()
+    _, err145 := mbTrans144.WriteString(arg143)
+    if err145 != nil {
       Usage()
       return
     }
-    factory145 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt146 := factory145.GetProtocol(mbTrans143)
+    factory146 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt147 := factory146.GetProtocol(mbTrans144)
     argvalue0 := hearts.NewTicket()
-    err147 := argvalue0.Read(jsProt146)
-    if err147 != nil {
+    err148 := argvalue0.Read(jsProt147)
+    if err148 != nil {
       Usage()
       return
     }
@@ -153,19 +153,19 @@ func main() {
       fmt.Fprint(os.Stderr, "GetHand requires 1 args\n")
       flag.Usage()
     }
-    arg148 := flag.Arg(1)
-    mbTrans149 := thrift.NewTMemoryBufferLen(len(arg148))
-    defer mbTrans149.Close()
-    _, err150 := mbTrans149.WriteString(arg148)
-    if err150 != nil {
+    arg149 := flag.Arg(1)
+    mbTrans150 := thrift.NewTMemoryBufferLen(len(arg149))
+    defer mbTrans150.Close()
+    _, err151 := mbTrans150.WriteString(arg149)
+    if err151 != nil {
       Usage()
       return
     }
-    factory151 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt152 := factory151.GetProtocol(mbTrans149)
+    factory152 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt153 := factory152.GetProtocol(mbTrans150)
     argvalue0 := hearts.NewTicket()
-    err153 := argvalue0.Read(jsProt152)
-    if err153 != nil {
+    err154 := argvalue0.Read(jsProt153)
+    if err154 != nil {
       Usage()
       return
     }
@@ -178,36 +178,36 @@ func main() {
       fmt.Fprint(os.Stderr, "PassCards requires 2 args\n")
       flag.Usage()
     }
-    arg154 := flag.Arg(1)
-    mbTrans155 := thrift.NewTMemoryBufferLen(len(arg154))
-    defer mbTrans155.Close()
-    _, err156 := mbTrans155.WriteString(arg154)
-    if err156 != nil {
+    arg155 := flag.Arg(1)
+    mbTrans156 := thrift.NewTMemoryBufferLen(len(arg155))
+    defer mbTrans156.Close()
+    _, err157 := mbTrans156.WriteString(arg155)
+    if err157 != nil {
       Usage()
       return
     }
-    factory157 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt158 := factory157.GetProtocol(mbTrans155)
+    factory158 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt159 := factory158.GetProtocol(mbTrans156)
     argvalue0 := hearts.NewTicket()
-    err159 := argvalue0.Read(jsProt158)
-    if err159 != nil {
+    err160 := argvalue0.Read(jsProt159)
+    if err160 != nil {
       Usage()
       return
     }
     value0 := argvalue0
-    arg160 := flag.Arg(2)
-    mbTrans161 := thrift.NewTMemoryBufferLen(len(arg160))
-    defer mbTrans161.Close()
-    _, err162 := mbTrans161.WriteString(arg160)
-    if err162 != nil { 
+    arg161 := flag.Arg(2)
+    mbTrans162 := thrift.NewTMemoryBufferLen(len(arg161))
+    defer mbTrans162.Close()
+    _, err163 := mbTrans162.WriteString(arg161)
+    if err163 != nil { 
       Usage()
       return
     }
-    factory163 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt164 := factory163.GetProtocol(mbTrans161)
+    factory164 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt165 := factory164.GetProtocol(mbTrans162)
     containerStruct1 := hearts.NewPassCardsArgs()
-    err165 := containerStruct1.ReadField2(jsProt164)
-    if err165 != nil {
+    err166 := containerStruct1.ReadField2(jsProt165)
+    if err166 != nil {
       Usage()
       return
     }
@@ -221,19 +221,19 @@ func main() {
       fmt.Fprint(os.Stderr, "GetTrick requires 1 args\n")
       flag.Usage()
     }
-    arg166 := flag.Arg(1)
-    mbTrans167 := thrift.NewTMemoryBufferLen(len(arg166))
-    defer mbTrans167.Close()
-    _, err168 := mbTrans167.WriteString(arg166)
-    if err168 != nil {
+    arg167 := flag.Arg(1)
+    mbTrans168 := thrift.NewTMemoryBufferLen(len(arg167))
+    defer mbTrans168.Close()
+    _, err169 := mbTrans168.WriteString(arg167)
+    if err169 != nil {
       Usage()
       return
     }
-    factory169 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt170 := factory169.GetProtocol(mbTrans167)
+    factory170 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt171 := factory170.GetProtocol(mbTrans168)
     argvalue0 := hearts.NewTicket()
-    err171 := argvalue0.Read(jsProt170)
-    if err171 != nil {
+    err172 := argvalue0.Read(jsProt171)
+    if err172 != nil {
       Usage()
       return
     }
@@ -246,36 +246,36 @@ func main() {
       fmt.Fprint(os.Stderr, "PlayCard requires 2 args\n")
       flag.Usage()
     }
-    arg172 := flag.Arg(1)
-    mbTrans173 := thrift.NewTMemoryBufferLen(len(arg172))
-    defer mbTrans173.Close()
-    _, err174 := mbTrans173.WriteString(arg172)
-    if err174 != nil {
+    arg173 := flag.Arg(1)
+    mbTrans174 := thrift.NewTMemoryBufferLen(len(arg173))
+    defer mbTrans174.Close()
+    _, err175 := mbTrans174.WriteString(arg173)
+    if err175 != nil {
       Usage()
       return
     }
-    factory175 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt176 := factory175.GetProtocol(mbTrans173)
+    factory176 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt177 := factory176.GetProtocol(mbTrans174)
     argvalue0 := hearts.NewTicket()
-    err177 := argvalue0.Read(jsProt176)
-    if err177 != nil {
+    err178 := argvalue0.Read(jsProt177)
+    if err178 != nil {
       Usage()
       return
     }
     value0 := argvalue0
-    arg178 := flag.Arg(2)
-    mbTrans179 := thrift.NewTMemoryBufferLen(len(arg178))
-    defer mbTrans179.Close()
-    _, err180 := mbTrans179.WriteString(arg178)
-    if err180 != nil {
+    arg179 := flag.Arg(2)
+    mbTrans180 := thrift.NewTMemoryBufferLen(len(arg179))
+    defer mbTrans180.Close()
+    _, err181 := mbTrans180.WriteString(arg179)
+    if err181 != nil {
       Usage()
       return
     }
-    factory181 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt182 := factory181.GetProtocol(mbTrans179)
+    factory182 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt183 := factory182.GetProtocol(mbTrans180)
     argvalue1 := hearts.NewCard()
-    err183 := argvalue1.Read(jsProt182)
-    if err183 != nil {
+    err184 := argvalue1.Read(jsProt183)
+    if err184 != nil {
       Usage()
       return
     }

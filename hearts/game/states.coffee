@@ -36,10 +36,9 @@ exports.StartingRound = class StartingRound extends State
 
 exports.Dealing = class Dealing extends State
   run: ->
-    deck = Pile.createDeck()
+    deck = Pile.createShuffledDeck()
 
-    # @game.positions.leftOf(@game.currentDealer)
-    # players = @game.positions.fromLeftOf(@game.currentDealer)
+    # TODO: copyAllCardsTo held
     deck.moveCardsTo(13, @game.currentRound().north.dealt)
     @game.positions.north.emit 'dealt', @game.currentRound().north.dealt.cards
 
@@ -68,6 +67,11 @@ exports.Passing = class Passing extends State
     action.execute(@game)
 
     if @game.currentRound().allHavePassed()
+      # add to passed for the seat
+      # Maybe have a holding one as well, that can be drained and validated against
+
+      #TODO: copy into passed
+      # and copyAllTo held
       @game.positions.north.emit 'passed', @game.currentRound().east.passed.cards
       @game.positions.east.emit 'passed', @game.currentRound().south.passed.cards
       @game.positions.south.emit 'passed', @game.currentRound().west.passed.cards
@@ -76,7 +80,7 @@ exports.Passing = class Passing extends State
 
 exports.StartingTrick = class StartingTrick extends State
   run: ->
-    @game.currentRound().tricks.push({leader: "north"})
+    @game.currentRound().newTrick()
     @game.stack.push("endingTrick")
     @game.stack.push("waitingForCardFromNorth")
     @game.stack.push("waitingForCardFromWest")
@@ -93,6 +97,7 @@ exports.WaitingForCard = class WaitingForCard extends State
     @game.positions[@position].emit 'turn', @game.currentRound().currentTrick()
 
   handleAction: (action) ->
+    # TODO: Remove from held
     action.execute(@game)
     @game.nextState()
 
@@ -101,6 +106,8 @@ exports.EndingTrick = class EndingTrick extends State
     for player in @game.players
       player.emit 'endTrick', @game.currentRound().currentTrick()
     @game.nextState()
+
+
 # class EndRound
 #   tallyScore
 #   if any over 100

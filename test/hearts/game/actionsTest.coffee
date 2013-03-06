@@ -38,6 +38,6 @@ describe "actions", ->
       action = new actions.PlayCard(@game.positions.north, card)
       action.execute(@game)
 
-      @game.currentRound().currentTrick().north.should.equal(card)
+      @game.currentRound().currentTrick().played.cards[0].should.equal(card)
 
 

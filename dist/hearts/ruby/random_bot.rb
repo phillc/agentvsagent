@@ -27,21 +27,25 @@ class RandomBot
     puts "playing"
     game_info = @game.get_game_info @ticket
     puts "game info: #{game_info.inspect}"
-    hand = @game.get_hand @ticket
-    puts "hand: #{hand.inspect}"
-    received_cards = @game.pass_cards @ticket, hand.shift(3)
-    puts "received cards: #{received_cards.inspect}"
-    hand = hand + received_cards
 
-    13.times {
-      trick = @game.get_trick @ticket
-      puts "current trick: #{trick.inspect}"
+    loop do
+      hand = @game.get_hand @ticket
+      puts "hand: #{hand.inspect}"
+      received_cards = @game.pass_cards @ticket, hand.shift(3)
+      puts "received cards: #{received_cards.inspect}"
+      hand = hand + received_cards
 
-      sleep 0.5
+      13.times do
+        trick = @game.get_trick @ticket
+        puts "current trick: #{trick.inspect}"
 
-      @game.play_card @ticket, hand.pop
-    }
-    # @game.get_round_results @ticket
+        sleep 0.25
+
+        @game.play_card @ticket, hand.pop
+      end
+      break
+      # @game.get_round_results @ticket
+    end
   end
 end
 

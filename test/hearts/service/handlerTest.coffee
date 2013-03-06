@@ -170,6 +170,7 @@ describe "Handler", ->
     beforeEach ->
       @game = Factory.createGame(arena: @arena)
       @game.states.startingGame.run()
+      @game.states.startingTrick.run()
       @game.states.dealing.run()
       @game.stack.push("waitingForCardFromEast")
       @game.nextState()
@@ -177,13 +178,13 @@ describe "Handler", ->
 
     it "returns the current trick", (done) ->
       @game.currentRound().currentTrick().leader = "north"
-      @game.currentRound().currentTrick().east = new Card(Suit.HEARTS, Rank.NINE)
-      should.not.exist(@game.currentRound().currentTrick().west)
+      @game.currentRound().currentTrick().played.addCard(new Card(Suit.HEARTS, Rank.NINE))
+      @game.currentRound().currentTrick().played.cards.should.have.length(1)
 
       @handler.get_trick @ticket, (error, trick) =>
         trick.leader.should.equal(types.Position.NORTH)
-        trick.east.suit.should.equal types.Suit.HEARTS
-        trick.east.rank.should.equal types.Rank.NINE
+        trick.played[0].suit.should.equal types.Suit.HEARTS
+        trick.played[0].rank.should.equal types.Rank.NINE
         done()
 
   describe "#play_card", ->
@@ -191,6 +192,7 @@ describe "Handler", ->
       @game = Factory.createGame(arena: @arena)
       @game.states.startingGame.run()
       @game.states.dealing.run()
+      @game.states.startingTrick.run()
       @game.stack.push("waitingForCardFromEast")
       @game.nextState()
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
@@ -199,16 +201,16 @@ describe "Handler", ->
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card
 
-      @game.currentRound().currentTrick().east.suit.should.equal(Suit.DIAMONDS)
-      @game.currentRound().currentTrick().east.rank.should.equal(Rank.TWO)
+      @game.currentRound().currentTrick().played.cards[0].suit.should.equal(Suit.DIAMONDS)
+      @game.currentRound().currentTrick().played.cards[0].rank.should.equal(Rank.TWO)
 
 
-    it "returns the result of trick", (done) ->
+    it "returns the result of the trick", (done) ->
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card, (error, trick) =>
         trick.leader.should.equal(types.Position.NORTH)
-        trick.east.suit.should.equal types.Suit.DIAMONDS
-        trick.east.rank.should.equal types.Rank.TWO
+        trick.played[0].suit.should.equal types.Suit.DIAMONDS
+        trick.played[0].rank.should.equal types.Rank.TWO
         done()
 
       @game.stack.push("endingTrick")

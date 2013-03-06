@@ -56,14 +56,9 @@ mapPositionToThrift = (position) ->
     when "south" then types.Position.SOUTH
     when "west" then types.Position.WEST
 
-
 mapTrickToThrift = (trick) ->
-  thriftTrick = new types.Trick leader: mapPositionToThrift(trick.leader)
-  thriftTrick.north = mapCardToThrift(trick.north) if trick.north
-  thriftTrick.east = mapCardToThrift(trick.east) if trick.east
-  thriftTrick.south = mapCardToThrift(trick.south) if trick.south
-  thriftTrick.west = mapCardToThrift(trick.west) if trick.west
-  thriftTrick
+  cards = trick.played.cards.map mapCardToThrift
+  new types.Trick leader: mapPositionToThrift(trick.leader), played: cards
 
 module.exports = class Handler
   constructor: (@arena) ->
@@ -93,8 +88,7 @@ module.exports = class Handler
     player = game.getPlayer(ticket.agentId)
 
     player.waitForHand (cards) =>
-      thriftCards = cards.map (card) ->
-        mapCardToThrift(card)
+      thriftCards = cards.map mapCardToThrift
       result null, thriftCards
 
   pass_cards: (ticket, cards, result) ->
@@ -103,13 +97,12 @@ module.exports = class Handler
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
-    mappedCards = cards.map (thriftCard) -> mapThriftToCard(thriftCard)
+    mappedCards = cards.map mapThriftToCard
     action = new actions.PassCards(player, mappedCards)
     game.handleAction(action)
 
     player.waitForPassed (cards) =>
-      thriftCards = cards.map (card) ->
-        mapCardToThrift(card)
+      thriftCards = cards.map mapCardToThrift
       result null, thriftCards
 
   get_trick: (ticket, result) ->

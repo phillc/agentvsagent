@@ -5,6 +5,8 @@ module.exports = class Seat
     @dealt = new Pile()
     @passed = new Pile()
     # @received = new Pile()
+    @held = new Pile()
 
   hasPassed: ->
     @passed.cards.length > 0
+

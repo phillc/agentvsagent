@@ -34,10 +34,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Trick");
 
   private static final org.apache.thrift.protocol.TField LEADER_FIELD_DESC = new org.apache.thrift.protocol.TField("leader", org.apache.thrift.protocol.TType.I32, (short)1);
-  private static final org.apache.thrift.protocol.TField NORTH_FIELD_DESC = new org.apache.thrift.protocol.TField("north", org.apache.thrift.protocol.TType.STRUCT, (short)2);
-  private static final org.apache.thrift.protocol.TField EAST_FIELD_DESC = new org.apache.thrift.protocol.TField("east", org.apache.thrift.protocol.TType.STRUCT, (short)3);
-  private static final org.apache.thrift.protocol.TField SOUTH_FIELD_DESC = new org.apache.thrift.protocol.TField("south", org.apache.thrift.protocol.TType.STRUCT, (short)4);
-  private static final org.apache.thrift.protocol.TField WEST_FIELD_DESC = new org.apache.thrift.protocol.TField("west", org.apache.thrift.protocol.TType.STRUCT, (short)5);
+  private static final org.apache.thrift.protocol.TField PLAYED_FIELD_DESC = new org.apache.thrift.protocol.TField("played", org.apache.thrift.protocol.TType.LIST, (short)2);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -50,10 +47,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
    * @see Position
    */
   public Position leader; // required
-  public Card north; // optional
-  public Card east; // optional
-  public Card south; // optional
-  public Card west; // optional
+  public List<Card> played; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -62,10 +56,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
      * @see Position
      */
     LEADER((short)1, "leader"),
-    NORTH((short)2, "north"),
-    EAST((short)3, "east"),
-    SOUTH((short)4, "south"),
-    WEST((short)5, "west");
+    PLAYED((short)2, "played");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -82,14 +73,8 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
       switch(fieldId) {
         case 1: // LEADER
           return LEADER;
-        case 2: // NORTH
-          return NORTH;
-        case 3: // EAST
-          return EAST;
-        case 4: // SOUTH
-          return SOUTH;
-        case 5: // WEST
-          return WEST;
+        case 2: // PLAYED
+          return PLAYED;
         default:
           return null;
       }
@@ -130,20 +115,14 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
   }
 
   // isset id assignments
-  private _Fields optionals[] = {_Fields.NORTH,_Fields.EAST,_Fields.SOUTH,_Fields.WEST};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.LEADER, new org.apache.thrift.meta_data.FieldMetaData("leader", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, Position.class)));
-    tmpMap.put(_Fields.NORTH, new org.apache.thrift.meta_data.FieldMetaData("north", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class)));
-    tmpMap.put(_Fields.EAST, new org.apache.thrift.meta_data.FieldMetaData("east", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class)));
-    tmpMap.put(_Fields.SOUTH, new org.apache.thrift.meta_data.FieldMetaData("south", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class)));
-    tmpMap.put(_Fields.WEST, new org.apache.thrift.meta_data.FieldMetaData("west", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class)));
+    tmpMap.put(_Fields.PLAYED, new org.apache.thrift.meta_data.FieldMetaData("played", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+        new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+            new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Trick.class, metaDataMap);
   }
@@ -152,10 +131,12 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
   }
 
   public Trick(
-    Position leader)
+    Position leader,
+    List<Card> played)
   {
     this();
     this.leader = leader;
+    this.played = played;
   }
 
   /**
@@ -165,17 +146,12 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     if (other.isSetLeader()) {
       this.leader = other.leader;
     }
-    if (other.isSetNorth()) {
-      this.north = new Card(other.north);
-    }
-    if (other.isSetEast()) {
-      this.east = new Card(other.east);
-    }
-    if (other.isSetSouth()) {
-      this.south = new Card(other.south);
-    }
-    if (other.isSetWest()) {
-      this.west = new Card(other.west);
+    if (other.isSetPlayed()) {
+      List<Card> __this__played = new ArrayList<Card>();
+      for (Card other_element : other.played) {
+        __this__played.add(new Card(other_element));
+      }
+      this.played = __this__played;
     }
   }
 
@@ -186,10 +162,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
   @Override
   public void clear() {
     this.leader = null;
-    this.north = null;
-    this.east = null;
-    this.south = null;
-    this.west = null;
+    this.played = null;
   }
 
   /**
@@ -224,99 +197,42 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     }
   }
 
-  public Card getNorth() {
-    return this.north;
+  public int getPlayedSize() {
+    return (this.played == null) ? 0 : this.played.size();
   }
 
-  public Trick setNorth(Card north) {
-    this.north = north;
-    return this;
+  public java.util.Iterator<Card> getPlayedIterator() {
+    return (this.played == null) ? null : this.played.iterator();
   }
 
-  public void unsetNorth() {
-    this.north = null;
-  }
-
-  /** Returns true if field north is set (has been assigned a value) and false otherwise */
-  public boolean isSetNorth() {
-    return this.north != null;
-  }
-
-  public void setNorthIsSet(boolean value) {
-    if (!value) {
-      this.north = null;
+  public void addToPlayed(Card elem) {
+    if (this.played == null) {
+      this.played = new ArrayList<Card>();
     }
+    this.played.add(elem);
   }
 
-  public Card getEast() {
-    return this.east;
+  public List<Card> getPlayed() {
+    return this.played;
   }
 
-  public Trick setEast(Card east) {
-    this.east = east;
+  public Trick setPlayed(List<Card> played) {
+    this.played = played;
     return this;
   }
 
-  public void unsetEast() {
-    this.east = null;
+  public void unsetPlayed() {
+    this.played = null;
   }
 
-  /** Returns true if field east is set (has been assigned a value) and false otherwise */
-  public boolean isSetEast() {
-    return this.east != null;
+  /** Returns true if field played is set (has been assigned a value) and false otherwise */
+  public boolean isSetPlayed() {
+    return this.played != null;
   }
 
-  public void setEastIsSet(boolean value) {
+  public void setPlayedIsSet(boolean value) {
     if (!value) {
-      this.east = null;
-    }
-  }
-
-  public Card getSouth() {
-    return this.south;
-  }
-
-  public Trick setSouth(Card south) {
-    this.south = south;
-    return this;
-  }
-
-  public void unsetSouth() {
-    this.south = null;
-  }
-
-  /** Returns true if field south is set (has been assigned a value) and false otherwise */
-  public boolean isSetSouth() {
-    return this.south != null;
-  }
-
-  public void setSouthIsSet(boolean value) {
-    if (!value) {
-      this.south = null;
-    }
-  }
-
-  public Card getWest() {
-    return this.west;
-  }
-
-  public Trick setWest(Card west) {
-    this.west = west;
-    return this;
-  }
-
-  public void unsetWest() {
-    this.west = null;
-  }
-
-  /** Returns true if field west is set (has been assigned a value) and false otherwise */
-  public boolean isSetWest() {
-    return this.west != null;
-  }
-
-  public void setWestIsSet(boolean value) {
-    if (!value) {
-      this.west = null;
+      this.played = null;
     }
   }
 
@@ -330,35 +246,11 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
       }
       break;
 
-    case NORTH:
+    case PLAYED:
       if (value == null) {
-        unsetNorth();
+        unsetPlayed();
       } else {
-        setNorth((Card)value);
-      }
-      break;
-
-    case EAST:
-      if (value == null) {
-        unsetEast();
-      } else {
-        setEast((Card)value);
-      }
-      break;
-
-    case SOUTH:
-      if (value == null) {
-        unsetSouth();
-      } else {
-        setSouth((Card)value);
-      }
-      break;
-
-    case WEST:
-      if (value == null) {
-        unsetWest();
-      } else {
-        setWest((Card)value);
+        setPlayed((List<Card>)value);
       }
       break;
 
@@ -370,17 +262,8 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     case LEADER:
       return getLeader();
 
-    case NORTH:
-      return getNorth();
-
-    case EAST:
-      return getEast();
-
-    case SOUTH:
-      return getSouth();
-
-    case WEST:
-      return getWest();
+    case PLAYED:
+      return getPlayed();
 
     }
     throw new IllegalStateException();
@@ -395,14 +278,8 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     switch (field) {
     case LEADER:
       return isSetLeader();
-    case NORTH:
-      return isSetNorth();
-    case EAST:
-      return isSetEast();
-    case SOUTH:
-      return isSetSouth();
-    case WEST:
-      return isSetWest();
+    case PLAYED:
+      return isSetPlayed();
     }
     throw new IllegalStateException();
   }
@@ -429,39 +306,12 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
         return false;
     }
 
-    boolean this_present_north = true && this.isSetNorth();
-    boolean that_present_north = true && that.isSetNorth();
-    if (this_present_north || that_present_north) {
-      if (!(this_present_north && that_present_north))
+    boolean this_present_played = true && this.isSetPlayed();
+    boolean that_present_played = true && that.isSetPlayed();
+    if (this_present_played || that_present_played) {
+      if (!(this_present_played && that_present_played))
         return false;
-      if (!this.north.equals(that.north))
-        return false;
-    }
-
-    boolean this_present_east = true && this.isSetEast();
-    boolean that_present_east = true && that.isSetEast();
-    if (this_present_east || that_present_east) {
-      if (!(this_present_east && that_present_east))
-        return false;
-      if (!this.east.equals(that.east))
-        return false;
-    }
-
-    boolean this_present_south = true && this.isSetSouth();
-    boolean that_present_south = true && that.isSetSouth();
-    if (this_present_south || that_present_south) {
-      if (!(this_present_south && that_present_south))
-        return false;
-      if (!this.south.equals(that.south))
-        return false;
-    }
-
-    boolean this_present_west = true && this.isSetWest();
-    boolean that_present_west = true && that.isSetWest();
-    if (this_present_west || that_present_west) {
-      if (!(this_present_west && that_present_west))
-        return false;
-      if (!this.west.equals(that.west))
+      if (!this.played.equals(that.played))
         return false;
     }
 
@@ -491,42 +341,12 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetNorth()).compareTo(typedOther.isSetNorth());
+    lastComparison = Boolean.valueOf(isSetPlayed()).compareTo(typedOther.isSetPlayed());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetNorth()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.north, typedOther.north);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetEast()).compareTo(typedOther.isSetEast());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetEast()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.east, typedOther.east);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetSouth()).compareTo(typedOther.isSetSouth());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSouth()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.south, typedOther.south);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetWest()).compareTo(typedOther.isSetWest());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetWest()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.west, typedOther.west);
+    if (isSetPlayed()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.played, typedOther.played);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -558,46 +378,14 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
       sb.append(this.leader);
     }
     first = false;
-    if (isSetNorth()) {
-      if (!first) sb.append(", ");
-      sb.append("north:");
-      if (this.north == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.north);
-      }
-      first = false;
+    if (!first) sb.append(", ");
+    sb.append("played:");
+    if (this.played == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.played);
     }
-    if (isSetEast()) {
-      if (!first) sb.append(", ");
-      sb.append("east:");
-      if (this.east == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.east);
-      }
-      first = false;
-    }
-    if (isSetSouth()) {
-      if (!first) sb.append(", ");
-      sb.append("south:");
-      if (this.south == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.south);
-      }
-      first = false;
-    }
-    if (isSetWest()) {
-      if (!first) sb.append(", ");
-      sb.append("west:");
-      if (this.west == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.west);
-      }
-      first = false;
-    }
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -607,19 +395,10 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     if (leader == null) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'leader' was not present! Struct: " + toString());
     }
+    if (played == null) {
+      throw new org.apache.thrift.protocol.TProtocolException("Required field 'played' was not present! Struct: " + toString());
+    }
     // check for sub-struct validity
-    if (north != null) {
-      north.validate();
-    }
-    if (east != null) {
-      east.validate();
-    }
-    if (south != null) {
-      south.validate();
-    }
-    if (west != null) {
-      west.validate();
-    }
   }
 
   private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -664,38 +443,21 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // NORTH
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.north = new Card();
-              struct.north.read(iprot);
-              struct.setNorthIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 3: // EAST
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.east = new Card();
-              struct.east.read(iprot);
-              struct.setEastIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 4: // SOUTH
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.south = new Card();
-              struct.south.read(iprot);
-              struct.setSouthIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 5: // WEST
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.west = new Card();
-              struct.west.read(iprot);
-              struct.setWestIsSet(true);
+          case 2: // PLAYED
+            if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+              {
+                org.apache.thrift.protocol.TList _list0 = iprot.readListBegin();
+                struct.played = new ArrayList<Card>(_list0.size);
+                for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+                {
+                  Card _elem2; // required
+                  _elem2 = new Card();
+                  _elem2.read(iprot);
+                  struct.played.add(_elem2);
+                }
+                iprot.readListEnd();
+              }
+              struct.setPlayedIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -720,33 +482,17 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
         oprot.writeI32(struct.leader.getValue());
         oprot.writeFieldEnd();
       }
-      if (struct.north != null) {
-        if (struct.isSetNorth()) {
-          oprot.writeFieldBegin(NORTH_FIELD_DESC);
-          struct.north.write(oprot);
-          oprot.writeFieldEnd();
+      if (struct.played != null) {
+        oprot.writeFieldBegin(PLAYED_FIELD_DESC);
+        {
+          oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.played.size()));
+          for (Card _iter3 : struct.played)
+          {
+            _iter3.write(oprot);
+          }
+          oprot.writeListEnd();
         }
-      }
-      if (struct.east != null) {
-        if (struct.isSetEast()) {
-          oprot.writeFieldBegin(EAST_FIELD_DESC);
-          struct.east.write(oprot);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.south != null) {
-        if (struct.isSetSouth()) {
-          oprot.writeFieldBegin(SOUTH_FIELD_DESC);
-          struct.south.write(oprot);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.west != null) {
-        if (struct.isSetWest()) {
-          oprot.writeFieldBegin(WEST_FIELD_DESC);
-          struct.west.write(oprot);
-          oprot.writeFieldEnd();
-        }
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -766,31 +512,12 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     public void write(org.apache.thrift.protocol.TProtocol prot, Trick struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       oprot.writeI32(struct.leader.getValue());
-      BitSet optionals = new BitSet();
-      if (struct.isSetNorth()) {
-        optionals.set(0);
-      }
-      if (struct.isSetEast()) {
-        optionals.set(1);
-      }
-      if (struct.isSetSouth()) {
-        optionals.set(2);
-      }
-      if (struct.isSetWest()) {
-        optionals.set(3);
-      }
-      oprot.writeBitSet(optionals, 4);
-      if (struct.isSetNorth()) {
-        struct.north.write(oprot);
-      }
-      if (struct.isSetEast()) {
-        struct.east.write(oprot);
-      }
-      if (struct.isSetSouth()) {
-        struct.south.write(oprot);
-      }
-      if (struct.isSetWest()) {
-        struct.west.write(oprot);
+      {
+        oprot.writeI32(struct.played.size());
+        for (Card _iter4 : struct.played)
+        {
+          _iter4.write(oprot);
+        }
       }
     }
 
@@ -799,27 +526,18 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
       TTupleProtocol iprot = (TTupleProtocol) prot;
       struct.leader = Position.findByValue(iprot.readI32());
       struct.setLeaderIsSet(true);
-      BitSet incoming = iprot.readBitSet(4);
-      if (incoming.get(0)) {
-        struct.north = new Card();
-        struct.north.read(iprot);
-        struct.setNorthIsSet(true);
+      {
+        org.apache.thrift.protocol.TList _list5 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+        struct.played = new ArrayList<Card>(_list5.size);
+        for (int _i6 = 0; _i6 < _list5.size; ++_i6)
+        {
+          Card _elem7; // required
+          _elem7 = new Card();
+          _elem7.read(iprot);
+          struct.played.add(_elem7);
+        }
       }
-      if (incoming.get(1)) {
-        struct.east = new Card();
-        struct.east.read(iprot);
-        struct.setEastIsSet(true);
-      }
-      if (incoming.get(2)) {
-        struct.south = new Card();
-        struct.south.read(iprot);
-        struct.setSouthIsSet(true);
-      }
-      if (incoming.get(3)) {
-        struct.west = new Card();
-        struct.west.read(iprot);
-        struct.setWestIsSet(true);
-      }
+      struct.setPlayedIsSet(true);
     }
   }
 

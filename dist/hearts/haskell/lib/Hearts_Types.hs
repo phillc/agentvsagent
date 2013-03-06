@@ -246,73 +246,43 @@ read_GameInfo iprot = do
   record <- read_GameInfo_fields iprot (GameInfo{f_GameInfo_position=Nothing})
   readStructEnd iprot
   return record
-data Trick = Trick{f_Trick_leader :: Maybe Position,f_Trick_north :: Maybe Card,f_Trick_east :: Maybe Card,f_Trick_south :: Maybe Card,f_Trick_west :: Maybe Card} deriving (Show,Eq,Typeable)
+data Trick = Trick{f_Trick_leader :: Maybe Position,f_Trick_played :: Maybe (Vector.Vector Card)} deriving (Show,Eq,Typeable)
 instance Hashable Trick where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Trick_leader record   `hashWithSalt` f_Trick_north record   `hashWithSalt` f_Trick_east record   `hashWithSalt` f_Trick_south record   `hashWithSalt` f_Trick_west record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Trick_leader record   `hashWithSalt` f_Trick_played record  
 write_Trick oprot record = do
   writeStructBegin oprot "Trick"
   case f_Trick_leader record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("leader",T_I32,1)
     writeI32 oprot (fromIntegral $ fromEnum _v)
     writeFieldEnd oprot}
-  case f_Trick_north record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("north",T_STRUCT,2)
-    write_Card oprot _v
-    writeFieldEnd oprot}
-  case f_Trick_east record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("east",T_STRUCT,3)
-    write_Card oprot _v
-    writeFieldEnd oprot}
-  case f_Trick_south record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("south",T_STRUCT,4)
-    write_Card oprot _v
-    writeFieldEnd oprot}
-  case f_Trick_west record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("west",T_STRUCT,5)
-    write_Card oprot _v
+  case f_Trick_played record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("played",T_LIST,2)
+    (let f = Vector.mapM_ (\_viter22 -> write_Card oprot _viter22) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
     writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Trick_fields iprot record = do
-  (_,_t23,_id24) <- readFieldBegin iprot
-  if _t23 == T_STOP then return record else
-    case _id24 of 
-      1 -> if _t23 == T_I32 then do
+  (_,_t24,_id25) <- readFieldBegin iprot
+  if _t24 == T_STOP then return record else
+    case _id25 of 
+      1 -> if _t24 == T_I32 then do
         s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
         read_Trick_fields iprot record{f_Trick_leader=Just s}
         else do
-          skip iprot _t23
+          skip iprot _t24
           read_Trick_fields iprot record
-      2 -> if _t23 == T_STRUCT then do
-        s <- (read_Card iprot)
-        read_Trick_fields iprot record{f_Trick_north=Just s}
+      2 -> if _t24 == T_LIST then do
+        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype29,_size26) <- readListBegin iprot; f _size26})
+        read_Trick_fields iprot record{f_Trick_played=Just s}
         else do
-          skip iprot _t23
-          read_Trick_fields iprot record
-      3 -> if _t23 == T_STRUCT then do
-        s <- (read_Card iprot)
-        read_Trick_fields iprot record{f_Trick_east=Just s}
-        else do
-          skip iprot _t23
-          read_Trick_fields iprot record
-      4 -> if _t23 == T_STRUCT then do
-        s <- (read_Card iprot)
-        read_Trick_fields iprot record{f_Trick_south=Just s}
-        else do
-          skip iprot _t23
-          read_Trick_fields iprot record
-      5 -> if _t23 == T_STRUCT then do
-        s <- (read_Card iprot)
-        read_Trick_fields iprot record{f_Trick_west=Just s}
-        else do
-          skip iprot _t23
+          skip iprot _t24
           read_Trick_fields iprot record
       _ -> do
-        skip iprot _t23
+        skip iprot _t24
         readFieldEnd iprot
         read_Trick_fields iprot record
 read_Trick iprot = do
   _ <- readStructBegin iprot
-  record <- read_Trick_fields iprot (Trick{f_Trick_leader=Nothing,f_Trick_north=Nothing,f_Trick_east=Nothing,f_Trick_south=Nothing,f_Trick_west=Nothing})
+  record <- read_Trick_fields iprot (Trick{f_Trick_leader=Nothing,f_Trick_played=Nothing})
   readStructEnd iprot
   return record

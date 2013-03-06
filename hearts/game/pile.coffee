@@ -1,8 +1,14 @@
+und = require 'underscore'
 Card = require("./card")
 
 module.exports = class Pile
   @createDeck: ->
     new Pile(Card.all())
+
+  @createShuffledDeck: ->
+    deck = @createDeck()
+    deck.shuffle()
+    deck
 
   constructor: (cards) ->
     @cards = cards || []
@@ -11,7 +17,17 @@ module.exports = class Pile
     @cards.push card
 
   allOfSuit: (suit) ->
-    @cards.filter (card) -> card.suit == suit
+    new Pile(@cards.filter (card) -> card.suit == suit)
+
+  highestRankedCard: ->
+    cards = @cards.sort (a, b) ->
+      b.rank.order - a.rank.order
+
+    cards[0]
+
+  findCard: (suit, rank) ->
+    for card in @cards
+      return card if card.suit == suit && card.rank == rank
 
   moveCardsTo: (number, otherPile) ->
     movedCards = @cards.splice(0, number)
@@ -24,4 +40,7 @@ module.exports = class Pile
   copyAllCardsTo: (otherPile) ->
     for card in @cards
       otherPile.addCard(card)
+
+  shuffle: ->
+    @cards = und.shuffle(@cards)
 

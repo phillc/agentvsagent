@@ -1,7 +1,8 @@
 Pile = require("../../../hearts/game/pile")
 Card = require("../../../hearts/game/card")
 Suit = require("../../../hearts/game/suit")
-require("should")
+Rank = require("../../../hearts/game/rank")
+should = require("should")
 
 describe "Pile", ->
   beforeEach ->
@@ -14,6 +15,10 @@ describe "Pile", ->
     it "makes a pile of all 52 cards", ->
       Pile.createDeck().should.have.property('cards').with.length(52)
 
+  describe "::createShuffledDeck", ->
+    it "shuffles the pile of 52", ->
+      Pile.createShuffledDeck().should.have.property('cards').with.length(52)
+
   describe "#addCard", ->
     it "adds a card", ->
       @pile.addCard(Card.all()[0])
@@ -23,23 +28,37 @@ describe "Pile", ->
     beforeEach ->
       @pile = Pile.createDeck()
 
-    it "returns all the clubs", ->
-      @pile.allOfSuit(Suit.CLUBS).length.should.equal(13)
+    it "returns a pile with all the clubs", ->
+      @pile.allOfSuit(Suit.CLUBS).cards.length.should.equal(13)
 
-    it "returns all the diamonds", ->
-      @pile.allOfSuit(Suit.DIAMONDS).length.should.equal(13)
+    it "returns a pile with all the diamonds", ->
+      @pile.allOfSuit(Suit.DIAMONDS).cards.length.should.equal(13)
 
-    it "returns all the spades", ->
-      @pile.allOfSuit(Suit.SPADES).length.should.equal(13)
+    it "returns a pile with all the spades", ->
+      @pile.allOfSuit(Suit.SPADES).cards.length.should.equal(13)
 
-    it "returns all the hearts", ->
-      @pile.allOfSuit(Suit.HEARTS).length.should.equal(13)
+    it "returns a pile with all the hearts", ->
+      @pile.allOfSuit(Suit.HEARTS).cards.length.should.equal(13)
+
+  describe "#highestRankedCard", ->
+    beforeEach ->
+      @pile = new Pile()
+
+    it "returns the highest card of the same suit", ->
+      @pile.cards.push(new Card(Suit.DIAMONDS, Rank.FOUR))
+      @pile.cards.push(new Card(Suit.DIAMONDS, Rank.QUEEN))
+      @pile.cards.push(new Card(Suit.HEARTS, Rank.ACE))
+      @pile.cards.push(new Card(Suit.HEARTS, Rank.KING))
+
+      card = @pile.highestRankedCard()
+      card.suit.should.equal Suit.HEARTS
+      card.rank.should.equal Rank.ACE
 
   describe "#moveCardsTo", ->
     beforeEach ->
-      @pile.addCard(new Card('clubs', 2))
-      @pile.addCard(new Card('diamonds', 9))
-      @pile.addCard(new Card('spades', 3))
+      @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
+      @pile.addCard(new Card(Suit.DIAMONDS, Rank.NINE))
+      @pile.addCard(new Card(Suit.SPADES, Rank.THREE))
 
       @otherPile = new Pile()
 
@@ -51,9 +70,9 @@ describe "Pile", ->
 
   describe "#moveAllCardsTo", ->
     beforeEach ->
-      @pile.addCard(new Card('clubs', 2))
-      @pile.addCard(new Card('diamonds', 9))
-      @pile.addCard(new Card('spades', 3))
+      @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
+      @pile.addCard(new Card(Suit.DIAMONDS, Rank.NINE))
+      @pile.addCard(new Card(Suit.SPADES, Rank.THREE))
 
       @otherPile = new Pile()
 
@@ -65,9 +84,9 @@ describe "Pile", ->
 
   describe "#copyAllCardsTo", ->
     beforeEach ->
-      @pile.addCard(new Card('clubs', 2))
-      @pile.addCard(new Card('diamonds', 9))
-      @pile.addCard(new Card('spades', 3))
+      @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
+      @pile.addCard(new Card(Suit.DIAMONDS, Rank.NINE))
+      @pile.addCard(new Card(Suit.SPADES, Rank.THREE))
 
       @otherPile = new Pile()
 
@@ -76,4 +95,15 @@ describe "Pile", ->
 
       @pile.cards.length.should.equal(3)
       @otherPile.cards.length.should.equal(3)
+
+  describe "findCard", ->
+    beforeEach ->
+      @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
+
+    it "returns the card", ->
+      @pile.findCard(Suit.CLUBS, Rank.TWO).suit.should.equal(Suit.CLUBS)
+      @pile.findCard(Suit.CLUBS, Rank.TWO).rank.should.equal(Rank.TWO)
+
+    it "returns null if card not in the pile", ->
+      should.not.exist(@pile.findCard(Suit.CLUBS, Rank.THREE))
 

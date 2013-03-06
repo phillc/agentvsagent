@@ -130,23 +130,18 @@ module AgentVsAgent
   class Trick
     include ::Thrift::Struct, ::Thrift::Struct_Union
     LEADER = 1
-    NORTH = 2
-    EAST = 3
-    SOUTH = 4
-    WEST = 5
+    PLAYED = 2
 
     FIELDS = {
       LEADER => {:type => ::Thrift::Types::I32, :name => 'leader', :enum_class => ::AgentVsAgent::Position},
-      NORTH => {:type => ::Thrift::Types::STRUCT, :name => 'north', :class => ::AgentVsAgent::Card, :optional => true},
-      EAST => {:type => ::Thrift::Types::STRUCT, :name => 'east', :class => ::AgentVsAgent::Card, :optional => true},
-      SOUTH => {:type => ::Thrift::Types::STRUCT, :name => 'south', :class => ::AgentVsAgent::Card, :optional => true},
-      WEST => {:type => ::Thrift::Types::STRUCT, :name => 'west', :class => ::AgentVsAgent::Card, :optional => true}
+      PLAYED => {:type => ::Thrift::Types::LIST, :name => 'played', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field leader is unset!') unless @leader
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field played is unset!') unless @played
       unless @leader.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@leader)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field leader!')
       end

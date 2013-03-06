@@ -276,19 +276,19 @@ Hearts_get_hand_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size0 = 0;
-        var _rtmp34;
+        var _size8 = 0;
+        var _rtmp312;
         this.success = [];
-        var _etype3 = 0;
-        _rtmp34 = input.readListBegin();
-        _etype3 = _rtmp34.etype;
-        _size0 = _rtmp34.size;
-        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        var _etype11 = 0;
+        _rtmp312 = input.readListBegin();
+        _etype11 = _rtmp312.etype;
+        _size8 = _rtmp312.size;
+        for (var _i13 = 0; _i13 < _size8; ++_i13)
         {
-          var elem6 = null;
-          elem6 = new ttypes.Card();
-          elem6.read(input);
-          this.success.push(elem6);
+          var elem14 = null;
+          elem14 = new ttypes.Card();
+          elem14.read(input);
+          this.success.push(elem14);
         }
         input.readListEnd();
       } else {
@@ -312,12 +312,12 @@ Hearts_get_hand_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter7 in this.success)
+    for (var iter15 in this.success)
     {
-      if (this.success.hasOwnProperty(iter7))
+      if (this.success.hasOwnProperty(iter15))
       {
-        iter7 = this.success[iter7];
-        iter7.write(output);
+        iter15 = this.success[iter15];
+        iter15.write(output);
       }
     }
     output.writeListEnd();
@@ -364,19 +364,19 @@ Hearts_pass_cards_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size8 = 0;
-        var _rtmp312;
+        var _size16 = 0;
+        var _rtmp320;
         this.cards = [];
-        var _etype11 = 0;
-        _rtmp312 = input.readListBegin();
-        _etype11 = _rtmp312.etype;
-        _size8 = _rtmp312.size;
-        for (var _i13 = 0; _i13 < _size8; ++_i13)
+        var _etype19 = 0;
+        _rtmp320 = input.readListBegin();
+        _etype19 = _rtmp320.etype;
+        _size16 = _rtmp320.size;
+        for (var _i21 = 0; _i21 < _size16; ++_i21)
         {
-          var elem14 = null;
-          elem14 = new ttypes.Card();
-          elem14.read(input);
-          this.cards.push(elem14);
+          var elem22 = null;
+          elem22 = new ttypes.Card();
+          elem22.read(input);
+          this.cards.push(elem22);
         }
         input.readListEnd();
       } else {
@@ -402,12 +402,12 @@ Hearts_pass_cards_args.prototype.write = function(output) {
   if (this.cards !== null && this.cards !== undefined) {
     output.writeFieldBegin('cards', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.STRUCT, this.cards.length);
-    for (var iter15 in this.cards)
+    for (var iter23 in this.cards)
     {
-      if (this.cards.hasOwnProperty(iter15))
+      if (this.cards.hasOwnProperty(iter23))
       {
-        iter15 = this.cards[iter15];
-        iter15.write(output);
+        iter23 = this.cards[iter23];
+        iter23.write(output);
       }
     }
     output.writeListEnd();
@@ -442,19 +442,19 @@ Hearts_pass_cards_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size16 = 0;
-        var _rtmp320;
+        var _size24 = 0;
+        var _rtmp328;
         this.success = [];
-        var _etype19 = 0;
-        _rtmp320 = input.readListBegin();
-        _etype19 = _rtmp320.etype;
-        _size16 = _rtmp320.size;
-        for (var _i21 = 0; _i21 < _size16; ++_i21)
+        var _etype27 = 0;
+        _rtmp328 = input.readListBegin();
+        _etype27 = _rtmp328.etype;
+        _size24 = _rtmp328.size;
+        for (var _i29 = 0; _i29 < _size24; ++_i29)
         {
-          var elem22 = null;
-          elem22 = new ttypes.Card();
-          elem22.read(input);
-          this.success.push(elem22);
+          var elem30 = null;
+          elem30 = new ttypes.Card();
+          elem30.read(input);
+          this.success.push(elem30);
         }
         input.readListEnd();
       } else {
@@ -478,12 +478,12 @@ Hearts_pass_cards_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter23 in this.success)
+    for (var iter31 in this.success)
     {
-      if (this.success.hasOwnProperty(iter23))
+      if (this.success.hasOwnProperty(iter31))
       {
-        iter23 = this.success[iter23];
-        iter23.write(output);
+        iter31 = this.success[iter31];
+        iter31.write(output);
       }
     }
     output.writeListEnd();

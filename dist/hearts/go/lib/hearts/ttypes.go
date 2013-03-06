@@ -864,28 +864,19 @@ func (p *GameInfo) TStructFields() thrift.TFieldContainer {
 /**
  * Attributes:
  *  - Leader
- *  - North
- *  - East
- *  - South
- *  - West
+ *  - Played
  */
 type Trick struct {
   thrift.TStruct
   Leader Position "leader"; // 1
-  North *Card "north"; // 2
-  East *Card "east"; // 3
-  South *Card "south"; // 4
-  West *Card "west"; // 5
+  Played thrift.TList "played"; // 2
 }
 
 func NewTrick() *Trick {
   output := &Trick{
     TStruct:thrift.NewTStruct("Trick", []thrift.TField{
     thrift.NewTField("leader", thrift.I32, 1),
-    thrift.NewTField("north", thrift.STRUCT, 2),
-    thrift.NewTField("east", thrift.STRUCT, 3),
-    thrift.NewTField("south", thrift.STRUCT, 4),
-    thrift.NewTField("west", thrift.STRUCT, 5),
+    thrift.NewTField("played", thrift.LIST, 2),
     }),
   }
   {
@@ -921,8 +912,8 @@ func (p *Trick) Read(iprot thrift.TProtocol) (err thrift.TProtocolException) {
         err = p.ReadField1(iprot)
         if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
       }
-    } else if fieldId == 2 || fieldName == "north" {
-      if fieldTypeId == thrift.STRUCT {
+    } else if fieldId == 2 || fieldName == "played" {
+      if fieldTypeId == thrift.LIST {
         err = p.ReadField2(iprot)
         if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
       } else if fieldTypeId == thrift.VOID {
@@ -930,39 +921,6 @@ func (p *Trick) Read(iprot thrift.TProtocol) (err thrift.TProtocolException) {
         if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
       } else {
         err = p.ReadField2(iprot)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      }
-    } else if fieldId == 3 || fieldName == "east" {
-      if fieldTypeId == thrift.STRUCT {
-        err = p.ReadField3(iprot)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      } else if fieldTypeId == thrift.VOID {
-        err = iprot.Skip(fieldTypeId)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      } else {
-        err = p.ReadField3(iprot)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      }
-    } else if fieldId == 4 || fieldName == "south" {
-      if fieldTypeId == thrift.STRUCT {
-        err = p.ReadField4(iprot)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      } else if fieldTypeId == thrift.VOID {
-        err = iprot.Skip(fieldTypeId)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      } else {
-        err = p.ReadField4(iprot)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      }
-    } else if fieldId == 5 || fieldName == "west" {
-      if fieldTypeId == thrift.STRUCT {
-        err = p.ReadField5(iprot)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      } else if fieldTypeId == thrift.VOID {
-        err = iprot.Skip(fieldTypeId)
-        if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
-      } else {
-        err = p.ReadField5(iprot)
         if err != nil { return thrift.NewTProtocolExceptionReadField(int(fieldId), fieldName, p.ThriftName(), err); }
       }
     } else {
@@ -989,47 +947,24 @@ func (p *Trick) ReadFieldLeader(iprot thrift.TProtocol) (thrift.TProtocolExcepti
 }
 
 func (p *Trick) ReadField2(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  p.North = NewCard()
-  err19 := p.North.Read(iprot)
-  if err19 != nil { return thrift.NewTProtocolExceptionReadStruct("p.NorthCard", err19); }
+  _etype22, _size19, err := iprot.ReadListBegin()
+  if err != nil {
+    return thrift.NewTProtocolExceptionReadField(-1, "p.Played", "", err)
+  }
+  p.Played = thrift.NewTList(_etype22, _size19)
+  for _i23:= 0; _i23 < _size19; _i23++ {
+    _elem24 := NewCard()
+    err27 := _elem24.Read(iprot)
+    if err27 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem24Card", err27); }
+    p.Played.Push(_elem24)
+  }
+  err = iprot.ReadListEnd()
+  if err != nil { return thrift.NewTProtocolExceptionReadField(-1, "", "list",err); }
   return err
 }
 
-func (p *Trick) ReadFieldNorth(iprot thrift.TProtocol) (thrift.TProtocolException) {
+func (p *Trick) ReadFieldPlayed(iprot thrift.TProtocol) (thrift.TProtocolException) {
   return p.ReadField2(iprot)
-}
-
-func (p *Trick) ReadField3(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  p.East = NewCard()
-  err22 := p.East.Read(iprot)
-  if err22 != nil { return thrift.NewTProtocolExceptionReadStruct("p.EastCard", err22); }
-  return err
-}
-
-func (p *Trick) ReadFieldEast(iprot thrift.TProtocol) (thrift.TProtocolException) {
-  return p.ReadField3(iprot)
-}
-
-func (p *Trick) ReadField4(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  p.South = NewCard()
-  err25 := p.South.Read(iprot)
-  if err25 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SouthCard", err25); }
-  return err
-}
-
-func (p *Trick) ReadFieldSouth(iprot thrift.TProtocol) (thrift.TProtocolException) {
-  return p.ReadField4(iprot)
-}
-
-func (p *Trick) ReadField5(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  p.West = NewCard()
-  err28 := p.West.Read(iprot)
-  if err28 != nil { return thrift.NewTProtocolExceptionReadStruct("p.WestCard", err28); }
-  return err
-}
-
-func (p *Trick) ReadFieldWest(iprot thrift.TProtocol) (thrift.TProtocolException) {
-  return p.ReadField5(iprot)
 }
 
 func (p *Trick) Write(oprot thrift.TProtocol) (err thrift.TProtocolException) {
@@ -1038,12 +973,6 @@ func (p *Trick) Write(oprot thrift.TProtocol) (err thrift.TProtocolException) {
   err = p.WriteField1(oprot)
   if err != nil { return err }
   err = p.WriteField2(oprot)
-  if err != nil { return err }
-  err = p.WriteField3(oprot)
-  if err != nil { return err }
-  err = p.WriteField4(oprot)
-  if err != nil { return err }
-  err = p.WriteField5(oprot)
   if err != nil { return err }
   err = oprot.WriteFieldStop()
   if err != nil { return thrift.NewTProtocolExceptionWriteField(-1, "STOP", p.ThriftName(), err); }
@@ -1067,67 +996,26 @@ func (p *Trick) WriteFieldLeader(oprot thrift.TProtocol) (thrift.TProtocolExcept
 }
 
 func (p *Trick) WriteField2(oprot thrift.TProtocol) (err thrift.TProtocolException) {
-  if p.North != nil {
-    err = oprot.WriteFieldBegin("north", thrift.STRUCT, 2)
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(2, "north", p.ThriftName(), err); }
-    err = p.North.Write(oprot)
-    if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
+  if p.Played != nil {
+    err = oprot.WriteFieldBegin("played", thrift.LIST, 2)
+    if err != nil { return thrift.NewTProtocolExceptionWriteField(2, "played", p.ThriftName(), err); }
+    err = oprot.WriteListBegin(thrift.STRUCT, p.Played.Len())
+    if err != nil { return thrift.NewTProtocolExceptionWriteField(-1, "", "list", err); }
+    for Iter28 := range p.Played.Iter() {
+      Iter29 := Iter28.(*Card)
+      err = Iter29.Write(oprot)
+      if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
+    }
+    err = oprot.WriteListEnd()
+    if err != nil { return thrift.NewTProtocolExceptionWriteField(-1, "", "list", err); }
     err = oprot.WriteFieldEnd()
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(2, "north", p.ThriftName(), err); }
+    if err != nil { return thrift.NewTProtocolExceptionWriteField(2, "played", p.ThriftName(), err); }
   }
   return err
 }
 
-func (p *Trick) WriteFieldNorth(oprot thrift.TProtocol) (thrift.TProtocolException) {
+func (p *Trick) WriteFieldPlayed(oprot thrift.TProtocol) (thrift.TProtocolException) {
   return p.WriteField2(oprot)
-}
-
-func (p *Trick) WriteField3(oprot thrift.TProtocol) (err thrift.TProtocolException) {
-  if p.East != nil {
-    err = oprot.WriteFieldBegin("east", thrift.STRUCT, 3)
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(3, "east", p.ThriftName(), err); }
-    err = p.East.Write(oprot)
-    if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
-    err = oprot.WriteFieldEnd()
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(3, "east", p.ThriftName(), err); }
-  }
-  return err
-}
-
-func (p *Trick) WriteFieldEast(oprot thrift.TProtocol) (thrift.TProtocolException) {
-  return p.WriteField3(oprot)
-}
-
-func (p *Trick) WriteField4(oprot thrift.TProtocol) (err thrift.TProtocolException) {
-  if p.South != nil {
-    err = oprot.WriteFieldBegin("south", thrift.STRUCT, 4)
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(4, "south", p.ThriftName(), err); }
-    err = p.South.Write(oprot)
-    if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
-    err = oprot.WriteFieldEnd()
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(4, "south", p.ThriftName(), err); }
-  }
-  return err
-}
-
-func (p *Trick) WriteFieldSouth(oprot thrift.TProtocol) (thrift.TProtocolException) {
-  return p.WriteField4(oprot)
-}
-
-func (p *Trick) WriteField5(oprot thrift.TProtocol) (err thrift.TProtocolException) {
-  if p.West != nil {
-    err = oprot.WriteFieldBegin("west", thrift.STRUCT, 5)
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(5, "west", p.ThriftName(), err); }
-    err = p.West.Write(oprot)
-    if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
-    err = oprot.WriteFieldEnd()
-    if err != nil { return thrift.NewTProtocolExceptionWriteField(5, "west", p.ThriftName(), err); }
-  }
-  return err
-}
-
-func (p *Trick) WriteFieldWest(oprot thrift.TProtocol) (thrift.TProtocolException) {
-  return p.WriteField5(oprot)
 }
 
 func (p *Trick) TStructName() string {
@@ -1159,16 +1047,7 @@ func (p *Trick) CompareTo(other interface{}) (int, bool) {
     }
     return 1, true
   }
-  if cmp, ok := p.North.CompareTo(data.North); !ok || cmp != 0 {
-    return cmp, ok
-  }
-  if cmp, ok := p.East.CompareTo(data.East); !ok || cmp != 0 {
-    return cmp, ok
-  }
-  if cmp, ok := p.South.CompareTo(data.South); !ok || cmp != 0 {
-    return cmp, ok
-  }
-  if cmp, ok := p.West.CompareTo(data.West); !ok || cmp != 0 {
+  if cmp, ok := p.Played.CompareTo(data.Played); !ok || cmp != 0 {
     return cmp, ok
   }
   return 0, true
@@ -1178,10 +1057,7 @@ func (p *Trick) AttributeByFieldId(id int) interface{} {
   switch id {
   default: return nil
   case 1: return p.Leader
-  case 2: return p.North
-  case 3: return p.East
-  case 4: return p.South
-  case 5: return p.West
+  case 2: return p.Played
   }
   return nil
 }
@@ -1189,10 +1065,7 @@ func (p *Trick) AttributeByFieldId(id int) interface{} {
 func (p *Trick) TStructFields() thrift.TFieldContainer {
   return thrift.NewTFieldContainer([]thrift.TField{
     thrift.NewTField("leader", thrift.I32, 1),
-    thrift.NewTField("north", thrift.STRUCT, 2),
-    thrift.NewTField("east", thrift.STRUCT, 3),
-    thrift.NewTField("south", thrift.STRUCT, 4),
-    thrift.NewTField("west", thrift.STRUCT, 5),
+    thrift.NewTField("played", thrift.LIST, 2),
     })
 }
 

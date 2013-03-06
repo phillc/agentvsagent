@@ -174,7 +174,7 @@ describe "states", ->
       action = new actions.PlayCard(@game.positions.north, card)
       state.handleAction(action)
 
-      @game.currentRound().currentTrick().north.should.equal(card)
+      @game.currentRound().currentTrick().played.cards[0].should.equal(card)
 
     it "emits an event on the player with the current trick", (done) ->
       @game.positions.north.once 'turn', (trick) =>

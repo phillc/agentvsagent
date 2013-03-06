@@ -52,13 +52,12 @@ struct GameInfo {
 
 struct Trick {
   1: required Position leader
-  2: optional Card north
-  3: optional Card east
-  4: optional Card south
-  5: optional Card west
+  2: required list<Card> played
 }
 
 service Hearts {
+  # These may need a wrapper around return values, to indicate things like
+  # game ended (in middle of trick... maybe someone played an invalid move)
   EntryResponse enter_arena(),
   GameInfo get_game_info(1: required Ticket ticket),
   list<Card> get_hand(1: required Ticket ticket),

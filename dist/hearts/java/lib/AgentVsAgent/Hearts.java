@@ -2557,14 +2557,14 @@ public class Hearts {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
-                  org.apache.thrift.protocol.TList _list0 = iprot.readListBegin();
-                  struct.success = new ArrayList<Card>(_list0.size);
-                  for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+                  org.apache.thrift.protocol.TList _list8 = iprot.readListBegin();
+                  struct.success = new ArrayList<Card>(_list8.size);
+                  for (int _i9 = 0; _i9 < _list8.size; ++_i9)
                   {
-                    Card _elem2; // required
-                    _elem2 = new Card();
-                    _elem2.read(iprot);
-                    struct.success.add(_elem2);
+                    Card _elem10; // required
+                    _elem10 = new Card();
+                    _elem10.read(iprot);
+                    struct.success.add(_elem10);
                   }
                   iprot.readListEnd();
                 }
@@ -2592,9 +2592,9 @@ public class Hearts {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Card _iter3 : struct.success)
+            for (Card _iter11 : struct.success)
             {
-              _iter3.write(oprot);
+              _iter11.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -2625,9 +2625,9 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Card _iter4 : struct.success)
+            for (Card _iter12 : struct.success)
             {
-              _iter4.write(oprot);
+              _iter12.write(oprot);
             }
           }
         }
@@ -2639,14 +2639,14 @@ public class Hearts {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TList _list5 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new ArrayList<Card>(_list5.size);
-            for (int _i6 = 0; _i6 < _list5.size; ++_i6)
+            org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new ArrayList<Card>(_list13.size);
+            for (int _i14 = 0; _i14 < _list13.size; ++_i14)
             {
-              Card _elem7; // required
-              _elem7 = new Card();
-              _elem7.read(iprot);
-              struct.success.add(_elem7);
+              Card _elem15; // required
+              _elem15 = new Card();
+              _elem15.read(iprot);
+              struct.success.add(_elem15);
             }
           }
           struct.setSuccessIsSet(true);
@@ -3060,14 +3060,14 @@ public class Hearts {
             case 2: // CARDS
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
-                  org.apache.thrift.protocol.TList _list8 = iprot.readListBegin();
-                  struct.cards = new ArrayList<Card>(_list8.size);
-                  for (int _i9 = 0; _i9 < _list8.size; ++_i9)
+                  org.apache.thrift.protocol.TList _list16 = iprot.readListBegin();
+                  struct.cards = new ArrayList<Card>(_list16.size);
+                  for (int _i17 = 0; _i17 < _list16.size; ++_i17)
                   {
-                    Card _elem10; // required
-                    _elem10 = new Card();
-                    _elem10.read(iprot);
-                    struct.cards.add(_elem10);
+                    Card _elem18; // required
+                    _elem18 = new Card();
+                    _elem18.read(iprot);
+                    struct.cards.add(_elem18);
                   }
                   iprot.readListEnd();
                 }
@@ -3100,9 +3100,9 @@ public class Hearts {
           oprot.writeFieldBegin(CARDS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.cards.size()));
-            for (Card _iter11 : struct.cards)
+            for (Card _iter19 : struct.cards)
             {
-              _iter11.write(oprot);
+              _iter19.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -3128,9 +3128,9 @@ public class Hearts {
         struct.ticket.write(oprot);
         {
           oprot.writeI32(struct.cards.size());
-          for (Card _iter12 : struct.cards)
+          for (Card _iter20 : struct.cards)
           {
-            _iter12.write(oprot);
+            _iter20.write(oprot);
           }
         }
       }
@@ -3142,14 +3142,14 @@ public class Hearts {
         struct.ticket.read(iprot);
         struct.setTicketIsSet(true);
         {
-          org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-          struct.cards = new ArrayList<Card>(_list13.size);
-          for (int _i14 = 0; _i14 < _list13.size; ++_i14)
+          org.apache.thrift.protocol.TList _list21 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+          struct.cards = new ArrayList<Card>(_list21.size);
+          for (int _i22 = 0; _i22 < _list21.size; ++_i22)
           {
-            Card _elem15; // required
-            _elem15 = new Card();
-            _elem15.read(iprot);
-            struct.cards.add(_elem15);
+            Card _elem23; // required
+            _elem23 = new Card();
+            _elem23.read(iprot);
+            struct.cards.add(_elem23);
           }
         }
         struct.setCardsIsSet(true);
@@ -3467,14 +3467,14 @@ public class Hearts {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
-                  org.apache.thrift.protocol.TList _list16 = iprot.readListBegin();
-                  struct.success = new ArrayList<Card>(_list16.size);
-                  for (int _i17 = 0; _i17 < _list16.size; ++_i17)
+                  org.apache.thrift.protocol.TList _list24 = iprot.readListBegin();
+                  struct.success = new ArrayList<Card>(_list24.size);
+                  for (int _i25 = 0; _i25 < _list24.size; ++_i25)
                   {
-                    Card _elem18; // required
-                    _elem18 = new Card();
-                    _elem18.read(iprot);
-                    struct.success.add(_elem18);
+                    Card _elem26; // required
+                    _elem26 = new Card();
+                    _elem26.read(iprot);
+                    struct.success.add(_elem26);
                   }
                   iprot.readListEnd();
                 }
@@ -3502,9 +3502,9 @@ public class Hearts {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (Card _iter19 : struct.success)
+            for (Card _iter27 : struct.success)
             {
-              _iter19.write(oprot);
+              _iter27.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -3535,9 +3535,9 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (Card _iter20 : struct.success)
+            for (Card _iter28 : struct.success)
             {
-              _iter20.write(oprot);
+              _iter28.write(oprot);
             }
           }
         }
@@ -3549,14 +3549,14 @@ public class Hearts {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TList _list21 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new ArrayList<Card>(_list21.size);
-            for (int _i22 = 0; _i22 < _list21.size; ++_i22)
+            org.apache.thrift.protocol.TList _list29 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new ArrayList<Card>(_list29.size);
+            for (int _i30 = 0; _i30 < _list29.size; ++_i30)
             {
-              Card _elem23; // required
-              _elem23 = new Card();
-              _elem23.read(iprot);
-              struct.success.add(_elem23);
+              Card _elem31; // required
+              _elem31 = new Card();
+              _elem31.read(iprot);
+              struct.success.add(_elem31);
             }
           }
           struct.setSuccessIsSet(true);

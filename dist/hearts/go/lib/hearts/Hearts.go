@@ -15,34 +15,34 @@ import (
 
 
 type IHearts interface {
-  EnterArena() (retval29 *EntryResponse, err os.Error)
+  EnterArena() (retval30 *EntryResponse, err os.Error)
   /**
    * Parameters:
    *  - Ticket
    */
-  GetGameInfo(ticket *Ticket) (retval30 *GameInfo, err os.Error)
+  GetGameInfo(ticket *Ticket) (retval31 *GameInfo, err os.Error)
   /**
    * Parameters:
    *  - Ticket
    */
-  GetHand(ticket *Ticket) (retval31 thrift.TList, err os.Error)
+  GetHand(ticket *Ticket) (retval32 thrift.TList, err os.Error)
   /**
    * Parameters:
    *  - Ticket
    *  - Cards
    */
-  PassCards(ticket *Ticket, cards thrift.TList) (retval32 thrift.TList, err os.Error)
+  PassCards(ticket *Ticket, cards thrift.TList) (retval33 thrift.TList, err os.Error)
   /**
    * Parameters:
    *  - Ticket
    */
-  GetTrick(ticket *Ticket) (retval33 *Trick, err os.Error)
+  GetTrick(ticket *Ticket) (retval34 *Trick, err os.Error)
   /**
    * Parameters:
    *  - Ticket
    *  - Card
    */
-  PlayCard(ticket *Ticket, card *Card) (retval34 *Trick, err os.Error)
+  PlayCard(ticket *Ticket, card *Card) (retval35 *Trick, err os.Error)
 }
 
 type HeartsClient struct {
@@ -71,7 +71,7 @@ func NewHeartsClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot 
   }
 }
 
-func (p *HeartsClient) EnterArena() (retval35 *EntryResponse, err os.Error) {
+func (p *HeartsClient) EnterArena() (retval36 *EntryResponse, err os.Error) {
   err = p.SendEnterArena()
   if err != nil { return }
   return p.RecvEnterArena()
@@ -85,8 +85,8 @@ func (p *HeartsClient) SendEnterArena()(err os.Error) {
   }
   p.SeqId++
   oprot.WriteMessageBegin("enter_arena", thrift.CALL, p.SeqId)
-  args36 := NewEnterArenaArgs()
-  err = args36.Write(oprot)
+  args37 := NewEnterArenaArgs()
+  err = args37.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Transport().Flush()
   return
@@ -104,25 +104,25 @@ func (p *HeartsClient) RecvEnterArena() (value *EntryResponse, err os.Error) {
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error38 := thrift.NewTApplicationExceptionDefault()
-    error39, err := error38.Read(iprot)
+    error39 := thrift.NewTApplicationExceptionDefault()
+    error40, err := error39.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error39
+    err = error40
     return
   }
   if p.SeqId != seqId {
     err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
     return
   }
-  result37 := NewEnterArenaResult()
-  err = result37.Read(iprot)
+  result38 := NewEnterArenaResult()
+  err = result38.Read(iprot)
   iprot.ReadMessageEnd()
-  value = result37.Success
+  value = result38.Success
   return
 }
 
@@ -130,7 +130,7 @@ func (p *HeartsClient) RecvEnterArena() (value *EntryResponse, err os.Error) {
  * Parameters:
  *  - Ticket
  */
-func (p *HeartsClient) GetGameInfo(ticket *Ticket) (retval40 *GameInfo, err os.Error) {
+func (p *HeartsClient) GetGameInfo(ticket *Ticket) (retval41 *GameInfo, err os.Error) {
   err = p.SendGetGameInfo(ticket)
   if err != nil { return }
   return p.RecvGetGameInfo()
@@ -144,9 +144,9 @@ func (p *HeartsClient) SendGetGameInfo(ticket *Ticket)(err os.Error) {
   }
   p.SeqId++
   oprot.WriteMessageBegin("get_game_info", thrift.CALL, p.SeqId)
-  args41 := NewGetGameInfoArgs()
-  args41.Ticket = ticket
-  err = args41.Write(oprot)
+  args42 := NewGetGameInfoArgs()
+  args42.Ticket = ticket
+  err = args42.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Transport().Flush()
   return
@@ -164,25 +164,25 @@ func (p *HeartsClient) RecvGetGameInfo() (value *GameInfo, err os.Error) {
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error43 := thrift.NewTApplicationExceptionDefault()
-    error44, err := error43.Read(iprot)
+    error44 := thrift.NewTApplicationExceptionDefault()
+    error45, err := error44.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error44
+    err = error45
     return
   }
   if p.SeqId != seqId {
     err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
     return
   }
-  result42 := NewGetGameInfoResult()
-  err = result42.Read(iprot)
+  result43 := NewGetGameInfoResult()
+  err = result43.Read(iprot)
   iprot.ReadMessageEnd()
-  value = result42.Success
+  value = result43.Success
   return
 }
 
@@ -190,7 +190,7 @@ func (p *HeartsClient) RecvGetGameInfo() (value *GameInfo, err os.Error) {
  * Parameters:
  *  - Ticket
  */
-func (p *HeartsClient) GetHand(ticket *Ticket) (retval45 thrift.TList, err os.Error) {
+func (p *HeartsClient) GetHand(ticket *Ticket) (retval46 thrift.TList, err os.Error) {
   err = p.SendGetHand(ticket)
   if err != nil { return }
   return p.RecvGetHand()
@@ -204,9 +204,9 @@ func (p *HeartsClient) SendGetHand(ticket *Ticket)(err os.Error) {
   }
   p.SeqId++
   oprot.WriteMessageBegin("get_hand", thrift.CALL, p.SeqId)
-  args46 := NewGetHandArgs()
-  args46.Ticket = ticket
-  err = args46.Write(oprot)
+  args47 := NewGetHandArgs()
+  args47.Ticket = ticket
+  err = args47.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Transport().Flush()
   return
@@ -224,25 +224,25 @@ func (p *HeartsClient) RecvGetHand() (value thrift.TList, err os.Error) {
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error48 := thrift.NewTApplicationExceptionDefault()
-    error49, err := error48.Read(iprot)
+    error49 := thrift.NewTApplicationExceptionDefault()
+    error50, err := error49.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error49
+    err = error50
     return
   }
   if p.SeqId != seqId {
     err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
     return
   }
-  result47 := NewGetHandResult()
-  err = result47.Read(iprot)
+  result48 := NewGetHandResult()
+  err = result48.Read(iprot)
   iprot.ReadMessageEnd()
-  value = result47.Success
+  value = result48.Success
   return
 }
 
@@ -251,7 +251,7 @@ func (p *HeartsClient) RecvGetHand() (value thrift.TList, err os.Error) {
  *  - Ticket
  *  - Cards
  */
-func (p *HeartsClient) PassCards(ticket *Ticket, cards thrift.TList) (retval50 thrift.TList, err os.Error) {
+func (p *HeartsClient) PassCards(ticket *Ticket, cards thrift.TList) (retval51 thrift.TList, err os.Error) {
   err = p.SendPassCards(ticket, cards)
   if err != nil { return }
   return p.RecvPassCards()
@@ -265,10 +265,10 @@ func (p *HeartsClient) SendPassCards(ticket *Ticket, cards thrift.TList)(err os.
   }
   p.SeqId++
   oprot.WriteMessageBegin("pass_cards", thrift.CALL, p.SeqId)
-  args51 := NewPassCardsArgs()
-  args51.Ticket = ticket
-  args51.Cards = cards
-  err = args51.Write(oprot)
+  args52 := NewPassCardsArgs()
+  args52.Ticket = ticket
+  args52.Cards = cards
+  err = args52.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Transport().Flush()
   return
@@ -286,25 +286,25 @@ func (p *HeartsClient) RecvPassCards() (value thrift.TList, err os.Error) {
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error53 := thrift.NewTApplicationExceptionDefault()
-    error54, err := error53.Read(iprot)
+    error54 := thrift.NewTApplicationExceptionDefault()
+    error55, err := error54.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error54
+    err = error55
     return
   }
   if p.SeqId != seqId {
     err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
     return
   }
-  result52 := NewPassCardsResult()
-  err = result52.Read(iprot)
+  result53 := NewPassCardsResult()
+  err = result53.Read(iprot)
   iprot.ReadMessageEnd()
-  value = result52.Success
+  value = result53.Success
   return
 }
 
@@ -312,7 +312,7 @@ func (p *HeartsClient) RecvPassCards() (value thrift.TList, err os.Error) {
  * Parameters:
  *  - Ticket
  */
-func (p *HeartsClient) GetTrick(ticket *Ticket) (retval55 *Trick, err os.Error) {
+func (p *HeartsClient) GetTrick(ticket *Ticket) (retval56 *Trick, err os.Error) {
   err = p.SendGetTrick(ticket)
   if err != nil { return }
   return p.RecvGetTrick()
@@ -326,9 +326,9 @@ func (p *HeartsClient) SendGetTrick(ticket *Ticket)(err os.Error) {
   }
   p.SeqId++
   oprot.WriteMessageBegin("get_trick", thrift.CALL, p.SeqId)
-  args56 := NewGetTrickArgs()
-  args56.Ticket = ticket
-  err = args56.Write(oprot)
+  args57 := NewGetTrickArgs()
+  args57.Ticket = ticket
+  err = args57.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Transport().Flush()
   return
@@ -346,25 +346,25 @@ func (p *HeartsClient) RecvGetTrick() (value *Trick, err os.Error) {
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error58 := thrift.NewTApplicationExceptionDefault()
-    error59, err := error58.Read(iprot)
+    error59 := thrift.NewTApplicationExceptionDefault()
+    error60, err := error59.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error59
+    err = error60
     return
   }
   if p.SeqId != seqId {
     err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
     return
   }
-  result57 := NewGetTrickResult()
-  err = result57.Read(iprot)
+  result58 := NewGetTrickResult()
+  err = result58.Read(iprot)
   iprot.ReadMessageEnd()
-  value = result57.Success
+  value = result58.Success
   return
 }
 
@@ -373,7 +373,7 @@ func (p *HeartsClient) RecvGetTrick() (value *Trick, err os.Error) {
  *  - Ticket
  *  - Card
  */
-func (p *HeartsClient) PlayCard(ticket *Ticket, card *Card) (retval60 *Trick, err os.Error) {
+func (p *HeartsClient) PlayCard(ticket *Ticket, card *Card) (retval61 *Trick, err os.Error) {
   err = p.SendPlayCard(ticket, card)
   if err != nil { return }
   return p.RecvPlayCard()
@@ -387,10 +387,10 @@ func (p *HeartsClient) SendPlayCard(ticket *Ticket, card *Card)(err os.Error) {
   }
   p.SeqId++
   oprot.WriteMessageBegin("play_card", thrift.CALL, p.SeqId)
-  args61 := NewPlayCardArgs()
-  args61.Ticket = ticket
-  args61.Card = card
-  err = args61.Write(oprot)
+  args62 := NewPlayCardArgs()
+  args62.Ticket = ticket
+  args62.Card = card
+  err = args62.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Transport().Flush()
   return
@@ -408,25 +408,25 @@ func (p *HeartsClient) RecvPlayCard() (value *Trick, err os.Error) {
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error63 := thrift.NewTApplicationExceptionDefault()
-    error64, err := error63.Read(iprot)
+    error64 := thrift.NewTApplicationExceptionDefault()
+    error65, err := error64.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error64
+    err = error65
     return
   }
   if p.SeqId != seqId {
     err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
     return
   }
-  result62 := NewPlayCardResult()
-  err = result62.Read(iprot)
+  result63 := NewPlayCardResult()
+  err = result63.Read(iprot)
   iprot.ReadMessageEnd()
-  value = result62.Success
+  value = result63.Success
   return
 }
 
@@ -455,14 +455,14 @@ func (p *HeartsProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 
 func NewHeartsProcessor(handler IHearts) *HeartsProcessor {
 
-  self65 := &HeartsProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
-  self65.processorMap["enter_arena"] = &heartsProcessorEnterArena{handler:handler}
-  self65.processorMap["get_game_info"] = &heartsProcessorGetGameInfo{handler:handler}
-  self65.processorMap["get_hand"] = &heartsProcessorGetHand{handler:handler}
-  self65.processorMap["pass_cards"] = &heartsProcessorPassCards{handler:handler}
-  self65.processorMap["get_trick"] = &heartsProcessorGetTrick{handler:handler}
-  self65.processorMap["play_card"] = &heartsProcessorPlayCard{handler:handler}
-return self65
+  self66 := &HeartsProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
+  self66.processorMap["enter_arena"] = &heartsProcessorEnterArena{handler:handler}
+  self66.processorMap["get_game_info"] = &heartsProcessorGetGameInfo{handler:handler}
+  self66.processorMap["get_hand"] = &heartsProcessorGetHand{handler:handler}
+  self66.processorMap["pass_cards"] = &heartsProcessorPassCards{handler:handler}
+  self66.processorMap["get_trick"] = &heartsProcessorGetTrick{handler:handler}
+  self66.processorMap["play_card"] = &heartsProcessorPlayCard{handler:handler}
+return self66
 }
 
 func (p *HeartsProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -472,12 +472,12 @@ func (p *HeartsProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, 
   if !nameFound || process == nil {
     iprot.Skip(thrift.STRUCT)
     iprot.ReadMessageEnd()
-    x66 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
+    x67 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
     oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-    x66.Write(oprot)
+    x67.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Transport().Flush()
-    return false, x66
+    return false, x67
   }
   return process.Process(seqId, iprot, oprot)
 }
@@ -894,8 +894,8 @@ func (p *EnterArenaResult) Read(iprot thrift.TProtocol) (err thrift.TProtocolExc
 
 func (p *EnterArenaResult) ReadField0(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Success = NewEntryResponse()
-  err69 := p.Success.Read(iprot)
-  if err69 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessEntryResponse", err69); }
+  err70 := p.Success.Read(iprot)
+  if err70 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessEntryResponse", err70); }
   return err
 }
 
@@ -1040,8 +1040,8 @@ func (p *GetGameInfoArgs) Read(iprot thrift.TProtocol) (err thrift.TProtocolExce
 
 func (p *GetGameInfoArgs) ReadField1(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Ticket = NewTicket()
-  err72 := p.Ticket.Read(iprot)
-  if err72 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err72); }
+  err73 := p.Ticket.Read(iprot)
+  if err73 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err73); }
   return err
 }
 
@@ -1182,8 +1182,8 @@ func (p *GetGameInfoResult) Read(iprot thrift.TProtocol) (err thrift.TProtocolEx
 
 func (p *GetGameInfoResult) ReadField0(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Success = NewGameInfo()
-  err75 := p.Success.Read(iprot)
-  if err75 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessGameInfo", err75); }
+  err76 := p.Success.Read(iprot)
+  if err76 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessGameInfo", err76); }
   return err
 }
 
@@ -1328,8 +1328,8 @@ func (p *GetHandArgs) Read(iprot thrift.TProtocol) (err thrift.TProtocolExceptio
 
 func (p *GetHandArgs) ReadField1(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Ticket = NewTicket()
-  err78 := p.Ticket.Read(iprot)
-  if err78 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err78); }
+  err79 := p.Ticket.Read(iprot)
+  if err79 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err79); }
   return err
 }
 
@@ -1469,16 +1469,16 @@ func (p *GetHandResult) Read(iprot thrift.TProtocol) (err thrift.TProtocolExcept
 }
 
 func (p *GetHandResult) ReadField0(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  _etype84, _size81, err := iprot.ReadListBegin()
+  _etype85, _size82, err := iprot.ReadListBegin()
   if err != nil {
     return thrift.NewTProtocolExceptionReadField(-1, "p.Success", "", err)
   }
-  p.Success = thrift.NewTList(_etype84, _size81)
-  for _i85:= 0; _i85 < _size81; _i85++ {
-    _elem86 := NewCard()
-    err89 := _elem86.Read(iprot)
-    if err89 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem86Card", err89); }
-    p.Success.Push(_elem86)
+  p.Success = thrift.NewTList(_etype85, _size82)
+  for _i86:= 0; _i86 < _size82; _i86++ {
+    _elem87 := NewCard()
+    err90 := _elem87.Read(iprot)
+    if err90 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem87Card", err90); }
+    p.Success.Push(_elem87)
   }
   err = iprot.ReadListEnd()
   if err != nil { return thrift.NewTProtocolExceptionReadField(-1, "", "list",err); }
@@ -1511,9 +1511,9 @@ func (p *GetHandResult) WriteField0(oprot thrift.TProtocol) (err thrift.TProtoco
     if err != nil { return thrift.NewTProtocolExceptionWriteField(0, "success", p.ThriftName(), err); }
     err = oprot.WriteListBegin(thrift.STRUCT, p.Success.Len())
     if err != nil { return thrift.NewTProtocolExceptionWriteField(-1, "", "list", err); }
-    for Iter90 := range p.Success.Iter() {
-      Iter91 := Iter90.(*Card)
-      err = Iter91.Write(oprot)
+    for Iter91 := range p.Success.Iter() {
+      Iter92 := Iter91.(*Card)
+      err = Iter92.Write(oprot)
       if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
     }
     err = oprot.WriteListEnd()
@@ -1647,8 +1647,8 @@ func (p *PassCardsArgs) Read(iprot thrift.TProtocol) (err thrift.TProtocolExcept
 
 func (p *PassCardsArgs) ReadField1(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Ticket = NewTicket()
-  err94 := p.Ticket.Read(iprot)
-  if err94 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err94); }
+  err95 := p.Ticket.Read(iprot)
+  if err95 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err95); }
   return err
 }
 
@@ -1657,16 +1657,16 @@ func (p *PassCardsArgs) ReadFieldTicket(iprot thrift.TProtocol) (thrift.TProtoco
 }
 
 func (p *PassCardsArgs) ReadField2(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  _etype100, _size97, err := iprot.ReadListBegin()
+  _etype101, _size98, err := iprot.ReadListBegin()
   if err != nil {
     return thrift.NewTProtocolExceptionReadField(-1, "p.Cards", "", err)
   }
-  p.Cards = thrift.NewTList(_etype100, _size97)
-  for _i101:= 0; _i101 < _size97; _i101++ {
-    _elem102 := NewCard()
-    err105 := _elem102.Read(iprot)
-    if err105 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem102Card", err105); }
-    p.Cards.Push(_elem102)
+  p.Cards = thrift.NewTList(_etype101, _size98)
+  for _i102:= 0; _i102 < _size98; _i102++ {
+    _elem103 := NewCard()
+    err106 := _elem103.Read(iprot)
+    if err106 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem103Card", err106); }
+    p.Cards.Push(_elem103)
   }
   err = iprot.ReadListEnd()
   if err != nil { return thrift.NewTProtocolExceptionReadField(-1, "", "list",err); }
@@ -1713,9 +1713,9 @@ func (p *PassCardsArgs) WriteField2(oprot thrift.TProtocol) (err thrift.TProtoco
     if err != nil { return thrift.NewTProtocolExceptionWriteField(2, "cards", p.ThriftName(), err); }
     err = oprot.WriteListBegin(thrift.STRUCT, p.Cards.Len())
     if err != nil { return thrift.NewTProtocolExceptionWriteField(-1, "", "list", err); }
-    for Iter106 := range p.Cards.Iter() {
-      Iter107 := Iter106.(*Card)
-      err = Iter107.Write(oprot)
+    for Iter107 := range p.Cards.Iter() {
+      Iter108 := Iter107.(*Card)
+      err = Iter108.Write(oprot)
       if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
     }
     err = oprot.WriteListEnd()
@@ -1839,16 +1839,16 @@ func (p *PassCardsResult) Read(iprot thrift.TProtocol) (err thrift.TProtocolExce
 }
 
 func (p *PassCardsResult) ReadField0(iprot thrift.TProtocol) (err thrift.TProtocolException) {
-  _etype113, _size110, err := iprot.ReadListBegin()
+  _etype114, _size111, err := iprot.ReadListBegin()
   if err != nil {
     return thrift.NewTProtocolExceptionReadField(-1, "p.Success", "", err)
   }
-  p.Success = thrift.NewTList(_etype113, _size110)
-  for _i114:= 0; _i114 < _size110; _i114++ {
-    _elem115 := NewCard()
-    err118 := _elem115.Read(iprot)
-    if err118 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem115Card", err118); }
-    p.Success.Push(_elem115)
+  p.Success = thrift.NewTList(_etype114, _size111)
+  for _i115:= 0; _i115 < _size111; _i115++ {
+    _elem116 := NewCard()
+    err119 := _elem116.Read(iprot)
+    if err119 != nil { return thrift.NewTProtocolExceptionReadStruct("_elem116Card", err119); }
+    p.Success.Push(_elem116)
   }
   err = iprot.ReadListEnd()
   if err != nil { return thrift.NewTProtocolExceptionReadField(-1, "", "list",err); }
@@ -1881,9 +1881,9 @@ func (p *PassCardsResult) WriteField0(oprot thrift.TProtocol) (err thrift.TProto
     if err != nil { return thrift.NewTProtocolExceptionWriteField(0, "success", p.ThriftName(), err); }
     err = oprot.WriteListBegin(thrift.STRUCT, p.Success.Len())
     if err != nil { return thrift.NewTProtocolExceptionWriteField(-1, "", "list", err); }
-    for Iter119 := range p.Success.Iter() {
-      Iter120 := Iter119.(*Card)
-      err = Iter120.Write(oprot)
+    for Iter120 := range p.Success.Iter() {
+      Iter121 := Iter120.(*Card)
+      err = Iter121.Write(oprot)
       if err != nil { return thrift.NewTProtocolExceptionWriteStruct("Card", err); }
     }
     err = oprot.WriteListEnd()
@@ -2003,8 +2003,8 @@ func (p *GetTrickArgs) Read(iprot thrift.TProtocol) (err thrift.TProtocolExcepti
 
 func (p *GetTrickArgs) ReadField1(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Ticket = NewTicket()
-  err123 := p.Ticket.Read(iprot)
-  if err123 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err123); }
+  err124 := p.Ticket.Read(iprot)
+  if err124 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err124); }
   return err
 }
 
@@ -2145,8 +2145,8 @@ func (p *GetTrickResult) Read(iprot thrift.TProtocol) (err thrift.TProtocolExcep
 
 func (p *GetTrickResult) ReadField0(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Success = NewTrick()
-  err126 := p.Success.Read(iprot)
-  if err126 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessTrick", err126); }
+  err127 := p.Success.Read(iprot)
+  if err127 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessTrick", err127); }
   return err
 }
 
@@ -2305,8 +2305,8 @@ func (p *PlayCardArgs) Read(iprot thrift.TProtocol) (err thrift.TProtocolExcepti
 
 func (p *PlayCardArgs) ReadField1(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Ticket = NewTicket()
-  err129 := p.Ticket.Read(iprot)
-  if err129 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err129); }
+  err130 := p.Ticket.Read(iprot)
+  if err130 != nil { return thrift.NewTProtocolExceptionReadStruct("p.TicketTicket", err130); }
   return err
 }
 
@@ -2316,8 +2316,8 @@ func (p *PlayCardArgs) ReadFieldTicket(iprot thrift.TProtocol) (thrift.TProtocol
 
 func (p *PlayCardArgs) ReadField2(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Card = NewCard()
-  err132 := p.Card.Read(iprot)
-  if err132 != nil { return thrift.NewTProtocolExceptionReadStruct("p.CardCard", err132); }
+  err133 := p.Card.Read(iprot)
+  if err133 != nil { return thrift.NewTProtocolExceptionReadStruct("p.CardCard", err133); }
   return err
 }
 
@@ -2481,8 +2481,8 @@ func (p *PlayCardResult) Read(iprot thrift.TProtocol) (err thrift.TProtocolExcep
 
 func (p *PlayCardResult) ReadField0(iprot thrift.TProtocol) (err thrift.TProtocolException) {
   p.Success = NewTrick()
-  err135 := p.Success.Read(iprot)
-  if err135 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessTrick", err135); }
+  err136 := p.Success.Read(iprot)
+  if err136 != nil { return thrift.NewTProtocolExceptionReadStruct("p.SuccessTrick", err136); }
   return err
 }
 

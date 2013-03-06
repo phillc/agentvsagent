@@ -20,4 +20,5 @@ exports.PlayCard = class PlayCard extends Action
   execute: (game) ->
     console.log "PLAYING CARD", @player.id, @card
     position = game.positionOf(@player)
-    game.currentRound().currentTrick()[position] = @card
+    # TODO: validate/shift it off of current player held
+    game.currentRound().currentTrick().played.addCard(@card)
