@@ -3,7 +3,6 @@ Rank = require("./rank")
 
 module.exports = class Card
   @all: ->
-    # Just use the Thrift types?
     cards = []
     for suit in Suit.all()
       for rank in Rank.all()
@@ -11,3 +10,11 @@ module.exports = class Card
     cards
 
   constructor: (@suit, @rank) ->
+
+  score: ->
+    if @suit == Suit.HEARTS
+      1
+    else if @suit == Suit.SPADES && @rank == Rank.QUEEN
+      13
+    else
+      0

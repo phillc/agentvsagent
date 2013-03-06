@@ -32,3 +32,33 @@ describe "Card", ->
       jacks = @cards.filter (card) ->
         card.rank.name == 'J'
       jacks.length.should.equal(4)
+
+  describe "score", ->
+    it "is 1 for hearts", ->
+      new Card(Suit.HEARTS, Rank.ACE).score().should.equal(1)
+      new Card(Suit.HEARTS, Rank.KING).score().should.equal(1)
+      new Card(Suit.HEARTS, Rank.QUEEN).score().should.equal(1)
+      new Card(Suit.HEARTS, Rank.THREE).score().should.equal(1)
+      new Card(Suit.HEARTS, Rank.TWO).score().should.equal(1)
+
+    it "is 0 for clubs", ->
+      new Card(Suit.CLUBS, Rank.ACE).score().should.equal(0)
+      new Card(Suit.CLUBS, Rank.KING).score().should.equal(0)
+      new Card(Suit.CLUBS, Rank.QUEEN).score().should.equal(0)
+      new Card(Suit.CLUBS, Rank.THREE).score().should.equal(0)
+      new Card(Suit.CLUBS, Rank.TWO).score().should.equal(0)
+
+    it "is 0 for diamonds", ->
+      new Card(Suit.DIAMONDS, Rank.ACE).score().should.equal(0)
+      new Card(Suit.DIAMONDS, Rank.KING).score().should.equal(0)
+      new Card(Suit.DIAMONDS, Rank.QUEEN).score().should.equal(0)
+      new Card(Suit.DIAMONDS, Rank.THREE).score().should.equal(0)
+      new Card(Suit.DIAMONDS, Rank.TWO).score().should.equal(0)
+
+    it "is 13 for the queen of spades", ->
+      new Card(Suit.SPADES, Rank.ACE).score().should.equal(0)
+      new Card(Suit.SPADES, Rank.KING).score().should.equal(0)
+      new Card(Suit.SPADES, Rank.QUEEN).score().should.equal(13)
+      new Card(Suit.SPADES, Rank.THREE).score().should.equal(0)
+      new Card(Suit.CLUBS, Rank.TWO).score().should.equal(0)
+
