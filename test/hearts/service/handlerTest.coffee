@@ -38,12 +38,14 @@ describe "Handler", ->
 
   describe "#get_game_info", ->
     beforeEach ->
-      @ticket = new types.Ticket(agentId: "123", gameId: "456")
+      @game = Factory.createGame(arena: @arena)
+      @game.states.startingGame.run()
+      @ticket = new types.Ticket(agentId: @game.positions.west.id, gameId: @game.id)
 
     it "returns game info", (done) ->
       @handler.get_game_info @ticket, (err, gameInfo) ->
         should.not.exist(err)
-        gameInfo.position.should.equal(types.Position.NORTH)
+        gameInfo.position.should.equal(types.Position.WEST)
         done()
 
     it "returns players position"

@@ -34,6 +34,7 @@ class RandomBot
     hand = hand + received_cards
 
     trick = @game.get_trick @ticket
+    puts "current trick: #{trick}"
     # 13.times {
     #   trick = @game.get_trick @ticket
     #   @game.play_card @ticket, hand.first
@@ -48,4 +49,5 @@ bot = RandomBot.new(client)
 bot.run
 transport.close
 
+puts "Finished"
 
