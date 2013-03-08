@@ -28,7 +28,6 @@ module.exports = class Round
     else
       winner = @currentTrick().winner()
       @tricks.push(new Trick(winner))
-      # @tricks.push(new Trick("north"))
 
   allHavePassed: ->
     @north.hasPassed() && @east.hasPassed() && @south.hasPassed() && @west.hasPassed()

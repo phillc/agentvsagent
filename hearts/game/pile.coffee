@@ -34,6 +34,10 @@ module.exports = class Pile
     for card in movedCards
       otherPile.addCard(card)
 
+  moveCardTo: (card, otherPile) ->
+    if foundCard = @findCard(card.suit, card.rank)
+      otherPile.addCard @cards.splice(@cards.indexOf(foundCard), 1)[0]
+
   moveAllCardsTo: (otherPile) ->
     @moveCardsTo @cards.length, otherPile
 

@@ -12,7 +12,7 @@ class State
 
 exports.StartingGame = class StartingGame extends State
   run: ->
-    console.log "Starting game with players:", @game.players.map (p) -> p.id
+    # console.log "Starting game with players:", @game.players.map (p) -> p.id
     positions = ["north", "east", "west", "south"]
 
     for player in und.shuffle(@game.players)
@@ -36,22 +36,19 @@ exports.StartingRound = class StartingRound extends State
 
 exports.Dealing = class Dealing extends State
   run: ->
+    @deal()
+    @game.nextState()
+
+  deal: ->
     deck = Pile.createShuffledDeck()
 
-    # TODO: copyAllCardsTo held
-    deck.moveCardsTo(13, @game.currentRound().north.dealt)
-    @game.positions.north.emit 'dealt', @game.currentRound().north.dealt.cards
+    positions = ["north", "east", "south", "west"]
 
-    deck.moveCardsTo(13, @game.currentRound().east.dealt)
-    @game.positions.east.emit 'dealt', @game.currentRound().east.dealt.cards
-
-    deck.moveCardsTo(13, @game.currentRound().south.dealt)
-    @game.positions.south.emit 'dealt', @game.currentRound().south.dealt.cards
-
-    deck.moveCardsTo(13, @game.currentRound().west.dealt)
-    @game.positions.west.emit 'dealt', @game.currentRound().west.dealt.cards
-
-    @game.nextState()
+    for position in positions
+      seat = @game.currentRound()[position]
+      deck.moveCardsTo(13, seat.dealt)
+      seat.dealt.copyAllCardsTo(seat.held)
+      @game.positions[position].emit 'dealt', seat.dealt.cards
 
 exports.Passing = class Passing extends State
   # @directions =
@@ -59,7 +56,7 @@ exports.Passing = class Passing extends State
   #   right: null
   #   across: null
 
-  constructor: (game, direction) ->
+  constructor: (game, @direction) ->
     # @strategy = Passing.directions[direction]
     super(game)
 
@@ -67,16 +64,32 @@ exports.Passing = class Passing extends State
     action.execute(@game)
 
     if @game.currentRound().allHavePassed()
-      # add to passed for the seat
-      # Maybe have a holding one as well, that can be drained and validated against
-
-      #TODO: copy into passed
-      # and copyAllTo held
-      @game.positions.north.emit 'passed', @game.currentRound().east.passed.cards
-      @game.positions.east.emit 'passed', @game.currentRound().south.passed.cards
-      @game.positions.south.emit 'passed', @game.currentRound().west.passed.cards
-      @game.positions.west.emit 'passed', @game.currentRound().north.passed.cards
+      @exchange()
       @game.nextState()
+
+  exchange: ->
+    passing =
+      right: [["north", "west"], ["east", "north"], ["south", "east"], ["west", "south"]]
+      left: [["north", "east"], ["east", "south"], ["south", "west"], ["west", "north"]]
+      across: [["north", "south"], ["east", "west"], ["south", "north"], ["west", "east"]]
+
+    strategy = passing[@direction]
+
+    game = @game
+    do (strategy, game) ->
+      for pair in strategy
+        do ->
+          round = game.currentRound()
+          fromPosition = pair[0]
+          toPosition = pair[1]
+          fromSeat = round[fromPosition]
+          toSeat = round[toPosition]
+          passedCards = fromSeat.passed.cards
+
+          for card in passedCards
+            fromSeat.held.moveCardTo(card, toSeat.held)
+
+          game.positions[toPosition].emit 'passed', passedCards
 
 exports.StartingTrick = class StartingTrick extends State
   run: ->

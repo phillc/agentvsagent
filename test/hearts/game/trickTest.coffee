@@ -4,7 +4,7 @@ Suit = require "../../../hearts/game/suit"
 Rank = require "../../../hearts/game/rank"
 
 describe "Trick", ->
-  describe.only "#winner", ->
+  describe "#winner", ->
     beforeEach ->
       @trick = new Trick("south")
 

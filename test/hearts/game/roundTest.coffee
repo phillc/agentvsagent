@@ -39,6 +39,7 @@ describe "Round", ->
     it "starts the next round with winner of previous round", ->
       @round.newTrick()
       trick = @round.currentTrick()
+      trick.leader = "north"
       trick.played.addCard new Card(Suit.CLUBS, Rank.FOUR)
       trick.played.addCard new Card(Suit.CLUBS, Rank.THREE)
       trick.played.addCard new Card(Suit.CLUBS, Rank.TWO)

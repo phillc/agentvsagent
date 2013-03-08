@@ -43,7 +43,7 @@ module.exports = class Game
       return player if player.id == playerId
 
   nextState: ->
-    console.log "nextState:: stack",  @stack
+    # console.log "nextState:: stack",  @stack
     @currentState = @states[@stack.pop()]
     @currentState.run()
 

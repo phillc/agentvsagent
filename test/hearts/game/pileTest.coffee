@@ -96,7 +96,27 @@ describe "Pile", ->
       @pile.cards.length.should.equal(3)
       @otherPile.cards.length.should.equal(3)
 
-  describe "findCard", ->
+  describe "#moveCardTo", ->
+    it "moves a card from one pile to another", ->
+      anotherPile = new Pile()
+
+      @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
+      @pile.addCard(new Card(Suit.CLUBS, Rank.THREE))
+      @pile.addCard(new Card(Suit.CLUBS, Rank.FOUR))
+      @pile.addCard(new Card(Suit.CLUBS, Rank.FIVE))
+      @pile.cards.should.have.length(4)
+      anotherPile.cards.should.have.length(0)
+
+      cardToMove = new Card(Suit.CLUBS, Rank.FOUR)
+      @pile.moveCardTo(cardToMove, anotherPile)
+
+      should.not.exist(@pile.findCard(cardToMove.suit, cardToMove.rank))
+      @pile.cards.should.have.length(3)
+      anotherPile.cards.should.have.length(1)
+      console.log anotherPile
+      anotherPile.findCard(cardToMove.suit, cardToMove.rank).rank.should.equal cardToMove.rank
+
+  describe "#findCard", ->
     beforeEach ->
       @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
 

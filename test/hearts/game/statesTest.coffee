@@ -1,10 +1,12 @@
 Game = require("../../../hearts/game")
 Pile = require("../../../hearts/game/pile")
 Card = require("../../../hearts/game/card")
+Suit = require("../../../hearts/game/suit")
+Rank = require("../../../hearts/game/rank")
 Player = require("../../../hearts/player")
 states = require("../../../hearts/game/states")
 actions = require("../../../hearts/game/actions")
-require("should")
+should = require("should")
 
 describe "states", ->
   beforeEach ->
@@ -82,9 +84,13 @@ describe "states", ->
     it "deals cards to all players", ->
       @state.run()
       @game.currentRound().north.dealt.cards.should.have.length(13)
+      @game.currentRound().north.held.cards.should.have.length(13)
       @game.currentRound().east.dealt.cards.should.have.length(13)
+      @game.currentRound().east.held.cards.should.have.length(13)
       @game.currentRound().south.dealt.cards.should.have.length(13)
+      @game.currentRound().south.held.cards.should.have.length(13)
       @game.currentRound().west.dealt.cards.should.have.length(13)
+      @game.currentRound().west.held.cards.should.have.length(13)
 
     it "goes to the next state", ->
       @state.run()
@@ -99,8 +105,9 @@ describe "states", ->
 
   describe "Passing", ->
     beforeEach ->
-      new states.StartingGame(@game).run()
-      new states.StartingRound(@game).run()
+      @game.states.startingGame.run()
+      @game.states.startingRound.run()
+      @game.states.dealing.run()
       @nextStateCalls = 0
       @state = new states.Passing(@game, "left")
 
@@ -132,23 +139,70 @@ describe "states", ->
       @state.handleAction new actions.PassCards(@game.positions.north, cards)
       @nextStateCalls.should.equal(0)
 
+    describe "strategies", ->
+      setup = ->
+        @northPassedCards = @game.currentRound().north.dealt.cards[0..2]
+        @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
+
+        @eastPassedCards = @game.currentRound().east.dealt.cards[0..2]
+        @state.handleAction new actions.PassCards(@game.positions.east, @eastPassedCards)
+
+        @southPassedCards = @game.currentRound().south.dealt.cards[0..2]
+        @state.handleAction new actions.PassCards(@game.positions.south, @southPassedCards)
+
+        @westPassedCards = @game.currentRound().west.dealt.cards[0..2]
+        @state.handleAction new actions.PassCards(@game.positions.west, @westPassedCards)
+
+        @nextStateCalls.should.equal(1)
+
+      it "passes left", ->
+        @state.direction = "left"
+        setup.apply(this)
+
+        for card in @northPassedCards
+          should.not.exist(@game.currentRound().north.held.findCard(card.suit, card.rank))
+          @game.currentRound().north.passed.findCard(card.suit, card.rank).should.equal(card)
+          @game.currentRound().east.held.findCard(card.suit, card.rank).should.equal(card)
+
+      it "passes right", ->
+        @state.direction = "right"
+        setup.apply(this)
+
+        for card in @northPassedCards
+          should.not.exist(@game.currentRound().north.held.findCard(card.suit, card.rank))
+          @game.currentRound().north.passed.findCard(card.suit, card.rank).should.equal(card)
+          @game.currentRound().west.held.findCard(card.suit, card.rank).should.equal(card)
+
+      it "passes across", ->
+        @state.direction = "across"
+        setup.apply(this)
+
+        for card in @northPassedCards
+          should.not.exist(@game.currentRound().north.held.findCard(card.suit, card.rank))
+          @game.currentRound().north.passed.findCard(card.suit, card.rank).should.equal(card)
+          @game.currentRound().south.held.findCard(card.suit, card.rank).should.equal(card)
+
   describe "StartingTrick", ->
     beforeEach ->
-      new states.StartingGame(@game).run()
-      new states.StartingRound(@game).run()
+      @game.states.startingGame.run()
+      @game.states.startingRound.run()
+
+      @game.currentRound().east.held.addCard(new Card(Suit.CLUBS, Rank.TWO))
+
       @nextStateCalls = 0
 
     it "adds a trick to the round", ->
       @game.currentRound().tricks.should.have.length(0)
-      state = new states.StartingTrick(@game).run()
+      @game.states.startingTrick.run()
       @game.currentRound().tricks.should.have.length(1)
-      state = new states.StartingTrick(@game).run()
+      @game.currentRound().currentTrick().played.addCard({})
+      @game.states.startingTrick.run()
       @game.currentRound().tricks.should.have.length(2)
 
     it "adds the next states", ->
       @game.stack.splice(0, @game.stack.length)
       @game.stack.should.have.length(0)
-      state = new states.StartingTrick(@game).run()
+      @game.states.startingTrick.run()
       @game.stack.should.have.length(5)
       @game.stack[4].should.equal("waitingForCardFromEast")
       @game.stack[3].should.equal("waitingForCardFromSouth")
@@ -157,7 +211,7 @@ describe "states", ->
       @game.stack[0].should.equal("endingTrick")
 
     it "goes to the next state", ->
-      new states.StartingTrick(@game).run()
+      @game.states.startingTrick.run()
 
       @nextStateCalls.should.equal(1)
 

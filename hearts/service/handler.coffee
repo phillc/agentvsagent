@@ -92,8 +92,8 @@ module.exports = class Handler
       result null, thriftCards
 
   pass_cards: (ticket, cards, result) ->
-    console.log "PASS CARDS", ticket, cards
-    #What if they send a blank ticket?
+    # console.log "PASS CARDS", ticket, cards
+    #TODO: What if they send a blank or invalid ticket?
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 

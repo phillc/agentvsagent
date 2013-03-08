@@ -18,3 +18,7 @@ module.exports = class Card
       13
     else
       0
+
+  # For debug
+  inspect: ->
+    "#{@rank.name} of #{@suit.name}"

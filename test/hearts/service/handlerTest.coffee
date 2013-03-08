@@ -15,6 +15,11 @@ describe "Handler", ->
     @arena.createPlayer()
     @arena.createPlayer()
     @handler = new Handler(@arena)
+    @game = Factory.createGame(arena: @arena)
+
+    @nextStateCalls = 0
+    @game.nextState = =>
+      @nextStateCalls++
 
   it "implements everything declared in the service", ->
     methods = Object.keys(Hearts.Client.prototype).filter (method) ->
@@ -38,8 +43,6 @@ describe "Handler", ->
 
   describe "#get_game_info", ->
     beforeEach ->
-      @game = Factory.createGame(arena: @arena)
-      @game.states.startingGame.run()
       @ticket = new types.Ticket(agentId: @game.positions.west.id, gameId: @game.id)
 
     it "returns game info", (done) ->
@@ -48,15 +51,10 @@ describe "Handler", ->
         gameInfo.position.should.equal(types.Position.WEST)
         done()
 
-    it "returns players position"
-
   describe "#get_hand", ->
     beforeEach ->
-      @game = Factory.createGame(arena: @arena)
       @player = @game.positions.west
       @ticket = new types.Ticket(agentId: @player.id, gameId: @game.id)
-      @game.states.startingGame.run()
-      @game.states.dealing.run()
 
     it "returns the players hand", (done) ->
       @handler.get_hand @ticket, (err, hand) ->
@@ -117,9 +115,6 @@ describe "Handler", ->
 
   describe "#pass_cards", ->
     beforeEach ->
-      @game = Factory.createGame(arena: @arena)
-      @game.states.startingGame.run()
-      @game.states.dealing.run()
       @game.stack.push("passingRight")
       @game.nextState()
       @northTicket = new types.Ticket(agentId: @game.positions.north.id, gameId: @game.id)
@@ -168,12 +163,8 @@ describe "Handler", ->
 
   describe "#get_trick", ->
     beforeEach ->
-      @game = Factory.createGame(arena: @arena)
-      @game.states.startingGame.run()
       @game.states.startingTrick.run()
-      @game.states.dealing.run()
-      @game.stack.push("waitingForCardFromEast")
-      @game.nextState()
+      @game.states.waitingForCardFromEast.run()
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
     it "returns the current trick", (done) ->
@@ -189,12 +180,8 @@ describe "Handler", ->
 
   describe "#play_card", ->
     beforeEach ->
-      @game = Factory.createGame(arena: @arena)
-      @game.states.startingGame.run()
-      @game.states.dealing.run()
       @game.states.startingTrick.run()
-      @game.stack.push("waitingForCardFromEast")
-      @game.nextState()
+      @game.states.waitingForCardFromEast.run()
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
     it "plays the card", ->
@@ -206,6 +193,7 @@ describe "Handler", ->
 
 
     it "returns the result of the trick", (done) ->
+      @game.currentRound().currentTrick().leader = "north"
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card, (error, trick) =>
         trick.leader.should.equal(types.Position.NORTH)
@@ -213,7 +201,6 @@ describe "Handler", ->
         trick.played[0].rank.should.equal types.Rank.TWO
         done()
 
-      @game.stack.push("endingTrick")
-      @game.nextState()
+      @game.states.endingTrick.run()
 
 
