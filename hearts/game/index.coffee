@@ -1,5 +1,6 @@
 IdGenerator = require '../idgenerator'
 states = require './states'
+logger = require '../logger'
 
 module.exports = class Game
   constructor: (player1, player2, player3, player4) ->
@@ -43,7 +44,7 @@ module.exports = class Game
       return player if player.id == playerId
 
   nextState: ->
-    # console.log "nextState:: stack",  @stack
+    logger.info "nextState:: stack",  @stack
     @currentState = @states[@stack.pop()]
     @currentState.run()
 

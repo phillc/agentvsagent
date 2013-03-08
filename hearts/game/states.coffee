@@ -1,4 +1,5 @@
 und = require 'underscore'
+logger = require '../logger'
 Pile = require './pile'
 Round = require './round'
 
@@ -12,7 +13,7 @@ class State
 
 exports.StartingGame = class StartingGame extends State
   run: ->
-    # console.log "Starting game with players:", @game.players.map (p) -> p.id
+    logger.info "Starting game with players:", @game.players.map (p) -> p.id
     positions = ["north", "east", "west", "south"]
 
     for player in und.shuffle(@game.players)

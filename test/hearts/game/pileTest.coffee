@@ -113,7 +113,6 @@ describe "Pile", ->
       should.not.exist(@pile.findCard(cardToMove.suit, cardToMove.rank))
       @pile.cards.should.have.length(3)
       anotherPile.cards.should.have.length(1)
-      console.log anotherPile
       anotherPile.findCard(cardToMove.suit, cardToMove.rank).rank.should.equal cardToMove.rank
 
   describe "#findCard", ->

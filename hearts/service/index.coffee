@@ -1,4 +1,5 @@
 thrift = require 'thrift'
+logger = require '../logger'
 Hearts = require '../lib/hearts'
 Handler = require './handler'
 
@@ -8,5 +9,5 @@ module.exports = class Service
 
   start: ->
     @server.listen(4001)
-    console.log "Service listening on", @server.address()
+    logger.info "Service listening on", @server.address()
 
