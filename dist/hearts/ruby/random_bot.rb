@@ -39,20 +39,35 @@ class RandomBot
         hand = hand + received_cards
       end
 
-      13.times do
+      13.times do |i|
         puts "playing trick"
 
         trick = @game.get_trick @ticket
-        puts "Leading the trick" if game_info.position == trick.leader
+        puts "Leading the trick #{game_info.inspect}, #{trick.inspect}" if game_info.position == trick.leader
         puts "current trick: #{trick.inspect}"
 
         sleep 0.25
 
-        @game.play_card @ticket, hand.pop
+        if i == 0 && two_clubs = hand.detect{|card| card.suit == AgentVsAgent::Suit::CLUBS && card.rank == AgentVsAgent::Rank::TWO }
+          card_to_play = two_clubs
+        elsif trick.played[0] && matching_suit = hand.detect{|card| card.suit == trick.played[0].suit}
+          card_to_play = matching_suit
+        else
+          card_to_play = hand.pop
+        end
+
+        hand.delete(card_to_play)
+        puts "playing card: #{card_to_play.inspect}"
+        trick_result = @game.play_card @ticket, card_to_play
+
+        puts "trick result: #{trick_result.inspect}"
       end
-      break
-      # @game.get_round_results @ticket
+
+      round_result = @game.get_round_result @ticket
+      puts "round result: #{round_result.inspect}"
+      break unless round_result.status == AgentVsAgent::GameStatus::GAME_END
     end
+    @game.get_game_results @ticket
   end
 end
 

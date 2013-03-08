@@ -42,3 +42,4 @@ class Hearts_Iface a where
   pass_cards :: a -> Maybe Ticket -> Maybe (Vector.Vector Card) -> IO (Vector.Vector Card)
   get_trick :: a -> Maybe Ticket -> IO Trick
   play_card :: a -> Maybe Ticket -> Maybe Card -> IO Trick
+  get_round_result :: a -> Maybe Ticket -> IO RoundResult

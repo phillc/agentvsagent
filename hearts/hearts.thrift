@@ -55,6 +55,21 @@ struct Trick {
   2: required list<Card> played
 }
 
+typedef i32 Score
+
+enum GameStatus {
+  NEXT_ROUND = 1,
+  END_GAME = 2
+}
+
+struct RoundResult {
+  1: required Score north
+  2: required Score east
+  3: required Score south
+  4: required Score west
+  5: required GameStatus status
+}
+
 service Hearts {
   # These may need a wrapper around return values, to indicate things like
   # game ended (in middle of trick... maybe someone played an invalid move)
@@ -64,6 +79,7 @@ service Hearts {
   list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards),
   Trick get_trick(1: required Ticket ticket),
   Trick play_card(1: required Ticket ticket, 2: required Card card),
+  RoundResult get_round_result(1: required Ticket ticket),
   # OR just make play_card return the trick
   # Trick get_trick_result(1: required Ticket ticket),
   #list<Card> get_trick(1: required Agent)

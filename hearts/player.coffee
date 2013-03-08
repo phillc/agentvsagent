@@ -21,6 +21,9 @@ module.exports = class Player extends EventEmitter
     @once 'endTrick', (trick) =>
       @_waitForTrickFinished = trick
 
+    @once 'endRound', (args...) =>
+      @_waitForRoundEnd = args
+
   waitForGame: (callback) ->
     if @_waitForGame
       callback @_waitForGame
@@ -55,3 +58,10 @@ module.exports = class Player extends EventEmitter
     else
       @removeAllListeners 'endTrick'
       @once 'endTrick', callback
+
+  waitForRoundEnd: (callback) ->
+    if @_waitForRoundEnd
+      callback @_waitForRoundEnd...
+    else
+      @removeAllListeners 'endRound'
+      @once 'endRound', callback

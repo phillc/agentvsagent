@@ -21,7 +21,6 @@ exports.StartingGame = class StartingGame extends State
 
       player.emit 'started', @game.id
 
-    @game.stack.push("endingGame")
     @game.stack.push("startingRound")
     @game.nextState()
 
@@ -120,14 +119,18 @@ exports.EndingTrick = class EndingTrick extends State
       player.emit 'endTrick', @game.currentRound().currentTrick()
     @game.nextState()
 
+exports.EndingRound = class EndingRound extends State
+  run: ->
+    if @game.maxPenaltyReached()
+      @game.stack.push("endingGame")
+      for player in @game.players
+        player.emit 'endRound', @game.currentRound().scores(), 'endGame'
+    else
+      @game.stack.push("startingRound")
+      for player in @game.players
+        player.emit 'endRound', @game.currentRound().scores(), 'nextRound'
 
-# class EndRound
-#   tallyScore
-#   if any over 100
-#     gameState.push new EndGame
-#   else
-#     gameState.push new StartTrick
-#   gameState.next
-# 
-# 
-# gameState.add new GameStart()
+    # Should this pause and wait for all bots
+    # to check in before moving to the next round?
+    @game.nextState()
+

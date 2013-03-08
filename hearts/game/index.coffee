@@ -20,6 +20,7 @@ module.exports = class Game
       waitingForCardFromSouth: new states.WaitingForCard(this, "south")
       waitingForCardFromWest: new states.WaitingForCard(this, "west")
       endingTrick: new states.EndingTrick(this)
+      endingRound: new states.EndingRound(this)
       endingGame: {run: ->}#new states.EndGame(this)
 
     # DATA
@@ -54,4 +55,20 @@ module.exports = class Game
 
   handleAction: (action) ->
     @currentState.handleAction(action)
+
+  scores: ->
+    @rounds.map((round) -> round.scores()).reduce (memo, scores) ->
+      memo.north += scores.north
+      memo.east += scores.east
+      memo.south += scores.south
+      memo.west += scores.west
+      memo
+
+  maxPenaltyReached: ->
+    maxPenalty = 100
+
+    scores = @scores()
+
+    [scores.north, scores.east, scores.south, scores.west].some (score) ->
+      score >= maxPenalty
 

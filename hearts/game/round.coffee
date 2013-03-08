@@ -32,3 +32,17 @@ module.exports = class Round
   allHavePassed: ->
     @north.hasPassed() && @east.hasPassed() && @south.hasPassed() && @west.hasPassed()
 
+  scores: ->
+    zeroscores =
+      north: 0
+      east: 0
+      south: 0
+      west: 0
+
+    scores = @tricks.reduce (memo, trick) ->
+      memo[trick.winner()] += trick.score()
+      memo
+    , zeroscores
+
+    # Moon shooting logic would go here:
+    scores

@@ -23,26 +23,29 @@ describe "Game", ->
     it "returns nothing if player doesn't exist", ->
       should.not.exist(@game.getPlayer("foo"))
 
+  describe "#scores", ->
+    it "returns the scores", ->
+      @game.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
+      @game.rounds.push({ scores: -> { north: 0, east: 0, south: 15, west: 11 }})
+      @game.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
+      @game.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
 
+      scores = @game.scores()
+      scores.north.should.equal(30)
+      scores.east.should.equal(0)
+      scores.south.should.equal(60)
+      scores.west.should.equal(14)
 
+  describe "#maxPenaltyReached", ->
+    it "returns true if 100 is reached by a player", ->
+      @game.scores = -> { north: 100, east: 10, south: 20, west: 3 }
+      @game.maxPenaltyReached().should.equal(true)
 
-  # describe "#passCards", ->
-  #   describe "on the right turn", ->
-  #     beforeEach ->
-  #       @game.passCards("right")
+    it "returns true if 100 is reached by multiple players", ->
+      @game.scores = -> { north: 100, east: 10, south: 105, west: 3 }
+      @game.maxPenaltyReached().should.equal(true)
 
-  #     it "asks each player for"
-
-  #   describe "on the left turn", ->
-  #     beforeEach ->
-  #       @game.passCards("left")
-
-  #   describe "on the across turn", ->
-  #     beforeEach ->
-  #       @game.passCards("across")
-
-  #   describe "on the hold turn", ->
-  #     beforeEach ->
-  #       @game.passCards("hold")
-
+    it "returns false if 100 is not reached by any player", ->
+      @game.scores = -> { north: 99, east: 10, south: 5, west: 3 }
+      @game.maxPenaltyReached().should.equal(false)
 

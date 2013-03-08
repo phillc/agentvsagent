@@ -32,6 +32,10 @@ ttypes.Position = {
 'SOUTH' : 3,
 'WEST' : 4
 };
+ttypes.GameStatus = {
+'NEXT_ROUND' : 1,
+'END_GAME' : 2
+};
 Card = module.exports.Card = function(args) {
   this.suit = null;
   this.rank = null;
@@ -366,6 +370,120 @@ Trick.prototype.write = function(output) {
       }
     }
     output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+RoundResult = module.exports.RoundResult = function(args) {
+  this.north = null;
+  this.east = null;
+  this.south = null;
+  this.west = null;
+  this.status = null;
+  if (args) {
+    if (args.north !== undefined) {
+      this.north = args.north;
+    }
+    if (args.east !== undefined) {
+      this.east = args.east;
+    }
+    if (args.south !== undefined) {
+      this.south = args.south;
+    }
+    if (args.west !== undefined) {
+      this.west = args.west;
+    }
+    if (args.status !== undefined) {
+      this.status = args.status;
+    }
+  }
+};
+RoundResult.prototype = {};
+RoundResult.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.north = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.east = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.south = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.west = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.I32) {
+        this.status = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+RoundResult.prototype.write = function(output) {
+  output.writeStructBegin('RoundResult');
+  if (this.north !== null && this.north !== undefined) {
+    output.writeFieldBegin('north', Thrift.Type.I32, 1);
+    output.writeI32(this.north);
+    output.writeFieldEnd();
+  }
+  if (this.east !== null && this.east !== undefined) {
+    output.writeFieldBegin('east', Thrift.Type.I32, 2);
+    output.writeI32(this.east);
+    output.writeFieldEnd();
+  }
+  if (this.south !== null && this.south !== undefined) {
+    output.writeFieldBegin('south', Thrift.Type.I32, 3);
+    output.writeI32(this.south);
+    output.writeFieldEnd();
+  }
+  if (this.west !== null && this.west !== undefined) {
+    output.writeFieldBegin('west', Thrift.Type.I32, 4);
+    output.writeI32(this.west);
+    output.writeFieldEnd();
+  }
+  if (this.status !== null && this.status !== undefined) {
+    output.writeFieldBegin('status', Thrift.Type.I32, 5);
+    output.writeI32(this.status);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

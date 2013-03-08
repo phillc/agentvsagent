@@ -724,6 +724,114 @@ Hearts_play_card_result.prototype.write = function(output) {
   return;
 };
 
+Hearts_get_round_result_args = function(args) {
+  this.ticket = null;
+  if (args) {
+    if (args.ticket !== undefined) {
+      this.ticket = args.ticket;
+    }
+  }
+};
+Hearts_get_round_result_args.prototype = {};
+Hearts_get_round_result_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ticket = new ttypes.Ticket();
+        this.ticket.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+Hearts_get_round_result_args.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_get_round_result_args');
+  if (this.ticket !== null && this.ticket !== undefined) {
+    output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
+    this.ticket.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+Hearts_get_round_result_result = function(args) {
+  this.success = null;
+  if (args) {
+    if (args.success !== undefined) {
+      this.success = args.success;
+    }
+  }
+};
+Hearts_get_round_result_result.prototype = {};
+Hearts_get_round_result_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new ttypes.RoundResult();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+Hearts_get_round_result_result.prototype.write = function(output) {
+  output.writeStructBegin('Hearts_get_round_result_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 HeartsClient = exports.Client = function(output, pClass) {
     this.output = output;
     this.pClass = pClass;
@@ -936,6 +1044,40 @@ HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
   }
   return callback('play_card failed: unknown result');
 };
+HeartsClient.prototype.get_round_result = function(ticket, callback) {
+  this.seqid += 1;
+  this._reqs[this.seqid] = callback;
+  this.send_get_round_result(ticket);
+};
+
+HeartsClient.prototype.send_get_round_result = function(ticket) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('get_round_result', Thrift.MessageType.CALL, this.seqid);
+  var args = new Hearts_get_round_result_args();
+  args.ticket = ticket;
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+HeartsClient.prototype.recv_get_round_result = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new Hearts_get_round_result_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('get_round_result failed: unknown result');
+};
 HeartsProcessor = exports.Processor = function(handler) {
   this._handler = handler
 }
@@ -1026,6 +1168,19 @@ HeartsProcessor.prototype.process_play_card = function(seqid, input, output) {
   this._handler.play_card(args.ticket, args.card, function (err, result) {
     var result = new Hearts_play_card_result((err != null ? err : {success: result}));
     output.writeMessageBegin("play_card", Thrift.MessageType.REPLY, seqid);
+    result.write(output);
+    output.writeMessageEnd();
+    output.flush();
+  })
+}
+
+HeartsProcessor.prototype.process_get_round_result = function(seqid, input, output) {
+  var args = new Hearts_get_round_result_args();
+  args.read(input);
+  input.readMessageEnd();
+  this._handler.get_round_result(args.ticket, function (err, result) {
+    var result = new Hearts_get_round_result_result((err != null ? err : {success: result}));
+    output.writeMessageBegin("get_round_result", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
     output.flush();

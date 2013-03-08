@@ -49,9 +49,8 @@ describe "states", ->
     it "pushes the next states on the stack", ->
       @game.stack.should.have.length(0)
       @state.run()
-      @game.stack.should.have.length(2)
-      @game.stack[1].should.equal("startingRound")
-      @game.stack[0].should.equal("endingGame")
+      @game.stack.should.have.length(1)
+      @game.stack[0].should.equal("startingRound")
 
     it "goes to the next state", ->
       @state.run()
@@ -263,3 +262,43 @@ describe "states", ->
     it "goes to the next state", ->
       new states.EndingTrick(@game).run()
       @nextStateCalls.should.equal(1)
+
+  describe "EndingRound", ->
+    beforeEach ->
+      @game.states.startingGame.run()
+      @game.stack = []
+      @nextStateCalls = 0
+
+    it "starts a new round if no one is over 100, and emits new round on each player", (done) ->
+      @game.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
+
+      @game.positions.north.once 'endRound', (round, status) ->
+        status.should.equal 'nextRound'
+        round.north.should.equal(10)
+        round.east.should.equal(0)
+        round.south.should.equal(15)
+        round.west.should.equal(1)
+        done()
+
+      @game.states.endingRound.run()
+      @game.stack[0].should.equal("startingRound")
+      @nextStateCalls.should.equal(1)
+
+    it "ends the game if someone reaches 100, and emits game end on each player", (done) ->
+      @game.rounds.push({ scores: -> { north: 101, east: 0, south: 15, west: 1 }})
+
+      @game.positions.north.once 'endRound', (round, status) ->
+        status.should.equal 'endGame'
+        round.north.should.equal(101)
+        round.east.should.equal(0)
+        round.south.should.equal(15)
+        round.west.should.equal(1)
+        done()
+
+      @game.states.endingRound.run()
+      @game.stack.should.have.length(1)
+      @game.stack[0].should.equal("endingGame")
+      @nextStateCalls.should.equal(1)
+
+
+

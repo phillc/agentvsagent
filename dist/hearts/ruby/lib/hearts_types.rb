@@ -43,6 +43,13 @@ module AgentVsAgent
     VALID_VALUES = Set.new([NORTH, EAST, SOUTH, WEST]).freeze
   end
 
+  module GameStatus
+    NEXT_ROUND = 1
+    END_GAME = 2
+    VALUE_MAP = {1 => "NEXT_ROUND", 2 => "END_GAME"}
+    VALID_VALUES = Set.new([NEXT_ROUND, END_GAME]).freeze
+  end
+
   class Card
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SUIT = 1
@@ -144,6 +151,38 @@ module AgentVsAgent
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field played is unset!') unless @played
       unless @leader.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@leader)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field leader!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class RoundResult
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    NORTH = 1
+    EAST = 2
+    SOUTH = 3
+    WEST = 4
+    STATUS = 5
+
+    FIELDS = {
+      NORTH => {:type => ::Thrift::Types::I32, :name => 'north'},
+      EAST => {:type => ::Thrift::Types::I32, :name => 'east'},
+      SOUTH => {:type => ::Thrift::Types::I32, :name => 'south'},
+      WEST => {:type => ::Thrift::Types::I32, :name => 'west'},
+      STATUS => {:type => ::Thrift::Types::I32, :name => 'status', :enum_class => ::AgentVsAgent::GameStatus}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field north is unset!') unless @north
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field east is unset!') unless @east
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field south is unset!') unless @south
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field west is unset!') unless @west
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field status is unset!') unless @status
+      unless @status.nil? || ::AgentVsAgent::GameStatus::VALID_VALUES.include?(@status)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field status!')
       end
     end
 

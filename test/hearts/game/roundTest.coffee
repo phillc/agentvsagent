@@ -3,6 +3,7 @@ Pile = require "../../../hearts/game/pile"
 Suit = require "../../../hearts/game/suit"
 Rank = require "../../../hearts/game/rank"
 Card = require "../../../hearts/game/card"
+Trick = require "../../../hearts/game/trick"
 should = require("should")
 
 describe "Round", ->
@@ -49,6 +50,35 @@ describe "Round", ->
       @round.tricks.should.have.length(2)
       @round.currentTrick().leader.should.equal("west")
 
+  describe "#scores", ->
+    beforeEach ->
+      trick1 = new Trick("north")
+      trick1.played.addCard(new Card(Suit.SPADES, Rank.THREE))
+      trick1.played.addCard(new Card(Suit.SPADES, Rank.ACE)) #east wins 13
+      trick1.played.addCard(new Card(Suit.SPADES, Rank.QUEEN))
+      trick1.played.addCard(new Card(Suit.SPADES, Rank.FOUR))
 
+      trick2 = new Trick("east")
+      trick2.played.addCard(new Card(Suit.SPADES, Rank.TWO))
+      trick2.played.addCard(new Card(Suit.SPADES, Rank.KING)) #south wins 1
+      trick2.played.addCard(new Card(Suit.SPADES, Rank.FIVE))
+      trick2.played.addCard(new Card(Suit.HEARTS, Rank.FOUR))
+
+      trick3 = new Trick("south")
+      trick3.played.addCard(new Card(Suit.HEARTS, Rank.FIVE)) #south wins 1
+      trick3.played.addCard(new Card(Suit.CLUBS, Rank.FOUR))
+      trick3.played.addCard(new Card(Suit.CLUBS, Rank.QUEEN))
+      trick3.played.addCard(new Card(Suit.CLUBS, Rank.THREE))
+
+      @round.tricks.push trick1
+      @round.tricks.push trick2
+      @round.tricks.push trick3
+
+    it "returns the scores", ->
+      scores = @round.scores()
+      scores.north.should.equal(0)
+      scores.east.should.equal(13)
+      scores.south.should.equal(2)
+      scores.west.should.equal(0)
 
 

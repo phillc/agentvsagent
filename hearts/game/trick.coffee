@@ -13,3 +13,8 @@ module.exports = class Trick
     winningCard = @played.allOfSuit(@played.cards[0].suit).highestRankedCard()
     winningCardIndex = @played.cards.indexOf(winningCard)
     positionsFromLeader[winningCardIndex]
+
+  score: ->
+    @played.cards.reduce (memo, card) ->
+      memo + card.score()
+    , 0

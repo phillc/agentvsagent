@@ -82,6 +82,7 @@ module.exports = class Handler
 
     thriftPosition = mapPositionToThrift(game.positionOf(player))
     gameInfo = new types.GameInfo(position: thriftPosition)
+    logger.info "Returning game info", ticket
 
     result null, gameInfo
 
@@ -114,7 +115,7 @@ module.exports = class Handler
     player = game.getPlayer(ticket.agentId)
 
     player.waitForTurn (trick) =>
-      logger.info "Retruning waitForTurn", trick
+      logger.info "Returning waitForTurn", trick
       result null, mapTrickToThrift(trick)
 
   play_card: (ticket, card, result) ->
@@ -127,4 +128,16 @@ module.exports = class Handler
 
     player.waitForTrickFinished (trick) =>
       result null, mapTrickToThrift(trick)
+
+  get_round_result: (ticket, result) ->
+    logger.info "get_round_result", ticket
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
+
+    player.waitForRoundEnd (scores, status) ->
+      round = new types.RoundResult(scores)
+      round.status = switch status
+        when "endGame" then types.GameStatus.END_GAME
+        when "nextRound" then types.GameStatus.NEXT_ROUND
+      result null, round
 

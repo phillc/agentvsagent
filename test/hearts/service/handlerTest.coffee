@@ -196,6 +196,7 @@ describe "Handler", ->
       @game.currentRound().currentTrick().leader = "north"
       card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
       @handler.play_card @ticket, card, (error, trick) =>
+        should.not.exist(error)
         trick.leader.should.equal(types.Position.NORTH)
         trick.played[0].suit.should.equal types.Suit.DIAMONDS
         trick.played[0].rank.should.equal types.Rank.TWO
@@ -203,4 +204,31 @@ describe "Handler", ->
 
       @game.states.endingTrick.run()
 
+  describe "#get_round_result", ->
+    beforeEach ->
+      @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
+
+    it "returns the results of the previous round and play the next hand", (done) ->
+      @game.rounds.push({ scores: -> { north: 99, east: 0, south: 15, west: 1 }})
+      @game.states.endingRound.run()
+      @handler.get_round_result @ticket, (error, roundResult) =>
+        should.not.exist(error)
+        roundResult.north.should.equal(99)
+        roundResult.east.should.equal(0)
+        roundResult.south.should.equal(15)
+        roundResult.west.should.equal(1)
+        roundResult.status.should.equal types.GameStatus.NEXT_ROUND
+        done()
+
+    it "returns the results of the previous round and finish the game", (done) ->
+      @game.rounds.push({ scores: -> { north: 101, east: 0, south: 15, west: 1 }})
+      @game.states.endingRound.run()
+      @handler.get_round_result @ticket, (error, roundResult) =>
+        should.not.exist(error)
+        roundResult.north.should.equal(101)
+        roundResult.east.should.equal(0)
+        roundResult.south.should.equal(15)
+        roundResult.west.should.equal(1)
+        roundResult.status.should.equal types.GameStatus.END_GAME
+        done()
 

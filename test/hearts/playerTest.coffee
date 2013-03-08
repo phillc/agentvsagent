@@ -73,3 +73,19 @@ describe "Player", ->
         done()
       @player.emit "endTrick", {leader: "north"}
 
+  describe "#waitForRoundEnd", ->
+    it "returns the hand if previously broadcasted", (done) ->
+      @player.emit "endRound", "foo", "bar"
+      @player.waitForRoundEnd (round, status) ->
+        round.should.equal "foo"
+        status.should.equal "bar"
+        done()
+
+    it "returns the hand if later broadcasted", (done) ->
+      @player.waitForRoundEnd (round, status) ->
+        round.should.equal "foo"
+        status.should.equal "bar"
+        done()
+      @player.emit "endRound", "foo", "bar"
+
+

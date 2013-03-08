@@ -96,6 +96,19 @@ instance Enum Position where
     _ -> throw ThriftException
 instance Hashable Position where
   hashWithSalt salt = hashWithSalt salt . fromEnum
+data GameStatus = NEXT_ROUND|END_GAME  deriving (Show,Eq, Typeable, Ord)
+instance Enum GameStatus where
+  fromEnum t = case t of
+    NEXT_ROUND -> 1
+    END_GAME -> 2
+  toEnum t = case t of
+    1 -> NEXT_ROUND
+    2 -> END_GAME
+    _ -> throw ThriftException
+instance Hashable GameStatus where
+  hashWithSalt salt = hashWithSalt salt . fromEnum
+type Score = Int32
+
 data Card = Card{f_Card_suit :: Maybe Suit,f_Card_rank :: Maybe Rank} deriving (Show,Eq,Typeable)
 instance Hashable Card where
   hashWithSalt salt record = salt   `hashWithSalt` f_Card_suit record   `hashWithSalt` f_Card_rank record  
@@ -284,5 +297,75 @@ read_Trick_fields iprot record = do
 read_Trick iprot = do
   _ <- readStructBegin iprot
   record <- read_Trick_fields iprot (Trick{f_Trick_leader=Nothing,f_Trick_played=Nothing})
+  readStructEnd iprot
+  return record
+data RoundResult = RoundResult{f_RoundResult_north :: Maybe Int32,f_RoundResult_east :: Maybe Int32,f_RoundResult_south :: Maybe Int32,f_RoundResult_west :: Maybe Int32,f_RoundResult_status :: Maybe GameStatus} deriving (Show,Eq,Typeable)
+instance Hashable RoundResult where
+  hashWithSalt salt record = salt   `hashWithSalt` f_RoundResult_north record   `hashWithSalt` f_RoundResult_east record   `hashWithSalt` f_RoundResult_south record   `hashWithSalt` f_RoundResult_west record   `hashWithSalt` f_RoundResult_status record  
+write_RoundResult oprot record = do
+  writeStructBegin oprot "RoundResult"
+  case f_RoundResult_north record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("north",T_I32,1)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_RoundResult_east record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("east",T_I32,2)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_RoundResult_south record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("south",T_I32,3)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_RoundResult_west record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("west",T_I32,4)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_RoundResult_status record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("status",T_I32,5)
+    writeI32 oprot (fromIntegral $ fromEnum _v)
+    writeFieldEnd oprot}
+  writeFieldStop oprot
+  writeStructEnd oprot
+read_RoundResult_fields iprot record = do
+  (_,_t34,_id35) <- readFieldBegin iprot
+  if _t34 == T_STOP then return record else
+    case _id35 of 
+      1 -> if _t34 == T_I32 then do
+        s <- readI32 iprot
+        read_RoundResult_fields iprot record{f_RoundResult_north=Just s}
+        else do
+          skip iprot _t34
+          read_RoundResult_fields iprot record
+      2 -> if _t34 == T_I32 then do
+        s <- readI32 iprot
+        read_RoundResult_fields iprot record{f_RoundResult_east=Just s}
+        else do
+          skip iprot _t34
+          read_RoundResult_fields iprot record
+      3 -> if _t34 == T_I32 then do
+        s <- readI32 iprot
+        read_RoundResult_fields iprot record{f_RoundResult_south=Just s}
+        else do
+          skip iprot _t34
+          read_RoundResult_fields iprot record
+      4 -> if _t34 == T_I32 then do
+        s <- readI32 iprot
+        read_RoundResult_fields iprot record{f_RoundResult_west=Just s}
+        else do
+          skip iprot _t34
+          read_RoundResult_fields iprot record
+      5 -> if _t34 == T_I32 then do
+        s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
+        read_RoundResult_fields iprot record{f_RoundResult_status=Just s}
+        else do
+          skip iprot _t34
+          read_RoundResult_fields iprot record
+      _ -> do
+        skip iprot _t34
+        readFieldEnd iprot
+        read_RoundResult_fields iprot record
+read_RoundResult iprot = do
+  _ <- readStructBegin iprot
+  record <- read_RoundResult_fields iprot (RoundResult{f_RoundResult_north=Nothing,f_RoundResult_east=Nothing,f_RoundResult_south=Nothing,f_RoundResult_west=Nothing,f_RoundResult_status=Nothing})
   readStructEnd iprot
   return record

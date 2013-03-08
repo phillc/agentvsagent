@@ -102,6 +102,21 @@ module AgentVsAgent
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'play_card failed: unknown result')
       end
 
+      def get_round_result(ticket)
+        send_get_round_result(ticket)
+        return recv_get_round_result()
+      end
+
+      def send_get_round_result(ticket)
+        send_message('get_round_result', Get_round_result_args, :ticket => ticket)
+      end
+
+      def recv_get_round_result()
+        result = receive_message(Get_round_result_result)
+        return result.success unless result.success.nil?
+        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_round_result failed: unknown result')
+      end
+
     end
 
     class Processor
@@ -147,6 +162,13 @@ module AgentVsAgent
         result = Play_card_result.new()
         result.success = @handler.play_card(args.ticket, args.card)
         write_result(result, oprot, 'play_card', seqid)
+      end
+
+      def process_get_round_result(seqid, iprot, oprot)
+        args = read_args(iprot, Get_round_result_args)
+        result = Get_round_result_result.new()
+        result.success = @handler.get_round_result(args.ticket)
+        write_result(result, oprot, 'get_round_result', seqid)
       end
 
     end
@@ -345,6 +367,39 @@ module AgentVsAgent
 
       FIELDS = {
         SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Get_round_result_args
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      TICKET = 1
+
+      FIELDS = {
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket}
+      }
+
+      def struct_fields; FIELDS; end
+
+      def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
+      end
+
+      ::Thrift::Struct.generate_accessors self
+    end
+
+    class Get_round_result_result
+      include ::Thrift::Struct, ::Thrift::Struct_Union
+      SUCCESS = 0
+
+      FIELDS = {
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::RoundResult}
       }
 
       def struct_fields; FIELDS; end

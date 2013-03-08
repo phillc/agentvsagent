@@ -39,3 +39,17 @@ describe "Trick", ->
       @trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
 
       @trick.winner().should.equal("west")
+
+  describe "#score", ->
+    it "returns the score", ->
+      trick = new Trick("south")
+      trick.score().should.equal(0)
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.score().should.equal(1)
+      trick.played.addCard(new Card(Suit.DIAMONDS, Rank.KING))
+      trick.score().should.equal(1)
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.ACE))
+      trick.score().should.equal(2)
+      trick.played.addCard(new Card(Suit.SPADES, Rank.QUEEN))
+      trick.score().should.equal(15)
+

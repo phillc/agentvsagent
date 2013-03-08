@@ -12,7 +12,7 @@
 -- DO NOT EDIT UNLESS YOU ARE SURE YOU KNOW WHAT YOU ARE DOING --
 -----------------------------------------------------------------
 
-module Hearts_Client(enter_arena,get_game_info,get_hand,pass_cards,get_trick,play_card) where
+module Hearts_Client(enter_arena,get_game_info,get_hand,pass_cards,get_trick,play_card,get_round_result) where
 import Data.IORef
 import Prelude ( Bool(..), Enum, Double, String, Maybe(..),
                  Eq, Show, Ord,
@@ -175,3 +175,26 @@ recv_play_card ip = do
     Just v -> return v
     Nothing -> do
       throw (AppExn AE_MISSING_RESULT "play_card failed: unknown result")
+get_round_result (ip,op) arg_ticket = do
+  send_get_round_result op arg_ticket
+  recv_get_round_result ip
+send_get_round_result op arg_ticket = do
+  seq <- seqid
+  seqn <- readIORef seq
+  writeMessageBegin op ("get_round_result", M_CALL, seqn)
+  write_Get_round_result_args op (Get_round_result_args{f_Get_round_result_args_ticket=Just arg_ticket})
+  writeMessageEnd op
+  tFlush (getTransport op)
+recv_get_round_result ip = do
+  (fname, mtype, rseqid) <- readMessageBegin ip
+  if mtype == M_EXCEPTION then do
+    x <- readAppExn ip
+    readMessageEnd ip
+    throw x
+    else return ()
+  res <- read_Get_round_result_result ip
+  readMessageEnd ip
+  case f_Get_round_result_result_success res of
+    Just v -> return v
+    Nothing -> do
+      throw (AppExn AE_MISSING_RESULT "get_round_result failed: unknown result")
