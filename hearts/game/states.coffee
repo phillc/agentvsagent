@@ -37,6 +37,7 @@ exports.StartingRound = class StartingRound extends State
 
 exports.Dealing = class Dealing extends State
   run: ->
+    logger.info "Dealing"
     @deal()
     @game.nextState()
 
@@ -52,16 +53,14 @@ exports.Dealing = class Dealing extends State
       @game.positions[position].emit 'dealt', seat.dealt.cards
 
 exports.Passing = class Passing extends State
-  # @directions =
-  #   left: null
-  #   right: null
-  #   across: null
-
   constructor: (game, @direction) ->
-    # @strategy = Passing.directions[direction]
     super(game)
 
+  run: ->
+    logger.info "Passing", @direction
+
   handleAction: (action) ->
+    logger.info "Handling passing action"
     action.execute(@game)
 
     if @game.currentRound().allHavePassed()

@@ -28,15 +28,22 @@ class RandomBot
     game_info = @game.get_game_info @ticket
     puts "game info: #{game_info.inspect}"
 
-    loop do
+    loop.with_index(1) do |_, count|
       hand = @game.get_hand @ticket
       puts "hand: #{hand.inspect}"
-      received_cards = @game.pass_cards @ticket, hand.shift(3)
-      puts "received cards: #{received_cards.inspect}"
-      hand = hand + received_cards
+
+      if count % 4 != 0
+        puts "passing cards"
+        received_cards = @game.pass_cards @ticket, hand.shift(3)
+        puts "received cards: #{received_cards.inspect}"
+        hand = hand + received_cards
+      end
 
       13.times do
+        puts "playing trick"
+
         trick = @game.get_trick @ticket
+        puts "Leading the trick" if game_info.position == trick.leader
         puts "current trick: #{trick.inspect}"
 
         sleep 0.25

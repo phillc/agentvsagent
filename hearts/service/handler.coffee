@@ -2,6 +2,7 @@ Suit = require '../game/suit'
 Rank = require '../game/rank'
 Card = require '../game/card'
 actions = require '../game/actions'
+logger = require '../logger'
 types = require '../lib/hearts_types'
 
 suitMapping = [
@@ -75,6 +76,7 @@ module.exports = class Handler
       result null, response
 
   get_game_info: (ticket, result) ->
+    logger.info "Get game info", ticket
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
@@ -84,6 +86,7 @@ module.exports = class Handler
     result null, gameInfo
 
   get_hand: (ticket, result) ->
+    logger.info "Get hand", ticket
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
@@ -92,6 +95,7 @@ module.exports = class Handler
       result null, thriftCards
 
   pass_cards: (ticket, cards, result) ->
+    logger.info "Pass cards", ticket, cards
     #TODO: What if they send a blank or invalid ticket?
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
@@ -105,13 +109,16 @@ module.exports = class Handler
       result null, thriftCards
 
   get_trick: (ticket, result) ->
+    logger.info "Get trick", ticket
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
     player.waitForTurn (trick) =>
+      logger.info "Retruning waitForTurn", trick
       result null, mapTrickToThrift(trick)
 
   play_card: (ticket, card, result) ->
+    logger.info "play_card", ticket
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
