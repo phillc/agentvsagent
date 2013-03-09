@@ -10,6 +10,21 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Human playable
 * Low barrier to entry
 
+### Installation
+
+Easy:
+
+npm install
+
+Manual:
+
+Download
+
+
+### Contributing
+
+Fork then...
+
 ### Decision Reasoning
 
 * Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.
@@ -19,3 +34,10 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Othello (Reversi)
 * Spades
 * Bridge
+
+### Tips
+
+* Basic
+  * Keep your bot under source control
+* Advanced
+  * Unit test at least your supporting code
