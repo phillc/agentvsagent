@@ -63,11 +63,12 @@ describe "states", ->
     it "pushes the next states on the stack", ->
       @game.stack.should.have.length(0)
       @state.run()
-      @game.stack.should.have.length(15)
-      @game.stack[14].should.equal("dealing")
-      @game.stack[13].should.equal("passingRight")
-      @game.stack[12].should.equal("startingTrick")
-      @game.stack[0].should.equal("startingTrick")
+      @game.stack.should.have.length(16)
+      @game.stack[15].should.equal("dealing")
+      @game.stack[14].should.equal("passingRight")
+      @game.stack[13].should.equal("startingTrick")
+      @game.stack[1].should.equal("startingTrick")
+      @game.stack[0].should.equal("endingRound")
 
     it "goes to the next state", ->
       @state.run()

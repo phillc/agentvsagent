@@ -33,8 +33,9 @@ class RandomBot
       puts "hand: #{hand.inspect}"
 
       if count % 4 != 0
-        puts "passing cards"
-        received_cards = @game.pass_cards @ticket, hand.shift(3)
+        cards_to_pass = hand.shift(3)
+        puts "[#{game_info.position}] passing cards #{cards_to_pass}"
+        received_cards = @game.pass_cards @ticket, cards_to_pass
         puts "received cards: #{received_cards.inspect}"
         hand = hand + received_cards
       end
@@ -46,8 +47,6 @@ class RandomBot
         puts "Leading the trick #{game_info.inspect}, #{trick.inspect}" if game_info.position == trick.leader
         puts "current trick: #{trick.inspect}"
 
-        sleep 0.25
-
         if i == 0 && two_clubs = hand.detect{|card| card.suit == AgentVsAgent::Suit::CLUBS && card.rank == AgentVsAgent::Rank::TWO }
           card_to_play = two_clubs
         elsif trick.played[0] && matching_suit = hand.detect{|card| card.suit == trick.played[0].suit}
@@ -57,7 +56,7 @@ class RandomBot
         end
 
         hand.delete(card_to_play)
-        puts "playing card: #{card_to_play.inspect}"
+        puts "[#{game_info.position}] playing card: #{card_to_play.inspect}"
         trick_result = @game.play_card @ticket, card_to_play
 
         puts "trick result: #{trick_result.inspect}"
@@ -65,7 +64,7 @@ class RandomBot
 
       round_result = @game.get_round_result @ticket
       puts "round result: #{round_result.inspect}"
-      break unless round_result.status == AgentVsAgent::GameStatus::GAME_END
+      break if round_result.status != AgentVsAgent::GameStatus::NEXT_ROUND
     end
     @game.get_game_results @ticket
   end

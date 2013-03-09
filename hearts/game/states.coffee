@@ -28,6 +28,7 @@ exports.StartingRound = class StartingRound extends State
   run: ->
     @game.rounds.push(new Round())
 
+    @game.stack.push("endingRound")
     for _ in [1..13]
       @game.stack.push("startingTrick")
     @game.stack.push("passingRight")
@@ -106,21 +107,25 @@ exports.WaitingForCard = class WaitingForCard extends State
     super(game)
 
   run: ->
+    logger.info "Waiting for card from", @position
     @game.positions[@position].emit 'turn', @game.currentRound().currentTrick()
 
   handleAction: (action) ->
+    logger.info "Handling action while waiting for card from", @position
     # TODO: Remove from held
     action.execute(@game)
     @game.nextState()
 
 exports.EndingTrick = class EndingTrick extends State
   run: ->
+    logger.info "Trick ended"
     for player in @game.players
       player.emit 'endTrick', @game.currentRound().currentTrick()
     @game.nextState()
 
 exports.EndingRound = class EndingRound extends State
   run: ->
+    logger.info "round ended", @game.currentRound().scores()
     if @game.maxPenaltyReached()
       @game.stack.push("endingGame")
       for player in @game.players
