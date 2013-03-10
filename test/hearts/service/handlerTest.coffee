@@ -63,7 +63,7 @@ describe "Handler", ->
         done()
 
     it "maps the cards to thrift types", (done) ->
-      @player.waitForHand = (callback) ->
+      @player.recvDealt = (callback) ->
         ranks = Rank.all()
         cards = [
           new Card(Suit.CLUBS, Rank.TWO)
@@ -81,7 +81,6 @@ describe "Handler", ->
           new Card(Suit.SPADES, Rank.SEVEN)
         ]
         callback(cards)
-
 
       @handler.get_hand @ticket, (err, cards) ->
         should.not.exist(err)

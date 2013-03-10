@@ -66,7 +66,7 @@ module.exports = class Handler
 
   enter_arena: (result) ->
     player = @arena.createPlayer()
-    player.waitForGame (gameId) =>
+    player.recvStartedGame (gameId) =>
       ticket = new types.Ticket(agentId: player.id, gameId: gameId)
       response = new types.EntryResponse(ticket: ticket)
 
@@ -91,7 +91,7 @@ module.exports = class Handler
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
-    player.waitForHand (cards) =>
+    player.recvDealt (cards) =>
       thriftCards = cards.map mapCardToThrift
       result null, thriftCards
 
@@ -105,7 +105,7 @@ module.exports = class Handler
     action = new actions.PassCards(player, mappedCards)
     game.handleAction(action)
 
-    player.waitForPassed (cards) =>
+    player.recvPassed (cards) =>
       thriftCards = cards.map mapCardToThrift
       result null, thriftCards
 
@@ -114,8 +114,8 @@ module.exports = class Handler
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
-    player.waitForTurn (trick) =>
-      logger.info "Returning waitForTurn", trick
+    player.recvTurn (trick) =>
+      logger.info "Returning recvTurn", trick
       result null, mapTrickToThrift(trick)
 
   play_card: (ticket, card, result) ->
@@ -126,7 +126,7 @@ module.exports = class Handler
     action = new actions.PlayCard(player, mapThriftToCard(card))
     game.handleAction(action)
 
-    player.waitForTrickFinished (trick) =>
+    player.recvEndTrick (trick) =>
       result null, mapTrickToThrift(trick)
 
   get_round_result: (ticket, result) ->
@@ -134,7 +134,7 @@ module.exports = class Handler
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
-    player.waitForRoundEnd (scores, status) ->
+    player.recvEndRound (scores, status) ->
       round = new types.RoundResult(scores)
       round.status = switch status
         when "endGame" then types.GameStatus.END_GAME

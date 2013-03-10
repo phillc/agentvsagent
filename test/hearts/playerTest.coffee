@@ -8,84 +8,84 @@ describe "Player", ->
   it "has an id", ->
     @player.should.have.property('id')
 
-  describe "#waitForGame", ->
+  describe "startedGame", ->
     it "returns the gameId if previously broadcasted", (done) ->
-      @player.emit "started", "12345"
-      @player.waitForGame (gameId) ->
+      @player.sendStartedGame "12345"
+      @player.recvStartedGame (gameId) ->
         gameId.should.equal("12345")
         done()
 
     it "returns the gameId if later broadcasted", (done) ->
-      @player.waitForGame (gameId) ->
+      @player.recvStartedGame (gameId) ->
         gameId.should.equal("12345")
         done()
-      @player.emit "started", "12345"
+      @player.sendStartedGame "12345"
 
-  describe "#waitForHand", ->
+  describe "dealt", ->
     it "returns the cards if previously broadcasted", (done) ->
-      @player.emit "dealt", ["1", "2"]
-      @player.waitForHand (cards) ->
+      @player.sendDealt ["1", "2"]
+      @player.recvDealt (cards) ->
         cards.should.eql ["1", "2"]
         done()
 
     it "returns the cards if later broadcasted", (done) ->
-      @player.waitForHand (cards) ->
+      @player.recvDealt (cards) ->
         cards.should.eql ["1", "2"]
         done()
-      @player.emit "dealt", ["1", "2"]
+      @player.sendDealt ["1", "2"]
 
-  describe "#waitForPassed", ->
+  describe "passed", ->
     it "returns the cards if previously broadcasted", (done) ->
-      @player.emit "passed", ["1", "2"]
-      @player.waitForPassed (cards) ->
+      @player.sendPassed ["1", "2"]
+      @player.recvPassed (cards) ->
         cards.should.eql ["1", "2"]
         done()
 
     it "returns the cards if later broadcasted", (done) ->
-      @player.waitForPassed (cards) ->
+      @player.recvPassed (cards) ->
         cards.should.eql ["1", "2"]
         done()
-      @player.emit "passed", ["1", "2"]
+      @player.sendPassed ["1", "2"]
 
-  describe "#waitForTurn", ->
+  describe "turn", ->
     it "returns the trick if previously broadcasted", (done) ->
-      @player.emit "turn", {leader: "north"}
-      @player.waitForTurn (trick) ->
+      @player.sendTurn {leader: "north"}
+      @player.recvTurn (trick) ->
         trick.should.eql {leader: "north"}
         done()
 
     it "returns the trick if later broadcasted", (done) ->
-      @player.waitForTurn (trick) ->
+      @player.recvTurn (trick) ->
         trick.should.eql {leader: "north"}
         done()
-      @player.emit "turn", {leader: "north"}
+      @player.sendTurn {leader: "north"}
 
-  describe "#waitForTrickFinished", ->
+  describe "endTrick", ->
     it "returns the hand if previously broadcasted", (done) ->
-      @player.emit "endTrick", {leader: "north"}
-      @player.waitForTrickFinished (trick) ->
+      @player.sendEndTrick {leader: "north"}
+      @player.recvEndTrick (trick) ->
         trick.should.eql {leader: "north"}
         done()
 
     it "returns the hand if later broadcasted", (done) ->
-      @player.waitForTrickFinished (trick) ->
+      @player.recvEndTrick (trick) ->
         trick.should.eql {leader: "north"}
         done()
-      @player.emit "endTrick", {leader: "north"}
+      @player.sendEndTrick {leader: "north"}
 
-  describe "#waitForRoundEnd", ->
+  describe "endRound", ->
     it "returns the hand if previously broadcasted", (done) ->
-      @player.emit "endRound", "foo", "bar"
-      @player.waitForRoundEnd (round, status) ->
+      @player.sendEndRound "foo", "bar"
+      @player.recvEndRound (round, status) ->
         round.should.equal "foo"
         status.should.equal "bar"
         done()
 
     it "returns the hand if later broadcasted", (done) ->
-      @player.waitForRoundEnd (round, status) ->
+      @player.recvEndRound (round, status) ->
         round.should.equal "foo"
         status.should.equal "bar"
         done()
-      @player.emit "endRound", "foo", "bar"
+      @player.sendEndRound "foo", "bar"
 
 

@@ -3,65 +3,24 @@ IdGenerator = require './idgenerator'
 Pile = require "./game/Pile"
 
 module.exports = class Player extends EventEmitter
+  @events = ['startedGame', 'dealt', 'passed', 'turn', 'endTrick', 'endRound']
+
   constructor: ->
     @id = IdGenerator.generate()
 
-    @once 'started', (gameId) =>
-      @_waitForGame = gameId
+    Player.events.forEach (event) =>
+      @["#{event}Messages"] = []
+      name = event.charAt(0).toUpperCase() + event.slice(1)
+      @["send#{name}"] = (args...) ->
+        @["#{event}Messages"].push [event, args]
+        @emit "message#{name}", event
 
-    @once 'dealt', (hand) =>
-      @_waitForHand = hand
+      @["recv#{name}"] = (callback) ->
+        #TODO: What if message is unexpected?
+        if @["#{event}Messages"].length > 0
+          callback @["#{event}Messages"].shift()[1]...
+        else
+          @once "message#{name}", ->
+            callback @["#{event}Messages"].shift()[1]...
 
-    @once 'passed', (cards) =>
-      @_waitForPassed = cards
 
-    @once 'turn', (trick) =>
-      @_waitForTurn = trick
-
-    @once 'endTrick', (trick) =>
-      @_waitForTrickFinished = trick
-
-    @once 'endRound', (args...) =>
-      @_waitForRoundEnd = args
-
-  waitForGame: (callback) ->
-    if @_waitForGame
-      callback @_waitForGame
-    else
-      @removeAllListeners 'started'
-      @once 'started', callback
-
-  waitForHand: (callback) ->
-    if @_waitForHand
-      callback @_waitForHand
-    else
-      @removeAllListeners 'dealt'
-      @once 'dealt', callback
-
-  waitForPassed: (callback) ->
-    if @_waitForPassed
-      callback @_waitForPassed
-    else
-      @removeAllListeners 'passed'
-      @once 'passed', callback
-
-  waitForTurn: (callback) ->
-    if @_waitForTurn
-      callback @_waitForTurn
-    else
-      @removeAllListeners 'turn'
-      @once 'turn', callback
-
-  waitForTrickFinished: (callback) ->
-    if @_waitForTrickFinished
-      callback @_waitForTrickFinished
-    else
-      @removeAllListeners 'endTrick'
-      @once 'endTrick', callback
-
-  waitForRoundEnd: (callback) ->
-    if @_waitForRoundEnd
-      callback @_waitForRoundEnd...
-    else
-      @removeAllListeners 'endRound'
-      @once 'endRound', callback

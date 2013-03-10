@@ -19,7 +19,7 @@ exports.StartingGame = class StartingGame extends State
     for player in und.shuffle(@game.players)
       @game.positions[positions.shift()] = player
 
-      player.emit 'started', @game.id
+      player.sendStartedGame @game.id
 
     @game.stack.push("startingRound")
     @game.nextState()
@@ -50,7 +50,7 @@ exports.Dealing = class Dealing extends State
       seat = @game.currentRound()[position]
       deck.moveCardsTo(13, seat.dealt)
       seat.dealt.copyAllCardsTo(seat.held)
-      @game.positions[position].emit 'dealt', seat.dealt.cards
+      @game.positions[position].sendDealt seat.dealt.cards
 
 exports.Passing = class Passing extends State
   constructor: (game, @direction) ->
@@ -89,7 +89,7 @@ exports.Passing = class Passing extends State
           for card in passedCards
             fromSeat.held.moveCardTo(card, toSeat.held)
 
-          game.positions[toPosition].emit 'passed', passedCards
+          game.positions[toPosition].sendPassed passedCards
 
 exports.StartingTrick = class StartingTrick extends State
   run: ->
@@ -108,7 +108,7 @@ exports.WaitingForCard = class WaitingForCard extends State
 
   run: ->
     logger.info "Waiting for card from", @position
-    @game.positions[@position].emit 'turn', @game.currentRound().currentTrick()
+    @game.positions[@position].sendTurn @game.currentRound().currentTrick()
 
   handleAction: (action) ->
     logger.info "Handling action while waiting for card from", @position
@@ -120,7 +120,7 @@ exports.EndingTrick = class EndingTrick extends State
   run: ->
     logger.info "Trick ended"
     for player in @game.players
-      player.emit 'endTrick', @game.currentRound().currentTrick()
+      player.sendEndTrick @game.currentRound().currentTrick()
     @game.nextState()
 
 exports.EndingRound = class EndingRound extends State
@@ -129,11 +129,11 @@ exports.EndingRound = class EndingRound extends State
     if @game.maxPenaltyReached()
       @game.stack.push("endingGame")
       for player in @game.players
-        player.emit 'endRound', @game.currentRound().scores(), 'endGame'
+        player.sendEndRound @game.currentRound().scores(), 'endGame'
     else
       @game.stack.push("startingRound")
       for player in @game.players
-        player.emit 'endRound', @game.currentRound().scores(), 'nextRound'
+        player.sendEndRound @game.currentRound().scores(), 'nextRound'
 
     # Should this pause and wait for all bots
     # to check in before moving to the next round?
