@@ -31,7 +31,10 @@ exports.StartingRound = class StartingRound extends State
     @game.stack.push("endingRound")
     for _ in [1..13]
       @game.stack.push("startingTrick")
-    @game.stack.push("passingRight")
+
+    passing = ["passingRight", "passingLeft", "passingAcross"][(@game.rounds.length - 1) % 4]
+    if passing
+      @game.stack.push(passing)
     @game.stack.push("dealing")
     @game.nextState()
 

@@ -70,6 +70,23 @@ describe "states", ->
       @game.stack[1].should.equal("startingTrick")
       @game.stack[0].should.equal("endingRound")
 
+    it "passes in each direction", ->
+      @state.run()
+      @game.stack[14].should.equal("passingRight")
+      @game.stack.splice(0, 20)
+      @state.run()
+      @game.stack[14].should.equal("passingLeft")
+      @game.stack.splice(0, 20)
+      @state.run()
+      @game.stack[14].should.equal("passingAcross")
+      @game.stack.splice(0, 20)
+      @state.run()
+      @game.stack[14].should.equal("dealing")
+      @game.stack.splice(0, 20)
+      @state.run()
+      @game.stack[14].should.equal("passingRight")
+      @game.stack.splice(0, 20)
+
     it "goes to the next state", ->
       @state.run()
       @nextStateCalls.should.equal(1)
@@ -321,7 +338,4 @@ describe "states", ->
     it "doesn't call next state", ->
       @game.states.endingGame.run()
       @nextStateCalls.should.equal(0)
-
-
-
 

@@ -32,13 +32,13 @@ class RandomBot
       hand = @game.get_hand @ticket
       puts "hand: #{hand.inspect}"
 
-      # if round_number % 4 != 0
+      if round_number % 4 != 0
         cards_to_pass = hand.shift(3)
         puts "[#{game_info.position}] passing cards #{cards_to_pass}"
         received_cards = @game.pass_cards @ticket, cards_to_pass
         puts "received cards: #{received_cards.inspect}"
         hand = hand + received_cards
-      # end
+      end
 
       13.times do |i|
         puts "[#{game_info.position}, round #{round_number}, hand #{i}, playing trick"
@@ -66,7 +66,8 @@ class RandomBot
       puts "round result: #{round_result.inspect}"
       break if round_result.status != AgentVsAgent::GameStatus::NEXT_ROUND
     end
-    @game.get_game_results @ticket
+    game_result = @game.get_game_result @ticket
+    puts "game_result: #{game_result.inspect}"
   end
 end
 
