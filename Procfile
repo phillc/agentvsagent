@@ -1,2 +1,2 @@
-nodemon: node_modules/.bin/nodemon --ext '.coffee|.js' --exec 'coffee' hearts/server.coffee
+nodemon: node_modules/.bin/nodemon --ext '.coffee|.js' ./bin/ava server
 guard: guard -i

@@ -3,6 +3,10 @@
   "description": "Agent vs Agent",
   "version": "0.0.1",
   "author": "Phillip <spyyderz@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/phillc/agentvsagent.git"
+  },
   "private": true,
   "engines": { "node": ">= 0.8.0" },
   "dependencies": {
@@ -10,11 +14,16 @@
     "thrift": "0.7.x",
     "node-uuid": "1.4.x",
     "underscore": "1.4.x",
-    "winston": "0.6.x"
+    "winston": "0.6.x",
+    "commander": "1.1.x"
   },
   "devDependencies": {
     "mocha": "1.7.0",
     "should": "1.2.x",
     "nodemon": "0.7.x"
+  },
+  "preferGlobal": true,
+  "bin": {
+    "ava": "./bin/ava"
   }
 }
