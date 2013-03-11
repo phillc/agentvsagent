@@ -70,6 +70,13 @@ struct RoundResult {
   5: required GameStatus status
 }
 
+struct GameResult {
+  1: required Score north
+  2: required Score east
+  3: required Score south
+  4: required Score west
+}
+
 service Hearts {
   # These may need a wrapper around return values, to indicate things like
   # game ended (in middle of trick... maybe someone played an invalid move)
@@ -80,8 +87,6 @@ service Hearts {
   Trick get_trick(1: required Ticket ticket),
   Trick play_card(1: required Ticket ticket, 2: required Card card),
   RoundResult get_round_result(1: required Ticket ticket),
-  # OR just make play_card return the trick
-  # Trick get_trick_result(1: required Ticket ticket),
-  #list<Card> get_trick(1: required Agent)
+  GameResult get_game_result(1: required Ticket ticket)
 }
 

@@ -491,3 +491,101 @@ RoundResult.prototype.write = function(output) {
   return;
 };
 
+GameResult = module.exports.GameResult = function(args) {
+  this.north = null;
+  this.east = null;
+  this.south = null;
+  this.west = null;
+  if (args) {
+    if (args.north !== undefined) {
+      this.north = args.north;
+    }
+    if (args.east !== undefined) {
+      this.east = args.east;
+    }
+    if (args.south !== undefined) {
+      this.south = args.south;
+    }
+    if (args.west !== undefined) {
+      this.west = args.west;
+    }
+  }
+};
+GameResult.prototype = {};
+GameResult.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.north = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.east = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.south = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.west = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+GameResult.prototype.write = function(output) {
+  output.writeStructBegin('GameResult');
+  if (this.north !== null && this.north !== undefined) {
+    output.writeFieldBegin('north', Thrift.Type.I32, 1);
+    output.writeI32(this.north);
+    output.writeFieldEnd();
+  }
+  if (this.east !== null && this.east !== undefined) {
+    output.writeFieldBegin('east', Thrift.Type.I32, 2);
+    output.writeI32(this.east);
+    output.writeFieldEnd();
+  }
+  if (this.south !== null && this.south !== undefined) {
+    output.writeFieldBegin('south', Thrift.Type.I32, 3);
+    output.writeI32(this.south);
+    output.writeFieldEnd();
+  }
+  if (this.west !== null && this.west !== undefined) {
+    output.writeFieldBegin('west', Thrift.Type.I32, 4);
+    output.writeI32(this.west);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+

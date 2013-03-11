@@ -54,5 +54,6 @@ Sample bots for languages
 * Data validations
 * Shooting the moon
 * Timeout management
-* Clean up after games are done
-* Human player
+* Clean up after games are done (memory leak)
+* Human player(s)
+

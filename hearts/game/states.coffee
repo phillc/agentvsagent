@@ -139,3 +139,11 @@ exports.EndingRound = class EndingRound extends State
     # to check in before moving to the next round?
     @game.nextState()
 
+exports.EndingGame = class EndingGame extends State
+  run: ->
+    # TODO: cleanup from arena
+    logger.info "game ended", @game.scores()
+    for player in @game.players
+      player.sendEndGame @game.scores()
+
+

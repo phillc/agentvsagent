@@ -135,9 +135,16 @@ module.exports = class Handler
     player = game.getPlayer(ticket.agentId)
 
     player.recvEndRound (scores, status) ->
-      round = new types.RoundResult(scores)
-      round.status = switch status
+      roundResult = new types.RoundResult(scores)
+      roundResult.status = switch status
         when "endGame" then types.GameStatus.END_GAME
         when "nextRound" then types.GameStatus.NEXT_ROUND
-      result null, round
+      result null, roundResult
 
+  get_game_result: (ticket, result) ->
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
+
+    player.recvEndGame (scores) ->
+      gameResult = new types.GameResult(scores)
+      result null, gameResult

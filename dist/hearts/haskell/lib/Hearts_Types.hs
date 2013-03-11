@@ -369,3 +369,63 @@ read_RoundResult iprot = do
   record <- read_RoundResult_fields iprot (RoundResult{f_RoundResult_north=Nothing,f_RoundResult_east=Nothing,f_RoundResult_south=Nothing,f_RoundResult_west=Nothing,f_RoundResult_status=Nothing})
   readStructEnd iprot
   return record
+data GameResult = GameResult{f_GameResult_north :: Maybe Int32,f_GameResult_east :: Maybe Int32,f_GameResult_south :: Maybe Int32,f_GameResult_west :: Maybe Int32} deriving (Show,Eq,Typeable)
+instance Hashable GameResult where
+  hashWithSalt salt record = salt   `hashWithSalt` f_GameResult_north record   `hashWithSalt` f_GameResult_east record   `hashWithSalt` f_GameResult_south record   `hashWithSalt` f_GameResult_west record  
+write_GameResult oprot record = do
+  writeStructBegin oprot "GameResult"
+  case f_GameResult_north record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("north",T_I32,1)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_GameResult_east record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("east",T_I32,2)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_GameResult_south record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("south",T_I32,3)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  case f_GameResult_west record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("west",T_I32,4)
+    writeI32 oprot _v
+    writeFieldEnd oprot}
+  writeFieldStop oprot
+  writeStructEnd oprot
+read_GameResult_fields iprot record = do
+  (_,_t39,_id40) <- readFieldBegin iprot
+  if _t39 == T_STOP then return record else
+    case _id40 of 
+      1 -> if _t39 == T_I32 then do
+        s <- readI32 iprot
+        read_GameResult_fields iprot record{f_GameResult_north=Just s}
+        else do
+          skip iprot _t39
+          read_GameResult_fields iprot record
+      2 -> if _t39 == T_I32 then do
+        s <- readI32 iprot
+        read_GameResult_fields iprot record{f_GameResult_east=Just s}
+        else do
+          skip iprot _t39
+          read_GameResult_fields iprot record
+      3 -> if _t39 == T_I32 then do
+        s <- readI32 iprot
+        read_GameResult_fields iprot record{f_GameResult_south=Just s}
+        else do
+          skip iprot _t39
+          read_GameResult_fields iprot record
+      4 -> if _t39 == T_I32 then do
+        s <- readI32 iprot
+        read_GameResult_fields iprot record{f_GameResult_west=Just s}
+        else do
+          skip iprot _t39
+          read_GameResult_fields iprot record
+      _ -> do
+        skip iprot _t39
+        readFieldEnd iprot
+        read_GameResult_fields iprot record
+read_GameResult iprot = do
+  _ <- readStructBegin iprot
+  record <- read_GameResult_fields iprot (GameResult{f_GameResult_north=Nothing,f_GameResult_east=Nothing,f_GameResult_south=Nothing,f_GameResult_west=Nothing})
+  readStructEnd iprot
+  return record

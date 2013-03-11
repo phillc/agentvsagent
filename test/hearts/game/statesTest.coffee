@@ -301,5 +301,27 @@ describe "states", ->
       @game.stack[0].should.equal("endingGame")
       @nextStateCalls.should.equal(1)
 
+  describe "EndingGame", ->
+    beforeEach ->
+      @game.states.startingGame.run()
+      @nextStateCalls = 0
+      @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
+      @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
+
+    it "send the game scores to each player", (done) ->
+      @game.positions.north.recvEndGame (game) ->
+        game.north.should.equal(100)
+        game.east.should.equal(0)
+        game.south.should.equal(30)
+        game.west.should.equal(2)
+        done()
+
+      @game.states.endingGame.run()
+
+    it "doesn't call next state", ->
+      @game.states.endingGame.run()
+      @nextStateCalls.should.equal(0)
+
+
 
 

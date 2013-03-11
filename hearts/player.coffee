@@ -3,7 +3,7 @@ IdGenerator = require './idgenerator'
 Pile = require "./game/Pile"
 
 module.exports = class Player extends EventEmitter
-  @events = ['startedGame', 'dealt', 'passed', 'turn', 'endTrick', 'endRound']
+  @events = ['startedGame', 'dealt', 'passed', 'turn', 'endTrick', 'endRound', 'endGame']
 
   constructor: ->
     @id = IdGenerator.generate()

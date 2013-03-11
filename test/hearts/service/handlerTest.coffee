@@ -220,14 +220,30 @@ describe "Handler", ->
         done()
 
     it "returns the results of the previous round and finish the game", (done) ->
-      @game.rounds.push({ scores: -> { north: 101, east: 0, south: 15, west: 1 }})
+      @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
+      @game.rounds.push({ scores: -> { north: 51, east: 0, south: 15, west: 1 }})
       @game.states.endingRound.run()
       @handler.get_round_result @ticket, (error, roundResult) =>
         should.not.exist(error)
-        roundResult.north.should.equal(101)
+        roundResult.north.should.equal(51)
         roundResult.east.should.equal(0)
         roundResult.south.should.equal(15)
         roundResult.west.should.equal(1)
         roundResult.status.should.equal types.GameStatus.END_GAME
         done()
 
+  describe "#get_game_result", ->
+    beforeEach ->
+      @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
+
+    it "returns the results of the game", (done) ->
+      @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
+      @game.rounds.push({ scores: -> { north: 51, east: 0, south: 15, west: 1 }})
+      @game.states.endingGame.run()
+      @handler.get_game_result @ticket, (error, gameResult) =>
+        should.not.exist(error)
+        gameResult.north.should.equal(101)
+        gameResult.east.should.equal(0)
+        gameResult.south.should.equal(30)
+        gameResult.west.should.equal(2)
+        done()

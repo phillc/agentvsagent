@@ -189,4 +189,30 @@ module AgentVsAgent
     ::Thrift::Struct.generate_accessors self
   end
 
+  class GameResult
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    NORTH = 1
+    EAST = 2
+    SOUTH = 3
+    WEST = 4
+
+    FIELDS = {
+      NORTH => {:type => ::Thrift::Types::I32, :name => 'north'},
+      EAST => {:type => ::Thrift::Types::I32, :name => 'east'},
+      SOUTH => {:type => ::Thrift::Types::I32, :name => 'south'},
+      WEST => {:type => ::Thrift::Types::I32, :name => 'west'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field north is unset!') unless @north
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field east is unset!') unless @east
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field south is unset!') unless @south
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field west is unset!') unless @west
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
 end

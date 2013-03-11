@@ -43,3 +43,4 @@ class Hearts_Iface a where
   get_trick :: a -> Maybe Ticket -> IO Trick
   play_card :: a -> Maybe Ticket -> Maybe Card -> IO Trick
   get_round_result :: a -> Maybe Ticket -> IO RoundResult
+  get_game_result :: a -> Maybe Ticket -> IO GameResult
