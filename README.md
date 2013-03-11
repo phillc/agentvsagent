@@ -12,24 +12,9 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 
 ## Installation
 
-Easy:
-
-npm install
-
-Manual:
-
-Download
-
-
-## Contributing
-
-Fork then...
-
-Mac OSX installation instructions
-
-## In need of
-
-Sample bots for languages
+* Install node: [via package manager](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
+* npm install -g agentvsagent
+* run `ava` for command options
 
 ## FAQ
 
@@ -56,4 +41,18 @@ Sample bots for languages
 * Timeout management
 * Clean up after games are done (memory leak)
 * Human player(s)
+
+## Contributing
+
+### Mac OSX installation instructions:
+
+* Fork project on github and clone
+* run `npm install`
+* run tests via `make test`
+
+The command `make setup` has a more complete setup, including thrift
+
+## In need of
+
+Sample bots for languages
 
