@@ -50,24 +50,68 @@
 
 <p>Agent vs. Agent is intended to be a collection of simple games that can be played by computer programs developed by people of various levels of experience. Agent vs. Agent targets small groups of people, and attempts to provide the tools necessary to conduct competitive agent vs agent combat. The ultimate goal is to help facilitate learning, whether that be through exploring new languages, learning new concepts, or smashing your co-workers egos.</p>
 
-<h3>Goals</h3>
+<h2>Goals</h2>
 
 <ul>
 <li>Privately deployable</li>
 <li>Support many languages</li>
 <li>Human playable</li>
 <li>Low barrier to entry</li>
-</ul><h3>Decision Reasoning</h3>
+</ul><h2>Installation</h2>
+
+<ul>
+<li>Install node: <a href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager">via package manager</a>
+</li>
+<li>npm install -g agentvsagent</li>
+<li>run <code>ava</code> for command options</li>
+</ul><h2>FAQ</h2>
 
 <ul>
 <li>Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.</li>
-</ul><h3>Potential game ideas</h3>
+</ul><h2>Tips</h2>
+
+<ul>
+<li>Basic
+
+<ul>
+<li>Keep your bot under source control</li>
+</ul>
+</li>
+<li>Advanced
+
+<ul>
+<li>Unit test at least your supporting code</li>
+</ul>
+</li>
+</ul><h2>Potential game ideas</h2>
 
 <ul>
 <li>Othello (Reversi)</li>
 <li>Spades</li>
 <li>Bridge</li>
-</ul>
+</ul><h2>TODO</h2>
+
+<ul>
+<li>Data validations</li>
+<li>Shooting the moon</li>
+<li>Timeout management</li>
+<li>Clean up after games are done (memory leak)</li>
+<li>Human player(s)</li>
+</ul><h2>Contributing</h2>
+
+<h3>Mac OSX installation instructions:</h3>
+
+<ul>
+<li>Fork project on github and clone</li>
+<li>run <code>npm install</code>
+</li>
+<li>run tests via <code>make test</code>
+</li>
+</ul><p>The command <code>make setup</code> has a more complete setup, including thrift</p>
+
+<h2>In need of</h2>
+
+<p>Sample bots for languages</p>
       </section>
 
       <footer>
