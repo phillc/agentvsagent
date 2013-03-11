@@ -51,7 +51,7 @@ describe "Round", ->
       @round.currentTrick().leader.should.equal("west")
 
   describe "#scores", ->
-    beforeEach ->
+    it "returns the scores", ->
       trick1 = new Trick("north")
       trick1.played.addCard(new Card(Suit.SPADES, Rank.THREE))
       trick1.played.addCard(new Card(Suit.SPADES, Rank.ACE)) #east wins 13
@@ -73,12 +73,25 @@ describe "Round", ->
       @round.tricks.push trick1
       @round.tricks.push trick2
       @round.tricks.push trick3
-
-    it "returns the scores", ->
       scores = @round.scores()
       scores.north.should.equal(0)
       scores.east.should.equal(13)
       scores.south.should.equal(2)
       scores.west.should.equal(0)
+
+    it "accounts for shooting the moon", ->
+      trick = new Trick("north")
+      trick.score = ->
+        26
+      trick.winner = ->
+        "north"
+      @round.tricks.push trick
+
+      scores = @round.scores()
+      scores.north.should.equal(0)
+      scores.east.should.equal(26)
+      scores.south.should.equal(26)
+      scores.west.should.equal(26)
+
 
 

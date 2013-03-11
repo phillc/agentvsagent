@@ -44,5 +44,12 @@ module.exports = class Round
       memo
     , zeroscores
 
-    # Moon shooting logic would go here:
+    for position in ['north', 'east', 'south', 'west']
+      if scores[position] == 26
+        scores.north = 26
+        scores.east = 26
+        scores.south = 26
+        scores.west = 26
+        scores[position] = 0
+        break
     scores
