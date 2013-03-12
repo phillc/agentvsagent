@@ -8,18 +8,10 @@ program
 
 program
   .command('server')
-  .option('-p, --port', 'port', parseInt)
   .description('start a local server')
   .action(function() {
     ran = true;
     require('../hearts/server')
-  });
-
-program
-  .command('new')
-  .description('start a new agent')
-  .action(function(cmd) {
-    ran = true;
   });
 
 program.parse(process.argv)
