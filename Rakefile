@@ -1,12 +1,16 @@
 require 'pty'
 
-desc "run ruby random bots"
-task :bots, :number, :sleep do |t, args|
+desc "run ruby random agents"
+task :agents, :number, :sleep do |t, args|
   args.with_defaults number: 4, sleep: 0.1
-  command = 'cd dist/hearts/ruby && ruby random_bot.rb'
+  agent_commands = [
+    'cd dist/hearts/ruby && ruby sample_agent.rb',
+    'cd dist/hearts/nodejs && coffee sampleAgent.coffee'
+  ].cycle
 
   pids = []
   args.number.to_i.times do |i|
+    command = agent_commands.next
     pids << fork do
       STDOUT.sync = true
 

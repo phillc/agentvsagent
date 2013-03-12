@@ -17,16 +17,22 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * npm install -g agentvsagent
 * run `ava` for command options
 
-## FAQ
+## Starting an agent
 
-* Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.
+* Clone or download the repository.
+* Use the files in the dist/hearts/<language>/ directory
 
 ## Tips
 
 * Basic
-  * Keep your bot under source control
+  * Isolate your logic to the starter agent in a different file/module, to reduce conflict if the api changes.
+  * Keep your agent under source control
 * Advanced
   * Unit test at least your supporting code
+
+## FAQ
+
+* Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.
 
 ## Potential game ideas
 
@@ -42,6 +48,7 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Timeout management
 * Clean up after games are done (memory leak)
 * Human player(s)
+* Server will crash if a player disconnects mid game, or pass in null for a card
 
 ## Contributing
 
@@ -55,5 +62,5 @@ The command `make setup` has a more complete setup, including thrift
 
 ## In need of
 
-Sample bots for languages
+Sample agents for languages
 
