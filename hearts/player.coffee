@@ -8,6 +8,8 @@ module.exports = class Player extends EventEmitter
   constructor: ->
     @id = IdGenerator.generate()
 
+    # TODO: Make this one queue, so that a game ended suddenly
+    # message can be put on the queue for any listener to pick up
     Player.events.forEach (event) =>
       @["#{event}Messages"] = []
       name = event.charAt(0).toUpperCase() + event.slice(1)

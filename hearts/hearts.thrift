@@ -62,6 +62,8 @@ enum GameStatus {
   END_GAME = 2
 }
 
+# Once time limits are implemented, should the responses
+# return how long they took, so they can calculate network lag?
 struct RoundResult {
   1: required Score north
   2: required Score east
@@ -80,7 +82,7 @@ struct GameResult {
 service Hearts {
   # These may need a wrapper around return values, to indicate things like
   # game ended (in middle of trick... maybe someone played an invalid move)
-  EntryResponse enter_arena(),
+  EntryResponse enter_arena(), # Should they send in the api version number?
   GameInfo get_game_info(1: required Ticket ticket),
   list<Card> get_hand(1: required Ticket ticket),
   list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards),

@@ -10,17 +10,22 @@
   "engines": { "node": ">= 0.8.0" },
   "dependencies": {
     "coffee-script": "1.4.x",
-    "thrift": "0.7.x",
     "node-uuid": "1.4.x",
     "underscore": "1.4.x",
     "winston": "0.6.x",
-    "commander": "1.1.x"
+    "commander": "1.1.x",
+
+    "thrift": "1.0.0-dev",
+    "node-int64": "0.3.x"
   },
   "devDependencies": {
     "mocha": "1.7.0",
     "should": "1.2.x",
     "nodemon": "0.7.x"
   },
+  "bundledDependencies": [
+    "thrift"
+  ],
   "preferGlobal": true,
   "bin": {
     "ava": "./bin/ava"

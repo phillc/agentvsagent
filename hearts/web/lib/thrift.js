@@ -1,0 +1,1 @@
+../../../vendor/thrift/lib/js/thrift.js
