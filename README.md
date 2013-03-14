@@ -4,6 +4,9 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 
 # This is an alpha release
 
+* The server isn't stable... it will leak memory (games don't clean up after them selves), it will crash when a client does something unexpected (like disconnect in the middle of a turn...), it will still assign disconnected players to games (and then crash).
+* The transport layer may change. Seems like a http transport would be easier to manage.
+
 ## Goals
 
 * Privately deployable
@@ -49,6 +52,7 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Clean up after games are done (memory leak)
 * Human player(s)
 * Server will crash if a player disconnects mid game, or pass in null for a card
+* Symlinks suck. Come up with some script that copies from the submodule (yuck).
 
 ## Contributing
 
