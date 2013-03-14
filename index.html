@@ -50,7 +50,12 @@
 
 <p>Agent vs. Agent is intended to be a collection of simple games that can be played by computer programs developed by people of various levels of experience. Agent vs. Agent targets small groups of people, and attempts to provide the tools necessary to conduct competitive agent vs agent combat. The ultimate goal is to help facilitate learning, whether that be through exploring new languages, learning new concepts, or smashing your co-workers egos.</p>
 
-<h2>Goals</h2>
+<h1>This is an alpha release</h1>
+
+<ul>
+<li>The server isn't stable... it will leak memory (games don't clean up after them selves), it will crash when a client does something unexpected (like disconnect in the middle of a turn...), it will still assign disconnected players to games (and then crash).</li>
+<li>The transport layer may change. Seems like a http transport would be easier to manage.</li>
+</ul><h2>Goals</h2>
 
 <ul>
 <li>Privately deployable</li>
@@ -64,17 +69,19 @@
 </li>
 <li>npm install -g agentvsagent</li>
 <li>run <code>ava</code> for command options</li>
-</ul><h2>FAQ</h2>
+</ul><h2>Starting an agent</h2>
 
 <ul>
-<li>Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.</li>
+<li>Clone or download the repository.</li>
+<li>Use the files in the dist/hearts// directory</li>
 </ul><h2>Tips</h2>
 
 <ul>
 <li>Basic
 
 <ul>
-<li>Keep your bot under source control</li>
+<li>Isolate your logic to the starter agent in a different file/module, to reduce conflict if the api changes.</li>
+<li>Keep your agent under source control</li>
 </ul>
 </li>
 <li>Advanced
@@ -83,6 +90,10 @@
 <li>Unit test at least your supporting code</li>
 </ul>
 </li>
+</ul><h2>FAQ</h2>
+
+<ul>
+<li>Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.</li>
 </ul><h2>Potential game ideas</h2>
 
 <ul>
@@ -97,6 +108,8 @@
 <li>Timeout management</li>
 <li>Clean up after games are done (memory leak)</li>
 <li>Human player(s)</li>
+<li>Server will crash if a player disconnects mid game, or pass in null for a card</li>
+<li>Symlinks suck. Come up with some script that copies from the submodule (yuck).</li>
 </ul><h2>Contributing</h2>
 
 <h3>Mac OSX installation instructions:</h3>
@@ -111,7 +124,7 @@
 
 <h2>In need of</h2>
 
-<p>Sample bots for languages</p>
+<p>Sample agents for languages</p>
       </section>
 
       <footer>
