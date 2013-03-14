@@ -82,6 +82,7 @@ struct GameResult {
 service Hearts {
   # These may need a wrapper around return values, to indicate things like
   # game ended (in middle of trick... maybe someone played an invalid move)
+  # OR, maybe declare exceptions
   EntryResponse enter_arena(), # Should they send in the api version number?
   GameInfo get_game_info(1: required Ticket ticket),
   list<Card> get_hand(1: required Ticket ticket),

@@ -4,8 +4,9 @@ desc "run ruby random agents"
 task :agents, :number, :sleep do |t, args|
   args.with_defaults number: 4, sleep: 0.1
   agent_commands = [
-    'cd dist/hearts/ruby && ruby sample_agent.rb',
-    'cd dist/hearts/nodejs && coffee sampleAgent.coffee'
+    # 'cd dist/hearts/ruby && ruby sample_agent.rb',
+    # 'cd dist/hearts/nodejs && coffee sampleAgent.coffee',
+    'cd dist/hearts/haskell && runhaskell -i../../../vendor/thrift/lib/hs/src -i./lib SampleAgent.hs'
   ].cycle
 
   pids = []
