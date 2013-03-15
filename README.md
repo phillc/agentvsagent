@@ -53,6 +53,7 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Human player(s)
 * Server will crash if a player disconnects mid game, or pass in null for a card
 * Symlinks suck. Come up with some script that copies from the submodule (yuck).
+* The sample agents are ugly. I was trying to just get them to look the same in each language, but I ended up mutating too many variables. I think it would be nice to split them into two files, one with logic and the other with the harness for rounds/tricks. That will let me change the harness later and reduce the risk of merge conflict with the logic that potential participants implement. Rushing to MVP =\
 
 ## Contributing
 

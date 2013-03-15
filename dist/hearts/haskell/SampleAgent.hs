@@ -7,7 +7,6 @@ import Thrift.Transport.Handle
 import Thrift.Transport.Framed
 import Thrift.Protocol.Binary
 
-
 main :: IO ()
 main = do
   print "Starting"
@@ -21,7 +20,24 @@ main = do
     Nothing -> print "no ticket"
   print "DONE"
 
+play :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> IO ()
 play handler ticket = do
   print "playing"
-  -- print . get_game_info handler
+  gameInfo <- get_game_info handler ticket
+  print "game info:"
+  print gameInfo
+
+  playRound handler ticket 1
   return ()
+
+playRound :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> Int -> IO () 0
+playRound handler ticket roundNumber = do
+  hand <- get_hand handler ticket
+  print "hand:"
+  print hand
+
+  -- round %4...
+  cardsToPass = hand
+
+
+playTrick = 2
