@@ -58,11 +58,11 @@ end
 
 guard :thrift, all_on_start: true,
                clean_target: true,
-               targets: { "hearts/lib" => "js:node",
-                          "hearts/web/lib/types" => "js:jquery",
+               targets: { "lib/hearts/service/types" => "js:node",
+                          "lib/hearts/web/lib/types" => "js:jquery",
                           "dist/hearts/nodejs/lib" => "js:node",
                           "dist/hearts/java/lib" => "java",
                           "dist/hearts/haskell/lib" => "hs",
                           "dist/hearts/ruby/lib" => "rb" } do
-  watch('hearts/hearts.thrift')
+  watch('thrift/hearts.thrift')
 end
