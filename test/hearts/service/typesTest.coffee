@@ -1,4 +1,4 @@
-types = require("../../hearts/lib/hearts_types")
+types = require("../../../lib/hearts/service/types/hearts_types")
 require("should")
 
 describe "types", ->

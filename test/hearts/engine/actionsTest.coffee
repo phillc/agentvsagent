@@ -1,7 +1,7 @@
-Factory = require "../factory"
-actions = require("../../../hearts/game/actions")
-Card = require("../../../hearts/game/card")
-Pile = require("../../../hearts/game/pile")
+Factory = require "../../factory"
+actions = require "../../../lib/hearts/engine/actions"
+Card = require "../../../lib/hearts/engine/card"
+Pile = require "../../../lib/hearts/engine/pile"
 require("should")
 
 describe "actions", ->

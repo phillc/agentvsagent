@@ -1,11 +1,11 @@
-Arena = require '../../../hearts/arena'
-Handler = require '../../../hearts/service/handler'
-Card = require '../../../hearts/game/card'
-Suit = require '../../../hearts/game/suit'
-Rank = require '../../../hearts/game/rank'
-types = require '../../../hearts/lib/hearts_types'
-Hearts = require '../../../hearts/lib/hearts'
-Factory = require '../factory'
+Arena = require '../../../lib/arena'
+Card = require '../../../lib/hearts/engine/card'
+Suit = require '../../../lib/hearts/engine/suit'
+Rank = require '../../../lib/hearts/engine/rank'
+Handler = require '../../../lib/hearts/service/handler'
+types = require '../../../lib/hearts/service/types/hearts_types'
+Hearts = require '../../../lib/hearts/service/types/hearts'
+Factory = require '../../factory'
 should = require("should")
 
 describe "Handler", ->

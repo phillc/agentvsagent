@@ -1,4 +1,4 @@
-Pile = require './pile'
+Pile = require "../../../lib/hearts/engine/pile"
 
 module.exports = class Seat
   constructor: ->

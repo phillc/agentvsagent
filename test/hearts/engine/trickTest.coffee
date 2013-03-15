@@ -1,7 +1,7 @@
-Trick = require "../../../hearts/game/trick"
-Card = require "../../../hearts/game/card"
-Suit = require "../../../hearts/game/suit"
-Rank = require "../../../hearts/game/rank"
+Trick = require "../../../lib/hearts/engine/trick"
+Card = require "../../../lib/hearts/engine/card"
+Suit = require "../../../lib/hearts/engine/suit"
+Rank = require "../../../lib/hearts/engine/rank"
 
 describe "Trick", ->
   describe "#winner", ->

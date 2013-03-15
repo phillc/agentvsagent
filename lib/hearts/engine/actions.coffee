@@ -1,5 +1,5 @@
 Pile = require './pile'
-logger = require '../logger'
+logger = require '../../logger'
 class Action
   constructor: (@player) ->
 

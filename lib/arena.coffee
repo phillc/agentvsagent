@@ -1,6 +1,6 @@
 {EventEmitter} = require 'events'
-Player = require './player'
-Game = require './game'
+HeartsPlayer = require './hearts/player'
+Game = require './hearts/engine/game'
 
 module.exports = class Arena extends EventEmitter
   constructor: ->
@@ -8,7 +8,7 @@ module.exports = class Arena extends EventEmitter
     @runningMatches = {}
 
   createPlayer: ->
-    player = new Player()
+    player = new HeartsPlayer()
     @waitingRoom.push player
     @emit 'newPlayer'
     player

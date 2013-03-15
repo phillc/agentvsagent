@@ -1,5 +1,5 @@
 und = require 'underscore'
-logger = require '../logger'
+logger = require '../../logger'
 Pile = require './pile'
 Round = require './round'
 

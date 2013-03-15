@@ -1,4 +1,4 @@
-Player = require("../../hearts/player")
+Player = require "../../lib/hearts/player"
 require("should")
 
 describe "Player", ->

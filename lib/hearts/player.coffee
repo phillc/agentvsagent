@@ -1,6 +1,6 @@
 {EventEmitter} = require 'events'
-IdGenerator = require './idgenerator'
-Pile = require "./game/Pile"
+IdGenerator = require '../idgenerator'
+Pile = require "./engine/Pile"
 
 module.exports = class Player extends EventEmitter
   @events = ['startedGame', 'dealt', 'passed', 'turn', 'endTrick', 'endRound', 'endGame']

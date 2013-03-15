@@ -1,5 +1,5 @@
-Game = require("../../../hearts/game")
-Player = require("../../../hearts/player")
+Game = require "../../../lib/hearts/engine/game"
+Player = require "../../../lib/hearts/player"
 should = require("should")
 
 describe "Game", ->

@@ -1,6 +1,6 @@
-MatchMaker = require '../../hearts/matchmaker'
-Arena = require '../../hearts/arena'
-Player = require '../../hearts/player'
+MatchMaker = require '../lib/matchmaker'
+Arena = require '../lib/arena'
+Player = require '../lib/hearts/player'
 require("should")
 
 describe "MatchMaker", ->

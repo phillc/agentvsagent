@@ -1,5 +1,5 @@
-Seat = require "../../../hearts/game/seat"
-Pile = require "../../../hearts/game/pile"
+Seat = require "../../../lib/hearts/engine/seat"
+Pile = require "../../../lib/hearts/engine/pile"
 should = require("should")
 
 describe "Seat", ->

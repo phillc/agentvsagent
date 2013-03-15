@@ -11,7 +11,7 @@ program
   .description('start a local server')
   .action(function() {
     ran = true;
-    require('../hearts/server')
+    require('../lib/server')
   });
 
 program.parse(process.argv)

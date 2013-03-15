@@ -1,9 +1,9 @@
-Round = require "../../../hearts/game/round"
-Pile = require "../../../hearts/game/pile"
-Suit = require "../../../hearts/game/suit"
-Rank = require "../../../hearts/game/rank"
-Card = require "../../../hearts/game/card"
-Trick = require "../../../hearts/game/trick"
+Round = require "../../../lib/hearts/engine/round"
+Pile = require "../../../lib/hearts/engine/pile"
+Card = require "../../../lib/hearts/engine/card"
+Suit = require "../../../lib/hearts/engine/suit"
+Rank = require "../../../lib/hearts/engine/rank"
+Trick = require "../../../lib/hearts/engine/trick"
 should = require("should")
 
 describe "Round", ->

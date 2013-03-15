@@ -1,6 +1,6 @@
-IdGenerator = require '../idgenerator'
+IdGenerator = require '../../idgenerator'
+logger = require '../../logger'
 states = require './states'
-logger = require '../logger'
 
 module.exports = class Game
   constructor: (player1, player2, player3, player4) ->

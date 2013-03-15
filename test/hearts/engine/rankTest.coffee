@@ -1,4 +1,4 @@
-Rank = require("../../../hearts/game/rank")
+Rank = require "../../../lib/hearts/engine/rank"
 require("should")
 
 describe "Rank", ->

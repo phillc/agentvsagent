@@ -1,11 +1,11 @@
-Game = require("../../../hearts/game")
-Pile = require("../../../hearts/game/pile")
-Card = require("../../../hearts/game/card")
-Suit = require("../../../hearts/game/suit")
-Rank = require("../../../hearts/game/rank")
-Player = require("../../../hearts/player")
-states = require("../../../hearts/game/states")
-actions = require("../../../hearts/game/actions")
+Game = require "../../../lib/hearts/engine/game"
+Pile = require "../../../lib/hearts/engine/pile"
+Card = require "../../../lib/hearts/engine/card"
+Suit = require "../../../lib/hearts/engine/suit"
+Rank = require "../../../lib/hearts/engine/rank"
+Player = require "../../../lib/hearts/player"
+states = require "../../../lib/hearts/engine/states"
+actions = require "../../../lib/hearts/engine/actions"
 should = require("should")
 
 describe "states", ->

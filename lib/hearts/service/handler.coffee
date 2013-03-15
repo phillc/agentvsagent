@@ -1,9 +1,9 @@
-Suit = require '../game/suit'
-Rank = require '../game/rank'
-Card = require '../game/card'
-actions = require '../game/actions'
-logger = require '../logger'
-types = require '../lib/hearts_types'
+Suit = require '../engine/suit'
+Rank = require '../engine/rank'
+Card = require '../engine/card'
+actions = require '../engine/actions'
+logger = require '../../logger'
+types = require './types/hearts_types'
 
 suitMapping = [
   [Suit.CLUBS, types.Suit.CLUBS]

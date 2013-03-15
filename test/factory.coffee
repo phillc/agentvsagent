@@ -1,4 +1,4 @@
-Arena = require "../../hearts/arena"
+Arena = require "../lib/arena"
 exports.createGame = (options={}) ->
   arena = options.arena || new Arena()
 

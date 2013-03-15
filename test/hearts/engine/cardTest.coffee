@@ -1,6 +1,6 @@
-Card = require("../../../hearts/game/card")
-Suit = require("../../../hearts/game/suit")
-Rank = require("../../../hearts/game/rank")
+Card = require "../../../lib/hearts/engine/card"
+Suit = require "../../../lib/hearts/engine/suit"
+Rank = require "../../../lib/hearts/engine/rank"
 
 require("should")
 

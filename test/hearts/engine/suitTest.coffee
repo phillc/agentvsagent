@@ -1,4 +1,4 @@
-Suit = require("../../../hearts/game/suit")
+Suit = require "../../../lib/hearts/engine/suit"
 require("should")
 
 describe "Suit", ->

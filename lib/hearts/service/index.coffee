@@ -1,6 +1,6 @@
 thrift = require 'thrift'
-logger = require '../logger'
-Hearts = require '../lib/hearts'
+logger = require '../../logger'
+Hearts = require './types/hearts'
 Handler = require './handler'
 
 module.exports = class Service

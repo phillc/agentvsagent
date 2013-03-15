@@ -1,5 +1,5 @@
 Factory = require './factory'
-Arena = require '../../hearts/arena'
+Arena = require '../lib/arena'
 should = require("should")
 
 describe "Arena", ->
