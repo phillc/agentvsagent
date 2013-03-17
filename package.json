@@ -15,7 +15,7 @@
     "winston": "0.6.x",
     "commander": "1.1.x",
 
-    "thrift": "1.0.0-dev",
+    "node-thrift": "1.0.0-dev",
     "node-int64": "0.3.x"
   },
   "devDependencies": {
