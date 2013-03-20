@@ -1,9 +1,6 @@
 REPORTER = spec
 all: test
 
-clean:
-	rm -rf gen
-
 test:
 	./node_modules/mocha/bin/mocha --reporter $(REPORTER)
 
@@ -22,5 +19,16 @@ setup:
 	brew install thrift --with-haskell
 	gem install thrift
 
+update-thrift:
+	git submodule init
+	git submodule update
+
+package-thrift:
+	mkdir -p node_modules
+	rm -rf node_modules/thrift
+	cp -r vendor/thrift/lib/nodejs node_modules/thrift
+	git add -A -f node_modules/thrift
+	cp vendor/thrift/lib/js/thrift.js lib/hearts/web/lib/thrift.js
+	git add lib/hearts/web/lib/thrift.js
 
 .PHONY: test stats clean all
