@@ -86,6 +86,9 @@ service Hearts {
   EntryResponse enter_arena(), # Should they send in the api version number?
   GameInfo get_game_info(1: required Ticket ticket),
   list<Card> get_hand(1: required Ticket ticket),
+  # Right now, server not expecting you to call pass cards on the 4th round.
+  # Need to figure out a way to not make it arbitrary. Maybe have get_hand also
+  # return number of cards to pass
   list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards),
   Trick get_trick(1: required Ticket ticket),
   Trick play_card(1: required Ticket ticket, 2: required Card card),

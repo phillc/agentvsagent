@@ -4,10 +4,11 @@ Hearts = require './types/hearts'
 Handler = require './handler'
 
 module.exports = class Service
-  constructor: (arena) ->
-    @server = thrift.createServer Hearts, new Handler(arena)
+  constructor: (@arena) ->
 
-  start: ->
-    @server.listen(4001)
-    logger.info "Service listening on", @server.address()
+  create: ->
+    handler = new Handler(@arena)
+
+    tcpServer: thrift.createServer(Hearts, handler)
+    httpMiddleware: thrift.httpMiddleware(Hearts, handler)
 
