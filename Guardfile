@@ -59,7 +59,7 @@ end
 guard :thrift, all_on_start: true,
                clean_target: true,
                targets: { "lib/hearts/service/types" => "js:node",
-                          "lib/hearts/web/lib/types" => "js:jquery",
+                          "lib/hearts/web/public/types" => "js:jquery",
                           "dist/hearts/nodejs/lib" => "js:node",
                           "dist/hearts/java/lib" => "java",
                           "dist/hearts/haskell/lib" => "hs",
