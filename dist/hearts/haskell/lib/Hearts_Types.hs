@@ -48,10 +48,9 @@ instance Enum Suit where
     _ -> throw ThriftException
 instance Hashable Suit where
   hashWithSalt salt = hashWithSalt salt . fromEnum
-data Rank = ACE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|JACK|QUEEN|KING  deriving (Show,Eq, Typeable, Ord)
+data Rank = TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|JACK|QUEEN|KING|ACE  deriving (Show,Eq, Typeable, Ord)
 instance Enum Rank where
   fromEnum t = case t of
-    ACE -> 1
     TWO -> 2
     THREE -> 3
     FOUR -> 4
@@ -64,8 +63,8 @@ instance Enum Rank where
     JACK -> 11
     QUEEN -> 12
     KING -> 13
+    ACE -> 14
   toEnum t = case t of
-    1 -> ACE
     2 -> TWO
     3 -> THREE
     4 -> FOUR
@@ -78,6 +77,7 @@ instance Enum Rank where
     11 -> JACK
     12 -> QUEEN
     13 -> KING
+    14 -> ACE
     _ -> throw ThriftException
 instance Hashable Rank where
   hashWithSalt salt = hashWithSalt salt . fromEnum

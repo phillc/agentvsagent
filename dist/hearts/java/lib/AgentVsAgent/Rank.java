@@ -12,7 +12,6 @@ import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
 public enum Rank implements org.apache.thrift.TEnum {
-  ACE(1),
   TWO(2),
   THREE(3),
   FOUR(4),
@@ -24,7 +23,8 @@ public enum Rank implements org.apache.thrift.TEnum {
   TEN(10),
   JACK(11),
   QUEEN(12),
-  KING(13);
+  KING(13),
+  ACE(14);
 
   private final int value;
 
@@ -45,8 +45,6 @@ public enum Rank implements org.apache.thrift.TEnum {
    */
   public static Rank findByValue(int value) { 
     switch (value) {
-      case 1:
-        return ACE;
       case 2:
         return TWO;
       case 3:
@@ -71,6 +69,8 @@ public enum Rank implements org.apache.thrift.TEnum {
         return QUEEN;
       case 13:
         return KING;
+      case 14:
+        return ACE;
       default:
         return null;
     }
