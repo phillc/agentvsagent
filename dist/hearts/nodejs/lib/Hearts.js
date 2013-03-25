@@ -8,10 +8,10 @@ var Thrift = require('thrift').Thrift;
 var ttypes = require('./hearts_types');
 //HELPER FUNCTIONS AND STRUCTURES
 
-Hearts_enter_arena_args = function(args) {
+AgentVsAgent.Hearts_enter_arena_args = function(args) {
 };
-Hearts_enter_arena_args.prototype = {};
-Hearts_enter_arena_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_enter_arena_args.prototype = {};
+AgentVsAgent.Hearts_enter_arena_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -29,14 +29,14 @@ Hearts_enter_arena_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_enter_arena_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_enter_arena_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_enter_arena_args');
   output.writeFieldStop();
   output.writeStructEnd();
   return;
 };
 
-Hearts_enter_arena_result = function(args) {
+AgentVsAgent.Hearts_enter_arena_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -44,8 +44,8 @@ Hearts_enter_arena_result = function(args) {
     }
   }
 };
-Hearts_enter_arena_result.prototype = {};
-Hearts_enter_arena_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_enter_arena_result.prototype = {};
+AgentVsAgent.Hearts_enter_arena_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -78,7 +78,7 @@ Hearts_enter_arena_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_enter_arena_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_enter_arena_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_enter_arena_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -90,7 +90,7 @@ Hearts_enter_arena_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_game_info_args = function(args) {
+AgentVsAgent.Hearts_get_game_info_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -98,8 +98,8 @@ Hearts_get_game_info_args = function(args) {
     }
   }
 };
-Hearts_get_game_info_args.prototype = {};
-Hearts_get_game_info_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_game_info_args.prototype = {};
+AgentVsAgent.Hearts_get_game_info_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -132,7 +132,7 @@ Hearts_get_game_info_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_game_info_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_game_info_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_game_info_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -144,7 +144,7 @@ Hearts_get_game_info_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_game_info_result = function(args) {
+AgentVsAgent.Hearts_get_game_info_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -152,8 +152,8 @@ Hearts_get_game_info_result = function(args) {
     }
   }
 };
-Hearts_get_game_info_result.prototype = {};
-Hearts_get_game_info_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_game_info_result.prototype = {};
+AgentVsAgent.Hearts_get_game_info_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -186,7 +186,7 @@ Hearts_get_game_info_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_game_info_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_game_info_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_game_info_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -198,7 +198,7 @@ Hearts_get_game_info_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_hand_args = function(args) {
+AgentVsAgent.Hearts_get_hand_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -206,8 +206,8 @@ Hearts_get_hand_args = function(args) {
     }
   }
 };
-Hearts_get_hand_args.prototype = {};
-Hearts_get_hand_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_hand_args.prototype = {};
+AgentVsAgent.Hearts_get_hand_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -240,7 +240,7 @@ Hearts_get_hand_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_hand_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_hand_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_hand_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -252,7 +252,7 @@ Hearts_get_hand_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_hand_result = function(args) {
+AgentVsAgent.Hearts_get_hand_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -260,8 +260,8 @@ Hearts_get_hand_result = function(args) {
     }
   }
 };
-Hearts_get_hand_result.prototype = {};
-Hearts_get_hand_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_hand_result.prototype = {};
+AgentVsAgent.Hearts_get_hand_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -307,7 +307,7 @@ Hearts_get_hand_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_hand_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_hand_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_hand_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
@@ -328,7 +328,7 @@ Hearts_get_hand_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_pass_cards_args = function(args) {
+AgentVsAgent.Hearts_pass_cards_args = function(args) {
   this.ticket = null;
   this.cards = null;
   if (args) {
@@ -340,8 +340,8 @@ Hearts_pass_cards_args = function(args) {
     }
   }
 };
-Hearts_pass_cards_args.prototype = {};
-Hearts_pass_cards_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_pass_cards_args.prototype = {};
+AgentVsAgent.Hearts_pass_cards_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -392,7 +392,7 @@ Hearts_pass_cards_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_pass_cards_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_pass_cards_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_pass_cards_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -418,7 +418,7 @@ Hearts_pass_cards_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_pass_cards_result = function(args) {
+AgentVsAgent.Hearts_pass_cards_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -426,8 +426,8 @@ Hearts_pass_cards_result = function(args) {
     }
   }
 };
-Hearts_pass_cards_result.prototype = {};
-Hearts_pass_cards_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_pass_cards_result.prototype = {};
+AgentVsAgent.Hearts_pass_cards_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -473,7 +473,7 @@ Hearts_pass_cards_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_pass_cards_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_pass_cards_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_pass_cards_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
@@ -494,7 +494,7 @@ Hearts_pass_cards_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_trick_args = function(args) {
+AgentVsAgent.Hearts_get_trick_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -502,8 +502,8 @@ Hearts_get_trick_args = function(args) {
     }
   }
 };
-Hearts_get_trick_args.prototype = {};
-Hearts_get_trick_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_trick_args.prototype = {};
+AgentVsAgent.Hearts_get_trick_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -536,7 +536,7 @@ Hearts_get_trick_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_trick_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_trick_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_trick_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -548,7 +548,7 @@ Hearts_get_trick_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_trick_result = function(args) {
+AgentVsAgent.Hearts_get_trick_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -556,8 +556,8 @@ Hearts_get_trick_result = function(args) {
     }
   }
 };
-Hearts_get_trick_result.prototype = {};
-Hearts_get_trick_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_trick_result.prototype = {};
+AgentVsAgent.Hearts_get_trick_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -590,7 +590,7 @@ Hearts_get_trick_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_trick_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_trick_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_trick_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -602,7 +602,7 @@ Hearts_get_trick_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_play_card_args = function(args) {
+AgentVsAgent.Hearts_play_card_args = function(args) {
   this.ticket = null;
   this.card = null;
   if (args) {
@@ -614,8 +614,8 @@ Hearts_play_card_args = function(args) {
     }
   }
 };
-Hearts_play_card_args.prototype = {};
-Hearts_play_card_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_play_card_args.prototype = {};
+AgentVsAgent.Hearts_play_card_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -653,7 +653,7 @@ Hearts_play_card_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_play_card_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_play_card_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_play_card_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -670,7 +670,7 @@ Hearts_play_card_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_play_card_result = function(args) {
+AgentVsAgent.Hearts_play_card_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -678,8 +678,8 @@ Hearts_play_card_result = function(args) {
     }
   }
 };
-Hearts_play_card_result.prototype = {};
-Hearts_play_card_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_play_card_result.prototype = {};
+AgentVsAgent.Hearts_play_card_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -712,7 +712,7 @@ Hearts_play_card_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_play_card_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_play_card_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_play_card_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -724,7 +724,7 @@ Hearts_play_card_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_round_result_args = function(args) {
+AgentVsAgent.Hearts_get_round_result_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -732,8 +732,8 @@ Hearts_get_round_result_args = function(args) {
     }
   }
 };
-Hearts_get_round_result_args.prototype = {};
-Hearts_get_round_result_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_round_result_args.prototype = {};
+AgentVsAgent.Hearts_get_round_result_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -766,7 +766,7 @@ Hearts_get_round_result_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_round_result_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_round_result_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_round_result_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -778,7 +778,7 @@ Hearts_get_round_result_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_round_result_result = function(args) {
+AgentVsAgent.Hearts_get_round_result_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -786,8 +786,8 @@ Hearts_get_round_result_result = function(args) {
     }
   }
 };
-Hearts_get_round_result_result.prototype = {};
-Hearts_get_round_result_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_round_result_result.prototype = {};
+AgentVsAgent.Hearts_get_round_result_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -820,7 +820,7 @@ Hearts_get_round_result_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_round_result_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_round_result_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_round_result_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -832,7 +832,7 @@ Hearts_get_round_result_result.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_game_result_args = function(args) {
+AgentVsAgent.Hearts_get_game_result_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -840,8 +840,8 @@ Hearts_get_game_result_args = function(args) {
     }
   }
 };
-Hearts_get_game_result_args.prototype = {};
-Hearts_get_game_result_args.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_game_result_args.prototype = {};
+AgentVsAgent.Hearts_get_game_result_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -874,7 +874,7 @@ Hearts_get_game_result_args.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_game_result_args.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_game_result_args.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_game_result_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -886,7 +886,7 @@ Hearts_get_game_result_args.prototype.write = function(output) {
   return;
 };
 
-Hearts_get_game_result_result = function(args) {
+AgentVsAgent.Hearts_get_game_result_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -894,8 +894,8 @@ Hearts_get_game_result_result = function(args) {
     }
   }
 };
-Hearts_get_game_result_result.prototype = {};
-Hearts_get_game_result_result.prototype.read = function(input) {
+AgentVsAgent.Hearts_get_game_result_result.prototype = {};
+AgentVsAgent.Hearts_get_game_result_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -928,7 +928,7 @@ Hearts_get_game_result_result.prototype.read = function(input) {
   return;
 };
 
-Hearts_get_game_result_result.prototype.write = function(output) {
+AgentVsAgent.Hearts_get_game_result_result.prototype.write = function(output) {
   output.writeStructBegin('Hearts_get_game_result_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -940,29 +940,29 @@ Hearts_get_game_result_result.prototype.write = function(output) {
   return;
 };
 
-HeartsClient = exports.Client = function(output, pClass) {
+AgentVsAgent.HeartsClient = exports.Client = function(output, pClass) {
     this.output = output;
     this.pClass = pClass;
     this.seqid = 0;
     this._reqs = {};
 };
-HeartsClient.prototype = {};
-HeartsClient.prototype.enter_arena = function(callback) {
+AgentVsAgent.HeartsClient.prototype = {};
+AgentVsAgent.HeartsClient.prototype.enter_arena = function(callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_enter_arena();
 };
 
-HeartsClient.prototype.send_enter_arena = function() {
+AgentVsAgent.HeartsClient.prototype.send_enter_arena = function() {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('enter_arena', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_enter_arena_args();
+  var args = new AgentVsAgent.Hearts_enter_arena_args();
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -971,7 +971,7 @@ HeartsClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_enter_arena_result();
+  var result = new AgentVsAgent.Hearts_enter_arena_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -980,23 +980,23 @@ HeartsClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
   }
   return callback('enter_arena failed: unknown result');
 };
-HeartsClient.prototype.get_game_info = function(ticket, callback) {
+AgentVsAgent.HeartsClient.prototype.get_game_info = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_game_info(ticket);
 };
 
-HeartsClient.prototype.send_get_game_info = function(ticket) {
+AgentVsAgent.HeartsClient.prototype.send_get_game_info = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_game_info', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_get_game_info_args();
+  var args = new AgentVsAgent.Hearts_get_game_info_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_get_game_info = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_get_game_info = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1005,7 +1005,7 @@ HeartsClient.prototype.recv_get_game_info = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_get_game_info_result();
+  var result = new AgentVsAgent.Hearts_get_game_info_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1014,23 +1014,23 @@ HeartsClient.prototype.recv_get_game_info = function(input,mtype,rseqid) {
   }
   return callback('get_game_info failed: unknown result');
 };
-HeartsClient.prototype.get_hand = function(ticket, callback) {
+AgentVsAgent.HeartsClient.prototype.get_hand = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_hand(ticket);
 };
 
-HeartsClient.prototype.send_get_hand = function(ticket) {
+AgentVsAgent.HeartsClient.prototype.send_get_hand = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_hand', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_get_hand_args();
+  var args = new AgentVsAgent.Hearts_get_hand_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_get_hand = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_get_hand = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1039,7 +1039,7 @@ HeartsClient.prototype.recv_get_hand = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_get_hand_result();
+  var result = new AgentVsAgent.Hearts_get_hand_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1048,16 +1048,16 @@ HeartsClient.prototype.recv_get_hand = function(input,mtype,rseqid) {
   }
   return callback('get_hand failed: unknown result');
 };
-HeartsClient.prototype.pass_cards = function(ticket, cards, callback) {
+AgentVsAgent.HeartsClient.prototype.pass_cards = function(ticket, cards, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_pass_cards(ticket, cards);
 };
 
-HeartsClient.prototype.send_pass_cards = function(ticket, cards) {
+AgentVsAgent.HeartsClient.prototype.send_pass_cards = function(ticket, cards) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('pass_cards', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_pass_cards_args();
+  var args = new AgentVsAgent.Hearts_pass_cards_args();
   args.ticket = ticket;
   args.cards = cards;
   args.write(output);
@@ -1065,7 +1065,7 @@ HeartsClient.prototype.send_pass_cards = function(ticket, cards) {
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_pass_cards = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_pass_cards = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1074,7 +1074,7 @@ HeartsClient.prototype.recv_pass_cards = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_pass_cards_result();
+  var result = new AgentVsAgent.Hearts_pass_cards_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1083,23 +1083,23 @@ HeartsClient.prototype.recv_pass_cards = function(input,mtype,rseqid) {
   }
   return callback('pass_cards failed: unknown result');
 };
-HeartsClient.prototype.get_trick = function(ticket, callback) {
+AgentVsAgent.HeartsClient.prototype.get_trick = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_trick(ticket);
 };
 
-HeartsClient.prototype.send_get_trick = function(ticket) {
+AgentVsAgent.HeartsClient.prototype.send_get_trick = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_trick', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_get_trick_args();
+  var args = new AgentVsAgent.Hearts_get_trick_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_get_trick = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_get_trick = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1108,7 +1108,7 @@ HeartsClient.prototype.recv_get_trick = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_get_trick_result();
+  var result = new AgentVsAgent.Hearts_get_trick_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1117,16 +1117,16 @@ HeartsClient.prototype.recv_get_trick = function(input,mtype,rseqid) {
   }
   return callback('get_trick failed: unknown result');
 };
-HeartsClient.prototype.play_card = function(ticket, card, callback) {
+AgentVsAgent.HeartsClient.prototype.play_card = function(ticket, card, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_play_card(ticket, card);
 };
 
-HeartsClient.prototype.send_play_card = function(ticket, card) {
+AgentVsAgent.HeartsClient.prototype.send_play_card = function(ticket, card) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('play_card', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_play_card_args();
+  var args = new AgentVsAgent.Hearts_play_card_args();
   args.ticket = ticket;
   args.card = card;
   args.write(output);
@@ -1134,7 +1134,7 @@ HeartsClient.prototype.send_play_card = function(ticket, card) {
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1143,7 +1143,7 @@ HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_play_card_result();
+  var result = new AgentVsAgent.Hearts_play_card_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1152,23 +1152,23 @@ HeartsClient.prototype.recv_play_card = function(input,mtype,rseqid) {
   }
   return callback('play_card failed: unknown result');
 };
-HeartsClient.prototype.get_round_result = function(ticket, callback) {
+AgentVsAgent.HeartsClient.prototype.get_round_result = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_round_result(ticket);
 };
 
-HeartsClient.prototype.send_get_round_result = function(ticket) {
+AgentVsAgent.HeartsClient.prototype.send_get_round_result = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_round_result', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_get_round_result_args();
+  var args = new AgentVsAgent.Hearts_get_round_result_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_get_round_result = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_get_round_result = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1177,7 +1177,7 @@ HeartsClient.prototype.recv_get_round_result = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_get_round_result_result();
+  var result = new AgentVsAgent.Hearts_get_round_result_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1186,23 +1186,23 @@ HeartsClient.prototype.recv_get_round_result = function(input,mtype,rseqid) {
   }
   return callback('get_round_result failed: unknown result');
 };
-HeartsClient.prototype.get_game_result = function(ticket, callback) {
+AgentVsAgent.HeartsClient.prototype.get_game_result = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_game_result(ticket);
 };
 
-HeartsClient.prototype.send_get_game_result = function(ticket) {
+AgentVsAgent.HeartsClient.prototype.send_get_game_result = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_game_result', Thrift.MessageType.CALL, this.seqid);
-  var args = new Hearts_get_game_result_args();
+  var args = new AgentVsAgent.Hearts_get_game_result_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-HeartsClient.prototype.recv_get_game_result = function(input,mtype,rseqid) {
+AgentVsAgent.HeartsClient.prototype.recv_get_game_result = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -1211,7 +1211,7 @@ HeartsClient.prototype.recv_get_game_result = function(input,mtype,rseqid) {
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new Hearts_get_game_result_result();
+  var result = new AgentVsAgent.Hearts_get_game_result_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -1220,10 +1220,10 @@ HeartsClient.prototype.recv_get_game_result = function(input,mtype,rseqid) {
   }
   return callback('get_game_result failed: unknown result');
 };
-HeartsProcessor = exports.Processor = function(handler) {
+AgentVsAgent.HeartsProcessor = exports.Processor = function(handler) {
   this._handler = handler
 }
-HeartsProcessor.prototype.process = function(input, output) {
+AgentVsAgent.HeartsProcessor.prototype.process = function(input, output) {
   var r = input.readMessageBegin();
   if (this['process_' + r.fname]) {
     return this['process_' + r.fname].call(this, r.rseqid, input, output);
@@ -1238,12 +1238,12 @@ HeartsProcessor.prototype.process = function(input, output) {
   }
 }
 
-HeartsProcessor.prototype.process_enter_arena = function(seqid, input, output) {
-  var args = new Hearts_enter_arena_args();
+AgentVsAgent.HeartsProcessor.prototype.process_enter_arena = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_enter_arena_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.enter_arena(function (err, result) {
-    var result = new Hearts_enter_arena_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_enter_arena_result((err != null ? err : {success: result}));
     output.writeMessageBegin("enter_arena", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1251,12 +1251,12 @@ HeartsProcessor.prototype.process_enter_arena = function(seqid, input, output) {
   })
 }
 
-HeartsProcessor.prototype.process_get_game_info = function(seqid, input, output) {
-  var args = new Hearts_get_game_info_args();
+AgentVsAgent.HeartsProcessor.prototype.process_get_game_info = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_get_game_info_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_game_info(args.ticket, function (err, result) {
-    var result = new Hearts_get_game_info_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_get_game_info_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_game_info", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1264,12 +1264,12 @@ HeartsProcessor.prototype.process_get_game_info = function(seqid, input, output)
   })
 }
 
-HeartsProcessor.prototype.process_get_hand = function(seqid, input, output) {
-  var args = new Hearts_get_hand_args();
+AgentVsAgent.HeartsProcessor.prototype.process_get_hand = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_get_hand_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_hand(args.ticket, function (err, result) {
-    var result = new Hearts_get_hand_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_get_hand_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_hand", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1277,12 +1277,12 @@ HeartsProcessor.prototype.process_get_hand = function(seqid, input, output) {
   })
 }
 
-HeartsProcessor.prototype.process_pass_cards = function(seqid, input, output) {
-  var args = new Hearts_pass_cards_args();
+AgentVsAgent.HeartsProcessor.prototype.process_pass_cards = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_pass_cards_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.pass_cards(args.ticket, args.cards, function (err, result) {
-    var result = new Hearts_pass_cards_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_pass_cards_result((err != null ? err : {success: result}));
     output.writeMessageBegin("pass_cards", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1290,12 +1290,12 @@ HeartsProcessor.prototype.process_pass_cards = function(seqid, input, output) {
   })
 }
 
-HeartsProcessor.prototype.process_get_trick = function(seqid, input, output) {
-  var args = new Hearts_get_trick_args();
+AgentVsAgent.HeartsProcessor.prototype.process_get_trick = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_get_trick_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_trick(args.ticket, function (err, result) {
-    var result = new Hearts_get_trick_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_get_trick_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_trick", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1303,12 +1303,12 @@ HeartsProcessor.prototype.process_get_trick = function(seqid, input, output) {
   })
 }
 
-HeartsProcessor.prototype.process_play_card = function(seqid, input, output) {
-  var args = new Hearts_play_card_args();
+AgentVsAgent.HeartsProcessor.prototype.process_play_card = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_play_card_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.play_card(args.ticket, args.card, function (err, result) {
-    var result = new Hearts_play_card_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_play_card_result((err != null ? err : {success: result}));
     output.writeMessageBegin("play_card", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1316,12 +1316,12 @@ HeartsProcessor.prototype.process_play_card = function(seqid, input, output) {
   })
 }
 
-HeartsProcessor.prototype.process_get_round_result = function(seqid, input, output) {
-  var args = new Hearts_get_round_result_args();
+AgentVsAgent.HeartsProcessor.prototype.process_get_round_result = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_get_round_result_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_round_result(args.ticket, function (err, result) {
-    var result = new Hearts_get_round_result_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_get_round_result_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_round_result", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -1329,12 +1329,12 @@ HeartsProcessor.prototype.process_get_round_result = function(seqid, input, outp
   })
 }
 
-HeartsProcessor.prototype.process_get_game_result = function(seqid, input, output) {
-  var args = new Hearts_get_game_result_args();
+AgentVsAgent.HeartsProcessor.prototype.process_get_game_result = function(seqid, input, output) {
+  var args = new AgentVsAgent.Hearts_get_game_result_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_game_result(args.ticket, function (err, result) {
-    var result = new Hearts_get_game_result_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.Hearts_get_game_result_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_game_result", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();

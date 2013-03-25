@@ -12,14 +12,17 @@ arena = new Arena()
 matchMaker = new MatchMaker(arena)
 matchMaker.start()
 
-{tcpServer, httpMiddleware} = new HeartsService(arena).create()
-web = require './hearts/web'
+{tcpServer, binaryHttpMiddleware, jsonHttpMiddleware} = new HeartsService(arena).create()
 
 app = express()
-app.use "/games/hearts/service", httpMiddleware
-app.get "/", (req, res) -> res.send("Home")
-app.get "/games/hearts", web.index
-app.get "/games/hearts/play", web.play
+
+app.set 'view engine', 'jade'
+app.use express.logger(format: 'dev')
+app.use '/game/hearts/service.json', jsonHttpMiddleware
+app.use '/game/hearts/service.thrift', binaryHttpMiddleware
+app.use '/game/hearts', require('connect-assets')(src: 'lib/hearts/web/assets', servePath: '/game/hearts')
+app.use '/game/hearts', require('./hearts/web').app()
+app.get '/', (req, res) -> res.send("Home")
 
 tcpServer.listen(4001)
 logger.info "TCP Server listening on", tcpServer.address()

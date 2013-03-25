@@ -1,5 +1,6 @@
 namespace rb AgentVsAgent
 namespace java AgentVsAgent
+namespace js AgentVsAgent
 
 enum Suit {
   CLUBS = 21,

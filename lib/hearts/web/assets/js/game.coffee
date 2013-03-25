@@ -1,24 +1,21 @@
-thrift = require('thrift')
-Hearts = require('./lib/Hearts')
-types = require('./lib/hearts_types')
-
-connection = thrift.createConnection('localhost', 4001)
-client = thrift.createClient(Hearts, connection)
+transport = new Thrift.Transport("/game/hearts/service.json")
+protocol  = new Thrift.Protocol(transport)
+client    = new AgentVsAgent.HeartsClient(protocol)
 
 class SampleAgent
   constructor: (@game) ->
 
   run: ->
     console.log "Entering arena"
-    @game.enter_arena (err, response) =>
+    @game.enter_arena (response) =>
       @ticket = response.ticket
       if @ticket
         @play()
 
   play: ->
-    console.log "playing"
+    console.log "playing", @ticket
 
-    @game.get_game_info @ticket, (err, gameInfo) =>
+    @game.get_game_info @ticket, (gameInfo) =>
       console.log "game info:", gameInfo
       @gameInfo = gameInfo
       @roundNumber = 0
@@ -26,13 +23,13 @@ class SampleAgent
 
   playRound: ->
     @roundNumber += 1
-    @game.get_hand @ticket, (err, hand) =>
+    @game.get_hand @ticket, (hand) =>
       console.log "hand:", hand
       @hand = hand
 
       if @roundNumber % 4 != 0
         cardsToPass = hand.splice(0, 3)
-        @game.pass_cards @ticket, cardsToPass, (err, receivedCards) =>
+        @game.pass_cards @ticket, cardsToPass, (receivedCards) =>
           @hand = @hand.concat(receivedCards)
           @playTrick(0)
       else
@@ -41,11 +38,11 @@ class SampleAgent
   playTrick: (trickNumber) ->
     console.log "[#{@gameInfo.position}, round #{@roundNumber}, trick #{trickNumber}, playing trick"
 
-    @game.get_trick @ticket, (err, trick) =>
+    @game.get_trick @ticket, (trick) =>
       console.log "Leading the trick #{@gameInfo.position}, #{trick}" if @gameInfo.position == trick.leader
       console.log "current trick:", trick
 
-      if trickNumber == 0 && twoClubs = (card for card in @hand when card.suit == types.Suit.CLUBS && card.rank == types.Rank.TWO)[0]
+      if trickNumber == 0 && twoClubs = (card for card in @hand when card.suit == AgentVsAgent.Suit.CLUBS && card.rank == AgentVsAgent.Rank.TWO)[0]
         console.log "playing two of clubs"
         cardToPlay = twoClubs
       else if trick.played[0] && matchingSuit = (card for card in @hand when card.suit == trick.played[0].suit)[0]
@@ -57,16 +54,15 @@ class SampleAgent
 
       @hand.splice(@hand.indexOf(cardToPlay), 1)
       console.log "[#{@gameInfo.position}] playing card:", cardToPlay
-      @game.play_card @ticket, cardToPlay, (err, trickResult) =>
+      @game.play_card @ticket, cardToPlay, (trickResult) =>
         console.log "trick: result", trickResult
 
         if trickNumber >= 12
-          @game.get_round_result @ticket, (err, roundResult) =>
+          @game.get_round_result @ticket, (roundResult) =>
             console.log "round result:", roundResult
-            if roundResult.status != types.GameStatus.NEXT_ROUND
-              @game.get_game_result @ticket, (err, gameResult) ->
+            if roundResult.status != AgentVsAgent.GameStatus.NEXT_ROUND
+              @game.get_game_result @ticket, (gameResult) ->
                 console.log "game result:", gameResult
-                connection.end()
             else
               @playRound()
 
@@ -74,6 +70,6 @@ class SampleAgent
           @playTrick trickNumber + 1
 
 
-agent = new SampleAgent(client)
-agent.run()
+window.agent = new SampleAgent(client)
+# agent.run()
 

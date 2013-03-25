@@ -10,5 +10,6 @@ module.exports = class Service
     handler = new Handler(@arena)
 
     tcpServer: thrift.createServer(Hearts, handler)
-    httpMiddleware: thrift.httpMiddleware(Hearts, handler)
+    binaryHttpMiddleware: thrift.httpMiddleware(Hearts, handler)
+    jsonHttpMiddleware: thrift.httpMiddleware(Hearts, handler, protocol: thrift.TJSONProtocol)
 

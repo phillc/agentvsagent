@@ -66,3 +66,9 @@ guard :thrift, all_on_start: true,
                           "dist/hearts/ruby/lib" => "rb" } do
   watch('thrift/hearts.thrift')
 end
+
+guard :shell do
+  watch(%r{vendor/thrift/lib/nodejs/(.*)}) {|m| puts "#{m[0]} changed, packaging thrift"; puts `make package-thrift` }
+  ignore! []
+end
+
