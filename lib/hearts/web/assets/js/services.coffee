@@ -1,39 +1,4 @@
-transport = new Thrift.Transport("/game/hearts/service.json")
-protocol  = new Thrift.Protocol(transport)
-client    = new AgentVsAgent.HeartsClient(protocol)
-
 class SampleAgent
-  constructor: (@game) ->
-
-  run: ->
-    console.log "Entering arena"
-    @game.enter_arena (response) =>
-      @ticket = response.ticket
-      if @ticket
-        @play()
-
-  play: ->
-    console.log "playing", @ticket
-
-    @game.get_game_info @ticket, (gameInfo) =>
-      console.log "game info:", gameInfo
-      @gameInfo = gameInfo
-      @roundNumber = 0
-      @playRound()
-
-  playRound: ->
-    @roundNumber += 1
-    @game.get_hand @ticket, (hand) =>
-      console.log "hand:", hand
-      @hand = hand
-
-      if @roundNumber % 4 != 0
-        cardsToPass = hand.splice(0, 3)
-        @game.pass_cards @ticket, cardsToPass, (receivedCards) =>
-          @hand = @hand.concat(receivedCards)
-          @playTrick(0)
-      else
-        @playTrick(0)
 
   playTrick: (trickNumber) ->
     console.log "[#{@gameInfo.position}, round #{@roundNumber}, trick #{trickNumber}, playing trick"
@@ -70,6 +35,43 @@ class SampleAgent
           @playTrick trickNumber + 1
 
 
-window.agent = new SampleAgent(client)
 # agent.run()
 
+class Client
+  constructor: (@$rootScope) ->
+    @transport = new Thrift.Transport("/game/hearts/service.json")
+    @protocol  = new Thrift.Protocol(@transport)
+    @client    = new AgentVsAgent.HeartsClient(@protocol)
+
+  startGame: ->
+    console.log @
+    @client.enter_arena (response) =>
+      @$rootScope.$apply ($scope) ->
+        $scope.ticket = response.ticket
+      @ticket = response.ticket
+      if response.ticket
+        @client.get_game_info @ticket, (gameInfo) =>
+          @$rootScope.$apply ($scope) ->
+            $scope.position = gameInfo.position
+            $scope.roundNumber = 0
+          @position = gameInfo.position
+          @roundNumber = 0
+          @playRound()
+
+  playRound: ->
+    @roundNumber += 1
+    @client.get_hand @ticket, (hand) =>
+      @hand = hand
+      @$rootScope.$apply ($scope) ->
+        $scope.hand = hand
+
+      # if @roundNumber % 4 != 0
+      #   cardsToPass = hand.splice(0, 3)
+      #   @client.pass_cards @ticket, cardsToPass, (receivedCards) =>
+      #     @hand = @hand.concat(receivedCards)
+      #     @playTrick(0)
+      # else
+      #   @playTrick(0)
+
+angular.module('AgentVsAgent.services', [])
+  .factory 'GameService', ["$rootScope", (args...) -> createClient: -> new Client(args...)]

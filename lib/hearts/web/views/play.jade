@@ -1,7 +1,15 @@
 extends ./layout
 
 block content
-  != js('game')
-  p
-    | foobar baz
+  div(ng-app="AgentVsAgent")
+    div(ng-controller='HeartsCtrl')
+      button.startGame(ng-click="client.startGame()") start the game
+      .playingCards
+        ul.table
+          li(ng-repeat="card in client.hand")
+            label(class="card {{card.suit | cardSuitClass}} {{card.rank | cardRankClass}}")
+              span.rank {{card.rank}}
+              span.suit(ngBindHtmlUnsafe="{{card.suit | cardSuitSymbol}}")
+              input(type="checkbox", name="card", value="{{card.value}}")
+
 

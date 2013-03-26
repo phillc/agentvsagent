@@ -1,6 +1,16 @@
 head
   title Agent vs Agent
-  script(src='./lib/jquery-1.9.1.js')
+  link(rel="stylesheet", type="text/css", href="./lib/cards/cards.css", media="screen")
+  //if lt IE 9
+    link(rel="stylesheet", type="text/css", href="./lib/cards/cards-ie.css", media="screen")
+  //if IE 9
+    link(rel="stylesheet", type="text/css", href="./lib/cards/cards-ie9.css", media="screen")
   script(src='./lib/thrift.js')
   script(src='./lib/types/hearts_types.js')
   script(src='./lib/types/Hearts.js')
+  script(src='./lib/jquery-1.9.1.js')
+  script(src='./lib/angular.js')
+  != js('controllers')
+  != js('services')
+  != js('filters')
+  != js('app')
