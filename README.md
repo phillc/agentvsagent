@@ -71,3 +71,8 @@ The command `make setup` has a more complete setup, including thrift
 
 Sample agents for languages
 
+
+## Credits
+
+* Thrift: http://thrift.apache.org/
+* Cards: https://github.com/selfthinker/CSS-Playing-Cards
