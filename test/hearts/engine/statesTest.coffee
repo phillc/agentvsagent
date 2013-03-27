@@ -65,17 +65,17 @@ describe "states", ->
       @state.run()
       @game.stack.should.have.length(16)
       @game.stack[15].should.equal("dealing")
-      @game.stack[14].should.equal("passingRight")
+      @game.stack[14].should.equal("passingLeft")
       @game.stack[13].should.equal("startingTrick")
       @game.stack[1].should.equal("startingTrick")
       @game.stack[0].should.equal("endingRound")
 
     it "passes in each direction", ->
       @state.run()
-      @game.stack[14].should.equal("passingRight")
+      @game.stack[14].should.equal("passingLeft")
       @game.stack.splice(0, 20)
       @state.run()
-      @game.stack[14].should.equal("passingLeft")
+      @game.stack[14].should.equal("passingRight")
       @game.stack.splice(0, 20)
       @state.run()
       @game.stack[14].should.equal("passingAcross")
@@ -84,7 +84,7 @@ describe "states", ->
       @game.stack[14].should.equal("dealing")
       @game.stack.splice(0, 20)
       @state.run()
-      @game.stack[14].should.equal("passingRight")
+      @game.stack[14].should.equal("passingLeft")
       @game.stack.splice(0, 20)
 
     it "goes to the next state", ->

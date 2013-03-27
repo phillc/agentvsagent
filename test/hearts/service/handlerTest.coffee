@@ -114,7 +114,7 @@ describe "Handler", ->
 
   describe "#pass_cards", ->
     beforeEach ->
-      @game.stack.push("passingRight")
+      @game.stack.push("passingLeft")
       @game.nextState()
       @northTicket = new types.Ticket(agentId: @game.positions.north.id, gameId: @game.id)
       @eastTicket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
@@ -153,11 +153,11 @@ describe "Handler", ->
       @handler.pass_cards @southTicket, @southPassed, ->
       @handler.pass_cards @westTicket, @westPassed, (err, cards) =>
         cards[0].suit.should.equal(types.Suit.HEARTS)
-        cards[0].rank.should.equal(types.Rank.THREE)
+        cards[0].rank.should.equal(types.Rank.FIVE)
         cards[1].suit.should.equal(types.Suit.CLUBS)
-        cards[1].rank.should.equal(types.Rank.TWO)
+        cards[1].rank.should.equal(types.Rank.FOUR)
         cards[2].suit.should.equal(types.Suit.SPADES)
-        cards[2].rank.should.equal(types.Rank.QUEEN)
+        cards[2].rank.should.equal(types.Rank.ACE)
         done()
 
   describe "#get_trick", ->
