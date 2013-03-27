@@ -98,12 +98,8 @@ exports.StartingTrick = class StartingTrick extends State
   run: ->
     @game.currentRound().newTrick()
     @game.stack.push("endingTrick")
-    # TODO: Ummm.... this needs to change
-    @game.stack.push("waitingForCardFromNorth")
-    @game.stack.push("waitingForCardFromWest")
-    @game.stack.push("waitingForCardFromSouth")
-    @game.stack.push("waitingForCardFromEast")
-
+    for position in @game.currentRound().currentTrick().positionsFromLeader().reverse()
+      @game.stack.push("waitingForCardFrom" + position.charAt(0).toUpperCase() + position.slice(1))
     @game.nextState()
 
 exports.WaitingForCard = class WaitingForCard extends State

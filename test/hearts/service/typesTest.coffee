@@ -4,7 +4,7 @@ require("should")
 describe "types", ->
   describe "Card", ->
     beforeEach ->
-      @card = new Card(suit: types.Suit.SPADES, rank: types.Rank.FOUR)
+      @card = new types.Card(suit: types.Suit.SPADES, rank: types.Rank.FOUR)
 
     it "has a suit", ->
       @card.suit.should.equal(types.Suit.SPADES)

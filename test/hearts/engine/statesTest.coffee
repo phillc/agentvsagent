@@ -227,6 +227,32 @@ describe "states", ->
       @game.stack[1].should.equal("waitingForCardFromNorth")
       @game.stack[0].should.equal("endingTrick")
 
+    it "waits for cards starting with the last winner south", ->
+      @game.states.startingTrick.run()
+      @game.currentRound().currentTrick().winner = -> "south"
+      @game.stack.splice(0, @game.stack.length)
+      @game.stack.should.have.length(0)
+      @game.states.startingTrick.run()
+      @game.stack.should.have.length(5)
+      @game.stack[4].should.equal("waitingForCardFromSouth")
+      @game.stack[3].should.equal("waitingForCardFromWest")
+      @game.stack[2].should.equal("waitingForCardFromNorth")
+      @game.stack[1].should.equal("waitingForCardFromEast")
+      @game.stack[0].should.equal("endingTrick")
+
+    it "waits for cards starting with the last winner north", ->
+      @game.states.startingTrick.run()
+      @game.currentRound().currentTrick().winner = -> "north"
+      @game.stack.splice(0, @game.stack.length)
+      @game.stack.should.have.length(0)
+      @game.states.startingTrick.run()
+      @game.stack.should.have.length(5)
+      @game.stack[4].should.equal("waitingForCardFromNorth")
+      @game.stack[3].should.equal("waitingForCardFromEast")
+      @game.stack[2].should.equal("waitingForCardFromSouth")
+      @game.stack[1].should.equal("waitingForCardFromWest")
+      @game.stack[0].should.equal("endingTrick")
+
     it "goes to the next state", ->
       @game.states.startingTrick.run()
 
