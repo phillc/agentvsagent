@@ -3,13 +3,26 @@ extends ./layout
 block content
   div(ng-app="AgentVsAgent")
     div(ng-controller='HeartsCtrl')
-      button.startGame(ng-click="client.startGame()") start the game
+      .info {{trick}}
+      .round {{roundResult}}
+      .game {{gameResult}}
+      button.startGame(ng-click="startGame()") start the game
       .playingCards
+        h1 TABLE:
         ul.table
-          li(ng-repeat="card in client.hand")
-            label(class="card {{card.suit | cardSuitClass}} {{card.rank | cardRankClass}}")
-              span.rank {{card.rank}}
+          li(ng-repeat="card in trick.played")
+            label(class="card {{card.suit | cardSuitClass}} rank-{{card.rank | rankName}}")
+              span.rank {{card.rank | rankName | uppercase}}
               span.suit(ngBindHtmlUnsafe="{{card.suit | cardSuitSymbol}}")
-              input(type="checkbox", name="card", value="{{card.value}}")
+              input(type="checkbox", ng-model="card.checked")
+        h1 HAND:
+        ul.table
+          li(ng-repeat="card in hand")
+            label(class="card {{card.suit | cardSuitClass}} rank-{{card.rank | rankName}}")
+              span.rank {{card.rank | rankName | uppercase}}
+              span.suit(ngBindHtmlUnsafe="{{card.suit | cardSuitSymbol}}")
+              input(type="checkbox", ng-model="card.checked")
+        button(ng-click="pass()") Pass
+        button(ng-click="play()") Play
 
 

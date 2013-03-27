@@ -98,6 +98,7 @@ exports.StartingTrick = class StartingTrick extends State
   run: ->
     @game.currentRound().newTrick()
     @game.stack.push("endingTrick")
+    # TODO: Ummm.... this needs to change
     @game.stack.push("waitingForCardFromNorth")
     @game.stack.push("waitingForCardFromWest")
     @game.stack.push("waitingForCardFromSouth")

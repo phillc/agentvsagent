@@ -1,15 +1,11 @@
 window.HeartsCtrl = HeartsCtrl = ($scope, GameService) ->
-  console.log "HMM", $scope, GameService
-  $scope.client = GameService.createClient()
-    # { suit: "clubs", rank: "A", value: "c-AC" }
-    # { suit: "clubs", rank: "K", value: "c-AK" }
+  console.log("IN CNTRL")
+  client = GameService.createClient()
+  $scope.startGame = -> client.startGame()
 
-
-  # $scope.foo = {a: "FOOOO"}
-  # setTimeout (->
-  #   $scope.foo.a = "BARRRR"
-  #   $scope.$apply()
-  #   console.log("GOOO")
-  # ), 3000
+  $scope.pass = ->
+    client.passCards(card for card in $scope.hand when card.checked)
+  $scope.play = ->
+    client.playCard((card for card in $scope.hand when card.checked)[0])
 
 HeartsCtrl.$inject = ['$scope', 'GameService']
