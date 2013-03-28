@@ -1,55 +1,61 @@
-class Client
-  constructor: (@$rootScope) ->
-    @transport = new Thrift.Transport("/game/hearts/service.json")
-    @protocol  = new Thrift.Protocol(@transport)
-    @client    = new AgentVsAgent.HeartsClient(@protocol)
+class GameState
+  constructor: (@$scope) ->
+    for attribute in ["currentState", "ticket", "position", "roundNumber", "hand", "trick"]
+      @["set#{attribute.charAt(0).toUpperCase() + attribute.slice(1)}"] = (value) =>
+        @[attribute] = value
+        @$scope.$apply()
+    # @setCurrentState "unstarted"
+    @currentState = "unstarted"
 
-  startGame: ->
-    console.log @
+  removeCardsFromHand: (cards...) ->
+    for card in cards
+      @hand.splice(@hand.indexOf(card), 1)
+    @$scope.$apply()
+
+  addCardsToHand: (cards...) ->
+    @setHand @hand.concat(cards)
+    @$scope.$apply()
+
+class Game
+  constructor: (@state) ->
+    transport = new Thrift.Transport("/game/hearts/service.json")
+    protocol  = new Thrift.Protocol(transport)
+    @client    = new AgentVsAgent.HeartsClient(protocol)
+
+  start: ->
+    @state.setCurrentState("started")
     @client.enter_arena (response) =>
-      @$rootScope.$apply ($scope) ->
-        $scope.ticket = response.ticket
-      @ticket = response.ticket
-      if response.ticket
-        @client.get_game_info @ticket, (gameInfo) =>
-          @$rootScope.$apply ($scope) ->
-            $scope.position = gameInfo.position
-            $scope.roundNumber = 0
-          @position = gameInfo.position
-          @roundNumber = 0
+      @state.setTicket(response.ticket)
+      if @state.ticket
+        @client.get_game_info @state.ticket, (gameInfo) =>
+          @state.setPosition(gameInfo.position)
+          @state.setRoundNumber(gameInfo.roundNumber)
           @playRound()
 
   playRound: ->
-    @roundNumber += 1
-    @client.get_hand @ticket, (hand) =>
-      @hand = hand
-      @$rootScope.$apply ($scope) ->
-        $scope.hand = hand
+    @state.setRoundNumber(@state.roundNumber + 1)
+    @client.get_hand @state.ticket, (hand) =>
+      @setHand(hand)
 
   passCards: (cardsToPass) ->
-    for card in cardsToPass
-      @hand.splice(@hand.indexOf(card), 1)
-    @client.pass_cards @ticket, cardsToPass, (receivedCards) =>
-      @hand = @hand.concat(receivedCards)
-      @$rootScope.$apply ($scope) =>
-        $scope.hand = @hand
+    @state.removeCardsFromHand cardsToPass
+    @client.pass_cards @state.ticket, cardsToPass, (receivedCards) =>
+      @state.addCardsToHand receivedCards...
       @playTrick()
 
-
   playTrick: ->
-    @client.get_trick @ticket, (trick) =>
-      @$rootScope.$apply ($scope) =>
-        $scope.trick = trick
+    @client.get_trick @state.ticket, (trick) =>
+      @state.setTrick(trick)
 
   playCard: (cardToPlay) ->
-    @hand.splice(@hand.indexOf(cardToPlay), 1)
-    @client.play_card @ticket, cardToPlay, (trickResult) =>
+    @state.removeCardsFromHand cardToPlay
+    @client.play_card @state.ticket, cardToPlay, (trickResult) =>
       if @hand.length == 0
-        @client.get_round_result @ticket, (roundResult) =>
+        @client.get_round_result @state.ticket, (roundResult) =>
           @$rootScope.$apply ($scope) =>
             $scope.roundResult = roundResult
           if roundResult.status != AgentVsAgent.GameStatus.NEXT_ROUND
-            @client.get_game_result @ticket, (gameResult) ->
+            @client.get_game_result @state.ticket, (gameResult) ->
               @$rootScope.$apply ($scope) =>
                 $scope.gameResult = gameResult
           else
@@ -58,4 +64,7 @@ class Client
         @playTrick()
 
 angular.module('AgentVsAgent.services', [])
-  .factory 'GameService', ["$rootScope", (args...) -> createClient: -> new Client(args...)]
+  .factory 'GameService', ["$rootScope", ($rootScope) ->
+    createGame: ->
+      new Game(new GameState($rootScope))
+  ]

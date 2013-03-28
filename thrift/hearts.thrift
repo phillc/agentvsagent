@@ -63,7 +63,7 @@ enum GameStatus {
   END_GAME = 2
 }
 
-# Once time limits are implemented, should the responses
+# TODO: Once time limits are implemented, should the responses
 # return how long they took, so they can calculate network lag?
 struct RoundResult {
   1: required Score north

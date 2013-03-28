@@ -1,28 +1,71 @@
 extends ./layout
 
+block head
+  link(rel="stylesheet", type="text/css", href="./lib/cards/cards.css", media="screen")
+  //if lt IE 9
+    link(rel="stylesheet", type="text/css", href="./lib/cards/cards-ie.css", media="screen")
+  //if IE 9
+    link(rel="stylesheet", type="text/css", href="./lib/cards/cards-ie9.css", media="screen")
+  != css('style')
+
+  script(src='./lib/thrift.js')
+  script(src='./lib/types/hearts_types.js')
+  script(src='./lib/types/Hearts.js')
+  != js('controllers')
+  != js('services')
+  != js('filters')
+  != js('app')
+
+mixin card
+  label(class="card {{card.suit | cardSuitClass}} rank-{{card.rank | rankName}}")
+    span.rank {{card.rank | rankName | uppercase}}
+    span.suit(ngBindHtmlUnsafe="{{card.suit | cardSuitSymbol}}")
+    input(type="checkbox", ng-model="card.checked")
+
+mixin position(position)
+  h1= position
+  p score: {{positions.#{position}.score}}
+  .player(ng-class="{ human: position.player == '#{position}' }")
+
 block content
   div(ng-app="AgentVsAgent")
     div(ng-controller='HeartsCtrl')
-      .info {{trick}}
-      .round {{roundResult}}
-      .game {{gameResult}}
-      button.startGame(ng-click="startGame()") start the game
-      .playingCards
-        h1 TABLE:
-        ul.table
-          li(ng-repeat="card in trick.played")
-            label(class="card {{card.suit | cardSuitClass}} rank-{{card.rank | rankName}}")
-              span.rank {{card.rank | rankName | uppercase}}
-              span.suit(ngBindHtmlUnsafe="{{card.suit | cardSuitSymbol}}")
-              input(type="checkbox", ng-model="card.checked")
-        h1 HAND:
-        ul.table
-          li(ng-repeat="card in hand")
-            label(class="card {{card.suit | cardSuitClass}} rank-{{card.rank | rankName}}")
-              span.rank {{card.rank | rankName | uppercase}}
-              span.suit(ngBindHtmlUnsafe="{{card.suit | cardSuitSymbol}}")
-              input(type="checkbox", ng-model="card.checked")
-        button(ng-click="pass()") Pass
-        button(ng-click="play()") Play
+      .container-fluid.cardTable
+        .row-fluid
+          .span12
+            .info {{trick}}
+            .round {{roundResult}}
+            .game {{gameResult}}
+        .row-fluid
+          .span4
+          .span4
+            mixin position("north")
+          .span4
+        .row-fluid
+          .span4
+            mixin position("west")
+          .span4
+            div(ng-show="state.currentState == 'unstarted'")
+              button.startGame(ng-click="startGame()") start the game
+          .span4
+            mixin position("east")
+        .row-fluid
+          .span4
+          .span4
+            mixin position("south")
+          .span4
+        .row-fluid
+          .span-12
+            .playingCards
+              h1 TABLE:
+              ul.table
+                li(ng-repeat="card in trick.played")
+                  mixin card
+              h1 HAND:
+              ul.table
+                li(ng-repeat="card in hand")
+                  mixin card
+              button(ng-click="pass()") Pass
+              button(ng-click="play()") Play
 
 

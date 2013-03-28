@@ -17,6 +17,11 @@ matchMaker.start()
 app = express()
 
 app.set 'view engine', 'jade'
+app.configure 'development', ->
+  app.use (req, res, next) ->
+    res.locals.pretty = true
+    next()
+
 app.use express.logger(format: 'dev')
 app.use '/game/hearts/service.json', jsonHttpMiddleware
 app.use '/game/hearts/service.thrift', binaryHttpMiddleware
