@@ -53,6 +53,10 @@ struct GameInfo {
 
 struct Trick {
   1: required Position leader
+  # Perhaps this should be a list of structs that have
+  # Who the card was played by with the card so that
+  # it will be much easier to associate cards/scores with
+  # players
   2: required list<Card> played
 }
 
@@ -89,7 +93,7 @@ service Hearts {
   list<Card> get_hand(1: required Ticket ticket),
   # Right now, server not expecting you to call pass cards on the 4th round.
   # Need to figure out a way to not make it arbitrary. Maybe have get_hand also
-  # return number of cards to pass
+  # return number of cards to pass, or tells you the position you are passing to
   list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards),
   Trick get_trick(1: required Ticket ticket),
   Trick play_card(1: required Ticket ticket, 2: required Card card),

@@ -1,20 +1,36 @@
 class GameState
   constructor: (@$scope) ->
-    for attribute in ["currentState", "ticket", "position", "roundNumber", "hand", "trick"]
-      @["set#{attribute.charAt(0).toUpperCase() + attribute.slice(1)}"] = (value) =>
-        @[attribute] = value
-        @$scope.$apply()
-    # @setCurrentState "unstarted"
-    @currentState = "unstarted"
+    attributes = ["currentState", "ticket", "position", "roundNumber", "trick", "roundResult"]
+    for attribute in attributes
+      do (attribute) =>
+        @["set#{attribute.charAt(0).toUpperCase() + attribute.slice(1)}"] = (value) =>
+          @[attribute] = value
+          @_apply()
+
+    @setCurrentState "unstarted"
+
+  _apply: ->
+    #It's things like this, angular...
+    phase = @$scope.$root.$$phase
+    unless phase == '$apply' || phase == '$digest'
+      @$scope.$apply()
+
+  setHand: (hand) ->
+    @hand = hand.sort (a, b) ->
+      if a.suit != b.suit
+        a.suit - b.suit
+      else
+        a.rank - b.rank
+    @_apply()
 
   removeCardsFromHand: (cards...) ->
     for card in cards
       @hand.splice(@hand.indexOf(card), 1)
-    @$scope.$apply()
+    @_apply()
 
   addCardsToHand: (cards...) ->
     @setHand @hand.concat(cards)
-    @$scope.$apply()
+    @_apply()
 
 class Game
   constructor: (@state) ->
@@ -23,11 +39,12 @@ class Game
     @client    = new AgentVsAgent.HeartsClient(protocol)
 
   start: ->
-    @state.setCurrentState("started")
+    @state.setCurrentState("waitingForGame")
     @client.enter_arena (response) =>
       @state.setTicket(response.ticket)
       if @state.ticket
         @client.get_game_info @state.ticket, (gameInfo) =>
+          @state.setCurrentState("started")
           @state.setPosition(gameInfo.position)
           @state.setRoundNumber(gameInfo.roundNumber)
           @playRound()
@@ -35,12 +52,14 @@ class Game
   playRound: ->
     @state.setRoundNumber(@state.roundNumber + 1)
     @client.get_hand @state.ticket, (hand) =>
-      @setHand(hand)
+      @state.setHand(hand)
+      @state.setCurrentState("passing")
 
   passCards: (cardsToPass) ->
-    @state.removeCardsFromHand cardsToPass
+    @state.removeCardsFromHand cardsToPass...
     @client.pass_cards @state.ticket, cardsToPass, (receivedCards) =>
       @state.addCardsToHand receivedCards...
+      @state.setCurrentState("playing")
       @playTrick()
 
   playTrick: ->
@@ -50,14 +69,13 @@ class Game
   playCard: (cardToPlay) ->
     @state.removeCardsFromHand cardToPlay
     @client.play_card @state.ticket, cardToPlay, (trickResult) =>
-      if @hand.length == 0
+      if @state.hand.length == 0
         @client.get_round_result @state.ticket, (roundResult) =>
-          @$rootScope.$apply ($scope) =>
-            $scope.roundResult = roundResult
+          @state.setRoundResult roundResult
           if roundResult.status != AgentVsAgent.GameStatus.NEXT_ROUND
             @client.get_game_result @state.ticket, (gameResult) ->
-              @$rootScope.$apply ($scope) =>
-                $scope.gameResult = gameResult
+              @state.setGameResult gameResult
+              @state.setCurrentState("finished")
           else
             @playRound()
       else

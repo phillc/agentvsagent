@@ -23,11 +23,3 @@ angular.module("AgentVsAgent.filters", [])
         when AgentVsAgent.Rank.QUEEN then "q"
         when AgentVsAgent.Rank.KING then "k"
         when AgentVsAgent.Rank.ACE then "a"
-
-  .filter "cardSuitSymbol", ->
-    (input) ->
-      switch input
-        when AgentVsAgent.Suit.CLUBS then "&clubs;"
-        when AgentVsAgent.Suit.DIAMONDS then "&diams;"
-        when AgentVsAgent.Suit.SPADES then "&spades;"
-        when AgentVsAgent.Suit.HEARTS then "&hearts;"
