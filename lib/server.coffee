@@ -27,7 +27,7 @@ app.use '/game/hearts/service.json', jsonHttpMiddleware
 app.use '/game/hearts/service.thrift', binaryHttpMiddleware
 app.use '/game/hearts', require('connect-assets')(src: 'lib/hearts/web/assets', servePath: '/game/hearts')
 app.use '/game/hearts', require('./hearts/web').app()
-app.get '/', (req, res) -> res.send("Home")
+app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a>")
 
 tcpServer.listen(4001)
 logger.info "TCP Server listening on", tcpServer.address()
