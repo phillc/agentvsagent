@@ -9,8 +9,9 @@ class SampleAgent
   constructor: (@game) ->
 
   run: ->
-    console.log "Entering arena"
-    @game.enter_arena (err, response) =>
+    request = new types.EntryRequest()
+    console.log "Entering arena", request
+    @game.enter_arena request, (err, response) =>
       @ticket = response.ticket
       if @ticket
         @play()

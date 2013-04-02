@@ -96,6 +96,23 @@ module AgentVsAgent
     ::Thrift::Struct.generate_accessors self
   end
 
+  class EntryRequest
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    VERSION = 1
+
+    FIELDS = {
+      VERSION => {:type => ::Thrift::Types::STRING, :name => 'version', :default => %q"0.0.1"}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field version is unset!') unless @version
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
   class EntryResponse
     include ::Thrift::Struct, ::Thrift::Struct_Union
     TICKET = 1

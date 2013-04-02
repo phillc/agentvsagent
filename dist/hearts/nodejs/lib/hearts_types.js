@@ -171,6 +171,59 @@ AgentVsAgent.Ticket.prototype.write = function(output) {
   return;
 };
 
+AgentVsAgent.EntryRequest = module.exports.EntryRequest = function(args) {
+  this.version = '0.0.1';
+  if (args) {
+    if (args.version !== undefined) {
+      this.version = args.version;
+    }
+  }
+};
+AgentVsAgent.EntryRequest.prototype = {};
+AgentVsAgent.EntryRequest.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.version = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+AgentVsAgent.EntryRequest.prototype.write = function(output) {
+  output.writeStructBegin('EntryRequest');
+  if (this.version !== null && this.version !== undefined) {
+    output.writeFieldBegin('version', Thrift.Type.STRING, 1);
+    output.writeString(this.version);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 AgentVsAgent.EntryResponse = module.exports.EntryResponse = function(args) {
   this.ticket = null;
   this.message = null;
@@ -592,3 +645,4 @@ AgentVsAgent.GameResult.prototype.write = function(output) {
   return;
 };
 
+ttypes.CURRENT_VERSION = '0.0.1';

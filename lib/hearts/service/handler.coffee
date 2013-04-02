@@ -64,7 +64,7 @@ mapTrickToThrift = (trick) ->
 module.exports = class Handler
   constructor: (@arena) ->
 
-  enter_arena: (result) ->
+  enter_arena: (request, result) ->
     player = @arena.createPlayer()
     player.recvStartedGame (gameId) =>
       ticket = new types.Ticket(agentId: player.id, gameId: gameId)

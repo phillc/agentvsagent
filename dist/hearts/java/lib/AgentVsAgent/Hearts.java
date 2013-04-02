@@ -34,7 +34,7 @@ public class Hearts {
 
   public interface Iface {
 
-    public EntryResponse enter_arena() throws org.apache.thrift.TException;
+    public EntryResponse enter_arena(EntryRequest request) throws org.apache.thrift.TException;
 
     public GameInfo get_game_info(Ticket ticket) throws org.apache.thrift.TException;
 
@@ -54,7 +54,7 @@ public class Hearts {
 
   public interface AsyncIface {
 
-    public void enter_arena(org.apache.thrift.async.AsyncMethodCallback<AsyncClient.enter_arena_call> resultHandler) throws org.apache.thrift.TException;
+    public void enter_arena(EntryRequest request, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.enter_arena_call> resultHandler) throws org.apache.thrift.TException;
 
     public void get_game_info(Ticket ticket, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.get_game_info_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -92,15 +92,16 @@ public class Hearts {
       super(iprot, oprot);
     }
 
-    public EntryResponse enter_arena() throws org.apache.thrift.TException
+    public EntryResponse enter_arena(EntryRequest request) throws org.apache.thrift.TException
     {
-      send_enter_arena();
+      send_enter_arena(request);
       return recv_enter_arena();
     }
 
-    public void send_enter_arena() throws org.apache.thrift.TException
+    public void send_enter_arena(EntryRequest request) throws org.apache.thrift.TException
     {
       enter_arena_args args = new enter_arena_args();
+      args.setRequest(request);
       sendBase("enter_arena", args);
     }
 
@@ -295,21 +296,24 @@ public class Hearts {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void enter_arena(org.apache.thrift.async.AsyncMethodCallback<enter_arena_call> resultHandler) throws org.apache.thrift.TException {
+    public void enter_arena(EntryRequest request, org.apache.thrift.async.AsyncMethodCallback<enter_arena_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      enter_arena_call method_call = new enter_arena_call(resultHandler, this, ___protocolFactory, ___transport);
+      enter_arena_call method_call = new enter_arena_call(request, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class enter_arena_call extends org.apache.thrift.async.TAsyncMethodCall {
-      public enter_arena_call(org.apache.thrift.async.AsyncMethodCallback<enter_arena_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private EntryRequest request;
+      public enter_arena_call(EntryRequest request, org.apache.thrift.async.AsyncMethodCallback<enter_arena_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.request = request;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("enter_arena", org.apache.thrift.protocol.TMessageType.CALL, 0));
         enter_arena_args args = new enter_arena_args();
+        args.setRequest(request);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -593,7 +597,7 @@ public class Hearts {
 
       public enter_arena_result getResult(I iface, enter_arena_args args) throws org.apache.thrift.TException {
         enter_arena_result result = new enter_arena_result();
-        result.success = iface.enter_arena();
+        result.success = iface.enter_arena(args.request);
         return result;
       }
     }
@@ -743,6 +747,7 @@ public class Hearts {
   public static class enter_arena_args implements org.apache.thrift.TBase<enter_arena_args, enter_arena_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("enter_arena_args");
 
+    private static final org.apache.thrift.protocol.TField REQUEST_FIELD_DESC = new org.apache.thrift.protocol.TField("request", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -750,10 +755,11 @@ public class Hearts {
       schemes.put(TupleScheme.class, new enter_arena_argsTupleSchemeFactory());
     }
 
+    public EntryRequest request; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      REQUEST((short)1, "request");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -768,6 +774,8 @@ public class Hearts {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 1: // REQUEST
+            return REQUEST;
           default:
             return null;
         }
@@ -806,9 +814,13 @@ public class Hearts {
         return _fieldName;
       }
     }
+
+    // isset id assignments
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.REQUEST, new org.apache.thrift.meta_data.FieldMetaData("request", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, EntryRequest.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(enter_arena_args.class, metaDataMap);
     }
@@ -816,10 +828,20 @@ public class Hearts {
     public enter_arena_args() {
     }
 
+    public enter_arena_args(
+      EntryRequest request)
+    {
+      this();
+      this.request = request;
+    }
+
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public enter_arena_args(enter_arena_args other) {
+      if (other.isSetRequest()) {
+        this.request = new EntryRequest(other.request);
+      }
     }
 
     public enter_arena_args deepCopy() {
@@ -828,15 +850,51 @@ public class Hearts {
 
     @Override
     public void clear() {
+      this.request = null;
+    }
+
+    public EntryRequest getRequest() {
+      return this.request;
+    }
+
+    public enter_arena_args setRequest(EntryRequest request) {
+      this.request = request;
+      return this;
+    }
+
+    public void unsetRequest() {
+      this.request = null;
+    }
+
+    /** Returns true if field request is set (has been assigned a value) and false otherwise */
+    public boolean isSetRequest() {
+      return this.request != null;
+    }
+
+    public void setRequestIsSet(boolean value) {
+      if (!value) {
+        this.request = null;
+      }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case REQUEST:
+        if (value == null) {
+          unsetRequest();
+        } else {
+          setRequest((EntryRequest)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case REQUEST:
+        return getRequest();
+
       }
       throw new IllegalStateException();
     }
@@ -848,6 +906,8 @@ public class Hearts {
       }
 
       switch (field) {
+      case REQUEST:
+        return isSetRequest();
       }
       throw new IllegalStateException();
     }
@@ -865,6 +925,15 @@ public class Hearts {
       if (that == null)
         return false;
 
+      boolean this_present_request = true && this.isSetRequest();
+      boolean that_present_request = true && that.isSetRequest();
+      if (this_present_request || that_present_request) {
+        if (!(this_present_request && that_present_request))
+          return false;
+        if (!this.request.equals(that.request))
+          return false;
+      }
+
       return true;
     }
 
@@ -881,6 +950,16 @@ public class Hearts {
       int lastComparison = 0;
       enter_arena_args typedOther = (enter_arena_args)other;
 
+      lastComparison = Boolean.valueOf(isSetRequest()).compareTo(typedOther.isSetRequest());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetRequest()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.request, typedOther.request);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -901,13 +980,26 @@ public class Hearts {
       StringBuilder sb = new StringBuilder("enter_arena_args(");
       boolean first = true;
 
+      sb.append("request:");
+      if (this.request == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.request);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
+      if (request == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'request' was not present! Struct: " + toString());
+      }
       // check for sub-struct validity
+      if (request != null) {
+        request.validate();
+      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -944,6 +1036,15 @@ public class Hearts {
             break;
           }
           switch (schemeField.id) {
+            case 1: // REQUEST
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.request = new EntryRequest();
+                struct.request.read(iprot);
+                struct.setRequestIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -959,6 +1060,11 @@ public class Hearts {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.request != null) {
+          oprot.writeFieldBegin(REQUEST_FIELD_DESC);
+          struct.request.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -976,11 +1082,15 @@ public class Hearts {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, enter_arena_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        struct.request.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, enter_arena_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        struct.request = new EntryRequest();
+        struct.request.read(iprot);
+        struct.setRequestIsSet(true);
       }
     }
 

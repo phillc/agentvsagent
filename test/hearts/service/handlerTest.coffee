@@ -27,6 +27,7 @@ describe "Handler", ->
 
     for method in methods
       @handler.should.have.property method
+      @handler[method].length.should.equal(Hearts.Client.prototype[method].length)
 
     Object.keys(Handler.prototype).length.should.equal(methods.length)
 

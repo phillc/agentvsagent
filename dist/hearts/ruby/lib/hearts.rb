@@ -12,13 +12,13 @@ module AgentVsAgent
     class Client
       include ::Thrift::Client
 
-      def enter_arena()
-        send_enter_arena()
+      def enter_arena(request)
+        send_enter_arena(request)
         return recv_enter_arena()
       end
 
-      def send_enter_arena()
-        send_message('enter_arena', Enter_arena_args)
+      def send_enter_arena(request)
+        send_message('enter_arena', Enter_arena_args, :request => request)
       end
 
       def recv_enter_arena()
@@ -140,7 +140,7 @@ module AgentVsAgent
       def process_enter_arena(seqid, iprot, oprot)
         args = read_args(iprot, Enter_arena_args)
         result = Enter_arena_result.new()
-        result.success = @handler.enter_arena()
+        result.success = @handler.enter_arena(args.request)
         write_result(result, oprot, 'enter_arena', seqid)
       end
 
@@ -199,14 +199,16 @@ module AgentVsAgent
 
     class Enter_arena_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
+      REQUEST = 1
 
       FIELDS = {
-
+        REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::AgentVsAgent::EntryRequest}
       }
 
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field request is unset!') unless @request
       end
 
       ::Thrift::Struct.generate_accessors self

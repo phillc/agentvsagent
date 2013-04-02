@@ -189,6 +189,36 @@ read_Ticket iprot = do
   record <- read_Ticket_fields iprot (Ticket{f_Ticket_gameId=Nothing,f_Ticket_agentId=Nothing})
   readStructEnd iprot
   return record
+data EntryRequest = EntryRequest{f_EntryRequest_version :: Maybe Text} deriving (Show,Eq,Typeable)
+instance Hashable EntryRequest where
+  hashWithSalt salt record = salt   `hashWithSalt` f_EntryRequest_version record  
+write_EntryRequest oprot record = do
+  writeStructBegin oprot "EntryRequest"
+  case f_EntryRequest_version record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("version",T_STRING,1)
+    writeString oprot _v
+    writeFieldEnd oprot}
+  writeFieldStop oprot
+  writeStructEnd oprot
+read_EntryRequest_fields iprot record = do
+  (_,_t13,_id14) <- readFieldBegin iprot
+  if _t13 == T_STOP then return record else
+    case _id14 of 
+      1 -> if _t13 == T_STRING then do
+        s <- readString iprot
+        read_EntryRequest_fields iprot record{f_EntryRequest_version=Just s}
+        else do
+          skip iprot _t13
+          read_EntryRequest_fields iprot record
+      _ -> do
+        skip iprot _t13
+        readFieldEnd iprot
+        read_EntryRequest_fields iprot record
+read_EntryRequest iprot = do
+  _ <- readStructBegin iprot
+  record <- read_EntryRequest_fields iprot (EntryRequest{f_EntryRequest_version=Nothing})
+  readStructEnd iprot
+  return record
 data EntryResponse = EntryResponse{f_EntryResponse_ticket :: Maybe Ticket,f_EntryResponse_message :: Maybe Text} deriving (Show,Eq,Typeable)
 instance Hashable EntryResponse where
   hashWithSalt salt record = salt   `hashWithSalt` f_EntryResponse_ticket record   `hashWithSalt` f_EntryResponse_message record  
@@ -205,23 +235,23 @@ write_EntryResponse oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_EntryResponse_fields iprot record = do
-  (_,_t13,_id14) <- readFieldBegin iprot
-  if _t13 == T_STOP then return record else
-    case _id14 of 
-      1 -> if _t13 == T_STRUCT then do
+  (_,_t18,_id19) <- readFieldBegin iprot
+  if _t18 == T_STOP then return record else
+    case _id19 of 
+      1 -> if _t18 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_EntryResponse_fields iprot record{f_EntryResponse_ticket=Just s}
         else do
-          skip iprot _t13
+          skip iprot _t18
           read_EntryResponse_fields iprot record
-      2 -> if _t13 == T_STRING then do
+      2 -> if _t18 == T_STRING then do
         s <- readString iprot
         read_EntryResponse_fields iprot record{f_EntryResponse_message=Just s}
         else do
-          skip iprot _t13
+          skip iprot _t18
           read_EntryResponse_fields iprot record
       _ -> do
-        skip iprot _t13
+        skip iprot _t18
         readFieldEnd iprot
         read_EntryResponse_fields iprot record
 read_EntryResponse iprot = do
@@ -241,17 +271,17 @@ write_GameInfo oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_GameInfo_fields iprot record = do
-  (_,_t18,_id19) <- readFieldBegin iprot
-  if _t18 == T_STOP then return record else
-    case _id19 of 
-      1 -> if _t18 == T_I32 then do
+  (_,_t23,_id24) <- readFieldBegin iprot
+  if _t23 == T_STOP then return record else
+    case _id24 of 
+      1 -> if _t23 == T_I32 then do
         s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
         read_GameInfo_fields iprot record{f_GameInfo_position=Just s}
         else do
-          skip iprot _t18
+          skip iprot _t23
           read_GameInfo_fields iprot record
       _ -> do
-        skip iprot _t18
+        skip iprot _t23
         readFieldEnd iprot
         read_GameInfo_fields iprot record
 read_GameInfo iprot = do
@@ -270,28 +300,28 @@ write_Trick oprot record = do
     writeFieldEnd oprot}
   case f_Trick_played record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("played",T_LIST,2)
-    (let f = Vector.mapM_ (\_viter22 -> write_Card oprot _viter22) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
+    (let f = Vector.mapM_ (\_viter27 -> write_Card oprot _viter27) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
     writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Trick_fields iprot record = do
-  (_,_t24,_id25) <- readFieldBegin iprot
-  if _t24 == T_STOP then return record else
-    case _id25 of 
-      1 -> if _t24 == T_I32 then do
+  (_,_t29,_id30) <- readFieldBegin iprot
+  if _t29 == T_STOP then return record else
+    case _id30 of 
+      1 -> if _t29 == T_I32 then do
         s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
         read_Trick_fields iprot record{f_Trick_leader=Just s}
         else do
-          skip iprot _t24
+          skip iprot _t29
           read_Trick_fields iprot record
-      2 -> if _t24 == T_LIST then do
-        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype29,_size26) <- readListBegin iprot; f _size26})
+      2 -> if _t29 == T_LIST then do
+        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype34,_size31) <- readListBegin iprot; f _size31})
         read_Trick_fields iprot record{f_Trick_played=Just s}
         else do
-          skip iprot _t24
+          skip iprot _t29
           read_Trick_fields iprot record
       _ -> do
-        skip iprot _t24
+        skip iprot _t29
         readFieldEnd iprot
         read_Trick_fields iprot record
 read_Trick iprot = do
@@ -327,41 +357,41 @@ write_RoundResult oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_RoundResult_fields iprot record = do
-  (_,_t34,_id35) <- readFieldBegin iprot
-  if _t34 == T_STOP then return record else
-    case _id35 of 
-      1 -> if _t34 == T_I32 then do
+  (_,_t39,_id40) <- readFieldBegin iprot
+  if _t39 == T_STOP then return record else
+    case _id40 of 
+      1 -> if _t39 == T_I32 then do
         s <- readI32 iprot
         read_RoundResult_fields iprot record{f_RoundResult_north=Just s}
         else do
-          skip iprot _t34
+          skip iprot _t39
           read_RoundResult_fields iprot record
-      2 -> if _t34 == T_I32 then do
+      2 -> if _t39 == T_I32 then do
         s <- readI32 iprot
         read_RoundResult_fields iprot record{f_RoundResult_east=Just s}
         else do
-          skip iprot _t34
+          skip iprot _t39
           read_RoundResult_fields iprot record
-      3 -> if _t34 == T_I32 then do
+      3 -> if _t39 == T_I32 then do
         s <- readI32 iprot
         read_RoundResult_fields iprot record{f_RoundResult_south=Just s}
         else do
-          skip iprot _t34
+          skip iprot _t39
           read_RoundResult_fields iprot record
-      4 -> if _t34 == T_I32 then do
+      4 -> if _t39 == T_I32 then do
         s <- readI32 iprot
         read_RoundResult_fields iprot record{f_RoundResult_west=Just s}
         else do
-          skip iprot _t34
+          skip iprot _t39
           read_RoundResult_fields iprot record
-      5 -> if _t34 == T_I32 then do
+      5 -> if _t39 == T_I32 then do
         s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
         read_RoundResult_fields iprot record{f_RoundResult_status=Just s}
         else do
-          skip iprot _t34
+          skip iprot _t39
           read_RoundResult_fields iprot record
       _ -> do
-        skip iprot _t34
+        skip iprot _t39
         readFieldEnd iprot
         read_RoundResult_fields iprot record
 read_RoundResult iprot = do
@@ -393,35 +423,35 @@ write_GameResult oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_GameResult_fields iprot record = do
-  (_,_t39,_id40) <- readFieldBegin iprot
-  if _t39 == T_STOP then return record else
-    case _id40 of 
-      1 -> if _t39 == T_I32 then do
+  (_,_t44,_id45) <- readFieldBegin iprot
+  if _t44 == T_STOP then return record else
+    case _id45 of 
+      1 -> if _t44 == T_I32 then do
         s <- readI32 iprot
         read_GameResult_fields iprot record{f_GameResult_north=Just s}
         else do
-          skip iprot _t39
+          skip iprot _t44
           read_GameResult_fields iprot record
-      2 -> if _t39 == T_I32 then do
+      2 -> if _t44 == T_I32 then do
         s <- readI32 iprot
         read_GameResult_fields iprot record{f_GameResult_east=Just s}
         else do
-          skip iprot _t39
+          skip iprot _t44
           read_GameResult_fields iprot record
-      3 -> if _t39 == T_I32 then do
+      3 -> if _t44 == T_I32 then do
         s <- readI32 iprot
         read_GameResult_fields iprot record{f_GameResult_south=Just s}
         else do
-          skip iprot _t39
+          skip iprot _t44
           read_GameResult_fields iprot record
-      4 -> if _t39 == T_I32 then do
+      4 -> if _t44 == T_I32 then do
         s <- readI32 iprot
         read_GameResult_fields iprot record{f_GameResult_west=Just s}
         else do
-          skip iprot _t39
+          skip iprot _t44
           read_GameResult_fields iprot record
       _ -> do
-        skip iprot _t39
+        skip iprot _t44
         readFieldEnd iprot
         read_GameResult_fields iprot record
 read_GameResult iprot = do

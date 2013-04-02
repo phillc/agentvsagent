@@ -42,6 +42,11 @@ struct Ticket {
   2: required string agentId
 }
 
+const string CURRENT_VERSION = "0.0.1"
+struct EntryRequest {
+  1: required string version=CURRENT_VERSION
+}
+
 struct EntryResponse {
   1: optional Ticket ticket,
   2: optional string message
@@ -53,10 +58,6 @@ struct GameInfo {
 
 struct Trick {
   1: required Position leader
-  # Perhaps this should be a list of structs that have
-  # Who the card was played by with the card so that
-  # it will be much easier to associate cards/scores with
-  # players
   2: required list<Card> played
 }
 
@@ -84,11 +85,12 @@ struct GameResult {
   4: required Score west
 }
 
+
 service Hearts {
   # These may need a wrapper around return values, to indicate things like
   # game ended (in middle of trick... maybe someone played an invalid move)
   # OR, maybe declare exceptions
-  EntryResponse enter_arena(), # Should they send in the api version number?
+  EntryResponse enter_arena(1: required EntryRequest request),
   GameInfo get_game_info(1: required Ticket ticket),
   list<Card> get_hand(1: required Ticket ticket),
   # Right now, server not expecting you to call pass cards on the 4th round.

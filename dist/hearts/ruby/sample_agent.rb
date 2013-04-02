@@ -14,8 +14,9 @@ class RandomBot
   end
 
   def run
-    puts "Entering arena"
-    response = @game.enter_arena
+    request = AgentVsAgent::EntryRequest.new
+    puts "Entering arena #{request.inspect}"
+    response = @game.enter_arena request
     @ticket = response.ticket
     if @ticket
       puts "Got a ticket! #{@ticket.inspect}"

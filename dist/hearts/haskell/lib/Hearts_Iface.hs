@@ -36,7 +36,7 @@ import Thrift.Types ()
 import Hearts_Types
 
 class Hearts_Iface a where
-  enter_arena :: a -> IO EntryResponse
+  enter_arena :: a -> Maybe EntryRequest -> IO EntryResponse
   get_game_info :: a -> Maybe Ticket -> IO GameInfo
   get_hand :: a -> Maybe Ticket -> IO (Vector.Vector Card)
   pass_cards :: a -> Maybe Ticket -> Maybe (Vector.Vector Card) -> IO (Vector.Vector Card)

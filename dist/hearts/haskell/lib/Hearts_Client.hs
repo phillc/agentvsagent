@@ -37,14 +37,14 @@ import Thrift.Types ()
 import Hearts_Types
 import Hearts
 seqid = newIORef 0
-enter_arena (ip,op) = do
-  send_enter_arena op
+enter_arena (ip,op) arg_request = do
+  send_enter_arena op arg_request
   recv_enter_arena ip
-send_enter_arena op = do
+send_enter_arena op arg_request = do
   seq <- seqid
   seqn <- readIORef seq
   writeMessageBegin op ("enter_arena", M_CALL, seqn)
-  write_Enter_arena_args op (Enter_arena_args{})
+  write_Enter_arena_args op (Enter_arena_args{f_Enter_arena_args_request=Just arg_request})
   writeMessageEnd op
   tFlush (getTransport op)
 recv_enter_arena ip = do
