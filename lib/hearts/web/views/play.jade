@@ -33,11 +33,6 @@ mixin cardDiv
   div(class="card {{card.suit | cardSuitClass}} rank-{{card.rank | rankName}}")
     mixin cardBody
 
-mixin position(position)
-  h1= position
-  p score: {{positions.#{position}.score}}
-  .player(ng-class="{ human: position.player == '#{position}' }")
-
 block content
   div(ng-app="AgentVsAgent")
     div(ng-controller='HeartsCtrl')
@@ -45,34 +40,69 @@ block content
         .row-fluid.cardTable
           .span12
             .row-fluid
+              .span12(ng-repeat="round in state.rounds")
+                .clearfix
+                  h1 Dealt:
+                  .playingCards
+                    ul.table
+                      li(ng-repeat="card in round.dealt")
+                        mixin cardDiv
+                .clearfix
+                  h1 Passed:
+                  .playingCards
+                    ul.table
+                      li(ng-repeat="card in round.passed")
+                        mixin cardDiv
+                .clearfix
+                  h1 Received:
+                  .playingCards
+                    ul.table
+                      li(ng-repeat="card in round.received")
+                        mixin cardDiv
+                .clearfix
+                table.table.table-bordered
+                  tr
+                    th(ng-class="{currentPlayer: state.position == Positions.NORTH}") North
+                    th(ng-class="{currentPlayer: state.position == Positions.EAST}") East
+                    th(ng-class="{currentPlayer: state.position == Positions.SOUTH}") South
+                    th(ng-class="{currentPlayer: state.position == Positions.WEST}") West
+                    th(ng-class="{currentPlayer: state.position == Positions.NORTH}") North
+                    th(ng-class="{currentPlayer: state.position == Positions.EAST}") East
+                    th(ng-class="{currentPlayer: state.position == Positions.SOUTH}") South
+                  tr(ng-repeat="trick in round.tricks")
+                    td(ng-repeat="i in positionsBefore(trick)")
+                    td(ng-repeat="card in trick.played")
+                      .playingCards
+                        mixin cardDiv
+                    td(ng-repeat="i in positionsNotPlayed(trick)")
+                    td(ng-repeat="i in positionsAfter(trick)")
+                  tr(ng-show="round.result")
+                    td {{round.result.north}}
+                    td {{round.result.east}}
+                    td {{round.result.south}}
+                    td {{round.result.west}}
+                    td
+                    td
+                    td
+                  tr
+                    th North
+                    th East
+                    th South
+                    th West
+                    th North
+                    th East
+                    th South
+            .row-fluid
               .span12
                 .info {{trick}}
                 .round {{roundResult}}
                 .game {{gameResult}}
             .row-fluid
-              .span4
-              .span4
-                mixin position("north")
-              .span4
-            .row-fluid
-              .span4
-                mixin position("west")
-              .span4
+              .span12
                 div(ng-show="state.currentState == 'unstarted'")
                   button.startGame(ng-click="startGame()") start the game
                 div(ng-show="state.currentState == 'waitingForGame'")
                   p Waiting for a game
-                .playingCards
-                  ul.table
-                    li(ng-repeat="card in state.trick.played")
-                      mixin cardDiv
-              .span4
-                mixin position("east")
-            .row-fluid
-              .span4
-              .span4
-                mixin position("south")
-              .span4
             .row-fluid
               .span-12
                 .playingCards
@@ -80,7 +110,9 @@ block content
                   ul.table
                     li(ng-repeat="card in state.hand")
                       mixin cardInput
+                  div(ng-show="state.currentState == 'waiting'") WAITING...
                   button(ng-show="state.currentState == 'passing'", ng-click="pass()") Pass
                   button(ng-show="state.currentState == 'playing'", ng-click="play()") Play
+
 
 

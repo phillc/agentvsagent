@@ -11,7 +11,7 @@ exports.PassCards = class PassCards extends Action
 
   execute: (game) ->
     position = game.positionOf(@player)
-    logger.info "PASSING CARDS", @player.id, @cards
+    logger.info "PASSING CARDS", @cards
     (new Pile(@cards)).copyAllCardsTo game.currentRound()[position].passed
 
 exports.PlayCard = class PlayCard extends Action
@@ -19,7 +19,7 @@ exports.PlayCard = class PlayCard extends Action
     super(player)
 
   execute: (game) ->
-    logger.info "PLAYING CARD", @player.id, @card
+    logger.info "PLAYING CARD", @card
     position = game.positionOf(@player)
     # TODO: validate/shift it off of current player held
     game.currentRound().currentTrick().played.addCard(@card)
