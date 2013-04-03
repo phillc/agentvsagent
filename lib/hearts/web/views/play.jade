@@ -70,12 +70,12 @@ block content
                     th(ng-class="{currentPlayer: state.position == Positions.EAST}") East
                     th(ng-class="{currentPlayer: state.position == Positions.SOUTH}") South
                   tr(ng-repeat="trick in round.tricks")
-                    td(ng-repeat="i in positionsBefore(trick)")
+                    td(class="blankSpot", ng-repeat="i in positionsBefore(trick)")
                     td(ng-repeat="card in trick.played")
                       .playingCards
                         mixin cardDiv
-                    td(ng-repeat="i in positionsNotPlayed(trick)")
-                    td(ng-repeat="i in positionsAfter(trick)")
+                    td(class="waitingSpot", ng-repeat="i in positionsNotPlayed(trick)")
+                    td(class="blankSpot", ng-repeat="i in positionsAfter(trick)")
                   tr(ng-show="round.result")
                     td {{round.result.north}}
                     td {{round.result.east}}
@@ -85,13 +85,13 @@ block content
                     td
                     td
                   tr
-                    th North
-                    th East
-                    th South
-                    th West
-                    th North
-                    th East
-                    th South
+                    th(ng-class="{currentPlayer: state.position == Positions.NORTH}") North
+                    th(ng-class="{currentPlayer: state.position == Positions.EAST}") East
+                    th(ng-class="{currentPlayer: state.position == Positions.SOUTH}") South
+                    th(ng-class="{currentPlayer: state.position == Positions.WEST}") West
+                    th(ng-class="{currentPlayer: state.position == Positions.NORTH}") North
+                    th(ng-class="{currentPlayer: state.position == Positions.EAST}") East
+                    th(ng-class="{currentPlayer: state.position == Positions.SOUTH}") South
             .row-fluid
               .span12
                 .info {{trick}}

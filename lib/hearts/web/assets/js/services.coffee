@@ -91,7 +91,7 @@ class Game
 
   start: ->
     @state.setCurrentState("waitingForGame")
-    @client.enter_arena (response) =>
+    @client.enter_arena new AgentVsAgent.EntryRequest(), (response) =>
       @state.setTicket(response.ticket)
       if @state.ticket
         @client.get_game_info @state.ticket, (gameInfo) =>
