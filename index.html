@@ -97,9 +97,9 @@
 </ul><h2>Potential game ideas</h2>
 
 <ul>
-<li>Othello (Reversi)</li>
-<li>Spades</li>
-<li>Bridge</li>
+<li>Team games: Spades, Bridge</li>
+<li>Variable # of players: </li>
+<li>Pathing: Othello (Reversi), Blokus, Tsuro</li>
 </ul><h2>TODO</h2>
 
 <ul>
@@ -110,6 +110,13 @@
 <li>Human player(s)</li>
 <li>Server will crash if a player disconnects mid game, or pass in null for a card</li>
 <li>Symlinks suck. Come up with some script that copies from the submodule (yuck).</li>
+<li>The sample agents are ugly. I was trying to just get them to look the same in each language, but I ended up mutating too many variables. I think it would be nice to split them into two files, one with logic and the other with the harness for rounds/tricks. That will let me change the harness later and reduce the risk of merge conflict with the logic that potential participants implement. Rushing to MVP =\</li>
+<li>Simple agents to play against (Play low agent, Play High Agent, Random Agent)
+
+<ul>
+<li>Option for server to startup the simple agents to play against locally</li>
+</ul>
+</li>
 </ul><h2>Contributing</h2>
 
 <h3>Mac OSX installation instructions:</h3>
@@ -125,6 +132,15 @@
 <h2>In need of</h2>
 
 <p>Sample agents for languages</p>
+
+<h2>Credits</h2>
+
+<ul>
+<li>Thrift: <a href="http://thrift.apache.org/">http://thrift.apache.org/</a>
+</li>
+<li>Cards: <a href="https://github.com/selfthinker/CSS-Playing-Cards">https://github.com/selfthinker/CSS-Playing-Cards</a>
+</li>
+</ul>
       </section>
 
       <footer>
@@ -141,6 +157,16 @@
 
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-4379922-4");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
