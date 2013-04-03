@@ -1,10 +1,12 @@
 Factory = require './factory'
 Arena = require '../lib/arena'
+HeartsFactory = require '../lib/hearts/factory'
 should = require("should")
 
 describe "Arena", ->
   beforeEach ->
-    @arena = new Arena()
+    factory = new HeartsFactory()
+    @arena = new Arena(factory)
 
   describe "#createPlayer", ->
     it "adds players", ->

@@ -1,11 +1,10 @@
 MatchMaker = require '../lib/matchmaker'
-Arena = require '../lib/arena'
-Player = require '../lib/hearts/player'
+Factory = require './factory'
 require("should")
 
 describe "MatchMaker", ->
   beforeEach ->
-    @arena = new Arena()
+    @arena = Factory.createArena()
     @matchMaker = new MatchMaker(@arena)
 
   describe "#findMatch", ->

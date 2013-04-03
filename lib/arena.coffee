@@ -1,14 +1,12 @@
 {EventEmitter} = require 'events'
-HeartsPlayer = require './hearts/player'
-Game = require './hearts/engine/game'
 
 module.exports = class Arena extends EventEmitter
-  constructor: ->
+  constructor: (@factory)->
     @waitingRoom = []
     @runningMatches = {}
 
   createPlayer: ->
-    player = new HeartsPlayer()
+    player = @factory.createPlayer()
     @waitingRoom.push player
     @emit 'newPlayer'
     player
@@ -20,7 +18,7 @@ module.exports = class Arena extends EventEmitter
     for player in players
       @removePlayer(player)
 
-    game = new Game(players...)
+    game = @factory.createGame(players...)
 
     @runningMatches[game.id] = game
     game.start()

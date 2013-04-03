@@ -1,4 +1,3 @@
-Arena = require '../../../lib/arena'
 Card = require '../../../lib/hearts/engine/card'
 Suit = require '../../../lib/hearts/engine/suit'
 Rank = require '../../../lib/hearts/engine/rank'
@@ -10,7 +9,7 @@ should = require("should")
 
 describe "Handler", ->
   beforeEach ->
-    @arena = new Arena()
+    @arena = Factory.createArena()
     @arena.createPlayer()
     @arena.createPlayer()
     @arena.createPlayer()
@@ -34,7 +33,7 @@ describe "Handler", ->
 
   describe "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
-      @handler.enter_arena (err, response) ->
+      @handler.enter_arena new types.EntryRequest(), (err, response) ->
         should.not.exist(err)
         response.ticket.agentId.should.be.a("string")
         response.ticket.gameId.should.be.a("string")

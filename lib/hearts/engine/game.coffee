@@ -3,7 +3,8 @@ logger = require '../../logger'
 states = require './states'
 
 module.exports = class Game
-  constructor: (player1, player2, player3, player4) ->
+  constructor: (player1, player2, player3, player4, options={}) ->
+    @maxPenalty = options.heartsMaxPoints || 100
     @id = IdGenerator.generate()
     @players = [player1, player2, player3, player4]
 
@@ -67,10 +68,8 @@ module.exports = class Game
       memo
 
   maxPenaltyReached: ->
-    maxPenalty = 100
-
     scores = @scores()
 
-    [scores.north, scores.east, scores.south, scores.west].some (score) ->
-      score >= maxPenalty
+    [scores.north, scores.east, scores.south, scores.west].some (score) =>
+      score >= @maxPenalty
 

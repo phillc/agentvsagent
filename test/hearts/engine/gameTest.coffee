@@ -49,3 +49,21 @@ describe "Game", ->
       @game.scores = -> { north: 99, east: 10, south: 5, west: 3 }
       @game.maxPenaltyReached().should.equal(false)
 
+    describe "configured to end at 40", ->
+      beforeEach ->
+        @player1 = new Player()
+        @player2 = new Player()
+        @player3 = new Player()
+        @player4 = new Player()
+        @game = new Game(@player1, @player2, @player3, @player4, heartsMaxPoints:40)
+
+
+      it "returns false if not reached", ->
+        @game.scores = -> { north: 39, east: 10, south: 0, west: 3 }
+        @game.maxPenaltyReached().should.equal(false)
+
+      it "returns true if reached", ->
+        @game.scores = -> { north: 40, east: 10, south: 0, west: 3 }
+        @game.maxPenaltyReached().should.equal(true)
+
+

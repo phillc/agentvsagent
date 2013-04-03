@@ -3,22 +3,23 @@
 var program = require('commander')
 
 var ran = false;
+// TODO: read from package.json
 program
   .version('0.0.1')
 
 program
-  .command('server')
-  .description('start a local server')
-  .action(function() {
-    ran = true;
-    require('../lib/server')
-  });
+  .option('--server', 'start a local server')
+  .option('--hearts-max-points <points>', 'Points for game end', parseInt)
 
 // TODO: ava update, looks at a yml file for update dir
 
 program.parse(process.argv)
 
-if(!ran) {
+if(program.server) {
+  require('../lib/server').start({
+    heartsMaxPoints: program.heartsMaxPoints
+  });
+} else {
   program.outputHelp()
 }
 

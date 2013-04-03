@@ -3,33 +3,38 @@ winston = require 'winston'
 logger = require './logger'
 logger.add winston.transports.Console
 
-HeartsService = require './hearts/service'
-MatchMaker = require './matchmaker'
-Arena = require './arena'
+exports.start = (options) ->
+  app = express()
 
-arena = new Arena()
+  app.set 'view engine', 'jade'
+  app.configure 'development', ->
+    app.use (req, res, next) ->
+      res.locals.pretty = true
+      next()
 
-matchMaker = new MatchMaker(arena)
-matchMaker.start()
+  app.use express.logger(format: 'dev')
+  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a>")
 
-{tcpServer, binaryHttpMiddleware, jsonHttpMiddleware} = new HeartsService(arena).create()
+  HeartsService = require './hearts/service'
+  MatchMaker = require './matchmaker'
+  Arena = require './arena'
+  HeartsFactory = require './hearts/factory'
 
-app = express()
+  factory = new HeartsFactory(options)
+  arena = new Arena(factory)
 
-app.set 'view engine', 'jade'
-app.configure 'development', ->
-  app.use (req, res, next) ->
-    res.locals.pretty = true
-    next()
+  matchMaker = new MatchMaker(arena)
+  matchMaker.start()
 
-app.use express.logger(format: 'dev')
-app.use '/game/hearts/service.json', jsonHttpMiddleware
-app.use '/game/hearts/service.thrift', binaryHttpMiddleware
-app.use '/game/hearts', require('connect-assets')(src: 'lib/hearts/web/assets', servePath: '/game/hearts')
-app.use '/game/hearts', require('./hearts/web').app()
-app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a>")
+  {tcpServer, binaryHttpMiddleware, jsonHttpMiddleware} = new HeartsService(arena).create()
 
-tcpServer.listen(4001)
-logger.info "TCP Server listening on", tcpServer.address()
-httpServer = app.listen(4000)
-logger.info "HTTP Server listening on", httpServer.address()
+  app.use '/game/hearts/service.json', jsonHttpMiddleware
+  app.use '/game/hearts/service.thrift', binaryHttpMiddleware
+  app.use '/game/hearts', require('connect-assets')(src: 'lib/hearts/web/assets', servePath: '/game/hearts')
+  app.use '/game/hearts', require('./hearts/web').app()
+
+  console.log "OPTIONS", options
+  tcpServer.listen(4001)
+  logger.info "TCP Server listening on", tcpServer.address()
+  httpServer = app.listen(4000)
+  logger.info "HTTP Server listening on", httpServer.address()

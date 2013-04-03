@@ -1,6 +1,12 @@
 Arena = require "../lib/arena"
-exports.createGame = (options={}) ->
-  arena = options.arena || new Arena()
+HeartsFactory = require "../lib/hearts/factory"
+
+exports.createArena = createArena = (options={}) ->
+  factory = options.factory || new HeartsFactory()
+  new Arena(factory)
+
+exports.createGame = createGame = (options={}) ->
+  arena = options.arena || createArena(options)
 
   players = [
     arena.createPlayer()
