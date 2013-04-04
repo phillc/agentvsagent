@@ -89,7 +89,7 @@ struct GameResult {
 service Hearts {
   # These may need a wrapper around return values, to indicate things like
   # game ended (in middle of trick... maybe someone played an invalid move)
-  # OR, maybe declare exceptions
+  # OR, maybe declare exceptions... InvalidMoveException, OutOfSequenceException...
   EntryResponse enter_arena(1: required EntryRequest request),
   GameInfo get_game_info(1: required Ticket ticket),
   list<Card> get_hand(1: required Ticket ticket),

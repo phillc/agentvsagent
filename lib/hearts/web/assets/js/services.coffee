@@ -129,6 +129,7 @@ class Game
           @state.currentRound().setResult roundResult
           if roundResult.status != AgentVsAgent.GameStatus.NEXT_ROUND
             @client.get_game_result @state.ticket, (gameResult) ->
+              # undefined...
               @state.setGameResult gameResult
               @state.setCurrentState("finished")
           else
