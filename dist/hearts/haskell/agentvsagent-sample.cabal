@@ -1,0 +1,19 @@
+name:                agentvsagent-sample
+version:             0.1.0.0
+homepage:            http://agentvsagent.com
+license:             MIT
+author:              Phillip Campbell
+build-type:          Simple
+cabal-version:       >=1.8
+
+executable sampleAgent
+  Main-is:        SampleAgent.hs
+  hs-source-dirs: . ./lib
+  build-depends:  base ==4.5.*,
+                  network ==2.3.*,
+                  thrift ==1.0.*,
+                  bytestring ==0.9.*,
+                  hashable ==1.2.*,
+                  text ==0.11.*,
+                  unordered-containers ==0.2.*,
+                  vector ==0.10.*

@@ -1,4 +1,4 @@
-module SampleAgent where
+module Main where
 
 import Network
 import Hearts_Types
@@ -13,7 +13,7 @@ main = do
   handle <- hOpen ("127.0.0.1", PortNumber 4001)
   transport <- openFramedTransport handle
   let handler = (BinaryProtocol transport, BinaryProtocol transport)
-  entryResponse <- enter_arena handler
+  entryResponse <- enter_arena handler (EntryRequest Nothing)
   let ticket = f_EntryResponse_ticket entryResponse
   case ticket of
     Just ticket' -> play handler ticket'
@@ -30,14 +30,14 @@ play handler ticket = do
   playRound handler ticket 1
   return ()
 
-playRound :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> Int -> IO () 0
+playRound :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> Int -> IO ()
 playRound handler ticket roundNumber = do
   hand <- get_hand handler ticket
   print "hand:"
   print hand
 
   -- round %4...
-  cardsToPass = hand
+  -- cardsToPass = hand
 
 
 playTrick = 2

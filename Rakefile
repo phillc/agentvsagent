@@ -1,17 +1,19 @@
 require 'pty'
 
 desc "run ruby random agents"
-task :agents, :number, :sleep do |t, args|
-  args.with_defaults number: 4, sleep: 0.1
-  agent_commands = [
-    'cd dist/hearts/ruby && ruby sample_agent.rb',
-    'cd dist/hearts/nodejs && coffee sampleAgent.coffee'
-    # 'cd dist/hearts/haskell && runhaskell -i../../../vendor/thrift/lib/hs/src -i./lib SampleAgent.hs'
-  ].cycle
+task :agents, :number, :langs, :sleep do |t, args|
+  args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee"
+  agent_commands = {
+    "ruby" => 'cd dist/hearts/ruby && ruby sample_agent.rb',
+    "coffee" => 'cd dist/hearts/nodejs && coffee sampleAgent.coffee',
+    "haskell" => 'cd dist/hearts/haskell && cabal configure && cabal build && dist/build/sampleAgent/sampleAgent'
+  }
+
+  agents = agent_commands.values_at(*args.langs.split(":")).shuffle.cycle
 
   pids = []
   args.number.to_i.times do |i|
-    command = agent_commands.next
+    command = agents.next
     pids << fork do
       STDOUT.sync = true
 
