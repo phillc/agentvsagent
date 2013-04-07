@@ -6,6 +6,7 @@ import Hearts_Client
 import Thrift.Transport.Handle
 import Thrift.Transport.Framed
 import Thrift.Protocol.Binary
+import qualified Data.Vector as V
 
 main :: IO ()
 main = do
@@ -32,12 +33,29 @@ play handler ticket = do
 
 playRound :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> Int -> IO ()
 playRound handler ticket roundNumber = do
-  hand <- get_hand handler ticket
-  print "hand:"
-  print hand
+  dealt <- get_hand handler ticket
+  print "dealt:"
+  print dealt
 
   -- round %4...
   -- cardsToPass = hand
+  let cardsToPass = V.take 3 dealt
+      remaining = V.drop 3 dealt
 
+  received <- pass_cards handler ticket cardsToPass
+  print "received"
+  print received
+  let hand = received V.++ remaining
+  playTrick handler ticket hand
 
-playTrick = 2
+playTrick :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> V.Vector Card -> IO ()
+playTrick handler ticket hand = do
+  print "hand:"
+  print hand
+  trick <- get_trick handler ticket
+  print "trick:"
+  print trick
+  play_card handler ticket $ V.head hand
+  case V.null V.tail hand
+  playTrick handler ticket $ V.tail hand
+

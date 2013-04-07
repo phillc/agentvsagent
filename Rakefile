@@ -1,19 +1,48 @@
 require 'pty'
 
+class Agent
+  def initialize(options={})
+    @directory = options[:directory]
+    @command = options[:command]
+    @compile = options[:compile]
+  end
+
+  def cd
+    "cd #{@directory}"
+  end
+
+  def compile!
+    return unless @compile
+    command = "#{cd} && #{@compile}"
+    puts "compiling: #{command}"
+    puts `#{command}`
+    raise "Compile error" unless $?.to_i == 0
+  end
+
+  def command
+    "#{cd} && #{@command}"
+  end
+end
+
 desc "run ruby random agents"
 task :agents, :number, :langs, :sleep do |t, args|
   args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee"
+
   agent_commands = {
-    "ruby" => 'cd dist/hearts/ruby && ruby sample_agent.rb',
-    "coffee" => 'cd dist/hearts/nodejs && coffee sampleAgent.coffee',
-    "haskell" => 'cd dist/hearts/haskell && cabal configure && cabal build && dist/build/sampleAgent/sampleAgent'
+    "ruby" => Agent.new(directory: 'dist/hearts/ruby', command: 'ruby sample_agent.rb'),
+    "coffee" => Agent.new(directory: 'dist/hearts/nodejs', command: 'coffee sampleAgent.coffee'),
+    "haskell" => Agent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/sampleAgent/sampleAgent')
   }
 
-  agents = agent_commands.values_at(*args.langs.split(":")).shuffle.cycle
+  agents = agent_commands.values_at(*args.langs.split(":")).shuffle
+
+  agents.each(&:compile!)
+
+  commands = agents.map(&:command).cycle
 
   pids = []
   args.number.to_i.times do |i|
-    command = agents.next
+    command = commands.next
     pids << fork do
       STDOUT.sync = true
 
