@@ -5,7 +5,7 @@ var program = require('commander')
 var ran = false;
 // TODO: read from package.json
 program
-  .version('0.0.1')
+  .version(require('../package.json').version)
 
 program
   .option('--server', 'start a local server')
