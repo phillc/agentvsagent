@@ -30,7 +30,7 @@ exports.start = (options) ->
 
   app.use '/game/hearts/service.json', jsonHttpMiddleware
   app.use '/game/hearts/service.thrift', binaryHttpMiddleware
-  app.use '/game/hearts', require('connect-assets')(src: 'lib/hearts/web/assets', servePath: '/game/hearts')
+  app.use '/game/hearts', require('connect-assets')(src: __dirname + '/hearts/web/assets', servePath: '/game/hearts')
   app.use '/game/hearts', require('./hearts/web').app()
 
   console.log "OPTIONS", options
