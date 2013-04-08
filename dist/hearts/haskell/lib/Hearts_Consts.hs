@@ -35,5 +35,5 @@ import Thrift.Types ()
 
 import Hearts_Types
 cURRENT_VERSION :: Text
-cURRENT_VERSION = "0.0.1"
+cURRENT_VERSION = "0.0.9"
 

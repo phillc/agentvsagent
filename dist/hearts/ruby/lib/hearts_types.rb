@@ -101,7 +101,7 @@ module AgentVsAgent
     VERSION = 1
 
     FIELDS = {
-      VERSION => {:type => ::Thrift::Types::STRING, :name => 'version', :default => %q"0.0.1"}
+      VERSION => {:type => ::Thrift::Types::STRING, :name => 'version', :default => %q"0.0.9"}
     }
 
     def struct_fields; FIELDS; end

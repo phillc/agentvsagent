@@ -1,5 +1,7 @@
 require "guard"
 require "guard/guard"
+require "json"
+require "erb"
 
 module ::Guard
   class Thrift < ::Guard::Guard
@@ -56,6 +58,17 @@ module ::Guard
   end
 end
 
+guard :shell, all_on_start: true do
+  watch("thrift/hearts.thrift.erb") do
+    AVA_VERSION = JSON.parse(File.read("package.json"))["version"]
+    puts "AVA VERSION #{AVA_VERSION}"
+    file = "thrift/hearts.thrift.erb"
+    output = "thrift/gen/hearts.thrift"
+    contents = ::ERB.new(File.read(file)).result(binding)
+    File.open(output, 'w'){ |f| f.write(contents) }
+  end
+end
+
 guard :thrift, all_on_start: true,
                clean_target: true,
                targets: { "lib/hearts/service/types" => "js:node",
@@ -64,11 +77,10 @@ guard :thrift, all_on_start: true,
                           "dist/hearts/java/lib" => "java",
                           "dist/hearts/haskell/lib" => "hs",
                           "dist/hearts/ruby/lib" => "rb" } do
-  watch('thrift/hearts.thrift')
+  watch('thrift/gen/hearts.thrift')
 end
 
 guard :shell do
   watch(%r{vendor/thrift/lib/nodejs/(.*)}) {|m| puts "#{m[0]} changed, packaging thrift"; puts `make package-thrift` }
   ignore! []
 end
-
