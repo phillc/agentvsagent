@@ -33,6 +33,7 @@ play handler ticket = do
 
 playRound :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> Int -> IO ()
 playRound handler ticket roundNumber = do
+  print "new round"
   dealt <- get_hand handler ticket
   print "dealt:"
   print dealt
@@ -56,6 +57,14 @@ playTrick handler ticket hand = do
   print "trick:"
   print trick
   play_card handler ticket $ V.head hand
-  case V.null V.tail hand
-  playTrick handler ticket $ V.tail hand
+  finishTrick handler ticket hand
+
+finishTrick handler ticket hand
+  | V.null $ V.tail hand = finishRound handler ticket
+  | otherwise            = playTrick handler ticket $ V.tail hand
+
+finishRound handler ticket = do
+  result <- get_round_result handler ticket
+  let status = f_RoundResult_status result
+  print status
 
