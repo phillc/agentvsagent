@@ -19,7 +19,6 @@ main = do
   case ticket of
     Just ticket' -> play handler ticket'
     Nothing -> print "no ticket"
-  print "DONE"
 
 play :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> IO ()
 play handler ticket = do
@@ -37,17 +36,26 @@ playRound handler ticket roundNumber = do
   dealt <- get_hand handler ticket
   print "dealt:"
   print dealt
+  case roundNumber `rem` 4 of
+    0 -> playTrick handler ticket dealt
+    otherwise -> passCards handler ticket dealt
 
-  -- round %4...
-  -- cardsToPass = hand
+  result <- get_round_result handler ticket
+  print "round result:"
+  print result
+  let status = f_RoundResult_status result
+  case status of
+    Just NEXT_ROUND -> playRound handler ticket (roundNumber + 1)
+    Just END_GAME -> finishGame handler ticket
+
+passCards handler ticket dealt = do
   let cardsToPass = V.take 3 dealt
       remaining = V.drop 3 dealt
 
   received <- pass_cards handler ticket cardsToPass
   print "received"
   print received
-  let hand = received V.++ remaining
-  playTrick handler ticket hand
+  playTrick handler ticket $ received V.++ remaining
 
 playTrick :: (Transport t, Transport a, Protocol a2, Protocol a1) => (a2 t, a1 a) -> Ticket -> V.Vector Card -> IO ()
 playTrick handler ticket hand = do
@@ -57,14 +65,12 @@ playTrick handler ticket hand = do
   print "trick:"
   print trick
   play_card handler ticket $ V.head hand
-  finishTrick handler ticket hand
+  if V.null $ V.tail hand
+    then print "finished round"
+    else playTrick handler ticket $ V.tail hand
 
-finishTrick handler ticket hand
-  | V.null $ V.tail hand = finishRound handler ticket
-  | otherwise            = playTrick handler ticket $ V.tail hand
-
-finishRound handler ticket = do
-  result <- get_round_result handler ticket
-  let status = f_RoundResult_status result
-  print status
-
+finishGame handler ticket = do
+  print "Game result:"
+  gameResult <- get_game_result handler ticket
+  print gameResult
+  print "DONE"
