@@ -54,6 +54,7 @@ module AgentVsAgent
       def recv_get_hand()
         result = receive_message(Get_hand_result)
         return result.success unless result.success.nil?
+        raise result.ex1 unless result.ex1.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_hand failed: unknown result')
       end
 
@@ -69,6 +70,8 @@ module AgentVsAgent
       def recv_pass_cards()
         result = receive_message(Pass_cards_result)
         return result.success unless result.success.nil?
+        raise result.ex1 unless result.ex1.nil?
+        raise result.ex2 unless result.ex2.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'pass_cards failed: unknown result')
       end
 
@@ -84,6 +87,7 @@ module AgentVsAgent
       def recv_get_trick()
         result = receive_message(Get_trick_result)
         return result.success unless result.success.nil?
+        raise result.ex1 unless result.ex1.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_trick failed: unknown result')
       end
 
@@ -99,6 +103,8 @@ module AgentVsAgent
       def recv_play_card()
         result = receive_message(Play_card_result)
         return result.success unless result.success.nil?
+        raise result.ex1 unless result.ex1.nil?
+        raise result.ex2 unless result.ex2.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'play_card failed: unknown result')
       end
 
@@ -114,6 +120,7 @@ module AgentVsAgent
       def recv_get_round_result()
         result = receive_message(Get_round_result_result)
         return result.success unless result.success.nil?
+        raise result.ex1 unless result.ex1.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_round_result failed: unknown result')
       end
 
@@ -129,6 +136,7 @@ module AgentVsAgent
       def recv_get_game_result()
         result = receive_message(Get_game_result_result)
         return result.success unless result.success.nil?
+        raise result.ex1 unless result.ex1.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_game_result failed: unknown result')
       end
 
@@ -154,42 +162,70 @@ module AgentVsAgent
       def process_get_hand(seqid, iprot, oprot)
         args = read_args(iprot, Get_hand_args)
         result = Get_hand_result.new()
-        result.success = @handler.get_hand(args.ticket)
+        begin
+          result.success = @handler.get_hand(args.ticket)
+        rescue ::AgentVsAgent::OutOfSequenceException => ex1
+          result.ex1 = ex1
+        end
         write_result(result, oprot, 'get_hand', seqid)
       end
 
       def process_pass_cards(seqid, iprot, oprot)
         args = read_args(iprot, Pass_cards_args)
         result = Pass_cards_result.new()
-        result.success = @handler.pass_cards(args.ticket, args.cards)
+        begin
+          result.success = @handler.pass_cards(args.ticket, args.cards)
+        rescue ::AgentVsAgent::OutOfSequenceException => ex1
+          result.ex1 = ex1
+        rescue ::AgentVsAgent::InvalidMoveException => ex2
+          result.ex2 = ex2
+        end
         write_result(result, oprot, 'pass_cards', seqid)
       end
 
       def process_get_trick(seqid, iprot, oprot)
         args = read_args(iprot, Get_trick_args)
         result = Get_trick_result.new()
-        result.success = @handler.get_trick(args.ticket)
+        begin
+          result.success = @handler.get_trick(args.ticket)
+        rescue ::AgentVsAgent::OutOfSequenceException => ex1
+          result.ex1 = ex1
+        end
         write_result(result, oprot, 'get_trick', seqid)
       end
 
       def process_play_card(seqid, iprot, oprot)
         args = read_args(iprot, Play_card_args)
         result = Play_card_result.new()
-        result.success = @handler.play_card(args.ticket, args.card)
+        begin
+          result.success = @handler.play_card(args.ticket, args.card)
+        rescue ::AgentVsAgent::OutOfSequenceException => ex1
+          result.ex1 = ex1
+        rescue ::AgentVsAgent::InvalidMoveException => ex2
+          result.ex2 = ex2
+        end
         write_result(result, oprot, 'play_card', seqid)
       end
 
       def process_get_round_result(seqid, iprot, oprot)
         args = read_args(iprot, Get_round_result_args)
         result = Get_round_result_result.new()
-        result.success = @handler.get_round_result(args.ticket)
+        begin
+          result.success = @handler.get_round_result(args.ticket)
+        rescue ::AgentVsAgent::OutOfSequenceException => ex1
+          result.ex1 = ex1
+        end
         write_result(result, oprot, 'get_round_result', seqid)
       end
 
       def process_get_game_result(seqid, iprot, oprot)
         args = read_args(iprot, Get_game_result_args)
         result = Get_game_result_result.new()
-        result.success = @handler.get_game_result(args.ticket)
+        begin
+          result.success = @handler.get_game_result(args.ticket)
+        rescue ::AgentVsAgent::OutOfSequenceException => ex1
+          result.ex1 = ex1
+        end
         write_result(result, oprot, 'get_game_result', seqid)
       end
 
@@ -283,9 +319,11 @@ module AgentVsAgent
     class Get_hand_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
+      EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
+        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::OutOfSequenceException}
       }
 
       def struct_fields; FIELDS; end
@@ -319,9 +357,13 @@ module AgentVsAgent
     class Pass_cards_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
+      EX1 = 1
+      EX2 = 2
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
+        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::OutOfSequenceException},
+        EX2 => {:type => ::Thrift::Types::STRUCT, :name => 'ex2', :class => ::AgentVsAgent::InvalidMoveException}
       }
 
       def struct_fields; FIELDS; end
@@ -352,9 +394,11 @@ module AgentVsAgent
     class Get_trick_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
+      EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::OutOfSequenceException}
       }
 
       def struct_fields; FIELDS; end
@@ -388,9 +432,13 @@ module AgentVsAgent
     class Play_card_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
+      EX1 = 1
+      EX2 = 2
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::Trick},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::OutOfSequenceException},
+        EX2 => {:type => ::Thrift::Types::STRUCT, :name => 'ex2', :class => ::AgentVsAgent::InvalidMoveException}
       }
 
       def struct_fields; FIELDS; end
@@ -421,9 +469,11 @@ module AgentVsAgent
     class Get_round_result_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
+      EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::RoundResult}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::RoundResult},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::OutOfSequenceException}
       }
 
       def struct_fields; FIELDS; end
@@ -454,9 +504,11 @@ module AgentVsAgent
     class Get_game_result_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
+      EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::GameResult}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::GameResult},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::OutOfSequenceException}
       }
 
       def struct_fields; FIELDS; end

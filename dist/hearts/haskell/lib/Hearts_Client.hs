@@ -105,6 +105,9 @@ recv_get_hand ip = do
   case f_Get_hand_result_success res of
     Just v -> return v
     Nothing -> do
+      case f_Get_hand_result_ex1 res of
+        Nothing -> return ()
+        Just _v -> throw _v
       throw (AppExn AE_MISSING_RESULT "get_hand failed: unknown result")
 pass_cards (ip,op) arg_ticket arg_cards = do
   send_pass_cards op arg_ticket arg_cards
@@ -128,6 +131,12 @@ recv_pass_cards ip = do
   case f_Pass_cards_result_success res of
     Just v -> return v
     Nothing -> do
+      case f_Pass_cards_result_ex1 res of
+        Nothing -> return ()
+        Just _v -> throw _v
+      case f_Pass_cards_result_ex2 res of
+        Nothing -> return ()
+        Just _v -> throw _v
       throw (AppExn AE_MISSING_RESULT "pass_cards failed: unknown result")
 get_trick (ip,op) arg_ticket = do
   send_get_trick op arg_ticket
@@ -151,6 +160,9 @@ recv_get_trick ip = do
   case f_Get_trick_result_success res of
     Just v -> return v
     Nothing -> do
+      case f_Get_trick_result_ex1 res of
+        Nothing -> return ()
+        Just _v -> throw _v
       throw (AppExn AE_MISSING_RESULT "get_trick failed: unknown result")
 play_card (ip,op) arg_ticket arg_card = do
   send_play_card op arg_ticket arg_card
@@ -174,6 +186,12 @@ recv_play_card ip = do
   case f_Play_card_result_success res of
     Just v -> return v
     Nothing -> do
+      case f_Play_card_result_ex1 res of
+        Nothing -> return ()
+        Just _v -> throw _v
+      case f_Play_card_result_ex2 res of
+        Nothing -> return ()
+        Just _v -> throw _v
       throw (AppExn AE_MISSING_RESULT "play_card failed: unknown result")
 get_round_result (ip,op) arg_ticket = do
   send_get_round_result op arg_ticket
@@ -197,6 +215,9 @@ recv_get_round_result ip = do
   case f_Get_round_result_result_success res of
     Just v -> return v
     Nothing -> do
+      case f_Get_round_result_result_ex1 res of
+        Nothing -> return ()
+        Just _v -> throw _v
       throw (AppExn AE_MISSING_RESULT "get_round_result failed: unknown result")
 get_game_result (ip,op) arg_ticket = do
   send_get_game_result op arg_ticket
@@ -220,4 +241,7 @@ recv_get_game_result ip = do
   case f_Get_game_result_result_success res of
     Just v -> return v
     Nothing -> do
+      case f_Get_game_result_result_ex1 res of
+        Nothing -> return ()
+        Just _v -> throw _v
       throw (AppExn AE_MISSING_RESULT "get_game_result failed: unknown result")

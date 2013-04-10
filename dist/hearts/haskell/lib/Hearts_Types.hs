@@ -459,3 +459,65 @@ read_GameResult iprot = do
   record <- read_GameResult_fields iprot (GameResult{f_GameResult_north=Nothing,f_GameResult_east=Nothing,f_GameResult_south=Nothing,f_GameResult_west=Nothing})
   readStructEnd iprot
   return record
+data OutOfSequenceException = OutOfSequenceException{f_OutOfSequenceException_message :: Maybe Text} deriving (Show,Eq,Typeable)
+instance Exception OutOfSequenceException
+instance Hashable OutOfSequenceException where
+  hashWithSalt salt record = salt   `hashWithSalt` f_OutOfSequenceException_message record  
+write_OutOfSequenceException oprot record = do
+  writeStructBegin oprot "OutOfSequenceException"
+  case f_OutOfSequenceException_message record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("message",T_STRING,1)
+    writeString oprot _v
+    writeFieldEnd oprot}
+  writeFieldStop oprot
+  writeStructEnd oprot
+read_OutOfSequenceException_fields iprot record = do
+  (_,_t49,_id50) <- readFieldBegin iprot
+  if _t49 == T_STOP then return record else
+    case _id50 of 
+      1 -> if _t49 == T_STRING then do
+        s <- readString iprot
+        read_OutOfSequenceException_fields iprot record{f_OutOfSequenceException_message=Just s}
+        else do
+          skip iprot _t49
+          read_OutOfSequenceException_fields iprot record
+      _ -> do
+        skip iprot _t49
+        readFieldEnd iprot
+        read_OutOfSequenceException_fields iprot record
+read_OutOfSequenceException iprot = do
+  _ <- readStructBegin iprot
+  record <- read_OutOfSequenceException_fields iprot (OutOfSequenceException{f_OutOfSequenceException_message=Nothing})
+  readStructEnd iprot
+  return record
+data InvalidMoveException = InvalidMoveException{f_InvalidMoveException_message :: Maybe Text} deriving (Show,Eq,Typeable)
+instance Exception InvalidMoveException
+instance Hashable InvalidMoveException where
+  hashWithSalt salt record = salt   `hashWithSalt` f_InvalidMoveException_message record  
+write_InvalidMoveException oprot record = do
+  writeStructBegin oprot "InvalidMoveException"
+  case f_InvalidMoveException_message record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("message",T_STRING,1)
+    writeString oprot _v
+    writeFieldEnd oprot}
+  writeFieldStop oprot
+  writeStructEnd oprot
+read_InvalidMoveException_fields iprot record = do
+  (_,_t54,_id55) <- readFieldBegin iprot
+  if _t54 == T_STOP then return record else
+    case _id55 of 
+      1 -> if _t54 == T_STRING then do
+        s <- readString iprot
+        read_InvalidMoveException_fields iprot record{f_InvalidMoveException_message=Just s}
+        else do
+          skip iprot _t54
+          read_InvalidMoveException_fields iprot record
+      _ -> do
+        skip iprot _t54
+        readFieldEnd iprot
+        read_InvalidMoveException_fields iprot record
+read_InvalidMoveException iprot = do
+  _ <- readStructBegin iprot
+  record <- read_InvalidMoveException_fields iprot (InvalidMoveException{f_InvalidMoveException_message=Nothing})
+  readStructEnd iprot
+  return record

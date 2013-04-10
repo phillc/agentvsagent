@@ -60,8 +60,8 @@ end
 
 guard :shell, all_on_start: true do
   watch("thrift/hearts.thrift.erb") do
-    AVA_VERSION = JSON.parse(File.read("package.json"))["version"]
-    puts "AVA VERSION #{AVA_VERSION}"
+    ava_version = JSON.parse(File.read("package.json"))["version"]
+    puts "AVA VERSION #{ava_version}"
     file = "thrift/hearts.thrift.erb"
     output = "thrift/gen/hearts.thrift"
     contents = ::ERB.new(File.read(file)).result(binding)

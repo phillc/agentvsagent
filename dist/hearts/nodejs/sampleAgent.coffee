@@ -12,6 +12,7 @@ class SampleAgent
     request = new types.EntryRequest()
     console.log "Entering arena", request
     @game.enter_arena request, (err, response) =>
+      throw err if err
       @ticket = response.ticket
       if @ticket
         @play()
@@ -20,6 +21,7 @@ class SampleAgent
     console.log "playing"
 
     @game.get_game_info @ticket, (err, gameInfo) =>
+      throw err if err
       console.log "game info:", gameInfo
       @gameInfo = gameInfo
       @roundNumber = 0
@@ -28,12 +30,14 @@ class SampleAgent
   playRound: ->
     @roundNumber += 1
     @game.get_hand @ticket, (err, hand) =>
+      throw err if err
       console.log "hand:", hand
       @hand = hand
 
       if @roundNumber % 4 != 0
         cardsToPass = hand.splice(0, 3)
         @game.pass_cards @ticket, cardsToPass, (err, receivedCards) =>
+          throw err if err
           @hand = @hand.concat(receivedCards)
           @playTrick(0)
       else
@@ -43,6 +47,7 @@ class SampleAgent
     console.log "[#{@gameInfo.position}, round #{@roundNumber}, trick #{trickNumber}, playing trick"
 
     @game.get_trick @ticket, (err, trick) =>
+      throw err if err
       console.log "Leading the trick #{@gameInfo.position}, #{trick}" if @gameInfo.position == trick.leader
       console.log "current trick:", trick
 
@@ -59,13 +64,16 @@ class SampleAgent
       @hand.splice(@hand.indexOf(cardToPlay), 1)
       console.log "[#{@gameInfo.position}] playing card:", cardToPlay
       @game.play_card @ticket, cardToPlay, (err, trickResult) =>
+        throw err if err
         console.log "trick: result", trickResult
 
         if trickNumber >= 12
           @game.get_round_result @ticket, (err, roundResult) =>
+            throw err if err
             console.log "round result:", roundResult
             if roundResult.status != types.GameStatus.NEXT_ROUND
               @game.get_game_result @ticket, (err, gameResult) ->
+                throw err if err
                 console.log "game result:", gameResult
                 connection.end()
             else

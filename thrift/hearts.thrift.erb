@@ -42,7 +42,7 @@ struct Ticket {
   2: required string agentId
 }
 
-const string CURRENT_VERSION = "<%= AVA_VERSION %>"
+const string CURRENT_VERSION = "<%= ava_version %>"
 struct EntryRequest {
   1: required string version=CURRENT_VERSION
 }
@@ -85,21 +85,25 @@ struct GameResult {
   4: required Score west
 }
 
+exception OutOfSequenceException {
+  1: required string message
+}
+
+exception InvalidMoveException {
+  1: required string message
+}
 
 service Hearts {
-  # These may need a wrapper around return values, to indicate things like
-  # game ended (in middle of trick... maybe someone played an invalid move)
-  # OR, maybe declare exceptions... InvalidMoveException, OutOfSequenceException...
   EntryResponse enter_arena(1: required EntryRequest request),
   GameInfo get_game_info(1: required Ticket ticket),
-  list<Card> get_hand(1: required Ticket ticket),
+  list<Card> get_hand(1: required Ticket ticket) throws (1: OutOfSequenceException ex1),
   # Right now, server not expecting you to call pass cards on the 4th round.
   # Need to figure out a way to not make it arbitrary. Maybe have get_hand also
   # return number of cards to pass, or tells you the position you are passing to
-  list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards),
-  Trick get_trick(1: required Ticket ticket),
-  Trick play_card(1: required Ticket ticket, 2: required Card card),
-  RoundResult get_round_result(1: required Ticket ticket),
-  GameResult get_game_result(1: required Ticket ticket)
+  list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards) throws (1: OutOfSequenceException ex1, 2: InvalidMoveException ex2),
+  Trick get_trick(1: required Ticket ticket) throws (1: OutOfSequenceException ex1),
+  Trick play_card(1: required Ticket ticket, 2: required Card card) throws (1: OutOfSequenceException ex1, 2: InvalidMoveException ex2),
+  RoundResult get_round_result(1: required Ticket ticket) throws (1: OutOfSequenceException ex1),
+  GameResult get_game_result(1: required Ticket ticket) throws (1: OutOfSequenceException ex1)
 }
 

@@ -645,4 +645,116 @@ AgentVsAgent.GameResult.prototype.write = function(output) {
   return;
 };
 
+AgentVsAgent.OutOfSequenceException = module.exports.OutOfSequenceException = function(args) {
+  Thrift.TException.call(this, "AgentVsAgent.OutOfSequenceException")
+  this.name = "AgentVsAgent.OutOfSequenceException"
+  this.message = null;
+  if (args) {
+    if (args.message !== undefined) {
+      this.message = args.message;
+    }
+  }
+};
+Thrift.inherits(AgentVsAgent.OutOfSequenceException, Thrift.TException);
+AgentVsAgent.OutOfSequenceException.prototype.name = 'OutOfSequenceException';
+AgentVsAgent.OutOfSequenceException.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.message = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+AgentVsAgent.OutOfSequenceException.prototype.write = function(output) {
+  output.writeStructBegin('OutOfSequenceException');
+  if (this.message !== null && this.message !== undefined) {
+    output.writeFieldBegin('message', Thrift.Type.STRING, 1);
+    output.writeString(this.message);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+AgentVsAgent.InvalidMoveException = module.exports.InvalidMoveException = function(args) {
+  Thrift.TException.call(this, "AgentVsAgent.InvalidMoveException")
+  this.name = "AgentVsAgent.InvalidMoveException"
+  this.message = null;
+  if (args) {
+    if (args.message !== undefined) {
+      this.message = args.message;
+    }
+  }
+};
+Thrift.inherits(AgentVsAgent.InvalidMoveException, Thrift.TException);
+AgentVsAgent.InvalidMoveException.prototype.name = 'InvalidMoveException';
+AgentVsAgent.InvalidMoveException.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.message = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+AgentVsAgent.InvalidMoveException.prototype.write = function(output) {
+  output.writeStructBegin('InvalidMoveException');
+  if (this.message !== null && this.message !== undefined) {
+    output.writeFieldBegin('message', Thrift.Type.STRING, 1);
+    output.writeString(this.message);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 ttypes.CURRENT_VERSION = '0.0.9';

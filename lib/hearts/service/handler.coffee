@@ -61,12 +61,23 @@ mapTrickToThrift = (trick) ->
   cards = trick.played.cards.map mapCardToThrift
   new types.Trick leader: mapPositionToThrift(trick.leader), played: cards
 
+mapErrorToThrift = (err) ->
+  switch err
+    when "outOfSequence" then new types.OutOfSequenceException(message: "Method call out of sequence")
+
 module.exports = class Handler
   constructor: (@arena) ->
 
+  _game: (ticket) ->
+    @arena.getGame(ticket.gameId)
+
+  _player: (ticket) ->
+    game = @_game(ticket)
+    game.getPlayer(ticket.agentId)
+
   enter_arena: (request, result) ->
     player = @arena.createPlayer()
-    player.recvStartedGame (gameId) =>
+    player.recvStartedGame (err, gameId) =>
       ticket = new types.Ticket(agentId: player.id, gameId: gameId)
       response = new types.EntryResponse(ticket: ticket)
 
@@ -88,53 +99,48 @@ module.exports = class Handler
 
   get_hand: (ticket, result) ->
     logger.info "Get hand", ticket
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
 
-    player.recvDealt (cards) =>
+    @_player(ticket).recvDealt (err, cards) =>
+      return result mapErrorToThrift(err), null if err
       thriftCards = cards.map mapCardToThrift
       result null, thriftCards
 
   pass_cards: (ticket, cards, result) ->
     logger.info "Pass cards", ticket, cards
-    #TODO: What if they send a blank or invalid ticket?
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
-
+    player = @_player(ticket)
     mappedCards = cards.map mapThriftToCard
     action = new actions.PassCards(player, mappedCards)
-    game.handleAction(action)
+    @_game(ticket).handleAction(action)
 
-    player.recvPassed (cards) =>
+    player.recvPassed (err, cards) =>
+      return result mapErrorToThrift(err), null if err
       thriftCards = cards.map mapCardToThrift
       result null, thriftCards
 
   get_trick: (ticket, result) ->
     logger.info "Get trick", ticket
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
 
-    player.recvTurn (trick) =>
+    @_player(ticket).recvTurn (err, trick) =>
+      return result mapErrorToThrift(err), null if err
       logger.info "Returning recvTurn", trick
       result null, mapTrickToThrift(trick)
 
   play_card: (ticket, card, result) ->
     logger.info "play_card", ticket
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
 
+    player = @_player(ticket)
     action = new actions.PlayCard(player, mapThriftToCard(card))
-    game.handleAction(action)
+    @_game(ticket).handleAction(action)
 
-    player.recvEndTrick (trick) =>
+    player.recvEndTrick (err, trick) =>
+      return result mapErrorToThrift(err), null if err
       result null, mapTrickToThrift(trick)
 
   get_round_result: (ticket, result) ->
     logger.info "get_round_result", ticket
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
 
-    player.recvEndRound (scores, status) ->
+    @_player(ticket).recvEndRound (err, scores, status) ->
+      return result mapErrorToThrift(err), null if err
       roundResult = new types.RoundResult(scores)
       roundResult.status = switch status
         when "endGame" then types.GameStatus.END_GAME
@@ -142,9 +148,7 @@ module.exports = class Handler
       result null, roundResult
 
   get_game_result: (ticket, result) ->
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
-
-    player.recvEndGame (scores) ->
+    @_player(ticket).recvEndGame (err, scores) ->
+      return result mapErrorToThrift(err), null if err
       gameResult = new types.GameResult(scores)
       result null, gameResult

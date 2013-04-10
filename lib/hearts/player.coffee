@@ -8,21 +8,23 @@ module.exports = class Player extends EventEmitter
   constructor: ->
     @id = IdGenerator.generate()
 
-    # TODO: Make this one queue, so that a game ended suddenly
-    # message can be put on the queue for any listener to pick up
+    @messages = []
     Player.events.forEach (event) =>
-      @["#{event}Messages"] = []
       name = event.charAt(0).toUpperCase() + event.slice(1)
       @["send#{name}"] = (args...) ->
-        @["#{event}Messages"].push [event, args]
-        @emit "message#{name}", event
+        @messages.push [event, args]
+        @emit "newMessage", event
 
       @["recv#{name}"] = (callback) ->
-        #TODO: What if message is unexpected?
-        if @["#{event}Messages"].length > 0
-          callback @["#{event}Messages"].shift()[1]...
+        if @messages.length > 0
+          @process event, callback
         else
-          @once "message#{name}", ->
-            callback @["#{event}Messages"].shift()[1]...
+          @once "newMessage", =>
+            @process event, callback
 
+  process: (event, callback) ->
+    if @messages[0][0] == event
+      callback null, @messages.shift()[1]...
+    else
+      callback "outOfSequence", null
 

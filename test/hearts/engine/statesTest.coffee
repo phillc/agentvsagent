@@ -40,7 +40,7 @@ describe "states", ->
       positions.sort().should.eql players.sort()
 
     it "emits a started event on the players", (done) ->
-      @player1.recvStartedGame (gameId) =>
+      @player1.recvStartedGame (err, gameId) =>
         gameId.should.equal(@game.id)
         done()
 
@@ -94,6 +94,10 @@ describe "states", ->
   describe "Dealing", ->
     beforeEach ->
       @game.states.startingGame.run()
+      @game.positions.north.messages.splice(0, 10)
+      @game.positions.east.messages.splice(0, 10)
+      @game.positions.south.messages.splice(0, 10)
+      @game.positions.west.messages.splice(0, 10)
       @game.states.startingRound.run()
       @nextStateCalls = 0
       @state = new states.Dealing(@game)
@@ -114,7 +118,7 @@ describe "states", ->
       @nextStateCalls.should.equal(1)
 
     it "emits a dealt event on the players", (done) ->
-      @player1.recvDealt (cards) =>
+      @player1.recvDealt (err, cards) =>
         cards.should.have.length(13)
         done()
 
@@ -125,6 +129,7 @@ describe "states", ->
       @game.states.startingGame.run()
       @game.states.startingRound.run()
       @game.states.dealing.run()
+      @game.positions.north.messages.splice(0, 10)
       @nextStateCalls = 0
       @state = new states.Passing(@game, "left")
 
@@ -141,7 +146,7 @@ describe "states", ->
       @state.handleAction new actions.PassCards(@game.positions.north, cards)
       @state.handleAction new actions.PassCards(@game.positions.east, cards)
       @state.handleAction new actions.PassCards(@game.positions.south, cards)
-      @game.positions.north.recvPassed (cards) ->
+      @game.positions.north.recvPassed (err, cards) ->
         cards.should.have.length(3)
         done()
 
@@ -262,6 +267,7 @@ describe "states", ->
     beforeEach ->
       @game.states.startingGame.run()
       @game.states.startingRound.run()
+      @game.positions.north.messages.splice(0, 10)
       @game.states.startingTrick.run()
       @nextStateCalls = 0
 
@@ -274,7 +280,7 @@ describe "states", ->
       @game.currentRound().currentTrick().played.cards[0].should.equal(card)
 
     it "emits an event on the player with the current trick", (done) ->
-      @game.positions.north.recvTurn (trick) =>
+      @game.positions.north.recvTurn (err, trick) =>
         trick.should.equal @game.currentRound().currentTrick()
         done()
       state = new states.WaitingForCard(@game, "north").run()
@@ -292,11 +298,12 @@ describe "states", ->
     beforeEach ->
       @game.states.startingGame.run()
       @game.states.startingRound.run()
+      @game.positions.north.messages.splice(0, 10)
       @game.states.startingTrick.run()
       @nextStateCalls = 0
 
     it "emits end trick event on each player", (done) ->
-      @game.positions.north.recvEndTrick (trick) =>
+      @game.positions.north.recvEndTrick (err, trick) =>
         trick.should.equal @game.currentRound().currentTrick()
         done()
 
@@ -310,13 +317,14 @@ describe "states", ->
   describe "EndingRound", ->
     beforeEach ->
       @game.states.startingGame.run()
+      @game.positions.north.messages.splice(0, 10)
       @game.stack = []
       @nextStateCalls = 0
 
     it "starts a new round if no one is over 100, and emits new round on each player", (done) ->
       @game.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
 
-      @game.positions.north.recvEndRound (round, status) ->
+      @game.positions.north.recvEndRound (err, round, status) ->
         status.should.equal 'nextRound'
         round.north.should.equal(10)
         round.east.should.equal(0)
@@ -331,7 +339,7 @@ describe "states", ->
     it "ends the game if someone reaches 100, and emits game end on each player", (done) ->
       @game.rounds.push({ scores: -> { north: 101, east: 0, south: 15, west: 1 }})
 
-      @game.positions.north.recvEndRound (round, status) ->
+      @game.positions.north.recvEndRound (err, round, status) ->
         status.should.equal 'endGame'
         round.north.should.equal(101)
         round.east.should.equal(0)
@@ -347,12 +355,13 @@ describe "states", ->
   describe "EndingGame", ->
     beforeEach ->
       @game.states.startingGame.run()
+      @game.positions.north.messages.splice(0, 10)
       @nextStateCalls = 0
       @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
       @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
 
     it "send the game scores to each player", (done) ->
-      @game.positions.north.recvEndGame (game) ->
+      @game.positions.north.recvEndGame (err, game) ->
         game.north.should.equal(100)
         game.east.should.equal(0)
         game.south.should.equal(30)

@@ -38,17 +38,17 @@ public class Hearts {
 
     public GameInfo get_game_info(Ticket ticket) throws org.apache.thrift.TException;
 
-    public List<Card> get_hand(Ticket ticket) throws org.apache.thrift.TException;
+    public List<Card> get_hand(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException;
 
-    public List<Card> pass_cards(Ticket ticket, List<Card> cards) throws org.apache.thrift.TException;
+    public List<Card> pass_cards(Ticket ticket, List<Card> cards) throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException;
 
-    public Trick get_trick(Ticket ticket) throws org.apache.thrift.TException;
+    public Trick get_trick(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException;
 
-    public Trick play_card(Ticket ticket, Card card) throws org.apache.thrift.TException;
+    public Trick play_card(Ticket ticket, Card card) throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException;
 
-    public RoundResult get_round_result(Ticket ticket) throws org.apache.thrift.TException;
+    public RoundResult get_round_result(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException;
 
-    public GameResult get_game_result(Ticket ticket) throws org.apache.thrift.TException;
+    public GameResult get_game_result(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException;
 
   }
 
@@ -138,7 +138,7 @@ public class Hearts {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "get_game_info failed: unknown result");
     }
 
-    public List<Card> get_hand(Ticket ticket) throws org.apache.thrift.TException
+    public List<Card> get_hand(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException
     {
       send_get_hand(ticket);
       return recv_get_hand();
@@ -151,17 +151,20 @@ public class Hearts {
       sendBase("get_hand", args);
     }
 
-    public List<Card> recv_get_hand() throws org.apache.thrift.TException
+    public List<Card> recv_get_hand() throws OutOfSequenceException, org.apache.thrift.TException
     {
       get_hand_result result = new get_hand_result();
       receiveBase(result, "get_hand");
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.ex1 != null) {
+        throw result.ex1;
+      }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "get_hand failed: unknown result");
     }
 
-    public List<Card> pass_cards(Ticket ticket, List<Card> cards) throws org.apache.thrift.TException
+    public List<Card> pass_cards(Ticket ticket, List<Card> cards) throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException
     {
       send_pass_cards(ticket, cards);
       return recv_pass_cards();
@@ -175,17 +178,23 @@ public class Hearts {
       sendBase("pass_cards", args);
     }
 
-    public List<Card> recv_pass_cards() throws org.apache.thrift.TException
+    public List<Card> recv_pass_cards() throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException
     {
       pass_cards_result result = new pass_cards_result();
       receiveBase(result, "pass_cards");
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.ex1 != null) {
+        throw result.ex1;
+      }
+      if (result.ex2 != null) {
+        throw result.ex2;
+      }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "pass_cards failed: unknown result");
     }
 
-    public Trick get_trick(Ticket ticket) throws org.apache.thrift.TException
+    public Trick get_trick(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException
     {
       send_get_trick(ticket);
       return recv_get_trick();
@@ -198,17 +207,20 @@ public class Hearts {
       sendBase("get_trick", args);
     }
 
-    public Trick recv_get_trick() throws org.apache.thrift.TException
+    public Trick recv_get_trick() throws OutOfSequenceException, org.apache.thrift.TException
     {
       get_trick_result result = new get_trick_result();
       receiveBase(result, "get_trick");
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.ex1 != null) {
+        throw result.ex1;
+      }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "get_trick failed: unknown result");
     }
 
-    public Trick play_card(Ticket ticket, Card card) throws org.apache.thrift.TException
+    public Trick play_card(Ticket ticket, Card card) throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException
     {
       send_play_card(ticket, card);
       return recv_play_card();
@@ -222,17 +234,23 @@ public class Hearts {
       sendBase("play_card", args);
     }
 
-    public Trick recv_play_card() throws org.apache.thrift.TException
+    public Trick recv_play_card() throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException
     {
       play_card_result result = new play_card_result();
       receiveBase(result, "play_card");
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.ex1 != null) {
+        throw result.ex1;
+      }
+      if (result.ex2 != null) {
+        throw result.ex2;
+      }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "play_card failed: unknown result");
     }
 
-    public RoundResult get_round_result(Ticket ticket) throws org.apache.thrift.TException
+    public RoundResult get_round_result(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException
     {
       send_get_round_result(ticket);
       return recv_get_round_result();
@@ -245,17 +263,20 @@ public class Hearts {
       sendBase("get_round_result", args);
     }
 
-    public RoundResult recv_get_round_result() throws org.apache.thrift.TException
+    public RoundResult recv_get_round_result() throws OutOfSequenceException, org.apache.thrift.TException
     {
       get_round_result_result result = new get_round_result_result();
       receiveBase(result, "get_round_result");
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.ex1 != null) {
+        throw result.ex1;
+      }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "get_round_result failed: unknown result");
     }
 
-    public GameResult get_game_result(Ticket ticket) throws org.apache.thrift.TException
+    public GameResult get_game_result(Ticket ticket) throws OutOfSequenceException, org.apache.thrift.TException
     {
       send_get_game_result(ticket);
       return recv_get_game_result();
@@ -268,12 +289,15 @@ public class Hearts {
       sendBase("get_game_result", args);
     }
 
-    public GameResult recv_get_game_result() throws org.apache.thrift.TException
+    public GameResult recv_get_game_result() throws OutOfSequenceException, org.apache.thrift.TException
     {
       get_game_result_result result = new get_game_result_result();
       receiveBase(result, "get_game_result");
       if (result.isSetSuccess()) {
         return result.success;
+      }
+      if (result.ex1 != null) {
+        throw result.ex1;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "get_game_result failed: unknown result");
     }
@@ -382,7 +406,7 @@ public class Hearts {
         prot.writeMessageEnd();
       }
 
-      public List<Card> getResult() throws org.apache.thrift.TException {
+      public List<Card> getResult() throws OutOfSequenceException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -417,7 +441,7 @@ public class Hearts {
         prot.writeMessageEnd();
       }
 
-      public List<Card> getResult() throws org.apache.thrift.TException {
+      public List<Card> getResult() throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -449,7 +473,7 @@ public class Hearts {
         prot.writeMessageEnd();
       }
 
-      public Trick getResult() throws org.apache.thrift.TException {
+      public Trick getResult() throws OutOfSequenceException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -484,7 +508,7 @@ public class Hearts {
         prot.writeMessageEnd();
       }
 
-      public Trick getResult() throws org.apache.thrift.TException {
+      public Trick getResult() throws OutOfSequenceException, InvalidMoveException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -516,7 +540,7 @@ public class Hearts {
         prot.writeMessageEnd();
       }
 
-      public RoundResult getResult() throws org.apache.thrift.TException {
+      public RoundResult getResult() throws OutOfSequenceException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -548,7 +572,7 @@ public class Hearts {
         prot.writeMessageEnd();
       }
 
-      public GameResult getResult() throws org.apache.thrift.TException {
+      public GameResult getResult() throws OutOfSequenceException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -637,7 +661,11 @@ public class Hearts {
 
       public get_hand_result getResult(I iface, get_hand_args args) throws org.apache.thrift.TException {
         get_hand_result result = new get_hand_result();
-        result.success = iface.get_hand(args.ticket);
+        try {
+          result.success = iface.get_hand(args.ticket);
+        } catch (OutOfSequenceException ex1) {
+          result.ex1 = ex1;
+        }
         return result;
       }
     }
@@ -657,7 +685,13 @@ public class Hearts {
 
       public pass_cards_result getResult(I iface, pass_cards_args args) throws org.apache.thrift.TException {
         pass_cards_result result = new pass_cards_result();
-        result.success = iface.pass_cards(args.ticket, args.cards);
+        try {
+          result.success = iface.pass_cards(args.ticket, args.cards);
+        } catch (OutOfSequenceException ex1) {
+          result.ex1 = ex1;
+        } catch (InvalidMoveException ex2) {
+          result.ex2 = ex2;
+        }
         return result;
       }
     }
@@ -677,7 +711,11 @@ public class Hearts {
 
       public get_trick_result getResult(I iface, get_trick_args args) throws org.apache.thrift.TException {
         get_trick_result result = new get_trick_result();
-        result.success = iface.get_trick(args.ticket);
+        try {
+          result.success = iface.get_trick(args.ticket);
+        } catch (OutOfSequenceException ex1) {
+          result.ex1 = ex1;
+        }
         return result;
       }
     }
@@ -697,7 +735,13 @@ public class Hearts {
 
       public play_card_result getResult(I iface, play_card_args args) throws org.apache.thrift.TException {
         play_card_result result = new play_card_result();
-        result.success = iface.play_card(args.ticket, args.card);
+        try {
+          result.success = iface.play_card(args.ticket, args.card);
+        } catch (OutOfSequenceException ex1) {
+          result.ex1 = ex1;
+        } catch (InvalidMoveException ex2) {
+          result.ex2 = ex2;
+        }
         return result;
       }
     }
@@ -717,7 +761,11 @@ public class Hearts {
 
       public get_round_result_result getResult(I iface, get_round_result_args args) throws org.apache.thrift.TException {
         get_round_result_result result = new get_round_result_result();
-        result.success = iface.get_round_result(args.ticket);
+        try {
+          result.success = iface.get_round_result(args.ticket);
+        } catch (OutOfSequenceException ex1) {
+          result.ex1 = ex1;
+        }
         return result;
       }
     }
@@ -737,7 +785,11 @@ public class Hearts {
 
       public get_game_result_result getResult(I iface, get_game_result_args args) throws org.apache.thrift.TException {
         get_game_result_result result = new get_game_result_result();
-        result.success = iface.get_game_result(args.ticket);
+        try {
+          result.success = iface.get_game_result(args.ticket);
+        } catch (OutOfSequenceException ex1) {
+          result.ex1 = ex1;
+        }
         return result;
       }
     }
@@ -2522,6 +2574,7 @@ public class Hearts {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("get_hand_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+    private static final org.apache.thrift.protocol.TField EX1_FIELD_DESC = new org.apache.thrift.protocol.TField("ex1", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -2530,10 +2583,12 @@ public class Hearts {
     }
 
     public List<Card> success; // required
+    public OutOfSequenceException ex1; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      EX1((short)1, "ex1");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -2550,6 +2605,8 @@ public class Hearts {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // EX1
+            return EX1;
           default:
             return null;
         }
@@ -2596,6 +2653,8 @@ public class Hearts {
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
               new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class))));
+      tmpMap.put(_Fields.EX1, new org.apache.thrift.meta_data.FieldMetaData("ex1", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_hand_result.class, metaDataMap);
     }
@@ -2604,10 +2663,12 @@ public class Hearts {
     }
 
     public get_hand_result(
-      List<Card> success)
+      List<Card> success,
+      OutOfSequenceException ex1)
     {
       this();
       this.success = success;
+      this.ex1 = ex1;
     }
 
     /**
@@ -2621,6 +2682,9 @@ public class Hearts {
         }
         this.success = __this__success;
       }
+      if (other.isSetEx1()) {
+        this.ex1 = new OutOfSequenceException(other.ex1);
+      }
     }
 
     public get_hand_result deepCopy() {
@@ -2630,6 +2694,7 @@ public class Hearts {
     @Override
     public void clear() {
       this.success = null;
+      this.ex1 = null;
     }
 
     public int getSuccessSize() {
@@ -2671,6 +2736,30 @@ public class Hearts {
       }
     }
 
+    public OutOfSequenceException getEx1() {
+      return this.ex1;
+    }
+
+    public get_hand_result setEx1(OutOfSequenceException ex1) {
+      this.ex1 = ex1;
+      return this;
+    }
+
+    public void unsetEx1() {
+      this.ex1 = null;
+    }
+
+    /** Returns true if field ex1 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx1() {
+      return this.ex1 != null;
+    }
+
+    public void setEx1IsSet(boolean value) {
+      if (!value) {
+        this.ex1 = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -2681,6 +2770,14 @@ public class Hearts {
         }
         break;
 
+      case EX1:
+        if (value == null) {
+          unsetEx1();
+        } else {
+          setEx1((OutOfSequenceException)value);
+        }
+        break;
+
       }
     }
 
@@ -2688,6 +2785,9 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return getSuccess();
+
+      case EX1:
+        return getEx1();
 
       }
       throw new IllegalStateException();
@@ -2702,6 +2802,8 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case EX1:
+        return isSetEx1();
       }
       throw new IllegalStateException();
     }
@@ -2725,6 +2827,15 @@ public class Hearts {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_ex1 = true && this.isSetEx1();
+      boolean that_present_ex1 = true && that.isSetEx1();
+      if (this_present_ex1 || that_present_ex1) {
+        if (!(this_present_ex1 && that_present_ex1))
+          return false;
+        if (!this.ex1.equals(that.ex1))
           return false;
       }
 
@@ -2754,6 +2865,16 @@ public class Hearts {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetEx1()).compareTo(typedOther.isSetEx1());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx1()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex1, typedOther.ex1);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -2779,6 +2900,14 @@ public class Hearts {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex1:");
+      if (this.ex1 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex1);
       }
       first = false;
       sb.append(")");
@@ -2843,6 +2972,15 @@ public class Hearts {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // EX1
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex1 = new OutOfSequenceException();
+                struct.ex1.read(iprot);
+                struct.setEx1IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -2870,6 +3008,11 @@ public class Hearts {
           }
           oprot.writeFieldEnd();
         }
+        if (struct.ex1 != null) {
+          oprot.writeFieldBegin(EX1_FIELD_DESC);
+          struct.ex1.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -2891,7 +3034,10 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx1()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
@@ -2901,12 +3047,15 @@ public class Hearts {
             }
           }
         }
+        if (struct.isSetEx1()) {
+          struct.ex1.write(oprot);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_hand_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           {
             org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
@@ -2920,6 +3069,11 @@ public class Hearts {
             }
           }
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ex1 = new OutOfSequenceException();
+          struct.ex1.read(iprot);
+          struct.setEx1IsSet(true);
         }
       }
     }
@@ -3432,6 +3586,8 @@ public class Hearts {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("pass_cards_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+    private static final org.apache.thrift.protocol.TField EX1_FIELD_DESC = new org.apache.thrift.protocol.TField("ex1", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField EX2_FIELD_DESC = new org.apache.thrift.protocol.TField("ex2", org.apache.thrift.protocol.TType.STRUCT, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -3440,10 +3596,14 @@ public class Hearts {
     }
 
     public List<Card> success; // required
+    public OutOfSequenceException ex1; // required
+    public InvalidMoveException ex2; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      EX1((short)1, "ex1"),
+      EX2((short)2, "ex2");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -3460,6 +3620,10 @@ public class Hearts {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // EX1
+            return EX1;
+          case 2: // EX2
+            return EX2;
           default:
             return null;
         }
@@ -3506,6 +3670,10 @@ public class Hearts {
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
               new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class))));
+      tmpMap.put(_Fields.EX1, new org.apache.thrift.meta_data.FieldMetaData("ex1", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
+      tmpMap.put(_Fields.EX2, new org.apache.thrift.meta_data.FieldMetaData("ex2", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pass_cards_result.class, metaDataMap);
     }
@@ -3514,10 +3682,14 @@ public class Hearts {
     }
 
     public pass_cards_result(
-      List<Card> success)
+      List<Card> success,
+      OutOfSequenceException ex1,
+      InvalidMoveException ex2)
     {
       this();
       this.success = success;
+      this.ex1 = ex1;
+      this.ex2 = ex2;
     }
 
     /**
@@ -3531,6 +3703,12 @@ public class Hearts {
         }
         this.success = __this__success;
       }
+      if (other.isSetEx1()) {
+        this.ex1 = new OutOfSequenceException(other.ex1);
+      }
+      if (other.isSetEx2()) {
+        this.ex2 = new InvalidMoveException(other.ex2);
+      }
     }
 
     public pass_cards_result deepCopy() {
@@ -3540,6 +3718,8 @@ public class Hearts {
     @Override
     public void clear() {
       this.success = null;
+      this.ex1 = null;
+      this.ex2 = null;
     }
 
     public int getSuccessSize() {
@@ -3581,6 +3761,54 @@ public class Hearts {
       }
     }
 
+    public OutOfSequenceException getEx1() {
+      return this.ex1;
+    }
+
+    public pass_cards_result setEx1(OutOfSequenceException ex1) {
+      this.ex1 = ex1;
+      return this;
+    }
+
+    public void unsetEx1() {
+      this.ex1 = null;
+    }
+
+    /** Returns true if field ex1 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx1() {
+      return this.ex1 != null;
+    }
+
+    public void setEx1IsSet(boolean value) {
+      if (!value) {
+        this.ex1 = null;
+      }
+    }
+
+    public InvalidMoveException getEx2() {
+      return this.ex2;
+    }
+
+    public pass_cards_result setEx2(InvalidMoveException ex2) {
+      this.ex2 = ex2;
+      return this;
+    }
+
+    public void unsetEx2() {
+      this.ex2 = null;
+    }
+
+    /** Returns true if field ex2 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx2() {
+      return this.ex2 != null;
+    }
+
+    public void setEx2IsSet(boolean value) {
+      if (!value) {
+        this.ex2 = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -3591,6 +3819,22 @@ public class Hearts {
         }
         break;
 
+      case EX1:
+        if (value == null) {
+          unsetEx1();
+        } else {
+          setEx1((OutOfSequenceException)value);
+        }
+        break;
+
+      case EX2:
+        if (value == null) {
+          unsetEx2();
+        } else {
+          setEx2((InvalidMoveException)value);
+        }
+        break;
+
       }
     }
 
@@ -3598,6 +3842,12 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return getSuccess();
+
+      case EX1:
+        return getEx1();
+
+      case EX2:
+        return getEx2();
 
       }
       throw new IllegalStateException();
@@ -3612,6 +3862,10 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case EX1:
+        return isSetEx1();
+      case EX2:
+        return isSetEx2();
       }
       throw new IllegalStateException();
     }
@@ -3635,6 +3889,24 @@ public class Hearts {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_ex1 = true && this.isSetEx1();
+      boolean that_present_ex1 = true && that.isSetEx1();
+      if (this_present_ex1 || that_present_ex1) {
+        if (!(this_present_ex1 && that_present_ex1))
+          return false;
+        if (!this.ex1.equals(that.ex1))
+          return false;
+      }
+
+      boolean this_present_ex2 = true && this.isSetEx2();
+      boolean that_present_ex2 = true && that.isSetEx2();
+      if (this_present_ex2 || that_present_ex2) {
+        if (!(this_present_ex2 && that_present_ex2))
+          return false;
+        if (!this.ex2.equals(that.ex2))
           return false;
       }
 
@@ -3664,6 +3936,26 @@ public class Hearts {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetEx1()).compareTo(typedOther.isSetEx1());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx1()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex1, typedOther.ex1);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetEx2()).compareTo(typedOther.isSetEx2());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx2()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex2, typedOther.ex2);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -3689,6 +3981,22 @@ public class Hearts {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex1:");
+      if (this.ex1 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex1);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex2:");
+      if (this.ex2 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex2);
       }
       first = false;
       sb.append(")");
@@ -3753,6 +4061,24 @@ public class Hearts {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // EX1
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex1 = new OutOfSequenceException();
+                struct.ex1.read(iprot);
+                struct.setEx1IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // EX2
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex2 = new InvalidMoveException();
+                struct.ex2.read(iprot);
+                struct.setEx2IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -3780,6 +4106,16 @@ public class Hearts {
           }
           oprot.writeFieldEnd();
         }
+        if (struct.ex1 != null) {
+          oprot.writeFieldBegin(EX1_FIELD_DESC);
+          struct.ex1.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ex2 != null) {
+          oprot.writeFieldBegin(EX2_FIELD_DESC);
+          struct.ex2.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -3801,7 +4137,13 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx1()) {
+          optionals.set(1);
+        }
+        if (struct.isSetEx2()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
@@ -3811,12 +4153,18 @@ public class Hearts {
             }
           }
         }
+        if (struct.isSetEx1()) {
+          struct.ex1.write(oprot);
+        }
+        if (struct.isSetEx2()) {
+          struct.ex2.write(oprot);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, pass_cards_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(3);
         if (incoming.get(0)) {
           {
             org.apache.thrift.protocol.TList _list29 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
@@ -3830,6 +4178,16 @@ public class Hearts {
             }
           }
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ex1 = new OutOfSequenceException();
+          struct.ex1.read(iprot);
+          struct.setEx1IsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.ex2 = new InvalidMoveException();
+          struct.ex2.read(iprot);
+          struct.setEx2IsSet(true);
         }
       }
     }
@@ -4192,6 +4550,7 @@ public class Hearts {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("get_trick_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField EX1_FIELD_DESC = new org.apache.thrift.protocol.TField("ex1", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -4200,10 +4559,12 @@ public class Hearts {
     }
 
     public Trick success; // required
+    public OutOfSequenceException ex1; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      EX1((short)1, "ex1");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -4220,6 +4581,8 @@ public class Hearts {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // EX1
+            return EX1;
           default:
             return null;
         }
@@ -4265,6 +4628,8 @@ public class Hearts {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Trick.class)));
+      tmpMap.put(_Fields.EX1, new org.apache.thrift.meta_data.FieldMetaData("ex1", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_trick_result.class, metaDataMap);
     }
@@ -4273,10 +4638,12 @@ public class Hearts {
     }
 
     public get_trick_result(
-      Trick success)
+      Trick success,
+      OutOfSequenceException ex1)
     {
       this();
       this.success = success;
+      this.ex1 = ex1;
     }
 
     /**
@@ -4285,6 +4652,9 @@ public class Hearts {
     public get_trick_result(get_trick_result other) {
       if (other.isSetSuccess()) {
         this.success = new Trick(other.success);
+      }
+      if (other.isSetEx1()) {
+        this.ex1 = new OutOfSequenceException(other.ex1);
       }
     }
 
@@ -4295,6 +4665,7 @@ public class Hearts {
     @Override
     public void clear() {
       this.success = null;
+      this.ex1 = null;
     }
 
     public Trick getSuccess() {
@@ -4321,6 +4692,30 @@ public class Hearts {
       }
     }
 
+    public OutOfSequenceException getEx1() {
+      return this.ex1;
+    }
+
+    public get_trick_result setEx1(OutOfSequenceException ex1) {
+      this.ex1 = ex1;
+      return this;
+    }
+
+    public void unsetEx1() {
+      this.ex1 = null;
+    }
+
+    /** Returns true if field ex1 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx1() {
+      return this.ex1 != null;
+    }
+
+    public void setEx1IsSet(boolean value) {
+      if (!value) {
+        this.ex1 = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -4331,6 +4726,14 @@ public class Hearts {
         }
         break;
 
+      case EX1:
+        if (value == null) {
+          unsetEx1();
+        } else {
+          setEx1((OutOfSequenceException)value);
+        }
+        break;
+
       }
     }
 
@@ -4338,6 +4741,9 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return getSuccess();
+
+      case EX1:
+        return getEx1();
 
       }
       throw new IllegalStateException();
@@ -4352,6 +4758,8 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case EX1:
+        return isSetEx1();
       }
       throw new IllegalStateException();
     }
@@ -4375,6 +4783,15 @@ public class Hearts {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_ex1 = true && this.isSetEx1();
+      boolean that_present_ex1 = true && that.isSetEx1();
+      if (this_present_ex1 || that_present_ex1) {
+        if (!(this_present_ex1 && that_present_ex1))
+          return false;
+        if (!this.ex1.equals(that.ex1))
           return false;
       }
 
@@ -4404,6 +4821,16 @@ public class Hearts {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetEx1()).compareTo(typedOther.isSetEx1());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx1()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex1, typedOther.ex1);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -4429,6 +4856,14 @@ public class Hearts {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex1:");
+      if (this.ex1 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex1);
       }
       first = false;
       sb.append(")");
@@ -4486,6 +4921,15 @@ public class Hearts {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // EX1
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex1 = new OutOfSequenceException();
+                struct.ex1.read(iprot);
+                struct.setEx1IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -4504,6 +4948,11 @@ public class Hearts {
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ex1 != null) {
+          oprot.writeFieldBegin(EX1_FIELD_DESC);
+          struct.ex1.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -4527,20 +4976,31 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx1()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
           struct.success.write(oprot);
+        }
+        if (struct.isSetEx1()) {
+          struct.ex1.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_trick_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.success = new Trick();
           struct.success.read(iprot);
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ex1 = new OutOfSequenceException();
+          struct.ex1.read(iprot);
+          struct.setEx1IsSet(true);
         }
       }
     }
@@ -5004,6 +5464,8 @@ public class Hearts {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("play_card_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField EX1_FIELD_DESC = new org.apache.thrift.protocol.TField("ex1", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField EX2_FIELD_DESC = new org.apache.thrift.protocol.TField("ex2", org.apache.thrift.protocol.TType.STRUCT, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -5012,10 +5474,14 @@ public class Hearts {
     }
 
     public Trick success; // required
+    public OutOfSequenceException ex1; // required
+    public InvalidMoveException ex2; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      EX1((short)1, "ex1"),
+      EX2((short)2, "ex2");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -5032,6 +5498,10 @@ public class Hearts {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // EX1
+            return EX1;
+          case 2: // EX2
+            return EX2;
           default:
             return null;
         }
@@ -5077,6 +5547,10 @@ public class Hearts {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Trick.class)));
+      tmpMap.put(_Fields.EX1, new org.apache.thrift.meta_data.FieldMetaData("ex1", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
+      tmpMap.put(_Fields.EX2, new org.apache.thrift.meta_data.FieldMetaData("ex2", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(play_card_result.class, metaDataMap);
     }
@@ -5085,10 +5559,14 @@ public class Hearts {
     }
 
     public play_card_result(
-      Trick success)
+      Trick success,
+      OutOfSequenceException ex1,
+      InvalidMoveException ex2)
     {
       this();
       this.success = success;
+      this.ex1 = ex1;
+      this.ex2 = ex2;
     }
 
     /**
@@ -5097,6 +5575,12 @@ public class Hearts {
     public play_card_result(play_card_result other) {
       if (other.isSetSuccess()) {
         this.success = new Trick(other.success);
+      }
+      if (other.isSetEx1()) {
+        this.ex1 = new OutOfSequenceException(other.ex1);
+      }
+      if (other.isSetEx2()) {
+        this.ex2 = new InvalidMoveException(other.ex2);
       }
     }
 
@@ -5107,6 +5591,8 @@ public class Hearts {
     @Override
     public void clear() {
       this.success = null;
+      this.ex1 = null;
+      this.ex2 = null;
     }
 
     public Trick getSuccess() {
@@ -5133,6 +5619,54 @@ public class Hearts {
       }
     }
 
+    public OutOfSequenceException getEx1() {
+      return this.ex1;
+    }
+
+    public play_card_result setEx1(OutOfSequenceException ex1) {
+      this.ex1 = ex1;
+      return this;
+    }
+
+    public void unsetEx1() {
+      this.ex1 = null;
+    }
+
+    /** Returns true if field ex1 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx1() {
+      return this.ex1 != null;
+    }
+
+    public void setEx1IsSet(boolean value) {
+      if (!value) {
+        this.ex1 = null;
+      }
+    }
+
+    public InvalidMoveException getEx2() {
+      return this.ex2;
+    }
+
+    public play_card_result setEx2(InvalidMoveException ex2) {
+      this.ex2 = ex2;
+      return this;
+    }
+
+    public void unsetEx2() {
+      this.ex2 = null;
+    }
+
+    /** Returns true if field ex2 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx2() {
+      return this.ex2 != null;
+    }
+
+    public void setEx2IsSet(boolean value) {
+      if (!value) {
+        this.ex2 = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -5143,6 +5677,22 @@ public class Hearts {
         }
         break;
 
+      case EX1:
+        if (value == null) {
+          unsetEx1();
+        } else {
+          setEx1((OutOfSequenceException)value);
+        }
+        break;
+
+      case EX2:
+        if (value == null) {
+          unsetEx2();
+        } else {
+          setEx2((InvalidMoveException)value);
+        }
+        break;
+
       }
     }
 
@@ -5150,6 +5700,12 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return getSuccess();
+
+      case EX1:
+        return getEx1();
+
+      case EX2:
+        return getEx2();
 
       }
       throw new IllegalStateException();
@@ -5164,6 +5720,10 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case EX1:
+        return isSetEx1();
+      case EX2:
+        return isSetEx2();
       }
       throw new IllegalStateException();
     }
@@ -5187,6 +5747,24 @@ public class Hearts {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_ex1 = true && this.isSetEx1();
+      boolean that_present_ex1 = true && that.isSetEx1();
+      if (this_present_ex1 || that_present_ex1) {
+        if (!(this_present_ex1 && that_present_ex1))
+          return false;
+        if (!this.ex1.equals(that.ex1))
+          return false;
+      }
+
+      boolean this_present_ex2 = true && this.isSetEx2();
+      boolean that_present_ex2 = true && that.isSetEx2();
+      if (this_present_ex2 || that_present_ex2) {
+        if (!(this_present_ex2 && that_present_ex2))
+          return false;
+        if (!this.ex2.equals(that.ex2))
           return false;
       }
 
@@ -5216,6 +5794,26 @@ public class Hearts {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetEx1()).compareTo(typedOther.isSetEx1());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx1()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex1, typedOther.ex1);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetEx2()).compareTo(typedOther.isSetEx2());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx2()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex2, typedOther.ex2);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -5241,6 +5839,22 @@ public class Hearts {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex1:");
+      if (this.ex1 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex1);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex2:");
+      if (this.ex2 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex2);
       }
       first = false;
       sb.append(")");
@@ -5298,6 +5912,24 @@ public class Hearts {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // EX1
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex1 = new OutOfSequenceException();
+                struct.ex1.read(iprot);
+                struct.setEx1IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // EX2
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex2 = new InvalidMoveException();
+                struct.ex2.read(iprot);
+                struct.setEx2IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -5316,6 +5948,16 @@ public class Hearts {
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ex1 != null) {
+          oprot.writeFieldBegin(EX1_FIELD_DESC);
+          struct.ex1.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ex2 != null) {
+          oprot.writeFieldBegin(EX2_FIELD_DESC);
+          struct.ex2.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -5339,20 +5981,42 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx1()) {
+          optionals.set(1);
+        }
+        if (struct.isSetEx2()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
         if (struct.isSetSuccess()) {
           struct.success.write(oprot);
+        }
+        if (struct.isSetEx1()) {
+          struct.ex1.write(oprot);
+        }
+        if (struct.isSetEx2()) {
+          struct.ex2.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, play_card_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(3);
         if (incoming.get(0)) {
           struct.success = new Trick();
           struct.success.read(iprot);
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ex1 = new OutOfSequenceException();
+          struct.ex1.read(iprot);
+          struct.setEx1IsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.ex2 = new InvalidMoveException();
+          struct.ex2.read(iprot);
+          struct.setEx2IsSet(true);
         }
       }
     }
@@ -5715,6 +6379,7 @@ public class Hearts {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("get_round_result_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField EX1_FIELD_DESC = new org.apache.thrift.protocol.TField("ex1", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -5723,10 +6388,12 @@ public class Hearts {
     }
 
     public RoundResult success; // required
+    public OutOfSequenceException ex1; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      EX1((short)1, "ex1");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -5743,6 +6410,8 @@ public class Hearts {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // EX1
+            return EX1;
           default:
             return null;
         }
@@ -5788,6 +6457,8 @@ public class Hearts {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, RoundResult.class)));
+      tmpMap.put(_Fields.EX1, new org.apache.thrift.meta_data.FieldMetaData("ex1", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_round_result_result.class, metaDataMap);
     }
@@ -5796,10 +6467,12 @@ public class Hearts {
     }
 
     public get_round_result_result(
-      RoundResult success)
+      RoundResult success,
+      OutOfSequenceException ex1)
     {
       this();
       this.success = success;
+      this.ex1 = ex1;
     }
 
     /**
@@ -5808,6 +6481,9 @@ public class Hearts {
     public get_round_result_result(get_round_result_result other) {
       if (other.isSetSuccess()) {
         this.success = new RoundResult(other.success);
+      }
+      if (other.isSetEx1()) {
+        this.ex1 = new OutOfSequenceException(other.ex1);
       }
     }
 
@@ -5818,6 +6494,7 @@ public class Hearts {
     @Override
     public void clear() {
       this.success = null;
+      this.ex1 = null;
     }
 
     public RoundResult getSuccess() {
@@ -5844,6 +6521,30 @@ public class Hearts {
       }
     }
 
+    public OutOfSequenceException getEx1() {
+      return this.ex1;
+    }
+
+    public get_round_result_result setEx1(OutOfSequenceException ex1) {
+      this.ex1 = ex1;
+      return this;
+    }
+
+    public void unsetEx1() {
+      this.ex1 = null;
+    }
+
+    /** Returns true if field ex1 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx1() {
+      return this.ex1 != null;
+    }
+
+    public void setEx1IsSet(boolean value) {
+      if (!value) {
+        this.ex1 = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -5854,6 +6555,14 @@ public class Hearts {
         }
         break;
 
+      case EX1:
+        if (value == null) {
+          unsetEx1();
+        } else {
+          setEx1((OutOfSequenceException)value);
+        }
+        break;
+
       }
     }
 
@@ -5861,6 +6570,9 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return getSuccess();
+
+      case EX1:
+        return getEx1();
 
       }
       throw new IllegalStateException();
@@ -5875,6 +6587,8 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case EX1:
+        return isSetEx1();
       }
       throw new IllegalStateException();
     }
@@ -5898,6 +6612,15 @@ public class Hearts {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_ex1 = true && this.isSetEx1();
+      boolean that_present_ex1 = true && that.isSetEx1();
+      if (this_present_ex1 || that_present_ex1) {
+        if (!(this_present_ex1 && that_present_ex1))
+          return false;
+        if (!this.ex1.equals(that.ex1))
           return false;
       }
 
@@ -5927,6 +6650,16 @@ public class Hearts {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetEx1()).compareTo(typedOther.isSetEx1());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx1()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex1, typedOther.ex1);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -5952,6 +6685,14 @@ public class Hearts {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex1:");
+      if (this.ex1 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex1);
       }
       first = false;
       sb.append(")");
@@ -6009,6 +6750,15 @@ public class Hearts {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // EX1
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex1 = new OutOfSequenceException();
+                struct.ex1.read(iprot);
+                struct.setEx1IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -6027,6 +6777,11 @@ public class Hearts {
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ex1 != null) {
+          oprot.writeFieldBegin(EX1_FIELD_DESC);
+          struct.ex1.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -6050,20 +6805,31 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx1()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
           struct.success.write(oprot);
+        }
+        if (struct.isSetEx1()) {
+          struct.ex1.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_round_result_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.success = new RoundResult();
           struct.success.read(iprot);
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ex1 = new OutOfSequenceException();
+          struct.ex1.read(iprot);
+          struct.setEx1IsSet(true);
         }
       }
     }
@@ -6426,6 +7192,7 @@ public class Hearts {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("get_game_result_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField EX1_FIELD_DESC = new org.apache.thrift.protocol.TField("ex1", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -6434,10 +7201,12 @@ public class Hearts {
     }
 
     public GameResult success; // required
+    public OutOfSequenceException ex1; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
+      SUCCESS((short)0, "success"),
+      EX1((short)1, "ex1");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -6454,6 +7223,8 @@ public class Hearts {
         switch(fieldId) {
           case 0: // SUCCESS
             return SUCCESS;
+          case 1: // EX1
+            return EX1;
           default:
             return null;
         }
@@ -6499,6 +7270,8 @@ public class Hearts {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, GameResult.class)));
+      tmpMap.put(_Fields.EX1, new org.apache.thrift.meta_data.FieldMetaData("ex1", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(get_game_result_result.class, metaDataMap);
     }
@@ -6507,10 +7280,12 @@ public class Hearts {
     }
 
     public get_game_result_result(
-      GameResult success)
+      GameResult success,
+      OutOfSequenceException ex1)
     {
       this();
       this.success = success;
+      this.ex1 = ex1;
     }
 
     /**
@@ -6519,6 +7294,9 @@ public class Hearts {
     public get_game_result_result(get_game_result_result other) {
       if (other.isSetSuccess()) {
         this.success = new GameResult(other.success);
+      }
+      if (other.isSetEx1()) {
+        this.ex1 = new OutOfSequenceException(other.ex1);
       }
     }
 
@@ -6529,6 +7307,7 @@ public class Hearts {
     @Override
     public void clear() {
       this.success = null;
+      this.ex1 = null;
     }
 
     public GameResult getSuccess() {
@@ -6555,6 +7334,30 @@ public class Hearts {
       }
     }
 
+    public OutOfSequenceException getEx1() {
+      return this.ex1;
+    }
+
+    public get_game_result_result setEx1(OutOfSequenceException ex1) {
+      this.ex1 = ex1;
+      return this;
+    }
+
+    public void unsetEx1() {
+      this.ex1 = null;
+    }
+
+    /** Returns true if field ex1 is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx1() {
+      return this.ex1 != null;
+    }
+
+    public void setEx1IsSet(boolean value) {
+      if (!value) {
+        this.ex1 = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
@@ -6565,6 +7368,14 @@ public class Hearts {
         }
         break;
 
+      case EX1:
+        if (value == null) {
+          unsetEx1();
+        } else {
+          setEx1((OutOfSequenceException)value);
+        }
+        break;
+
       }
     }
 
@@ -6572,6 +7383,9 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return getSuccess();
+
+      case EX1:
+        return getEx1();
 
       }
       throw new IllegalStateException();
@@ -6586,6 +7400,8 @@ public class Hearts {
       switch (field) {
       case SUCCESS:
         return isSetSuccess();
+      case EX1:
+        return isSetEx1();
       }
       throw new IllegalStateException();
     }
@@ -6609,6 +7425,15 @@ public class Hearts {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_ex1 = true && this.isSetEx1();
+      boolean that_present_ex1 = true && that.isSetEx1();
+      if (this_present_ex1 || that_present_ex1) {
+        if (!(this_present_ex1 && that_present_ex1))
+          return false;
+        if (!this.ex1.equals(that.ex1))
           return false;
       }
 
@@ -6638,6 +7463,16 @@ public class Hearts {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetEx1()).compareTo(typedOther.isSetEx1());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx1()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex1, typedOther.ex1);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -6663,6 +7498,14 @@ public class Hearts {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ex1:");
+      if (this.ex1 == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex1);
       }
       first = false;
       sb.append(")");
@@ -6720,6 +7563,15 @@ public class Hearts {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 1: // EX1
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex1 = new OutOfSequenceException();
+                struct.ex1.read(iprot);
+                struct.setEx1IsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -6738,6 +7590,11 @@ public class Hearts {
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ex1 != null) {
+          oprot.writeFieldBegin(EX1_FIELD_DESC);
+          struct.ex1.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -6761,20 +7618,31 @@ public class Hearts {
         if (struct.isSetSuccess()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx1()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
           struct.success.write(oprot);
+        }
+        if (struct.isSetEx1()) {
+          struct.ex1.write(oprot);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, get_game_result_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.success = new GameResult();
           struct.success.read(iprot);
           struct.setSuccessIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ex1 = new OutOfSequenceException();
+          struct.ex1.read(iprot);
+          struct.setEx1IsSet(true);
         }
       }
     }

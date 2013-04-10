@@ -232,4 +232,48 @@ module AgentVsAgent
     ::Thrift::Struct.generate_accessors self
   end
 
+  class OutOfSequenceException < ::Thrift::Exception
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    def initialize(message=nil)
+      super()
+      self.message = message
+    end
+
+    MESSAGE = 1
+
+    FIELDS = {
+      MESSAGE => {:type => ::Thrift::Types::STRING, :name => 'message'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field message is unset!') unless @message
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class InvalidMoveException < ::Thrift::Exception
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    def initialize(message=nil)
+      super()
+      self.message = message
+    end
+
+    MESSAGE = 1
+
+    FIELDS = {
+      MESSAGE => {:type => ::Thrift::Types::STRING, :name => 'message'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field message is unset!') unless @message
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
 end
