@@ -56,8 +56,8 @@ module.exports = class Game
     @stack.push("startingGame")
     @nextState()
 
-  handleAction: (action) ->
-    @currentState.handleAction(action)
+  handleAction: (action, callback) ->
+    @currentState.handleAction(action, callback)
 
   scores: ->
     @rounds.map((round) -> round.scores()).reduce (memo, scores) ->

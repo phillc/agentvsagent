@@ -8,8 +8,8 @@ class State
 
   run: ->
 
-  handleAction: (action) ->
-    false
+  handleAction: (action, callback) ->
+    callback("actionOutOfSequence", null)
 
 exports.StartingGame = class StartingGame extends State
   run: ->

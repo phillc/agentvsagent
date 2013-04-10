@@ -64,6 +64,7 @@ mapTrickToThrift = (trick) ->
 mapErrorToThrift = (err) ->
   switch err
     when "outOfSequence" then new types.OutOfSequenceException(message: "Method call out of sequence")
+    when "actionOutOfSequence" then new types.OutOfSequenceException(message: "Action requested out of sequence")
 
 module.exports = class Handler
   constructor: (@arena) ->

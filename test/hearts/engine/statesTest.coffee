@@ -20,7 +20,6 @@ describe "states", ->
     @game.nextState = =>
       @nextStateCalls++
 
-
   describe "StartingGame", ->
     beforeEach ->
       @state = new states.StartingGame(@game)
@@ -55,6 +54,12 @@ describe "states", ->
     it "goes to the next state", ->
       @state.run()
       @nextStateCalls.should.equal(1)
+
+    it "responds to actions with an out of sequence error", (done) ->
+      @state.handleAction null, (err, result) ->
+        err.should.equal("actionOutOfSequence")
+        should.not.exist(result)
+        done()
 
   describe "StartingRound", ->
     beforeEach ->
