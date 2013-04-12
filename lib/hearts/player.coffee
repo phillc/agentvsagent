@@ -26,5 +26,5 @@ module.exports = class Player extends EventEmitter
     if @messages[0][0] == event
       callback null, @messages.shift()[1]...
     else
-      callback "outOfSequence", null
+      callback ["outOfSequence", "Method call out of sequence"], null
 

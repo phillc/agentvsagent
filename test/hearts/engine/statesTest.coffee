@@ -57,7 +57,8 @@ describe "states", ->
 
     it "responds to actions with an out of sequence error", (done) ->
       @state.handleAction null, (err, result) ->
-        err.should.equal("actionOutOfSequence")
+        err[0].should.equal("outOfSequence")
+        err[1].should.equal("Action requested out of sequence")
         should.not.exist(result)
         done()
 
@@ -142,43 +143,43 @@ describe "states", ->
       cards = Card.all()[0..2]
       action = new actions.PassCards(@game.positions.north, cards)
 
-      @state.handleAction(action)
+      @state.handleAction(action, ->)
 
       @game.currentRound().north.passed.cards.should.eql(cards)
 
     it "goes to the next state and emits an event after all four have passed cards", (done) ->
       cards = Card.all()[0..2]
-      @state.handleAction new actions.PassCards(@game.positions.north, cards)
-      @state.handleAction new actions.PassCards(@game.positions.east, cards)
-      @state.handleAction new actions.PassCards(@game.positions.south, cards)
+      @state.handleAction new actions.PassCards(@game.positions.north, cards), ->
+      @state.handleAction new actions.PassCards(@game.positions.east, cards), ->
+      @state.handleAction new actions.PassCards(@game.positions.south, cards), ->
       @game.positions.north.recvPassed (err, cards) ->
         cards.should.have.length(3)
         done()
 
-      @state.handleAction new actions.PassCards(@game.positions.west, cards)
+      @state.handleAction new actions.PassCards(@game.positions.west, cards), ->
       @nextStateCalls.should.equal(1)
 
     it "does not go to the next state if the same player passes four times", ->
       cards = Card.all()[0..2]
-      @state.handleAction new actions.PassCards(@game.positions.north, cards)
-      @state.handleAction new actions.PassCards(@game.positions.north, cards)
-      @state.handleAction new actions.PassCards(@game.positions.north, cards)
-      @state.handleAction new actions.PassCards(@game.positions.north, cards)
+      @state.handleAction new actions.PassCards(@game.positions.north, cards), ->
+      @state.handleAction new actions.PassCards(@game.positions.north, cards), ->
+      @state.handleAction new actions.PassCards(@game.positions.north, cards), ->
+      @state.handleAction new actions.PassCards(@game.positions.north, cards), ->
       @nextStateCalls.should.equal(0)
 
     describe "strategies", ->
       setup = ->
         @northPassedCards = @game.currentRound().north.dealt.cards[0..2]
-        @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
+        @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards), ->
 
         @eastPassedCards = @game.currentRound().east.dealt.cards[0..2]
-        @state.handleAction new actions.PassCards(@game.positions.east, @eastPassedCards)
+        @state.handleAction new actions.PassCards(@game.positions.east, @eastPassedCards), ->
 
         @southPassedCards = @game.currentRound().south.dealt.cards[0..2]
-        @state.handleAction new actions.PassCards(@game.positions.south, @southPassedCards)
+        @state.handleAction new actions.PassCards(@game.positions.south, @southPassedCards), ->
 
         @westPassedCards = @game.currentRound().west.dealt.cards[0..2]
-        @state.handleAction new actions.PassCards(@game.positions.west, @westPassedCards)
+        @state.handleAction new actions.PassCards(@game.positions.west, @westPassedCards), ->
 
         @nextStateCalls.should.equal(1)
 
@@ -280,7 +281,7 @@ describe "states", ->
       state = new states.WaitingForCard(@game, "north")
       card = Card.all()[0]
       action = new actions.PlayCard(@game.positions.north, card)
-      state.handleAction(action)
+      state.handleAction(action, ->)
 
       @game.currentRound().currentTrick().played.cards[0].should.equal(card)
 
@@ -295,7 +296,7 @@ describe "states", ->
       state = new states.WaitingForCard(@game, "north")
       card = Card.all()[0]
       action = new actions.PlayCard(@game.positions.north, card)
-      state.handleAction(action)
+      state.handleAction(action, ->)
 
       @nextStateCalls.should.equal(1)
 

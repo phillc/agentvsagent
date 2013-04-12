@@ -19,7 +19,8 @@ describe "Player", ->
     it "returns outOfSequence errors", (done) ->
       @player.sendDealt "foo"
       @player.process "passed", (err, result) ->
-        err.should.eql "outOfSequence"
+        err[0].should.eql "outOfSequence"
+        err[1].should.eql "Method call out of sequence"
         should.not.exist(result)
         done()
 
