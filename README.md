@@ -33,29 +33,11 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Advanced
   * Unit test at least your supporting code
 
-## FAQ
-
-* Time that each agent is allowed should be low enough to make it difficult to come up with an always perfect solution, yet high enough that a novice and/or an implementation in a slower language can be competitive.
-
 ## Potential game ideas
 
 * Team games: Spades, Bridge
 * Variable # of players: 
 * Pathing: Othello (Reversi), Blokus, Tsuro
-
-
-## TODO
-
-* Data validations
-* Shooting the moon
-* Timeout management
-* Clean up after games are done (memory leak)
-* Human player(s)
-* Server will crash if a player disconnects mid game, or pass in null for a card
-* Symlinks suck. Come up with some script that copies from the submodule (yuck).
-* The sample agents are ugly. I was trying to just get them to look the same in each language, but I ended up mutating too many variables. I think it would be nice to split them into two files, one with logic and the other with the harness for rounds/tricks. That will let me change the harness later and reduce the risk of merge conflict with the logic that potential participants implement. Rushing to MVP =\
-* Simple agents to play against (Play low agent, Play High Agent, Random Agent)
-  * Option for server to startup the simple agents to play against locally
 
 ## Contributing
 
