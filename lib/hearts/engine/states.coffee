@@ -8,8 +8,14 @@ class State
 
   run: ->
 
-  handleAction: (action, callback) ->
-    callback(["outOfSequence", "Action requested out of sequence"], null)
+  handleAction: (action) ->
+    error = action.validate(@game)
+    logger.info "An error has occured: #{error}."
+    if !error
+      action.execute(@game)
+      @afterAction()
+    else
+      @game.abort(action.player, error)
 
 exports.StartingGame = class StartingGame extends State
   run: ->
@@ -62,9 +68,8 @@ exports.Passing = class Passing extends State
   run: ->
     logger.info "Passing", @direction
 
-  handleAction: (action, callback) ->
-    logger.info "Handling passing action"
-    action.execute(@game, callback)
+  afterAction: (action) ->
+    logger.info "Handled passing action"
 
     if @game.currentRound().allHavePassed()
       @exchange()
@@ -110,9 +115,8 @@ exports.WaitingForCard = class WaitingForCard extends State
     logger.info "Waiting for card from", @position
     @game.positions[@position].sendTurn @game.currentRound().currentTrick()
 
-  handleAction: (action, callback) ->
+  afterAction: ->
     logger.info "Handling action while waiting for card from", @position
-    action.execute(@game, callback)
     @game.nextState()
 
 exports.EndingTrick = class EndingTrick extends State

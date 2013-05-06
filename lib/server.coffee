@@ -1,9 +1,9 @@
 express = require 'express'
 winston = require 'winston'
 logger = require './logger'
-logger.add winston.transports.Console
 
 exports.start = (options) ->
+  logger.add winston.transports.Console
   app = express()
 
   app.set 'view engine', 'jade'

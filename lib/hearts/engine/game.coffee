@@ -56,8 +56,8 @@ module.exports = class Game
     @stack.push("startingGame")
     @nextState()
 
-  handleAction: (action, callback) ->
-    @currentState.handleAction(action, callback)
+  handleAction: (action) ->
+    @currentState.handleAction(action)
 
   scores: ->
     @rounds.map((round) -> round.scores()).reduce (memo, scores) ->
@@ -72,4 +72,8 @@ module.exports = class Game
 
     [scores.north, scores.east, scores.south, scores.west].some (score) =>
       score >= @maxPenalty
+
+  abort: (culprit, error) ->
+    #TODO: notify everyone else too...
+    culprit.raiseError(error)
 

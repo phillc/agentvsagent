@@ -19,8 +19,8 @@ describe "Player", ->
     it "returns outOfSequence errors", (done) ->
       @player.sendDealt "foo"
       @player.process "passed", (err, result) ->
-        err[0].should.eql "outOfSequence"
-        err[1].should.eql "Method call out of sequence"
+        err.type.should.eql "outOfSequence"
+        err.message.should.eql "Method call out of sequence"
         should.not.exist(result)
         done()
 
@@ -103,5 +103,37 @@ describe "Player", ->
         status.should.equal "bar"
         done()
       @player.sendEndRound "foo", "bar"
+
+  describe "raiseError", ->
+    it "returns an exception to any future callback", (done) ->
+      @player.raiseError("foo")
+      @player.recvPassed (err, cards) ->
+        err.should.eql("foo")
+        should.not.exist(cards)
+        done()
+
+    it "returns an exception to any existing callback", (done) ->
+      @player.recvPassed (err, cards) ->
+        err.should.eql("foo")
+        should.not.exist(cards)
+        done()
+      @player.raiseError("foo")
+
+    it "trumps the queue", (done) ->
+      @player.sendPassed ["1", "2"]
+      @player.raiseError("foo")
+      @player.recvPassed (err, cards) ->
+        err.should.eql("foo")
+        should.not.exist(cards)
+        done()
+
+    it "remains in front of the queue", (done) ->
+      @player.sendPassed ["1", "2"]
+      @player.raiseError("foo")
+      @player.sendPassed ["1", "2"]
+      @player.recvPassed (err, cards) ->
+        err.should.eql("foo")
+        should.not.exist(cards)
+        done()
 
 

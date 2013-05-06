@@ -2,6 +2,7 @@ Card = require '../../../lib/hearts/engine/card'
 Suit = require '../../../lib/hearts/engine/suit'
 Rank = require '../../../lib/hearts/engine/rank'
 Handler = require '../../../lib/hearts/service/handler'
+mapper = require '../../../lib/hearts/service/mapper'
 types = require '../../../lib/hearts/service/types/hearts_types'
 Hearts = require '../../../lib/hearts/service/types/hearts'
 Factory = require '../../factory'
@@ -121,8 +122,8 @@ describe "Handler", ->
 
   describe "#pass_cards", ->
     beforeEach ->
-      @game.stack.push("passingLeft")
-      @game.nextState()
+      # @game.stack.push("passingLeft")
+      # @game.nextState()
       @game.positions.north.messages.splice(0, 10)
       @game.positions.east.messages.splice(0, 10)
       @game.positions.south.messages.splice(0, 10)
@@ -131,21 +132,41 @@ describe "Handler", ->
       @eastTicket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
       @southTicket = new types.Ticket(agentId: @game.positions.south.id, gameId: @game.id)
       @westTicket = new types.Ticket(agentId: @game.positions.west.id, gameId: @game.id)
+
+      @game.currentRound().north.held.cards.splice(0, 13)
+      @game.currentRound().north.held.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      @game.currentRound().north.held.addCard(new Card(Suit.CLUBS, Rank.TWO))
+      @game.currentRound().north.held.addCard(new Card(Suit.SPADES, Rank.QUEEN))
       @northPassed = [
         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.THREE)
         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.TWO)
         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.QUEEN)
       ]
+
+      @game.currentRound().east.held.cards.splice(0, 13)
+      @game.currentRound().east.held.addCard(new Card(Suit.HEARTS, Rank.FOUR))
+      @game.currentRound().east.held.addCard(new Card(Suit.CLUBS, Rank.THREE))
+      @game.currentRound().east.held.addCard(new Card(Suit.SPADES, Rank.KING))
       @eastPassed = [
         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.FOUR)
         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.THREE)
         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.KING)
       ]
+
+      @game.currentRound().south.held.cards.splice(0, 13)
+      @game.currentRound().south.held.addCard(new Card(Suit.HEARTS, Rank.FIVE))
+      @game.currentRound().south.held.addCard(new Card(Suit.CLUBS, Rank.FOUR))
+      @game.currentRound().south.held.addCard(new Card(Suit.SPADES, Rank.ACE))
       @southPassed = [
         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.FIVE)
         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.FOUR)
         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.ACE)
       ]
+
+      @game.currentRound().west.held.cards.splice(0, 13)
+      @game.currentRound().west.held.addCard(new Card(Suit.HEARTS, Rank.SIX))
+      @game.currentRound().west.held.addCard(new Card(Suit.CLUBS, Rank.FIVE))
+      @game.currentRound().west.held.addCard(new Card(Suit.SPADES, Rank.TWO))
       @westPassed = [
         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.SIX)
         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.FIVE)
@@ -163,6 +184,7 @@ describe "Handler", ->
       @handler.pass_cards @eastTicket, @eastPassed, ->
       @handler.pass_cards @southTicket, @southPassed, ->
       @handler.pass_cards @westTicket, @westPassed, (err, cards) =>
+        should.not.exist(err)
         cards[0].suit.should.equal(types.Suit.HEARTS)
         cards[0].rank.should.equal(types.Rank.FIVE)
         cards[1].suit.should.equal(types.Suit.CLUBS)
@@ -208,32 +230,34 @@ describe "Handler", ->
       @game.states.startingTrick.run()
       @game.states.waitingForCardFromEast.run()
       @game.positions.east.messages.splice(0, 10)
+      @game.currentState = @game.states.waitingForCardFromEast
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
     it "plays the card", ->
-      card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
-      @handler.play_card @ticket, card
+      card = @game.currentRound().east.held.cards[0]
+      thriftCard = mapper.cardToThrift(card)
+      @handler.play_card @ticket, thriftCard
 
-      @game.currentRound().currentTrick().played.cards[0].suit.should.equal(Suit.DIAMONDS)
-      @game.currentRound().currentTrick().played.cards[0].rank.should.equal(Rank.TWO)
-
+      @game.currentRound().currentTrick().played.cards[0].isEqual(card).should.equal(true)
 
     it "returns the result of the trick", (done) ->
+      card = @game.currentRound().east.held.cards[0]
+      thriftCard = mapper.cardToThrift(card)
       @game.currentRound().currentTrick().leader = "north"
-      card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
-      @handler.play_card @ticket, card, (error, trick) =>
+      @handler.play_card @ticket, thriftCard, (error, trick) =>
         should.not.exist(error)
         trick.leader.should.equal(types.Position.NORTH)
-        trick.played[0].suit.should.equal types.Suit.DIAMONDS
-        trick.played[0].rank.should.equal types.Rank.TWO
+        trick.played[0].suit.should.equal thriftCard.suit
+        trick.played[0].rank.should.equal thriftCard.rank
         done()
 
       @game.states.endingTrick.run()
 
     it "passes through errors", (done) ->
-      card = new types.Card(suit: types.Suit.DIAMONDS, rank: types.Rank.TWO)
+      card = @game.currentRound().east.held.cards[0]
+      thriftCard = mapper.cardToThrift(card)
       @game.positions.east.messages.unshift ["foo"]
-      @handler.play_card @ticket, card, (err, trick) ->
+      @handler.play_card @ticket, thriftCard, (err, trick) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(trick)
         done()

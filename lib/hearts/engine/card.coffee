@@ -19,6 +19,9 @@ module.exports = class Card
     else
       0
 
+  isEqual: (otherCard) ->
+    @suit == otherCard.suit && @rank == otherCard.rank
+
   # For debug
   inspect: ->
     "#{@rank.name} of #{@suit.name}"
