@@ -33,5 +33,8 @@
   "preferGlobal": true,
   "bin": {
     "ava": "./bin/ava"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }
