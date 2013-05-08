@@ -275,14 +275,15 @@ describe "states", ->
       @game.states.startingTrick.run()
       @game.currentState = @game.states.waitingForCardFromNorth
       @nextStateCalls = 0
+      @card = new Card(Suit.CLUBS, Rank.TWO)
+      @game.currentRound().north.held.cards = [@card]
 
     it "applies the card to the player", ->
       state = new states.WaitingForCard(@game, "north")
-      card = @game.currentRound().north.held.cards[0]
-      action = new actions.PlayCard(@game.positions.north, card)
+      action = new actions.PlayCard(@game.positions.north, @card)
       state.handleAction(action)
 
-      @game.currentRound().currentTrick().played.cards[0].should.equal(card)
+      @game.currentRound().currentTrick().played.cards[0].should.equal(@card)
 
     it "emits an event on the player with the current trick", (done) ->
       @game.positions.north.recvTurn (err, trick) =>
@@ -290,11 +291,9 @@ describe "states", ->
         done()
       state = new states.WaitingForCard(@game, "north").run()
 
-
     it "goes to the next state", ->
       state = new states.WaitingForCard(@game, "north")
-      card = @game.currentRound().north.held.cards[0]
-      action = new actions.PlayCard(@game.positions.north, card)
+      action = new actions.PlayCard(@game.positions.north, @card)
       state.handleAction(action)
 
       @nextStateCalls.should.equal(1)

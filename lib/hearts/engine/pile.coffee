@@ -36,7 +36,10 @@ module.exports = class Pile
 
   moveCardTo: (card, otherPile) ->
     if foundCard = @findCard(card.suit, card.rank)
-      otherPile.addCard @cards.splice(@cards.indexOf(foundCard), 1)[0]
+      otherPile.addCard @removeCard(foundCard)[0]
+
+  removeCard: (card) ->
+    @cards.splice(@cards.indexOf(card), 1)
 
   moveAllCardsTo: (otherPile) ->
     @moveCardsTo @cards.length, otherPile
@@ -48,3 +51,5 @@ module.exports = class Pile
   shuffle: ->
     @cards = und.shuffle(@cards)
 
+  isEmpty: ->
+    @cards.length == 0

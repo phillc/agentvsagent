@@ -232,32 +232,29 @@ describe "Handler", ->
       @game.positions.east.messages.splice(0, 10)
       @game.currentState = @game.states.waitingForCardFromEast
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
+      @card = new Card(Suit.CLUBS, Rank.TWO)
+      @game.currentRound().east.held.cards = [@card]
+      @thriftCard = mapper.cardToThrift(@card)
 
     it "plays the card", ->
-      card = @game.currentRound().east.held.cards[0]
-      thriftCard = mapper.cardToThrift(card)
-      @handler.play_card @ticket, thriftCard
+      @handler.play_card @ticket, @thriftCard
 
-      @game.currentRound().currentTrick().played.cards[0].isEqual(card).should.equal(true)
+      @game.currentRound().currentTrick().played.cards[0].isEqual(@card).should.equal(true)
 
     it "returns the result of the trick", (done) ->
-      card = @game.currentRound().east.held.cards[0]
-      thriftCard = mapper.cardToThrift(card)
       @game.currentRound().currentTrick().leader = "north"
-      @handler.play_card @ticket, thriftCard, (error, trick) =>
+      @handler.play_card @ticket, @thriftCard, (error, trick) =>
         should.not.exist(error)
         trick.leader.should.equal(types.Position.NORTH)
-        trick.played[0].suit.should.equal thriftCard.suit
-        trick.played[0].rank.should.equal thriftCard.rank
+        trick.played[0].suit.should.equal @thriftCard.suit
+        trick.played[0].rank.should.equal @thriftCard.rank
         done()
 
       @game.states.endingTrick.run()
 
     it "passes through errors", (done) ->
-      card = @game.currentRound().east.held.cards[0]
-      thriftCard = mapper.cardToThrift(card)
       @game.positions.east.messages.unshift ["foo"]
-      @handler.play_card @ticket, thriftCard, (err, trick) ->
+      @handler.play_card @ticket, @thriftCard, (err, trick) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(trick)
         done()

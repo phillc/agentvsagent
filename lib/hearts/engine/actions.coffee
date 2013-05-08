@@ -1,6 +1,10 @@
 Pile = require './pile'
+Card = require './card'
+Rank = require './rank'
+Suit = require './suit'
 states = require './states'
 logger = require '../../logger'
+
 class Action
   constructor: (@player) ->
 
@@ -11,26 +15,38 @@ exports.PassCards = class PassCards extends Action
   validate: (game) ->
     position = game.positionOf(@player)
     seat = game.currentRound()[position]
-    if !(game.currentState instanceof states.Passing)
-      return {type: "outOfSequence", message: "Action requested out of sequence."}
 
-    if seat.passed.cards.length > 0
-      return {type: "invalidMove", message: "May not pass more than once in a round."}
+    validateState = ->
+      if !(game.currentState instanceof states.Passing)
+        {type: "outOfSequence", message: "Action requested out of sequence."}
 
-    uniqueCards = []
-    for card in @cards
-      if uniqueCards.some((uniqueCard) -> uniqueCard.isEqual(card))
-        return {type: "invalidMove", message: "Must pass a card no more than once."}
-      else
-        uniqueCards.push(card)
+    validatePassingAllowed = ->
+      if seat.passed.cards.length > 0
+        return {type: "invalidMove", message: "May not pass more than once in a round."}
 
-    for card in @cards
-      if !seat.held.cards.some((heldCard) -> heldCard.isEqual(card))
-        return {type: "invalidMove", message: "Must pass cards in your hand."}
+    validateUniqueCards = =>
+      uniqueCards = []
+      for card in @cards
+        if uniqueCards.some((uniqueCard) -> uniqueCard.isEqual(card))
+          return {type: "invalidMove", message: "Must pass a card no more than once."}
+        else
+          uniqueCards.push(card)
 
-    if @cards.length != 3
-      return {type: "invalidMove", message: "Must pass three cards. You passed #{@cards.length}."}
-    null
+    validateOwnCards = =>
+      for card in @cards
+        if !seat.held.cards.some((heldCard) -> heldCard.isEqual(card))
+          return {type: "invalidMove", message: "Must pass cards in your hand."}
+
+    validateNumberCards = =>
+      if @cards.length != 3
+        return {type: "invalidMove", message: "Must pass three cards. You passed #{@cards.length}."}
+
+    validateState() ||
+      validatePassingAllowed() ||
+      validateUniqueCards() ||
+      validateOwnCards() ||
+      validateNumberCards() ||
+      null
 
   execute: (game) ->
     position = game.positionOf(@player)
@@ -45,21 +61,65 @@ exports.PlayCard = class PlayCard extends Action
 
   validate: (game) ->
     position = game.positionOf(@player)
-    seat = game.currentRound()[position]
+    round = game.currentRound()
+    seat = round[position]
+    trick = round.currentTrick()
 
-    if !(game.currentState instanceof states.WaitingForCard)
-      return {type: "outOfSequence", message: "Action requested out of sequence."}
+    validateState = ->
+      if !(game.currentState instanceof states.WaitingForCard)
+        return {type: "outOfSequence", message: "Action requested out of sequence."}
 
-    if position != game.currentState.position
-      return {type: "outOfSequence", message: "Card played out of sequence."}
+    validatePlayer = ->
+      if position != game.currentState.position
+        return {type: "outOfSequence", message: "Card played out of sequence."}
 
-    if !seat.held.cards.some((heldCard) => heldCard.isEqual(@card))
-      return {type: "invalidMove", message: "Must play a card in your hand."}
+    validateOwnCard = =>
+      if !seat.held.cards.some((heldCard) => heldCard.isEqual(@card))
+        return {type: "invalidMove", message: "Must play a card in your hand."}
 
-    null
+    validateTwoClubs = =>
+      if !@card.isEqual(new Card(Suit.CLUBS, Rank.TWO))
+        return {type: "invalidMove", message: "Must lead round with two of clubs."}
+
+    validateNoPoints = =>
+      if @card.score() > 0 && seat.held.cards.some((heldCard) => heldCard.score() == 0)
+        return {type: "invalidMove", message: "Must not play points in the first trick of a round."}
+
+    validateHeartsBroken = =>
+      if @card.suit == Suit.HEARTS && !round.isHeartsBroken() && seat.held.allOfSuit(Suit.HEARTS).cards.length != seat.held.cards.length
+        return {type: "invalidMove", message: "Must not play a heart until broken."}
+
+    validateFollowingSuit = =>
+      if @card.suit != trick.played.cards[0].suit && !seat.held.allOfSuit(trick.played.cards[0].suit).isEmpty()
+        return {type: "invalidMove", message: "Must follow suit."}
+
+    validateTrickCard = =>
+      if trick.played.isEmpty()
+        validateHeartsBroken()
+      else
+        validateFollowingSuit()
+
+    validateFirstTrickCard = =>
+      if trick.played.isEmpty()
+        validateTwoClubs()
+      else
+        validateFollowingSuit() || validateNoPoints()
+
+    validateCard = =>
+      if round.tricks.length == 1
+        validateFirstTrickCard()
+      else
+        validateTrickCard()
+
+    validateState() ||
+      validatePlayer() ||
+      validateOwnCard() ||
+      validateCard() ||
+      null
 
   execute: (game) ->
     logger.info "PLAYING CARD", @card
     position = game.positionOf(@player)
-    # TODO: validate/shift it off of current player held
-    game.currentRound().currentTrick().played.addCard(@card)
+    round = game.currentRound()
+
+    round[position].held.moveCardTo(@card, round.currentTrick().played)

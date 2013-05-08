@@ -53,3 +53,7 @@ module.exports = class Round
         scores[position] = 0
         break
     scores
+
+  isHeartsBroken: ->
+    @tricks.some (trick) ->
+      trick.played.allOfSuit(Suit.HEARTS).cards.length > 0

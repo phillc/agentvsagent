@@ -10,11 +10,11 @@ class State
 
   handleAction: (action) ->
     error = action.validate(@game)
-    logger.info "An error has occured: #{error}."
     if !error
       action.execute(@game)
       @afterAction()
     else
+      logger.info "An error has occured: #{error.type} :: #{error.message}."
       @game.abort(action.player, error)
 
 exports.StartingGame = class StartingGame extends State
