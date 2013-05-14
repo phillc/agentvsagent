@@ -29,9 +29,9 @@ task :agents, :number, :langs, :sleep do |t, args|
   args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee"
 
   agent_commands = {
-    "ruby" => Agent.new(directory: 'dist/hearts/ruby', command: 'ruby sample_agent.rb'),
-    "coffee" => Agent.new(directory: 'dist/hearts/nodejs', command: 'coffee sampleAgent.coffee'),
-    "haskell" => Agent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/sampleAgent/sampleAgent')
+    "ruby" => Agent.new(directory: 'dist/hearts/ruby', command: 'ruby my_agent.rb'),
+    "coffee" => Agent.new(directory: 'dist/hearts/nodejs', command: 'coffee myAgent.coffee'),
+    "haskell" => Agent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent')
   }
 
   agents = agent_commands.values_at(*args.langs.split(":")).shuffle
