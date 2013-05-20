@@ -172,7 +172,7 @@ AgentVsAgent.Ticket.prototype.write = function(output) {
 };
 
 AgentVsAgent.EntryRequest = module.exports.EntryRequest = function(args) {
-  this.version = '0.0.9';
+  this.version = '0.0.10';
   if (args) {
     if (args.version !== undefined) {
       this.version = args.version;
@@ -757,4 +757,4 @@ AgentVsAgent.InvalidMoveException.prototype.write = function(output) {
   return;
 };
 
-ttypes.CURRENT_VERSION = '0.0.9';
+ttypes.CURRENT_VERSION = '0.0.10';
