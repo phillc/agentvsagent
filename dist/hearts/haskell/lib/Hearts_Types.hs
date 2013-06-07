@@ -521,3 +521,34 @@ read_InvalidMoveException iprot = do
   record <- read_InvalidMoveException_fields iprot (InvalidMoveException{f_InvalidMoveException_message=Nothing})
   readStructEnd iprot
   return record
+data GameAbortedException = GameAbortedException{f_GameAbortedException_message :: Maybe Text} deriving (Show,Eq,Typeable)
+instance Exception GameAbortedException
+instance Hashable GameAbortedException where
+  hashWithSalt salt record = salt   `hashWithSalt` f_GameAbortedException_message record  
+write_GameAbortedException oprot record = do
+  writeStructBegin oprot "GameAbortedException"
+  case f_GameAbortedException_message record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("message",T_STRING,1)
+    writeString oprot _v
+    writeFieldEnd oprot}
+  writeFieldStop oprot
+  writeStructEnd oprot
+read_GameAbortedException_fields iprot record = do
+  (_,_t59,_id60) <- readFieldBegin iprot
+  if _t59 == T_STOP then return record else
+    case _id60 of 
+      1 -> if _t59 == T_STRING then do
+        s <- readString iprot
+        read_GameAbortedException_fields iprot record{f_GameAbortedException_message=Just s}
+        else do
+          skip iprot _t59
+          read_GameAbortedException_fields iprot record
+      _ -> do
+        skip iprot _t59
+        readFieldEnd iprot
+        read_GameAbortedException_fields iprot record
+read_GameAbortedException iprot = do
+  _ <- readStructBegin iprot
+  record <- read_GameAbortedException_fields iprot (GameAbortedException{f_GameAbortedException_message=Nothing})
+  readStructEnd iprot
+  return record

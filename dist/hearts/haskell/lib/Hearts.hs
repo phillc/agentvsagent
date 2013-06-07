@@ -49,17 +49,17 @@ write_Enter_arena_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Enter_arena_args_fields iprot record = do
-  (_,_t59,_id60) <- readFieldBegin iprot
-  if _t59 == T_STOP then return record else
-    case _id60 of 
-      1 -> if _t59 == T_STRUCT then do
+  (_,_t64,_id65) <- readFieldBegin iprot
+  if _t64 == T_STOP then return record else
+    case _id65 of 
+      1 -> if _t64 == T_STRUCT then do
         s <- (read_EntryRequest iprot)
         read_Enter_arena_args_fields iprot record{f_Enter_arena_args_request=Just s}
         else do
-          skip iprot _t59
+          skip iprot _t64
           read_Enter_arena_args_fields iprot record
       _ -> do
-        skip iprot _t59
+        skip iprot _t64
         readFieldEnd iprot
         read_Enter_arena_args_fields iprot record
 read_Enter_arena_args iprot = do
@@ -79,17 +79,17 @@ write_Enter_arena_result oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Enter_arena_result_fields iprot record = do
-  (_,_t64,_id65) <- readFieldBegin iprot
-  if _t64 == T_STOP then return record else
-    case _id65 of 
-      0 -> if _t64 == T_STRUCT then do
+  (_,_t69,_id70) <- readFieldBegin iprot
+  if _t69 == T_STOP then return record else
+    case _id70 of 
+      0 -> if _t69 == T_STRUCT then do
         s <- (read_EntryResponse iprot)
         read_Enter_arena_result_fields iprot record{f_Enter_arena_result_success=Just s}
         else do
-          skip iprot _t64
+          skip iprot _t69
           read_Enter_arena_result_fields iprot record
       _ -> do
-        skip iprot _t64
+        skip iprot _t69
         readFieldEnd iprot
         read_Enter_arena_result_fields iprot record
 read_Enter_arena_result iprot = do
@@ -109,17 +109,17 @@ write_Get_game_info_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_game_info_args_fields iprot record = do
-  (_,_t69,_id70) <- readFieldBegin iprot
-  if _t69 == T_STOP then return record else
-    case _id70 of 
-      1 -> if _t69 == T_STRUCT then do
+  (_,_t74,_id75) <- readFieldBegin iprot
+  if _t74 == T_STOP then return record else
+    case _id75 of 
+      1 -> if _t74 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Get_game_info_args_fields iprot record{f_Get_game_info_args_ticket=Just s}
         else do
-          skip iprot _t69
+          skip iprot _t74
           read_Get_game_info_args_fields iprot record
       _ -> do
-        skip iprot _t69
+        skip iprot _t74
         readFieldEnd iprot
         read_Get_game_info_args_fields iprot record
 read_Get_game_info_args iprot = do
@@ -127,34 +127,44 @@ read_Get_game_info_args iprot = do
   record <- read_Get_game_info_args_fields iprot (Get_game_info_args{f_Get_game_info_args_ticket=Nothing})
   readStructEnd iprot
   return record
-data Get_game_info_result = Get_game_info_result{f_Get_game_info_result_success :: Maybe GameInfo} deriving (Show,Eq,Typeable)
+data Get_game_info_result = Get_game_info_result{f_Get_game_info_result_success :: Maybe GameInfo,f_Get_game_info_result_ex1 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Get_game_info_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Get_game_info_result_success record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Get_game_info_result_success record   `hashWithSalt` f_Get_game_info_result_ex1 record  
 write_Get_game_info_result oprot record = do
   writeStructBegin oprot "Get_game_info_result"
   case f_Get_game_info_result_success record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("success",T_STRUCT,0)
     write_GameInfo oprot _v
     writeFieldEnd oprot}
+  case f_Get_game_info_result_ex1 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex1",T_STRUCT,1)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_game_info_result_fields iprot record = do
-  (_,_t74,_id75) <- readFieldBegin iprot
-  if _t74 == T_STOP then return record else
-    case _id75 of 
-      0 -> if _t74 == T_STRUCT then do
+  (_,_t79,_id80) <- readFieldBegin iprot
+  if _t79 == T_STOP then return record else
+    case _id80 of 
+      0 -> if _t79 == T_STRUCT then do
         s <- (read_GameInfo iprot)
         read_Get_game_info_result_fields iprot record{f_Get_game_info_result_success=Just s}
         else do
-          skip iprot _t74
+          skip iprot _t79
+          read_Get_game_info_result_fields iprot record
+      1 -> if _t79 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Get_game_info_result_fields iprot record{f_Get_game_info_result_ex1=Just s}
+        else do
+          skip iprot _t79
           read_Get_game_info_result_fields iprot record
       _ -> do
-        skip iprot _t74
+        skip iprot _t79
         readFieldEnd iprot
         read_Get_game_info_result_fields iprot record
 read_Get_game_info_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Get_game_info_result_fields iprot (Get_game_info_result{f_Get_game_info_result_success=Nothing})
+  record <- read_Get_game_info_result_fields iprot (Get_game_info_result{f_Get_game_info_result_success=Nothing,f_Get_game_info_result_ex1=Nothing})
   readStructEnd iprot
   return record
 data Get_hand_args = Get_hand_args{f_Get_hand_args_ticket :: Maybe Ticket} deriving (Show,Eq,Typeable)
@@ -169,17 +179,17 @@ write_Get_hand_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_hand_args_fields iprot record = do
-  (_,_t79,_id80) <- readFieldBegin iprot
-  if _t79 == T_STOP then return record else
-    case _id80 of 
-      1 -> if _t79 == T_STRUCT then do
+  (_,_t84,_id85) <- readFieldBegin iprot
+  if _t84 == T_STOP then return record else
+    case _id85 of 
+      1 -> if _t84 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Get_hand_args_fields iprot record{f_Get_hand_args_ticket=Just s}
         else do
-          skip iprot _t79
+          skip iprot _t84
           read_Get_hand_args_fields iprot record
       _ -> do
-        skip iprot _t79
+        skip iprot _t84
         readFieldEnd iprot
         read_Get_hand_args_fields iprot record
 read_Get_hand_args iprot = do
@@ -187,44 +197,54 @@ read_Get_hand_args iprot = do
   record <- read_Get_hand_args_fields iprot (Get_hand_args{f_Get_hand_args_ticket=Nothing})
   readStructEnd iprot
   return record
-data Get_hand_result = Get_hand_result{f_Get_hand_result_success :: Maybe (Vector.Vector Card),f_Get_hand_result_ex1 :: Maybe OutOfSequenceException} deriving (Show,Eq,Typeable)
+data Get_hand_result = Get_hand_result{f_Get_hand_result_success :: Maybe (Vector.Vector Card),f_Get_hand_result_ex1 :: Maybe OutOfSequenceException,f_Get_hand_result_ex2 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Get_hand_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Get_hand_result_success record   `hashWithSalt` f_Get_hand_result_ex1 record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Get_hand_result_success record   `hashWithSalt` f_Get_hand_result_ex1 record   `hashWithSalt` f_Get_hand_result_ex2 record  
 write_Get_hand_result oprot record = do
   writeStructBegin oprot "Get_hand_result"
   case f_Get_hand_result_success record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("success",T_LIST,0)
-    (let f = Vector.mapM_ (\_viter83 -> write_Card oprot _viter83) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
+    (let f = Vector.mapM_ (\_viter88 -> write_Card oprot _viter88) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
     writeFieldEnd oprot}
   case f_Get_hand_result_ex1 record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("ex1",T_STRUCT,1)
     write_OutOfSequenceException oprot _v
     writeFieldEnd oprot}
+  case f_Get_hand_result_ex2 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex2",T_STRUCT,2)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_hand_result_fields iprot record = do
-  (_,_t85,_id86) <- readFieldBegin iprot
-  if _t85 == T_STOP then return record else
-    case _id86 of 
-      0 -> if _t85 == T_LIST then do
-        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype90,_size87) <- readListBegin iprot; f _size87})
+  (_,_t90,_id91) <- readFieldBegin iprot
+  if _t90 == T_STOP then return record else
+    case _id91 of 
+      0 -> if _t90 == T_LIST then do
+        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype95,_size92) <- readListBegin iprot; f _size92})
         read_Get_hand_result_fields iprot record{f_Get_hand_result_success=Just s}
         else do
-          skip iprot _t85
+          skip iprot _t90
           read_Get_hand_result_fields iprot record
-      1 -> if _t85 == T_STRUCT then do
+      1 -> if _t90 == T_STRUCT then do
         s <- (read_OutOfSequenceException iprot)
         read_Get_hand_result_fields iprot record{f_Get_hand_result_ex1=Just s}
         else do
-          skip iprot _t85
+          skip iprot _t90
+          read_Get_hand_result_fields iprot record
+      2 -> if _t90 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Get_hand_result_fields iprot record{f_Get_hand_result_ex2=Just s}
+        else do
+          skip iprot _t90
           read_Get_hand_result_fields iprot record
       _ -> do
-        skip iprot _t85
+        skip iprot _t90
         readFieldEnd iprot
         read_Get_hand_result_fields iprot record
 read_Get_hand_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Get_hand_result_fields iprot (Get_hand_result{f_Get_hand_result_success=Nothing,f_Get_hand_result_ex1=Nothing})
+  record <- read_Get_hand_result_fields iprot (Get_hand_result{f_Get_hand_result_success=Nothing,f_Get_hand_result_ex1=Nothing,f_Get_hand_result_ex2=Nothing})
   readStructEnd iprot
   return record
 data Pass_cards_args = Pass_cards_args{f_Pass_cards_args_ticket :: Maybe Ticket,f_Pass_cards_args_cards :: Maybe (Vector.Vector Card)} deriving (Show,Eq,Typeable)
@@ -238,28 +258,28 @@ write_Pass_cards_args oprot record = do
     writeFieldEnd oprot}
   case f_Pass_cards_args_cards record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("cards",T_LIST,2)
-    (let f = Vector.mapM_ (\_viter94 -> write_Card oprot _viter94) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
+    (let f = Vector.mapM_ (\_viter99 -> write_Card oprot _viter99) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
     writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Pass_cards_args_fields iprot record = do
-  (_,_t96,_id97) <- readFieldBegin iprot
-  if _t96 == T_STOP then return record else
-    case _id97 of 
-      1 -> if _t96 == T_STRUCT then do
+  (_,_t101,_id102) <- readFieldBegin iprot
+  if _t101 == T_STOP then return record else
+    case _id102 of 
+      1 -> if _t101 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Pass_cards_args_fields iprot record{f_Pass_cards_args_ticket=Just s}
         else do
-          skip iprot _t96
+          skip iprot _t101
           read_Pass_cards_args_fields iprot record
-      2 -> if _t96 == T_LIST then do
-        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype101,_size98) <- readListBegin iprot; f _size98})
+      2 -> if _t101 == T_LIST then do
+        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype106,_size103) <- readListBegin iprot; f _size103})
         read_Pass_cards_args_fields iprot record{f_Pass_cards_args_cards=Just s}
         else do
-          skip iprot _t96
+          skip iprot _t101
           read_Pass_cards_args_fields iprot record
       _ -> do
-        skip iprot _t96
+        skip iprot _t101
         readFieldEnd iprot
         read_Pass_cards_args_fields iprot record
 read_Pass_cards_args iprot = do
@@ -267,14 +287,14 @@ read_Pass_cards_args iprot = do
   record <- read_Pass_cards_args_fields iprot (Pass_cards_args{f_Pass_cards_args_ticket=Nothing,f_Pass_cards_args_cards=Nothing})
   readStructEnd iprot
   return record
-data Pass_cards_result = Pass_cards_result{f_Pass_cards_result_success :: Maybe (Vector.Vector Card),f_Pass_cards_result_ex1 :: Maybe OutOfSequenceException,f_Pass_cards_result_ex2 :: Maybe InvalidMoveException} deriving (Show,Eq,Typeable)
+data Pass_cards_result = Pass_cards_result{f_Pass_cards_result_success :: Maybe (Vector.Vector Card),f_Pass_cards_result_ex1 :: Maybe OutOfSequenceException,f_Pass_cards_result_ex2 :: Maybe InvalidMoveException,f_Pass_cards_result_ex3 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Pass_cards_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Pass_cards_result_success record   `hashWithSalt` f_Pass_cards_result_ex1 record   `hashWithSalt` f_Pass_cards_result_ex2 record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Pass_cards_result_success record   `hashWithSalt` f_Pass_cards_result_ex1 record   `hashWithSalt` f_Pass_cards_result_ex2 record   `hashWithSalt` f_Pass_cards_result_ex3 record  
 write_Pass_cards_result oprot record = do
   writeStructBegin oprot "Pass_cards_result"
   case f_Pass_cards_result_success record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("success",T_LIST,0)
-    (let f = Vector.mapM_ (\_viter105 -> write_Card oprot _viter105) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
+    (let f = Vector.mapM_ (\_viter110 -> write_Card oprot _viter110) in do {writeListBegin oprot (T_STRUCT,fromIntegral $ Vector.length _v); f _v;writeListEnd oprot})
     writeFieldEnd oprot}
   case f_Pass_cards_result_ex1 record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("ex1",T_STRUCT,1)
@@ -284,37 +304,47 @@ write_Pass_cards_result oprot record = do
     writeFieldBegin oprot ("ex2",T_STRUCT,2)
     write_InvalidMoveException oprot _v
     writeFieldEnd oprot}
+  case f_Pass_cards_result_ex3 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex3",T_STRUCT,3)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Pass_cards_result_fields iprot record = do
-  (_,_t107,_id108) <- readFieldBegin iprot
-  if _t107 == T_STOP then return record else
-    case _id108 of 
-      0 -> if _t107 == T_LIST then do
-        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype112,_size109) <- readListBegin iprot; f _size109})
+  (_,_t112,_id113) <- readFieldBegin iprot
+  if _t112 == T_STOP then return record else
+    case _id113 of 
+      0 -> if _t112 == T_LIST then do
+        s <- (let f n = Vector.replicateM (fromIntegral n) ((read_Card iprot)) in do {(_etype117,_size114) <- readListBegin iprot; f _size114})
         read_Pass_cards_result_fields iprot record{f_Pass_cards_result_success=Just s}
         else do
-          skip iprot _t107
+          skip iprot _t112
           read_Pass_cards_result_fields iprot record
-      1 -> if _t107 == T_STRUCT then do
+      1 -> if _t112 == T_STRUCT then do
         s <- (read_OutOfSequenceException iprot)
         read_Pass_cards_result_fields iprot record{f_Pass_cards_result_ex1=Just s}
         else do
-          skip iprot _t107
+          skip iprot _t112
           read_Pass_cards_result_fields iprot record
-      2 -> if _t107 == T_STRUCT then do
+      2 -> if _t112 == T_STRUCT then do
         s <- (read_InvalidMoveException iprot)
         read_Pass_cards_result_fields iprot record{f_Pass_cards_result_ex2=Just s}
         else do
-          skip iprot _t107
+          skip iprot _t112
+          read_Pass_cards_result_fields iprot record
+      3 -> if _t112 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Pass_cards_result_fields iprot record{f_Pass_cards_result_ex3=Just s}
+        else do
+          skip iprot _t112
           read_Pass_cards_result_fields iprot record
       _ -> do
-        skip iprot _t107
+        skip iprot _t112
         readFieldEnd iprot
         read_Pass_cards_result_fields iprot record
 read_Pass_cards_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Pass_cards_result_fields iprot (Pass_cards_result{f_Pass_cards_result_success=Nothing,f_Pass_cards_result_ex1=Nothing,f_Pass_cards_result_ex2=Nothing})
+  record <- read_Pass_cards_result_fields iprot (Pass_cards_result{f_Pass_cards_result_success=Nothing,f_Pass_cards_result_ex1=Nothing,f_Pass_cards_result_ex2=Nothing,f_Pass_cards_result_ex3=Nothing})
   readStructEnd iprot
   return record
 data Get_trick_args = Get_trick_args{f_Get_trick_args_ticket :: Maybe Ticket} deriving (Show,Eq,Typeable)
@@ -329,17 +359,17 @@ write_Get_trick_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_trick_args_fields iprot record = do
-  (_,_t117,_id118) <- readFieldBegin iprot
-  if _t117 == T_STOP then return record else
-    case _id118 of 
-      1 -> if _t117 == T_STRUCT then do
+  (_,_t122,_id123) <- readFieldBegin iprot
+  if _t122 == T_STOP then return record else
+    case _id123 of 
+      1 -> if _t122 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Get_trick_args_fields iprot record{f_Get_trick_args_ticket=Just s}
         else do
-          skip iprot _t117
+          skip iprot _t122
           read_Get_trick_args_fields iprot record
       _ -> do
-        skip iprot _t117
+        skip iprot _t122
         readFieldEnd iprot
         read_Get_trick_args_fields iprot record
 read_Get_trick_args iprot = do
@@ -347,9 +377,9 @@ read_Get_trick_args iprot = do
   record <- read_Get_trick_args_fields iprot (Get_trick_args{f_Get_trick_args_ticket=Nothing})
   readStructEnd iprot
   return record
-data Get_trick_result = Get_trick_result{f_Get_trick_result_success :: Maybe Trick,f_Get_trick_result_ex1 :: Maybe OutOfSequenceException} deriving (Show,Eq,Typeable)
+data Get_trick_result = Get_trick_result{f_Get_trick_result_success :: Maybe Trick,f_Get_trick_result_ex1 :: Maybe OutOfSequenceException,f_Get_trick_result_ex3 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Get_trick_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Get_trick_result_success record   `hashWithSalt` f_Get_trick_result_ex1 record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Get_trick_result_success record   `hashWithSalt` f_Get_trick_result_ex1 record   `hashWithSalt` f_Get_trick_result_ex3 record  
 write_Get_trick_result oprot record = do
   writeStructBegin oprot "Get_trick_result"
   case f_Get_trick_result_success record of {Nothing -> return (); Just _v -> do
@@ -360,31 +390,41 @@ write_Get_trick_result oprot record = do
     writeFieldBegin oprot ("ex1",T_STRUCT,1)
     write_OutOfSequenceException oprot _v
     writeFieldEnd oprot}
+  case f_Get_trick_result_ex3 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex3",T_STRUCT,2)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_trick_result_fields iprot record = do
-  (_,_t122,_id123) <- readFieldBegin iprot
-  if _t122 == T_STOP then return record else
-    case _id123 of 
-      0 -> if _t122 == T_STRUCT then do
+  (_,_t127,_id128) <- readFieldBegin iprot
+  if _t127 == T_STOP then return record else
+    case _id128 of 
+      0 -> if _t127 == T_STRUCT then do
         s <- (read_Trick iprot)
         read_Get_trick_result_fields iprot record{f_Get_trick_result_success=Just s}
         else do
-          skip iprot _t122
+          skip iprot _t127
           read_Get_trick_result_fields iprot record
-      1 -> if _t122 == T_STRUCT then do
+      1 -> if _t127 == T_STRUCT then do
         s <- (read_OutOfSequenceException iprot)
         read_Get_trick_result_fields iprot record{f_Get_trick_result_ex1=Just s}
         else do
-          skip iprot _t122
+          skip iprot _t127
+          read_Get_trick_result_fields iprot record
+      2 -> if _t127 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Get_trick_result_fields iprot record{f_Get_trick_result_ex3=Just s}
+        else do
+          skip iprot _t127
           read_Get_trick_result_fields iprot record
       _ -> do
-        skip iprot _t122
+        skip iprot _t127
         readFieldEnd iprot
         read_Get_trick_result_fields iprot record
 read_Get_trick_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Get_trick_result_fields iprot (Get_trick_result{f_Get_trick_result_success=Nothing,f_Get_trick_result_ex1=Nothing})
+  record <- read_Get_trick_result_fields iprot (Get_trick_result{f_Get_trick_result_success=Nothing,f_Get_trick_result_ex1=Nothing,f_Get_trick_result_ex3=Nothing})
   readStructEnd iprot
   return record
 data Play_card_args = Play_card_args{f_Play_card_args_ticket :: Maybe Ticket,f_Play_card_args_card :: Maybe Card} deriving (Show,Eq,Typeable)
@@ -403,23 +443,23 @@ write_Play_card_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Play_card_args_fields iprot record = do
-  (_,_t127,_id128) <- readFieldBegin iprot
-  if _t127 == T_STOP then return record else
-    case _id128 of 
-      1 -> if _t127 == T_STRUCT then do
+  (_,_t132,_id133) <- readFieldBegin iprot
+  if _t132 == T_STOP then return record else
+    case _id133 of 
+      1 -> if _t132 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Play_card_args_fields iprot record{f_Play_card_args_ticket=Just s}
         else do
-          skip iprot _t127
+          skip iprot _t132
           read_Play_card_args_fields iprot record
-      2 -> if _t127 == T_STRUCT then do
+      2 -> if _t132 == T_STRUCT then do
         s <- (read_Card iprot)
         read_Play_card_args_fields iprot record{f_Play_card_args_card=Just s}
         else do
-          skip iprot _t127
+          skip iprot _t132
           read_Play_card_args_fields iprot record
       _ -> do
-        skip iprot _t127
+        skip iprot _t132
         readFieldEnd iprot
         read_Play_card_args_fields iprot record
 read_Play_card_args iprot = do
@@ -427,9 +467,9 @@ read_Play_card_args iprot = do
   record <- read_Play_card_args_fields iprot (Play_card_args{f_Play_card_args_ticket=Nothing,f_Play_card_args_card=Nothing})
   readStructEnd iprot
   return record
-data Play_card_result = Play_card_result{f_Play_card_result_success :: Maybe Trick,f_Play_card_result_ex1 :: Maybe OutOfSequenceException,f_Play_card_result_ex2 :: Maybe InvalidMoveException} deriving (Show,Eq,Typeable)
+data Play_card_result = Play_card_result{f_Play_card_result_success :: Maybe Trick,f_Play_card_result_ex1 :: Maybe OutOfSequenceException,f_Play_card_result_ex2 :: Maybe InvalidMoveException,f_Play_card_result_ex3 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Play_card_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Play_card_result_success record   `hashWithSalt` f_Play_card_result_ex1 record   `hashWithSalt` f_Play_card_result_ex2 record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Play_card_result_success record   `hashWithSalt` f_Play_card_result_ex1 record   `hashWithSalt` f_Play_card_result_ex2 record   `hashWithSalt` f_Play_card_result_ex3 record  
 write_Play_card_result oprot record = do
   writeStructBegin oprot "Play_card_result"
   case f_Play_card_result_success record of {Nothing -> return (); Just _v -> do
@@ -444,37 +484,47 @@ write_Play_card_result oprot record = do
     writeFieldBegin oprot ("ex2",T_STRUCT,2)
     write_InvalidMoveException oprot _v
     writeFieldEnd oprot}
+  case f_Play_card_result_ex3 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex3",T_STRUCT,3)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Play_card_result_fields iprot record = do
-  (_,_t132,_id133) <- readFieldBegin iprot
-  if _t132 == T_STOP then return record else
-    case _id133 of 
-      0 -> if _t132 == T_STRUCT then do
+  (_,_t137,_id138) <- readFieldBegin iprot
+  if _t137 == T_STOP then return record else
+    case _id138 of 
+      0 -> if _t137 == T_STRUCT then do
         s <- (read_Trick iprot)
         read_Play_card_result_fields iprot record{f_Play_card_result_success=Just s}
         else do
-          skip iprot _t132
+          skip iprot _t137
           read_Play_card_result_fields iprot record
-      1 -> if _t132 == T_STRUCT then do
+      1 -> if _t137 == T_STRUCT then do
         s <- (read_OutOfSequenceException iprot)
         read_Play_card_result_fields iprot record{f_Play_card_result_ex1=Just s}
         else do
-          skip iprot _t132
+          skip iprot _t137
           read_Play_card_result_fields iprot record
-      2 -> if _t132 == T_STRUCT then do
+      2 -> if _t137 == T_STRUCT then do
         s <- (read_InvalidMoveException iprot)
         read_Play_card_result_fields iprot record{f_Play_card_result_ex2=Just s}
         else do
-          skip iprot _t132
+          skip iprot _t137
+          read_Play_card_result_fields iprot record
+      3 -> if _t137 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Play_card_result_fields iprot record{f_Play_card_result_ex3=Just s}
+        else do
+          skip iprot _t137
           read_Play_card_result_fields iprot record
       _ -> do
-        skip iprot _t132
+        skip iprot _t137
         readFieldEnd iprot
         read_Play_card_result_fields iprot record
 read_Play_card_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Play_card_result_fields iprot (Play_card_result{f_Play_card_result_success=Nothing,f_Play_card_result_ex1=Nothing,f_Play_card_result_ex2=Nothing})
+  record <- read_Play_card_result_fields iprot (Play_card_result{f_Play_card_result_success=Nothing,f_Play_card_result_ex1=Nothing,f_Play_card_result_ex2=Nothing,f_Play_card_result_ex3=Nothing})
   readStructEnd iprot
   return record
 data Get_round_result_args = Get_round_result_args{f_Get_round_result_args_ticket :: Maybe Ticket} deriving (Show,Eq,Typeable)
@@ -489,17 +539,17 @@ write_Get_round_result_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_round_result_args_fields iprot record = do
-  (_,_t137,_id138) <- readFieldBegin iprot
-  if _t137 == T_STOP then return record else
-    case _id138 of 
-      1 -> if _t137 == T_STRUCT then do
+  (_,_t142,_id143) <- readFieldBegin iprot
+  if _t142 == T_STOP then return record else
+    case _id143 of 
+      1 -> if _t142 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Get_round_result_args_fields iprot record{f_Get_round_result_args_ticket=Just s}
         else do
-          skip iprot _t137
+          skip iprot _t142
           read_Get_round_result_args_fields iprot record
       _ -> do
-        skip iprot _t137
+        skip iprot _t142
         readFieldEnd iprot
         read_Get_round_result_args_fields iprot record
 read_Get_round_result_args iprot = do
@@ -507,9 +557,9 @@ read_Get_round_result_args iprot = do
   record <- read_Get_round_result_args_fields iprot (Get_round_result_args{f_Get_round_result_args_ticket=Nothing})
   readStructEnd iprot
   return record
-data Get_round_result_result = Get_round_result_result{f_Get_round_result_result_success :: Maybe RoundResult,f_Get_round_result_result_ex1 :: Maybe OutOfSequenceException} deriving (Show,Eq,Typeable)
+data Get_round_result_result = Get_round_result_result{f_Get_round_result_result_success :: Maybe RoundResult,f_Get_round_result_result_ex1 :: Maybe OutOfSequenceException,f_Get_round_result_result_ex3 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Get_round_result_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Get_round_result_result_success record   `hashWithSalt` f_Get_round_result_result_ex1 record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Get_round_result_result_success record   `hashWithSalt` f_Get_round_result_result_ex1 record   `hashWithSalt` f_Get_round_result_result_ex3 record  
 write_Get_round_result_result oprot record = do
   writeStructBegin oprot "Get_round_result_result"
   case f_Get_round_result_result_success record of {Nothing -> return (); Just _v -> do
@@ -520,31 +570,41 @@ write_Get_round_result_result oprot record = do
     writeFieldBegin oprot ("ex1",T_STRUCT,1)
     write_OutOfSequenceException oprot _v
     writeFieldEnd oprot}
+  case f_Get_round_result_result_ex3 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex3",T_STRUCT,2)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_round_result_result_fields iprot record = do
-  (_,_t142,_id143) <- readFieldBegin iprot
-  if _t142 == T_STOP then return record else
-    case _id143 of 
-      0 -> if _t142 == T_STRUCT then do
+  (_,_t147,_id148) <- readFieldBegin iprot
+  if _t147 == T_STOP then return record else
+    case _id148 of 
+      0 -> if _t147 == T_STRUCT then do
         s <- (read_RoundResult iprot)
         read_Get_round_result_result_fields iprot record{f_Get_round_result_result_success=Just s}
         else do
-          skip iprot _t142
+          skip iprot _t147
           read_Get_round_result_result_fields iprot record
-      1 -> if _t142 == T_STRUCT then do
+      1 -> if _t147 == T_STRUCT then do
         s <- (read_OutOfSequenceException iprot)
         read_Get_round_result_result_fields iprot record{f_Get_round_result_result_ex1=Just s}
         else do
-          skip iprot _t142
+          skip iprot _t147
+          read_Get_round_result_result_fields iprot record
+      2 -> if _t147 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Get_round_result_result_fields iprot record{f_Get_round_result_result_ex3=Just s}
+        else do
+          skip iprot _t147
           read_Get_round_result_result_fields iprot record
       _ -> do
-        skip iprot _t142
+        skip iprot _t147
         readFieldEnd iprot
         read_Get_round_result_result_fields iprot record
 read_Get_round_result_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Get_round_result_result_fields iprot (Get_round_result_result{f_Get_round_result_result_success=Nothing,f_Get_round_result_result_ex1=Nothing})
+  record <- read_Get_round_result_result_fields iprot (Get_round_result_result{f_Get_round_result_result_success=Nothing,f_Get_round_result_result_ex1=Nothing,f_Get_round_result_result_ex3=Nothing})
   readStructEnd iprot
   return record
 data Get_game_result_args = Get_game_result_args{f_Get_game_result_args_ticket :: Maybe Ticket} deriving (Show,Eq,Typeable)
@@ -559,17 +619,17 @@ write_Get_game_result_args oprot record = do
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_game_result_args_fields iprot record = do
-  (_,_t147,_id148) <- readFieldBegin iprot
-  if _t147 == T_STOP then return record else
-    case _id148 of 
-      1 -> if _t147 == T_STRUCT then do
+  (_,_t152,_id153) <- readFieldBegin iprot
+  if _t152 == T_STOP then return record else
+    case _id153 of 
+      1 -> if _t152 == T_STRUCT then do
         s <- (read_Ticket iprot)
         read_Get_game_result_args_fields iprot record{f_Get_game_result_args_ticket=Just s}
         else do
-          skip iprot _t147
+          skip iprot _t152
           read_Get_game_result_args_fields iprot record
       _ -> do
-        skip iprot _t147
+        skip iprot _t152
         readFieldEnd iprot
         read_Get_game_result_args_fields iprot record
 read_Get_game_result_args iprot = do
@@ -577,9 +637,9 @@ read_Get_game_result_args iprot = do
   record <- read_Get_game_result_args_fields iprot (Get_game_result_args{f_Get_game_result_args_ticket=Nothing})
   readStructEnd iprot
   return record
-data Get_game_result_result = Get_game_result_result{f_Get_game_result_result_success :: Maybe GameResult,f_Get_game_result_result_ex1 :: Maybe OutOfSequenceException} deriving (Show,Eq,Typeable)
+data Get_game_result_result = Get_game_result_result{f_Get_game_result_result_success :: Maybe GameResult,f_Get_game_result_result_ex1 :: Maybe OutOfSequenceException,f_Get_game_result_result_ex3 :: Maybe GameAbortedException} deriving (Show,Eq,Typeable)
 instance Hashable Get_game_result_result where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Get_game_result_result_success record   `hashWithSalt` f_Get_game_result_result_ex1 record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Get_game_result_result_success record   `hashWithSalt` f_Get_game_result_result_ex1 record   `hashWithSalt` f_Get_game_result_result_ex3 record  
 write_Get_game_result_result oprot record = do
   writeStructBegin oprot "Get_game_result_result"
   case f_Get_game_result_result_success record of {Nothing -> return (); Just _v -> do
@@ -590,31 +650,41 @@ write_Get_game_result_result oprot record = do
     writeFieldBegin oprot ("ex1",T_STRUCT,1)
     write_OutOfSequenceException oprot _v
     writeFieldEnd oprot}
+  case f_Get_game_result_result_ex3 record of {Nothing -> return (); Just _v -> do
+    writeFieldBegin oprot ("ex3",T_STRUCT,2)
+    write_GameAbortedException oprot _v
+    writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
 read_Get_game_result_result_fields iprot record = do
-  (_,_t152,_id153) <- readFieldBegin iprot
-  if _t152 == T_STOP then return record else
-    case _id153 of 
-      0 -> if _t152 == T_STRUCT then do
+  (_,_t157,_id158) <- readFieldBegin iprot
+  if _t157 == T_STOP then return record else
+    case _id158 of 
+      0 -> if _t157 == T_STRUCT then do
         s <- (read_GameResult iprot)
         read_Get_game_result_result_fields iprot record{f_Get_game_result_result_success=Just s}
         else do
-          skip iprot _t152
+          skip iprot _t157
           read_Get_game_result_result_fields iprot record
-      1 -> if _t152 == T_STRUCT then do
+      1 -> if _t157 == T_STRUCT then do
         s <- (read_OutOfSequenceException iprot)
         read_Get_game_result_result_fields iprot record{f_Get_game_result_result_ex1=Just s}
         else do
-          skip iprot _t152
+          skip iprot _t157
+          read_Get_game_result_result_fields iprot record
+      2 -> if _t157 == T_STRUCT then do
+        s <- (read_GameAbortedException iprot)
+        read_Get_game_result_result_fields iprot record{f_Get_game_result_result_ex3=Just s}
+        else do
+          skip iprot _t157
           read_Get_game_result_result_fields iprot record
       _ -> do
-        skip iprot _t152
+        skip iprot _t157
         readFieldEnd iprot
         read_Get_game_result_result_fields iprot record
 read_Get_game_result_result iprot = do
   _ <- readStructBegin iprot
-  record <- read_Get_game_result_result_fields iprot (Get_game_result_result{f_Get_game_result_result_success=Nothing,f_Get_game_result_result_ex1=Nothing})
+  record <- read_Get_game_result_result_fields iprot (Get_game_result_result{f_Get_game_result_result_success=Nothing,f_Get_game_result_result_ex1=Nothing,f_Get_game_result_result_ex3=Nothing})
   readStructEnd iprot
   return record
 process_enter_arena (seqid, iprot, oprot, handler) = do
@@ -631,10 +701,13 @@ process_enter_arena (seqid, iprot, oprot, handler) = do
 process_get_game_info (seqid, iprot, oprot, handler) = do
   args <- read_Get_game_info_args iprot
   readMessageEnd iprot
-  rs <- return (Get_game_info_result Nothing)
-  res <- (do
-    res <- Iface.get_game_info handler (f_Get_game_info_args_ticket args)
-    return rs{f_Get_game_info_result_success= Just res})
+  rs <- return (Get_game_info_result Nothing Nothing)
+  res <- (Control.Exception.catch
+    (do
+      res <- Iface.get_game_info handler (f_Get_game_info_args_ticket args)
+      return rs{f_Get_game_info_result_success= Just res})
+    (\e  -> 
+      return rs{f_Get_game_info_result_ex1 =Just e}))
   writeMessageBegin oprot ("get_game_info", M_REPLY, seqid);
   write_Get_game_info_result oprot res
   writeMessageEnd oprot
@@ -642,13 +715,16 @@ process_get_game_info (seqid, iprot, oprot, handler) = do
 process_get_hand (seqid, iprot, oprot, handler) = do
   args <- read_Get_hand_args iprot
   readMessageEnd iprot
-  rs <- return (Get_hand_result Nothing Nothing)
+  rs <- return (Get_hand_result Nothing Nothing Nothing)
   res <- (Control.Exception.catch
-    (do
-      res <- Iface.get_hand handler (f_Get_hand_args_ticket args)
-      return rs{f_Get_hand_result_success= Just res})
+    (Control.Exception.catch
+      (do
+        res <- Iface.get_hand handler (f_Get_hand_args_ticket args)
+        return rs{f_Get_hand_result_success= Just res})
+      (\e  -> 
+        return rs{f_Get_hand_result_ex1 =Just e}))
     (\e  -> 
-      return rs{f_Get_hand_result_ex1 =Just e}))
+      return rs{f_Get_hand_result_ex2 =Just e}))
   writeMessageBegin oprot ("get_hand", M_REPLY, seqid);
   write_Get_hand_result oprot res
   writeMessageEnd oprot
@@ -656,16 +732,19 @@ process_get_hand (seqid, iprot, oprot, handler) = do
 process_pass_cards (seqid, iprot, oprot, handler) = do
   args <- read_Pass_cards_args iprot
   readMessageEnd iprot
-  rs <- return (Pass_cards_result Nothing Nothing Nothing)
+  rs <- return (Pass_cards_result Nothing Nothing Nothing Nothing)
   res <- (Control.Exception.catch
     (Control.Exception.catch
-      (do
-        res <- Iface.pass_cards handler (f_Pass_cards_args_ticket args) (f_Pass_cards_args_cards args)
-        return rs{f_Pass_cards_result_success= Just res})
+      (Control.Exception.catch
+        (do
+          res <- Iface.pass_cards handler (f_Pass_cards_args_ticket args) (f_Pass_cards_args_cards args)
+          return rs{f_Pass_cards_result_success= Just res})
+        (\e  -> 
+          return rs{f_Pass_cards_result_ex1 =Just e}))
       (\e  -> 
-        return rs{f_Pass_cards_result_ex1 =Just e}))
+        return rs{f_Pass_cards_result_ex2 =Just e}))
     (\e  -> 
-      return rs{f_Pass_cards_result_ex2 =Just e}))
+      return rs{f_Pass_cards_result_ex3 =Just e}))
   writeMessageBegin oprot ("pass_cards", M_REPLY, seqid);
   write_Pass_cards_result oprot res
   writeMessageEnd oprot
@@ -673,13 +752,16 @@ process_pass_cards (seqid, iprot, oprot, handler) = do
 process_get_trick (seqid, iprot, oprot, handler) = do
   args <- read_Get_trick_args iprot
   readMessageEnd iprot
-  rs <- return (Get_trick_result Nothing Nothing)
+  rs <- return (Get_trick_result Nothing Nothing Nothing)
   res <- (Control.Exception.catch
-    (do
-      res <- Iface.get_trick handler (f_Get_trick_args_ticket args)
-      return rs{f_Get_trick_result_success= Just res})
+    (Control.Exception.catch
+      (do
+        res <- Iface.get_trick handler (f_Get_trick_args_ticket args)
+        return rs{f_Get_trick_result_success= Just res})
+      (\e  -> 
+        return rs{f_Get_trick_result_ex1 =Just e}))
     (\e  -> 
-      return rs{f_Get_trick_result_ex1 =Just e}))
+      return rs{f_Get_trick_result_ex3 =Just e}))
   writeMessageBegin oprot ("get_trick", M_REPLY, seqid);
   write_Get_trick_result oprot res
   writeMessageEnd oprot
@@ -687,16 +769,19 @@ process_get_trick (seqid, iprot, oprot, handler) = do
 process_play_card (seqid, iprot, oprot, handler) = do
   args <- read_Play_card_args iprot
   readMessageEnd iprot
-  rs <- return (Play_card_result Nothing Nothing Nothing)
+  rs <- return (Play_card_result Nothing Nothing Nothing Nothing)
   res <- (Control.Exception.catch
     (Control.Exception.catch
-      (do
-        res <- Iface.play_card handler (f_Play_card_args_ticket args) (f_Play_card_args_card args)
-        return rs{f_Play_card_result_success= Just res})
+      (Control.Exception.catch
+        (do
+          res <- Iface.play_card handler (f_Play_card_args_ticket args) (f_Play_card_args_card args)
+          return rs{f_Play_card_result_success= Just res})
+        (\e  -> 
+          return rs{f_Play_card_result_ex1 =Just e}))
       (\e  -> 
-        return rs{f_Play_card_result_ex1 =Just e}))
+        return rs{f_Play_card_result_ex2 =Just e}))
     (\e  -> 
-      return rs{f_Play_card_result_ex2 =Just e}))
+      return rs{f_Play_card_result_ex3 =Just e}))
   writeMessageBegin oprot ("play_card", M_REPLY, seqid);
   write_Play_card_result oprot res
   writeMessageEnd oprot
@@ -704,13 +789,16 @@ process_play_card (seqid, iprot, oprot, handler) = do
 process_get_round_result (seqid, iprot, oprot, handler) = do
   args <- read_Get_round_result_args iprot
   readMessageEnd iprot
-  rs <- return (Get_round_result_result Nothing Nothing)
+  rs <- return (Get_round_result_result Nothing Nothing Nothing)
   res <- (Control.Exception.catch
-    (do
-      res <- Iface.get_round_result handler (f_Get_round_result_args_ticket args)
-      return rs{f_Get_round_result_result_success= Just res})
+    (Control.Exception.catch
+      (do
+        res <- Iface.get_round_result handler (f_Get_round_result_args_ticket args)
+        return rs{f_Get_round_result_result_success= Just res})
+      (\e  -> 
+        return rs{f_Get_round_result_result_ex1 =Just e}))
     (\e  -> 
-      return rs{f_Get_round_result_result_ex1 =Just e}))
+      return rs{f_Get_round_result_result_ex3 =Just e}))
   writeMessageBegin oprot ("get_round_result", M_REPLY, seqid);
   write_Get_round_result_result oprot res
   writeMessageEnd oprot
@@ -718,13 +806,16 @@ process_get_round_result (seqid, iprot, oprot, handler) = do
 process_get_game_result (seqid, iprot, oprot, handler) = do
   args <- read_Get_game_result_args iprot
   readMessageEnd iprot
-  rs <- return (Get_game_result_result Nothing Nothing)
+  rs <- return (Get_game_result_result Nothing Nothing Nothing)
   res <- (Control.Exception.catch
-    (do
-      res <- Iface.get_game_result handler (f_Get_game_result_args_ticket args)
-      return rs{f_Get_game_result_result_success= Just res})
+    (Control.Exception.catch
+      (do
+        res <- Iface.get_game_result handler (f_Get_game_result_args_ticket args)
+        return rs{f_Get_game_result_result_success= Just res})
+      (\e  -> 
+        return rs{f_Get_game_result_result_ex1 =Just e}))
     (\e  -> 
-      return rs{f_Get_game_result_result_ex1 =Just e}))
+      return rs{f_Get_game_result_result_ex3 =Just e}))
   writeMessageBegin oprot ("get_game_result", M_REPLY, seqid);
   write_Get_game_result_result oprot res
   writeMessageEnd oprot
