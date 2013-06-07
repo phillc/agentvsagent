@@ -49,7 +49,10 @@ class Round
         @playTrick callback
 
   passCards: (callback) ->
-    if @number % 4 != 0
+    if @number % 4 == 0
+      @log "Not passing cards"
+      callback()
+    else
       @log "About to pass cards"
       cardsToPass = @options.passCardsFn this
       for cardToPass in cardsToPass
@@ -60,9 +63,6 @@ class Round
         @log "Received cards:", receivedCards
         @held = @held.concat(receivedCards)
         callback()
-    else
-      @log "Not passing cards"
-      callback()
 
   playTrick: (callback) ->
     trick = @createTrick()
@@ -132,6 +132,9 @@ exports.play = (passCardsFn, playCardFn) ->
             throw err if err
             console.log "game result:", gameResult
             connection.end()
+    else
+      console.log "No ticket"
+      connection.end()
 
 exports.Suit = types.Suit
 exports.Rank = types.Rank

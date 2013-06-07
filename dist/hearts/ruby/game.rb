@@ -63,7 +63,9 @@ class Round
   end
 
   def pass_cards
-    if @number % 4 != 0
+    if @number % 4 == 0
+      log "Not passing cards"
+    else
       log "About to pass cards"
       cards_to_pass = @options[:pass_cards_fn].(self)
 
@@ -156,8 +158,10 @@ class Game
       puts "Game is over"
       game_result = client.get_game_result ticket
       puts "game result: #{game_result.inspect}"
-      transport.close
+    else
+      puts "No ticket"
     end
+    transport.close
   end
 
   include AgentVsAgent

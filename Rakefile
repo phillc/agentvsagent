@@ -49,7 +49,7 @@ task :agents, :number, :langs, :sleep do |t, args|
       begin
         PTY.spawn(command) do |stdin, stdout, pid|
           begin
-            stdin.each { |line| print "[#{i}] #{line}" }
+            stdin.each { |line| puts "[#{i}] #{line}" }
           rescue Errno::EIO
             puts "Errno:EIO error, but this probably just means that the process has finished giving output"
           end

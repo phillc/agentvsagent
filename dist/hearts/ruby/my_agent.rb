@@ -42,7 +42,6 @@ def playable_cards(trick)
   valid_cards
 end
 
-
 Game.do_pass_cards do |round|
   cards_to_pass = round.dealt[0..2]
   round.log "Passing cards #{cards_to_pass.inspect}"
