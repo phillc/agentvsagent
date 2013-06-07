@@ -25,18 +25,18 @@ module.exports = class Handler
       result null, response
 
   get_game_info: (ticket, result) ->
-    logger.info "Get game info", ticket
+    logger.verbose "Get game info", ticket
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
     thriftPosition = mapper.positionToThrift(game.positionOf(player))
     gameInfo = new types.GameInfo(position: thriftPosition)
-    logger.info "Returning game info", ticket
+    logger.verbose "Returning game info", ticket
 
     result null, gameInfo
 
   get_hand: (ticket, result) ->
-    logger.info "Get hand", ticket
+    logger.verbose "Get hand", ticket
 
     @_player(ticket).recvDealt (err, cards) ->
       return result mapper.errorToThrift(err), null if err
@@ -44,7 +44,7 @@ module.exports = class Handler
       result null, thriftCards
 
   pass_cards: (ticket, cards, result) ->
-    logger.info "Pass cards", ticket, cards
+    logger.verbose "Pass cards", ticket, cards
     player = @_player(ticket)
     mappedCards = cards.map mapper.thriftToCard
     action = new actions.PassCards(player, mappedCards)
@@ -55,15 +55,15 @@ module.exports = class Handler
       result null, thriftCards
 
   get_trick: (ticket, result) ->
-    logger.info "Get trick", ticket
+    logger.verbose "Get trick", ticket
 
     @_player(ticket).recvTurn (err, trick) ->
       return result mapper.errorToThrift(err), null if err
-      logger.info "Returning recvTurn", trick
+      logger.verbose "Returning recvTurn", trick
       result null, mapper.trickToThrift(trick)
 
   play_card: (ticket, card, result) ->
-    logger.info "play_card", ticket
+    logger.verbose "play_card", ticket
 
     player = @_player(ticket)
     action = new actions.PlayCard(player, mapper.thriftToCard(card))
@@ -73,7 +73,7 @@ module.exports = class Handler
       result null, mapper.trickToThrift(trick)
 
   get_round_result: (ticket, result) ->
-    logger.info "get_round_result", ticket
+    logger.verbose "get_round_result", ticket
 
     @_player(ticket).recvEndRound (err, scores, status) ->
       return result mapper.errorToThrift(err), null if err

@@ -48,7 +48,7 @@ module.exports = class Game
       return player if player.id == playerId
 
   nextState: ->
-    logger.info "nextState:: stack",  @stack
+    logger.verbose "nextState:: stack",  @stack
     @currentState = @states[@stack.pop()]
     @currentState.run()
 

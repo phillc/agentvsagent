@@ -1,7 +1,3 @@
-# 0.1
-
-* Move/data validations
-
 # 0.2
 
 * Stable match making

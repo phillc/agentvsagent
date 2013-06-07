@@ -14,12 +14,12 @@ class State
       action.execute(@game)
       @afterAction()
     else
-      logger.info "An error has occured: #{error.type} :: #{error.message}."
+      logger.verbose "An error has occured: #{error.type} :: #{error.message}."
       @game.abort(action.player, error)
 
 exports.StartingGame = class StartingGame extends State
   run: ->
-    logger.info "Starting game with players:", @game.players.map (p) -> p.id
+    logger.verbose "Starting game with players:", @game.players.map (p) -> p.id
     positions = ["north", "east", "west", "south"]
 
     for player in und.shuffle(@game.players)
@@ -46,7 +46,7 @@ exports.StartingRound = class StartingRound extends State
 
 exports.Dealing = class Dealing extends State
   run: ->
-    logger.info "Dealing"
+    logger.verbose "Dealing"
     @deal()
     @game.nextState()
 
@@ -66,10 +66,10 @@ exports.Passing = class Passing extends State
     super(game)
 
   run: ->
-    logger.info "Passing", @direction
+    logger.verbose "Passing", @direction
 
   afterAction: (action) ->
-    logger.info "Handled passing action"
+    logger.verbose "Handled passing action"
 
     if @game.currentRound().allHavePassed()
       @exchange()
@@ -112,23 +112,23 @@ exports.WaitingForCard = class WaitingForCard extends State
     super(game)
 
   run: ->
-    logger.info "Waiting for card from", @position
+    logger.verbose "Waiting for card from", @position
     @game.positions[@position].sendTurn @game.currentRound().currentTrick()
 
   afterAction: ->
-    logger.info "Handling action while waiting for card from", @position
+    logger.verbose "Handling action while waiting for card from", @position
     @game.nextState()
 
 exports.EndingTrick = class EndingTrick extends State
   run: ->
-    logger.info "Trick ended"
+    logger.verbose "Trick ended"
     for player in @game.players
       player.sendEndTrick @game.currentRound().currentTrick()
     @game.nextState()
 
 exports.EndingRound = class EndingRound extends State
   run: ->
-    logger.info "round ended", @game.currentRound().scores()
+    logger.verbose "round ended", @game.currentRound().scores()
     if @game.maxPenaltyReached()
       @game.stack.push("endingGame")
       for player in @game.players
@@ -145,7 +145,7 @@ exports.EndingRound = class EndingRound extends State
 exports.EndingGame = class EndingGame extends State
   run: ->
     # TODO: cleanup from arena
-    logger.info "game ended", @game.scores()
+    logger.verbose "game ended", @game.scores()
     for player in @game.players
       player.sendEndGame @game.scores()
 

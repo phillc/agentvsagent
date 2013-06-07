@@ -51,7 +51,7 @@ exports.PassCards = class PassCards extends Action
   execute: (game) ->
     position = game.positionOf(@player)
     seat = game.currentRound()[position]
-    logger.info "PASSING CARDS", @cards
+    logger.verbose "PASSING CARDS", @cards
 
     (new Pile(@cards)).copyAllCardsTo game.currentRound()[position].passed
 
@@ -118,7 +118,7 @@ exports.PlayCard = class PlayCard extends Action
       null
 
   execute: (game) ->
-    logger.info "PLAYING CARD", @card
+    logger.verbose "PLAYING CARD", @card
     position = game.positionOf(@player)
     round = game.currentRound()
 

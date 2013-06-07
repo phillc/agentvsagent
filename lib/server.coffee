@@ -3,7 +3,6 @@ winston = require 'winston'
 logger = require './logger'
 
 exports.start = (options) ->
-  logger.add winston.transports.Console
   app = express()
 
   app.set 'view engine', 'jade'
@@ -12,7 +11,14 @@ exports.start = (options) ->
       res.locals.pretty = true
       next()
 
-  app.use express.logger(format: 'dev')
+  loggerOptions = timestamp: true, colorize: true
+  if options.debug
+    app.use express.logger(format: 'dev')
+    loggerOptions.level = 'verbose'
+  else
+    loggerOptions.level = 'info'
+  logger.add winston.transports.Console, loggerOptions
+
   app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a>")
 
   HeartsService = require './hearts/service'
@@ -33,7 +39,7 @@ exports.start = (options) ->
   app.use '/game/hearts', require('connect-assets')(src: __dirname + '/hearts/web/assets', servePath: '/game/hearts')
   app.use '/game/hearts', require('./hearts/web').app()
 
-  console.log "OPTIONS", options
+  logger.verbose "OPTIONS", options
   tcpServer.listen(4001)
   logger.info "TCP Server listening on", tcpServer.address()
   httpServer = app.listen(4000)

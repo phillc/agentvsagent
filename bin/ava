@@ -10,6 +10,7 @@ program
 program
   .option('--server', 'start a local server')
   .option('--hearts-max-points <points>', 'Points for game end', parseInt)
+  .option('--debug', 'Show debug log')
 
 // TODO: ava update, looks at a yml file for update dir
 
@@ -17,7 +18,8 @@ program.parse(process.argv)
 
 if(program.server) {
   require('../lib/server').start({
-    heartsMaxPoints: program.heartsMaxPoints
+    heartsMaxPoints: program.heartsMaxPoints,
+    debug: !!program.debug
   });
 } else {
   program.outputHelp()
