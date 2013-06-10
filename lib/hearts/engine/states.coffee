@@ -14,7 +14,6 @@ class State
       action.execute(@game)
       @afterAction()
     else
-      logger.verbose "An error has occured: #{error.type} :: #{error.message}."
       @game.abort(action.player, error)
 
 exports.StartingGame = class StartingGame extends State
@@ -145,7 +144,7 @@ exports.EndingRound = class EndingRound extends State
 exports.EndingGame = class EndingGame extends State
   run: ->
     # TODO: cleanup from arena
-    logger.verbose "game ended", @game.scores()
+    logger.info "game ended", @game.scores()
     for player in @game.players
       player.sendEndGame @game.scores()
 

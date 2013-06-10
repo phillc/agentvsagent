@@ -1,8 +1,9 @@
+{EventEmitter} = require 'events'
 IdGenerator = require '../../idgenerator'
 logger = require '../../logger'
 states = require './states'
 
-module.exports = class Game
+module.exports = class Game extends EventEmitter
   constructor: (player1, player2, player3, player4, options={}) ->
     @maxPenalty = options.heartsMaxPoints || 100
     @id = IdGenerator.generate()
@@ -74,6 +75,9 @@ module.exports = class Game
       score >= @maxPenalty
 
   abort: (culprit, error) ->
-    #TODO: notify everyone else too...
+    logger.warn "Game has been aborted: #{error.type} :: #{error.message}."
     culprit.raiseError(error)
+    for player in @players when player isnt culprit
+      player.raiseError type: "gameAborted", message: "Game ended due to an invalid action by another agent."
+    @emit 'gameEnded'
 
