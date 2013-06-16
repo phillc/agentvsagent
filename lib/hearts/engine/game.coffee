@@ -6,6 +6,7 @@ states = require './states'
 module.exports = class Game extends EventEmitter
   constructor: (player1, player2, player3, player4, options={}) ->
     @maxPenalty = options.heartsMaxPoints || 100
+    @turnTime = options.turnTime || 1000
     @id = IdGenerator.generate()
     @players = [player1, player2, player3, player4]
 
