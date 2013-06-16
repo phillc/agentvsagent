@@ -33,6 +33,17 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Advanced
   * Unit test at least your supporting code
 
+## Your first agent
+
+Simple heuristics should make a hearts agent very competitive. The sample agents already provide a list of cards that are valid to play, and then they choose from that list randomly.
+
+* Your first step could be to take that list of valid cards, and sort them from low to high, and play the lowest card.
+* Make another agent, and play cards from high to low and compare the results.
+* Eventually, add a condition that if the Queen of Spades can be played safely, do so.
+* Your next heuristic could be as simple as playing the highest card that can be played safely, or play the highest card if the trick has no points.
+
+From there, you should be able to code against other scenarios as you observe the behaviors of your agent while playing against it in the web UI.
+
 ## Potential game ideas
 
 * Team games: Spades, Bridge
