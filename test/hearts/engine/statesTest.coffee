@@ -157,10 +157,19 @@ describe "states", ->
 
     it "does not go to the next state if the same player passes four times", ->
       @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
-      @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
-      @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
-      @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
       @nextStateCalls.should.equal(0)
+
+      @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
+      @game.stack[0].should.equal("gameEnded")
+      @nextStateCalls.should.equal(1)
+
+      @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
+      @game.stack[0].should.equal("gameEnded")
+      @nextStateCalls.should.equal(2)
+
+      @state.handleAction new actions.PassCards(@game.positions.north, @northPassedCards)
+      @game.stack[0].should.equal("gameEnded")
+      @nextStateCalls.should.equal(3)
 
     describe "strategies", ->
       setup = ->
@@ -277,11 +286,12 @@ describe "states", ->
       @nextStateCalls = 0
       @card = new Card(Suit.CLUBS, Rank.TWO)
       @game.currentRound().north.held.cards = [@card]
+      @game.turnTime = 0
 
     it "applies the card to the player", ->
-      state = new states.WaitingForCard(@game, "north")
+      @game.currentState.run()
       action = new actions.PlayCard(@game.positions.north, @card)
-      state.handleAction(action)
+      @game.currentState.handleAction(action)
 
       @game.currentRound().currentTrick().played.cards[0].should.equal(@card)
 
@@ -289,14 +299,48 @@ describe "states", ->
       @game.positions.north.recvTurn (err, trick) =>
         trick.should.equal @game.currentRound().currentTrick()
         done()
-      state = new states.WaitingForCard(@game, "north").run()
+      @game.currentState.run()
 
     it "goes to the next state", ->
-      state = new states.WaitingForCard(@game, "north")
       action = new actions.PlayCard(@game.positions.north, @card)
-      state.handleAction(action)
+      @nextStateCalls.should.equal(0)
+      @game.currentState.handleAction(action)
 
       @nextStateCalls.should.equal(1)
+
+    it "aborts if the player takes longer than the allowed time", (done) ->
+      @game.turnTime = 50
+      @game.currentState.run()
+
+      @nextStateCalls.should.equal(0)
+      setTimeout =>
+        @nextStateCalls.should.equal(1)
+        @game.stack[0].should.equal("gameEnded")
+        @game.currentState = @game.states.gameEnded
+
+        action = new actions.PlayCard(@game.positions.north, @card)
+        @game.currentState.handleAction(action)
+        @nextStateCalls.should.equal(1)
+
+        # test the message
+        @game.positions.north.recvTurn (err, trick) =>
+          err.type.should.equal("invalidMove")
+          err.message.should.equal("Your action took longer than allowed")
+          done()
+      , 75
+
+    it "applies the card if the player takes less than the allowed time", (done) ->
+      @game.turnTime = 200
+      @game.currentState.run()
+
+      setTimeout =>
+        @nextStateCalls.should.equal(0)
+        action = new actions.PlayCard(@game.positions.north, @card)
+        @game.currentState.handleAction(action)
+        @game.currentRound().currentTrick().played.cards[0].should.equal(@card)
+        @nextStateCalls.should.equal(1)
+        done()
+      , 75
 
   describe "EndingTrick", ->
     beforeEach ->
@@ -374,7 +418,21 @@ describe "states", ->
 
       @game.states.endingGame.run()
 
-    it "doesn't call next state", ->
+    it "goes to the next state", ->
       @game.states.endingGame.run()
+      @nextStateCalls.should.equal(1)
+
+  describe "GameEnded", ->
+    beforeEach ->
+      @game.states.startingGame.run()
+      @nextStateCalls = 0
+
+    it "doesn't call next state", ->
+      @game.states.gameEnded.run()
       @nextStateCalls.should.equal(0)
+
+    it "emits a gameEnded event", (done) ->
+      @game.once "gameEnded", ->
+        done()
+      @game.states.gameEnded.run()
 

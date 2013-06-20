@@ -80,8 +80,10 @@ describe "Game", ->
         player.messages[0][1].type.should.equal("gameAborted")
         player.messages[0][1].message.should.equal("Game ended due to an invalid action by another agent.")
 
-    it "emits a gameEnded event", (done) ->
-      @game.once "gameEnded", ->
+    it "moves the game to GameEnded state", (done) ->
+      @game.nextState = =>
+        @game.stack.length.should.equal(1)
+        @game.stack[0].should.equal("gameEnded")
         done()
       @game.abort(@player2, type: "FOO", message: "BAR")
 

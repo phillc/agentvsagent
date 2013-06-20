@@ -9,6 +9,7 @@ class State
   run: ->
 
   handleAction: (action) ->
+    @beforeAction && @beforeAction()
     error = action.validate(@game)
     if !error
       action.execute(@game)
@@ -111,8 +112,15 @@ exports.WaitingForCard = class WaitingForCard extends State
     super(game)
 
   run: ->
-    logger.verbose "Waiting for card from", @position
+    logger.verbose "Waiting for card from #{@position}, for #{@game.turnTime}"
     @game.positions[@position].sendTurn @game.currentRound().currentTrick()
+    @timer = setTimeout =>
+      logger.verbose "Timeout!"
+      @game.abort(@game.positions[@position], {type: "invalidMove", message: "Your action took longer than allowed"})
+    , @game.turnTime
+
+  beforeAction: ->
+    clearTimeout(@timer)
 
   afterAction: ->
     logger.verbose "Handling action while waiting for card from", @position
@@ -143,9 +151,18 @@ exports.EndingRound = class EndingRound extends State
 
 exports.EndingGame = class EndingGame extends State
   run: ->
-    # TODO: cleanup from arena
-    logger.info "game ended", @game.scores()
+    logger.info "sending scores", @game.scores()
     for player in @game.players
       player.sendEndGame @game.scores()
+    @game.stack.push("gameEnded")
+    @game.nextState()
+
+exports.GameEnded = class GameEnded extends State
+  handleAction: ->
+
+  run: ->
+    logger.info "game ended"
+    @game.emit 'gameEnded'
+
 
 

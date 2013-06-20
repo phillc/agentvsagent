@@ -27,6 +27,7 @@ module.exports = class Game extends EventEmitter
       endingTrick: new states.EndingTrick(this)
       endingRound: new states.EndingRound(this)
       endingGame: new states.EndingGame(this)
+      gameEnded: new states.GameEnded(this)
 
     # DATA
     @positions = {}
@@ -76,9 +77,12 @@ module.exports = class Game extends EventEmitter
       score >= @maxPenalty
 
   abort: (culprit, error) ->
+    #what if game already aborted/gameEnded?
     logger.warn "Game has been aborted: #{error.type} :: #{error.message}."
     culprit.raiseError(error)
     for player in @players when player isnt culprit
       player.raiseError type: "gameAborted", message: "Game ended due to an invalid action by another agent."
-    @emit 'gameEnded'
+    @stack.splice(0, @stack.length)
+    @stack.push("gameEnded")
+    @nextState()
 
