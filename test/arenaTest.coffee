@@ -51,6 +51,36 @@ describe "Arena", ->
       game = @arena.createGame @matchedPlayers
       game.id.should.equal(Object.keys(@arena.runningMatches)[0])
 
+    it "adds a listener that cleans up the game after some period of time", (done) ->
+      @arena.lingerTime = 50
+      game = @arena.createGame @matchedPlayers
+      Object.keys(@arena.runningMatches).length.should.equal(1)
+      game.emit 'gameEnded'
+      setTimeout =>
+        Object.keys(@arena.runningMatches).length.should.equal(0)
+        done()
+      , 75
+
+    it "adds doesn't clean up until after linger time", (done) ->
+      @arena.lingerTime = 50
+      game = @arena.createGame @matchedPlayers
+      Object.keys(@arena.runningMatches).length.should.equal(1)
+      game.emit 'gameEnded'
+      setTimeout =>
+        Object.keys(@arena.runningMatches).length.should.equal(1)
+        done()
+      , 25
+
+  describe "#removeGame", ->
+    it "removes the game from the running matches list", ->
+      gameId = Factory.createGame(arena: @arena).id
+
+      game = @arena.getGame gameId
+      game.id.should.equal(gameId)
+
+      @arena.removeGame(gameId)
+      should.not.exist(@arena.getGame(gameId))
+
   describe "#getGame", ->
     it "returns the game", ->
       gameId = Factory.createGame(arena: @arena).id
