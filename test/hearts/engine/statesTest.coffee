@@ -300,6 +300,8 @@ describe "states", ->
         trick.should.equal @game.currentRound().currentTrick()
         done()
       @game.currentState.run()
+      action = new actions.PlayCard(@game.positions.north, @card)
+      @game.currentState.handleAction(action)
 
     it "goes to the next state", ->
       action = new actions.PlayCard(@game.positions.north, @card)
@@ -322,7 +324,6 @@ describe "states", ->
         @game.currentState.handleAction(action)
         @nextStateCalls.should.equal(1)
 
-        # test the message
         @game.positions.north.recvTurn (err, trick) =>
           err.type.should.equal("invalidMove")
           err.message.should.equal("Your action took longer than allowed")
