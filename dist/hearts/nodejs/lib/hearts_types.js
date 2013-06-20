@@ -172,7 +172,7 @@ AgentVsAgent.Ticket.prototype.write = function(output) {
 };
 
 AgentVsAgent.EntryRequest = module.exports.EntryRequest = function(args) {
-  this.version = '0.0.10';
+  this.version = '0.0.11';
   if (args) {
     if (args.version !== undefined) {
       this.version = args.version;
@@ -813,4 +813,4 @@ AgentVsAgent.GameAbortedException.prototype.write = function(output) {
   return;
 };
 
-ttypes.CURRENT_VERSION = '0.0.10';
+ttypes.CURRENT_VERSION = '0.0.11';

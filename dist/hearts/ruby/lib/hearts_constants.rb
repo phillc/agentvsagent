@@ -8,6 +8,6 @@ require 'thrift'
 require 'hearts_types'
 
 module AgentVsAgent
-  CURRENT_VERSION = %q"0.0.10"
+  CURRENT_VERSION = %q"0.0.11"
 
 end
