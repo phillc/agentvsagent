@@ -2,6 +2,31 @@ express = require 'express'
 winston = require 'winston'
 logger = require './logger'
 
+Arena = require './arena'
+MatchMaker = require './matchmaker'
+
+HeartsService = require './hearts/service'
+HeartsFactory = require './hearts/factory'
+
+TicTacToeService = require './tic_tac_toe/service'
+TicTacToeFactory = require './tic_tac_toe/factory'
+
+mountGame = (name, app, service, factory, tcpPort, options) ->
+  factory = new factory(options)
+  arena = new Arena(factory)
+
+  matchMaker = new MatchMaker(arena)
+  matchMaker.start()
+
+  {tcpServer, binaryHttpMiddleware, jsonHttpMiddleware} = new service(arena).create()
+
+  app.use "/game/#{name}/service.json", jsonHttpMiddleware
+  app.use "/game/#{name}/service.thrift", binaryHttpMiddleware
+  app.use "/game/#{name}", require("./#{name}/web").app()
+
+  tcpServer.listen(tcpPort)
+  logger.info "TCP Server listening on", tcpServer.address()
+
 exports.start = (options) ->
   app = express()
 
@@ -19,28 +44,11 @@ exports.start = (options) ->
     loggerOptions.level = 'info'
   logger.add winston.transports.Console, loggerOptions
 
-  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a>")
+  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><a href='/game/tic_tac_toe/play'>Tic Tac Toe</a>")
 
-  HeartsService = require './hearts/service'
-  MatchMaker = require './matchmaker'
-  Arena = require './arena'
-  HeartsFactory = require './hearts/factory'
-
-  factory = new HeartsFactory(options)
-  arena = new Arena(factory)
-
-  matchMaker = new MatchMaker(arena)
-  matchMaker.start()
-
-  {tcpServer, binaryHttpMiddleware, jsonHttpMiddleware} = new HeartsService(arena).create()
-
-  app.use '/game/hearts/service.json', jsonHttpMiddleware
-  app.use '/game/hearts/service.thrift', binaryHttpMiddleware
-  app.use '/game/hearts', require('connect-assets')(src: __dirname + '/hearts/web/assets', servePath: '/game/hearts')
-  app.use '/game/hearts', require('./hearts/web').app()
+  mountGame("hearts", app, HeartsService, HeartsFactory, 4001, options)
+  mountGame("tic_tac_toe", app, TicTacToeService, TicTacToeFactory, 4002, options)
 
   logger.verbose "OPTIONS", options
-  tcpServer.listen(4001)
-  logger.info "TCP Server listening on", tcpServer.address()
   httpServer = app.listen(4000)
   logger.info "HTTP Server listening on", httpServer.address()
