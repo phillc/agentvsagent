@@ -1,0 +1,43 @@
+namespace rb TicTacToe
+namespace java TicTacToe
+namespace js TicTacToe
+
+enum Position {
+  X = 1,
+  O = 2
+}
+
+const string CURRENT_VERSION = "<%= ava_version %>"
+struct EntryRequest {
+  1: required string version=CURRENT_VERSION
+}
+
+struct Ticket {
+  1: required string gameId,
+  2: required string agentId
+}
+
+struct EntryResponse {
+  1: optional Ticket ticket,
+  2: optional string message
+}
+
+struct GameInfo {
+  1: required Position position
+}
+
+struct GameResult {
+  1: required Position winner
+}
+
+exception GameAbortedException {
+  1: required string message
+}
+
+service TicTacToe {
+  EntryResponse enter_arena(1: required EntryRequest request),
+  GameInfo get_game_info(1: required Ticket ticket) throws (1: GameAbortedException ex1),
+  list<i32> make_move(1: required list<i32> coordinates) throws (1: GameAbortedException ex1),
+  GameResult get_game_result(1: required Ticket ticket) throws (1: GameAbortedException ex2)
+}
+
