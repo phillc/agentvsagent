@@ -266,18 +266,18 @@ TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size0 = 0;
-        var _rtmp34;
+        var _size8 = 0;
+        var _rtmp312;
         this.coordinates = [];
-        var _etype3 = 0;
-        _rtmp34 = input.readListBegin();
-        _etype3 = _rtmp34.etype;
-        _size0 = _rtmp34.size;
-        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        var _etype11 = 0;
+        _rtmp312 = input.readListBegin();
+        _etype11 = _rtmp312.etype;
+        _size8 = _rtmp312.size;
+        for (var _i13 = 0; _i13 < _size8; ++_i13)
         {
-          var elem6 = null;
-          elem6 = input.readI32();
-          this.coordinates.push(elem6);
+          var elem14 = null;
+          elem14 = input.readI32();
+          this.coordinates.push(elem14);
         }
         input.readListEnd();
       } else {
@@ -301,12 +301,12 @@ TicTacToe.TicTacToe_make_move_args.prototype.write = function(output) {
   if (this.coordinates !== null && this.coordinates !== undefined) {
     output.writeFieldBegin('coordinates', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.I32, this.coordinates.length);
-    for (var iter7 in this.coordinates)
+    for (var iter15 in this.coordinates)
     {
-      if (this.coordinates.hasOwnProperty(iter7))
+      if (this.coordinates.hasOwnProperty(iter15))
       {
-        iter7 = this.coordinates[iter7];
-        output.writeI32(iter7);
+        iter15 = this.coordinates[iter15];
+        output.writeI32(iter15);
       }
     }
     output.writeListEnd();
@@ -348,21 +348,9 @@ TicTacToe.TicTacToe_make_move_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size8 = 0;
-        var _rtmp312;
-        this.success = [];
-        var _etype11 = 0;
-        _rtmp312 = input.readListBegin();
-        _etype11 = _rtmp312.etype;
-        _size8 = _rtmp312.size;
-        for (var _i13 = 0; _i13 < _size8; ++_i13)
-        {
-          var elem14 = null;
-          elem14 = input.readI32();
-          this.success.push(elem14);
-        }
-        input.readListEnd();
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new ttypes.MoveResult();
+        this.success.read(input);
       } else {
         input.skip(ftype);
       }
@@ -387,17 +375,8 @@ TicTacToe.TicTacToe_make_move_result.prototype.read = function(input) {
 TicTacToe.TicTacToe_make_move_result.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_make_move_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter15 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter15))
-      {
-        iter15 = this.success[iter15];
-        output.writeI32(iter15);
-      }
-    }
-    output.writeListEnd();
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {

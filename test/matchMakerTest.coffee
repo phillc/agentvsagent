@@ -6,6 +6,9 @@ describe "MatchMaker", ->
   beforeEach ->
     @arena = Factory.createArena()
     @matchMaker = new MatchMaker(@arena)
+    @arena.factory.createGame = ->
+      on: ->,
+      start: ->
 
   describe "#findMatch", ->
     it "does nothing if there are only three players", ->
@@ -40,6 +43,16 @@ describe "MatchMaker", ->
 
       Object.keys(@arena.runningMatches).length.should.equal(1)
       @arena.waitingRoom.length.should.equal(1)
+
+    it "creates a game if there are two players for a game of two players", ->
+      @arena.numberOfPlayers = 2
+      @arena.createPlayer()
+      @arena.createPlayer()
+
+      @matchMaker.findMatch()
+
+      Object.keys(@arena.runningMatches).length.should.equal(1)
+      @arena.waitingRoom.length.should.equal(0)
 
   describe "#start", ->
     it "automatically finds matches as players join", ->

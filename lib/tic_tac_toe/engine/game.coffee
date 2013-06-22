@@ -10,3 +10,5 @@ module.exports = class Game extends EventEmitter
   getPlayer: (playerId) ->
     for player in @players
       return player if player.id == playerId
+
+  start: ->

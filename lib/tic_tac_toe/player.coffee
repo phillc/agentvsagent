@@ -1,7 +1,7 @@
-{EventEmitter} = require 'events'
-IdGenerator = require '../idgenerator'
+AbstractPlayer = require '../abstract_player'
 
-module.exports = class Player extends EventEmitter
+module.exports = class Player extends AbstractPlayer
   constructor: ->
-    @id = IdGenerator.generate()
+    @events = ['startedGame']
+    super
 

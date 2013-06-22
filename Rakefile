@@ -25,16 +25,21 @@ class Agent
 end
 
 desc "run ruby random agents"
-task :agents, :number, :langs, :sleep do |t, args|
-  args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee"
+task :agents, :number, :langs, :game, :sleep do |t, args|
+  args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee", game: "hearts"
 
   agent_commands = {
-    "ruby" => Agent.new(directory: 'dist/hearts/ruby', command: 'ruby my_agent.rb'),
-    "coffee" => Agent.new(directory: 'dist/hearts/nodejs', command: 'coffee myAgent.coffee'),
-    "haskell" => Agent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent')
+    "hearts" => {
+      "ruby" => Agent.new(directory: 'dist/hearts/ruby', command: 'ruby my_agent.rb'),
+      "coffee" => Agent.new(directory: 'dist/hearts/nodejs', command: 'coffee myAgent.coffee'),
+      "haskell" => Agent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent')
+    },
+    "ttt" => {
+      "ruby" => Agent.new(directory: 'dist/tic_tac_toe/ruby', command: 'ruby my_agent.rb'),
+    }
   }
 
-  agents = agent_commands.values_at(*args.langs.split(":")).shuffle
+  agents = agent_commands[args.game].values_at(*args.langs.split(":")).shuffle
 
   agents.each(&:compile!)
 

@@ -1,10 +1,12 @@
+Player = require './player'
 Game = require './engine/game'
 
 module.exports = class TicTacToeFactory
   constructor: (@gameOptions) ->
+    @numberOfPlayers = 2
+
   createPlayer: ->
-    # new Player()
-    {}
+    new Player()
 
   createGame: (players...) ->
     new Game(players..., @gameOptions)

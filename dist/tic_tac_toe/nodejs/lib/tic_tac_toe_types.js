@@ -304,6 +304,94 @@ TicTacToe.GameResult.prototype.write = function(output) {
   return;
 };
 
+TicTacToe.MoveResult = module.exports.MoveResult = function(args) {
+  this.opponent = null;
+  this.status = null;
+  if (args) {
+    if (args.opponent !== undefined) {
+      this.opponent = args.opponent;
+    }
+    if (args.status !== undefined) {
+      this.status = args.status;
+    }
+  }
+};
+TicTacToe.MoveResult.prototype = {};
+TicTacToe.MoveResult.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.LIST) {
+        var _size0 = 0;
+        var _rtmp34;
+        this.opponent = [];
+        var _etype3 = 0;
+        _rtmp34 = input.readListBegin();
+        _etype3 = _rtmp34.etype;
+        _size0 = _rtmp34.size;
+        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        {
+          var elem6 = null;
+          elem6 = input.readI32();
+          this.opponent.push(elem6);
+        }
+        input.readListEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.status = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+TicTacToe.MoveResult.prototype.write = function(output) {
+  output.writeStructBegin('MoveResult');
+  if (this.opponent !== null && this.opponent !== undefined) {
+    output.writeFieldBegin('opponent', Thrift.Type.LIST, 1);
+    output.writeListBegin(Thrift.Type.I32, this.opponent.length);
+    for (var iter7 in this.opponent)
+    {
+      if (this.opponent.hasOwnProperty(iter7))
+      {
+        iter7 = this.opponent[iter7];
+        output.writeI32(iter7);
+      }
+    }
+    output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.status !== null && this.status !== undefined) {
+    output.writeFieldBegin('status', Thrift.Type.STRING, 2);
+    output.writeString(this.status);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 TicTacToe.GameAbortedException = module.exports.GameAbortedException = function(args) {
   Thrift.TException.call(this, "TicTacToe.GameAbortedException")
   this.name = "TicTacToe.GameAbortedException"

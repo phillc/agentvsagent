@@ -215,7 +215,7 @@ module TicTacToe
       EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::I32}},
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::TicTacToe::MoveResult},
         EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::TicTacToe::GameAbortedException}
       }
 

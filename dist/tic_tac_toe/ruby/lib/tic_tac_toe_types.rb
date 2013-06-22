@@ -109,6 +109,26 @@ module TicTacToe
     ::Thrift::Struct.generate_accessors self
   end
 
+  class MoveResult
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    OPPONENT = 1
+    STATUS = 2
+
+    FIELDS = {
+      OPPONENT => {:type => ::Thrift::Types::LIST, :name => 'opponent', :element => {:type => ::Thrift::Types::I32}},
+      STATUS => {:type => ::Thrift::Types::STRING, :name => 'status'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field opponent is unset!') unless @opponent
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field status is unset!') unless @status
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
   class GameAbortedException < ::Thrift::Exception
     include ::Thrift::Struct, ::Thrift::Struct_Union
     def initialize(message=nil)

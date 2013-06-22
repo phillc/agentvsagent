@@ -6,6 +6,7 @@ module.exports = class Arena extends EventEmitter
     @waitingRoom = []
     @runningMatches = {}
     @lingerTime = 5000
+    @numberOfPlayers = @factory.numberOfPlayers
 
   createPlayer: ->
     player = @factory.createPlayer()
