@@ -12,7 +12,7 @@ class Game
     log "Starting game"
 
     loop do
-      opponent_move = @options[:client].make_move @options[:ticket]
+      opponent_move = @options[:client].make_move @options[:ticket], @options[:do_turn_fn].([])
       log "opponent's move: #{opponent_move.inspect}"
       break if round_result.status != AgentVsAgent::GameStatus::NEXT_ROUND
     end
@@ -47,7 +47,7 @@ class Game
       game = Game.new game_info, {
         ticket: ticket,
         client: client,
-        pass_cards_fn: @do_turn_fn,
+        do_turn_fn: @do_turn_fn,
       }
 
       game.run
