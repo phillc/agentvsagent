@@ -43,13 +43,13 @@ module TicTacToe
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_game_info failed: unknown result')
       end
 
-      def make_move(coordinates)
-        send_make_move(coordinates)
+      def make_move(ticket, coordinates)
+        send_make_move(ticket, coordinates)
         return recv_make_move()
       end
 
-      def send_make_move(coordinates)
-        send_message('make_move', Make_move_args, :coordinates => coordinates)
+      def send_make_move(ticket, coordinates)
+        send_message('make_move', Make_move_args, :ticket => ticket, :coordinates => coordinates)
       end
 
       def recv_make_move()
@@ -102,7 +102,7 @@ module TicTacToe
         args = read_args(iprot, Make_move_args)
         result = Make_move_result.new()
         begin
-          result.success = @handler.make_move(args.coordinates)
+          result.success = @handler.make_move(args.ticket, args.coordinates)
         rescue ::TicTacToe::GameAbortedException => ex1
           result.ex1 = ex1
         end
@@ -194,15 +194,18 @@ module TicTacToe
 
     class Make_move_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      COORDINATES = 1
+      TICKET = 1
+      COORDINATES = 2
 
       FIELDS = {
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::TicTacToe::Ticket},
         COORDINATES => {:type => ::Thrift::Types::LIST, :name => 'coordinates', :element => {:type => ::Thrift::Types::I32}}
       }
 
       def struct_fields; FIELDS; end
 
       def validate
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field coordinates is unset!') unless @coordinates
       end
 

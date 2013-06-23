@@ -243,8 +243,12 @@ TicTacToe.TicTacToe_get_game_info_result.prototype.write = function(output) {
 };
 
 TicTacToe.TicTacToe_make_move_args = function(args) {
+  this.ticket = null;
   this.coordinates = null;
   if (args) {
+    if (args.ticket !== undefined) {
+      this.ticket = args.ticket;
+    }
     if (args.coordinates !== undefined) {
       this.coordinates = args.coordinates;
     }
@@ -265,6 +269,14 @@ TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ticket = new ttypes.Ticket();
+        this.ticket.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
       if (ftype == Thrift.Type.LIST) {
         var _size8 = 0;
         var _rtmp312;
@@ -284,9 +296,6 @@ TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 0:
-        input.skip(ftype);
-        break;
       default:
         input.skip(ftype);
     }
@@ -298,8 +307,13 @@ TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
 
 TicTacToe.TicTacToe_make_move_args.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_make_move_args');
+  if (this.ticket !== null && this.ticket !== undefined) {
+    output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
+    this.ticket.write(output);
+    output.writeFieldEnd();
+  }
   if (this.coordinates !== null && this.coordinates !== undefined) {
-    output.writeFieldBegin('coordinates', Thrift.Type.LIST, 1);
+    output.writeFieldBegin('coordinates', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.I32, this.coordinates.length);
     for (var iter15 in this.coordinates)
     {
@@ -593,16 +607,17 @@ TicTacToe.TicTacToeClient.prototype.recv_get_game_info = function(input,mtype,rs
   }
   return callback('get_game_info failed: unknown result');
 };
-TicTacToe.TicTacToeClient.prototype.make_move = function(coordinates, callback) {
+TicTacToe.TicTacToeClient.prototype.make_move = function(ticket, coordinates, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
-  this.send_make_move(coordinates);
+  this.send_make_move(ticket, coordinates);
 };
 
-TicTacToe.TicTacToeClient.prototype.send_make_move = function(coordinates) {
+TicTacToe.TicTacToeClient.prototype.send_make_move = function(ticket, coordinates) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('make_move', Thrift.MessageType.CALL, this.seqid);
   var args = new TicTacToe.TicTacToe_make_move_args();
+  args.ticket = ticket;
   args.coordinates = coordinates;
   args.write(output);
   output.writeMessageEnd();
@@ -715,7 +730,7 @@ TicTacToe.TicTacToeProcessor.prototype.process_make_move = function(seqid, input
   var args = new TicTacToe.TicTacToe_make_move_args();
   args.read(input);
   input.readMessageEnd();
-  this._handler.make_move(args.coordinates, function (err, result) {
+  this._handler.make_move(args.ticket, args.coordinates, function (err, result) {
     var result = new TicTacToe.TicTacToe_make_move_result((err != null ? err : {success: result}));
     output.writeMessageBegin("make_move", Thrift.MessageType.REPLY, seqid);
     result.write(output);

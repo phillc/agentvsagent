@@ -42,7 +42,7 @@ exception GameAbortedException {
 service TicTacToe {
   EntryResponse enter_arena(1: required EntryRequest request),
   GameInfo get_game_info(1: required Ticket ticket) throws (1: GameAbortedException ex1),
-  MoveResult make_move(1: required list<i32> coordinates) throws (1: GameAbortedException ex1),
+  MoveResult make_move(1: required Ticket ticket, 2: required list<i32> coordinates) throws (1: GameAbortedException ex1),
   GameResult get_game_result(1: required Ticket ticket) throws (1: GameAbortedException ex2)
 }
 

@@ -34,5 +34,5 @@ module.exports = class Handler
 
     result null, gameInfo
 
-  make_move: (ticket, result) ->
+  make_move: (ticket, coordinates, result) ->
   get_game_result: (ticket, result) ->
