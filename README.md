@@ -5,7 +5,8 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 # This is an alpha release
 
 * The server isn't stable... it will leak memory (games don't clean up after them selves), it will crash when a client does something unexpected (like disconnect in the middle of a turn...), it will still assign disconnected players to games (and then crash).
-* The transport layer may change. Seems like a http transport would be easier to manage.
+* The transport layer may change. The API might change.
+* I want to make the barrier to entry much lower, but I haven't tackled it yet.
 
 ## Goals
 
@@ -47,7 +48,7 @@ From there, you should be able to code against other scenarios as you observe th
 ## Potential game ideas
 
 * Team games: Spades, Bridge
-* Variable # of players: 
+* Variable # of players:
 * Pathing: Othello (Reversi), Blokus, Tsuro
 
 ## Contributing
@@ -63,7 +64,6 @@ The command `make setup` has a more complete setup, including thrift
 ## In need of
 
 Sample agents for languages
-
 
 ## Credits
 
