@@ -1,3 +1,3 @@
 [submodule "vendor/thrift"]
 	path = vendor/thrift
-	url = http://git-wip-us.apache.org/repos/asf/thrift.git
+	url = https://github.com/phillc/thrift.git
