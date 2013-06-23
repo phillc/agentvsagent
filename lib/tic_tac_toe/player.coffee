@@ -1,4 +1,4 @@
-AbstractPlayer = require '../abstract_player'
+AbstractPlayer = require '../abstractplayer'
 
 module.exports = class Player extends AbstractPlayer
   constructor: ->
