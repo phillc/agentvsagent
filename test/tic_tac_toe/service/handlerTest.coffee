@@ -9,7 +9,6 @@ describe "Handler", ->
   beforeEach ->
     @arena = Factory.createArena(factory: new TicTacToeFactory())
     @arena.createPlayer()
-    @arena.createPlayer()
     @handler = new Handler(@arena)
     @game = Factory.createGame(arena: @arena)
 
@@ -23,7 +22,7 @@ describe "Handler", ->
 
     Object.keys(Handler.prototype).filter((name) -> name[0] != "_").length.should.equal(methods.length)
 
-  describe.only "#enter_arena", ->
+  describe "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
       @handler.enter_arena new types.EntryRequest(), (err, response) ->
         should.not.exist(err)
@@ -35,12 +34,11 @@ describe "Handler", ->
 
   describe "#get_game_info", ->
     beforeEach ->
-      @ticket = new types.Ticket(agentId: @game.players[0].id, gameId: @game.id)
+      @ticket = new types.Ticket(agentId: @game.positions.X.id, gameId: @game.id)
 
     it "returns game info", (done) ->
       @handler.get_game_info @ticket, (err, gameInfo) ->
         should.not.exist(err)
         gameInfo.position.should.equal(types.Position.X)
         done()
-
 

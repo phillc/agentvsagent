@@ -21,3 +21,23 @@ describe "Game", ->
     it "returns nothing if player doesn't exist", ->
       should.not.exist(@game.getPlayer("foo"))
 
+  describe "#start", ->
+    it "assigns each player a position", ->
+      @game.start()
+
+      positions = [
+        @game.positions.X.id
+        @game.positions.O.id
+      ]
+
+      players = @game.players.map (player) -> player.id
+
+      positions.sort().should.eql players.sort()
+
+    it "emits a started event on the players", (done) ->
+      @game.start()
+
+      @player1.recvStartedGame (err, gameId) =>
+        gameId.should.equal(@game.id)
+        done()
+

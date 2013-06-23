@@ -1,6 +1,11 @@
 logger = require '../../logger'
 types = require './types/tic_tac_toe_types'
-# mapper = require './mapper'
+
+mapper = {}
+mapper.positionToThrift = positionToThrift = (position) ->
+  switch position
+    when "X" then types.Position.X
+    when "O" then types.Position.O
 
 module.exports = class Handler
   constructor: (@arena) ->
@@ -21,14 +26,13 @@ module.exports = class Handler
       result null, response
 
   get_game_info: (ticket, result) ->
-    beforeEach ->
-      @ticket = new types.Ticket(agentId: @game.positions.x.id, gameId: @game.id)
+    game = @arena.getGame(ticket.gameId)
+    player = game.getPlayer(ticket.agentId)
 
-    it "returns game info", (done) ->
-      @handler.get_game_info @ticket, (err, gameInfo) ->
-        should.not.exist(err)
-        gameInfo.position.should.equal(types.Position.X)
-        done()
+    thriftPosition = mapper.positionToThrift(game.positionOf(player))
+    gameInfo = new types.GameInfo(position: thriftPosition)
+
+    result null, gameInfo
 
   make_move: (ticket, result) ->
   get_game_result: (ticket, result) ->
