@@ -4,7 +4,7 @@ Rank = require '../../../lib/hearts/engine/rank'
 Handler = require '../../../lib/hearts/service/handler'
 mapper = require '../../../lib/hearts/service/mapper'
 types = require '../../../lib/hearts/service/types/hearts_types'
-Hearts = require '../../../lib/hearts/service/types/hearts'
+Hearts = require '../../../lib/hearts/service/types/Hearts'
 Factory = require '../../factory'
 should = require("should")
 
