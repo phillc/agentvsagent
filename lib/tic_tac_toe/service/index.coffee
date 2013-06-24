@@ -1,6 +1,6 @@
 thrift = require 'thrift'
 logger = require '../../logger'
-TicTacToe = require './types/tictactoe'
+TicTacToe = require './types/TicTacToe'
 Handler = require './handler'
 
 module.exports = class Service

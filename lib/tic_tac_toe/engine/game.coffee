@@ -1,6 +1,6 @@
 {EventEmitter} = require 'events'
 und = require 'underscore'
-IdGenerator = require '../../idgenerator'
+IdGenerator = require '../../idGenerator'
 logger = require '../../logger'
 
 module.exports = class Game extends EventEmitter

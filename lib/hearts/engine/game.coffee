@@ -1,5 +1,5 @@
 {EventEmitter} = require 'events'
-IdGenerator = require '../../idgenerator'
+IdGenerator = require '../../idGenerator'
 logger = require '../../logger'
 states = require './states'
 

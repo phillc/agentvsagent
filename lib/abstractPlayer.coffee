@@ -1,5 +1,5 @@
 {EventEmitter} = require 'events'
-IdGenerator = require './idgenerator'
+IdGenerator = require './idGenerator'
 
 module.exports = class AbstractPlayer extends EventEmitter
   constructor: ->
