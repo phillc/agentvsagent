@@ -1,6 +1,6 @@
 Handler = require '../../../lib/tic_tac_toe/service/handler'
 types = require '../../../lib/tic_tac_toe/service/types/tic_tac_toe_types'
-TicTacToe = require '../../../lib/tic_tac_toe/service/types/tictactoe'
+TicTacToe = require '../../../lib/tic_tac_toe/service/types/TicTacToe'
 TicTacToeFactory = require '../../../lib/tic_tac_toe/factory'
 Factory = require '../../factory'
 should = require("should")
