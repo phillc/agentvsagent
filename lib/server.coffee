@@ -3,7 +3,7 @@ winston = require 'winston'
 logger = require './logger'
 
 Arena = require './arena'
-MatchMaker = require './matchmaker'
+MatchMaker = require './matchMaker'
 
 HeartsService = require './hearts/service'
 HeartsFactory = require './hearts/factory'

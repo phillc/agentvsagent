@@ -1,4 +1,4 @@
-MatchMaker = require '../lib/matchmaker'
+MatchMaker = require '../lib/matchMaker'
 Factory = require './factory'
 require("should")
 
