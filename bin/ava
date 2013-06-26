@@ -18,7 +18,7 @@ program
 program.parse(process.argv)
 
 if(program.server) {
-  require('../lib/server').start({
+  require('../server').start({
     heartsMaxPoints: program.heartsMaxPoints,
     debug: !!program.debug,
     turnTime: program.turnTime

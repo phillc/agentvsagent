@@ -1,5 +1,5 @@
 Player = require './player'
-Game = require './engine/game'
+Game = require './game'
 
 module.exports = class HeartsFactory
   constructor: (@gameOptions) ->
