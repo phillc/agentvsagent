@@ -1,16 +1,16 @@
-extends ./layout
+extends ../layout
 
 block head
-  link(rel="stylesheet", type="text/css", href="./lib/cards/cards.css", media="screen")
+  link(rel="stylesheet", type="text/css", href="/cards/cards.css", media="screen")
   //if lt IE 9
-    link(rel="stylesheet", type="text/css", href="./lib/cards/cards-ie.css", media="screen")
+    link(rel="stylesheet", type="text/css", href="/cards/cards-ie.css", media="screen")
   //if IE 9
-    link(rel="stylesheet", type="text/css", href="./lib/cards/cards-ie9.css", media="screen")
+    link(rel="stylesheet", type="text/css", href="/cards/cards-ie9.css", media="screen")
   != css('style')
 
-  script(src='./lib/thrift.js')
-  script(src='./lib/types/hearts_types.js')
-  script(src='./lib/types/Hearts.js')
+  script(src='/javascripts/thrift.js')
+  script(src='/types/hearts/hearts_types.js')
+  script(src='/types/hearts/Hearts.js')
   != js('controllers')
   != js('services')
   != js('filters')
