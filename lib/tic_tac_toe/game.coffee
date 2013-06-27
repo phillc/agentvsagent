@@ -25,3 +25,5 @@ module.exports = class Game extends EventEmitter
       @positions[availablePositions.shift()] = player
 
       player.sendStartedGame @id
+
+    @positions.X.sendGameInfo position: "X", opponentsMove: []

@@ -5,6 +5,9 @@ Suit = require './suit'
 states = require './states'
 logger = require '../logger'
 
+# I'm happy with the way this logic is separated, but I am not happy with
+# the fact that messages to the agents are in this async callback world,
+# but messages from the agent to the game are going through the handleAction path
 class Action
   constructor: (@player) ->
 
