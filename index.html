@@ -52,20 +52,27 @@
 <p>Agent vs. Agent is intended to be a collection of simple games that can be played by computer programs developed by people of various levels of experience. Agent vs. Agent targets small groups of people, and attempts to provide the tools necessary to conduct competitive agent vs agent combat. The ultimate goal is to help facilitate learning, whether that be through exploring new languages, learning new concepts, or smashing your co-workers egos.</p>
 
 <h1>
+<a name="current-games" class="anchor" href="#current-games"><span class="octicon octicon-link"></span></a>Current games</h1>
+
+<ul>
+<li>Hearts</li>
+<li>Ultimate tic tac toe (in the works)</li>
+</ul><h1>
 <a name="this-is-an-alpha-release" class="anchor" href="#this-is-an-alpha-release"><span class="octicon octicon-link"></span></a>This is an alpha release</h1>
 
 <ul>
 <li>The server isn't stable... it will leak memory (games don't clean up after them selves), it will crash when a client does something unexpected (like disconnect in the middle of a turn...), it will still assign disconnected players to games (and then crash).</li>
 <li>The transport layer may change. The API might change.</li>
 <li>I want to make the barrier to entry much lower, but I haven't tackled it yet.</li>
+<li>See the milestones for more information.</li>
 </ul><h2>
 <a name="goals" class="anchor" href="#goals"><span class="octicon octicon-link"></span></a>Goals</h2>
 
 <ul>
-<li>Privately deployable</li>
-<li>Support many languages</li>
-<li>Human playable</li>
-<li>Low barrier to entry</li>
+<li>Privately deployable: decentralized for low infrastructure costs</li>
+<li>Support many languages: for a larger audience</li>
+<li>Human playable games: to be able to see how your work is doing</li>
+<li>Low barrier to entry: so anyone can start a server and challenge others</li>
 </ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
@@ -78,8 +85,8 @@
 <a name="starting-an-agent" class="anchor" href="#starting-an-agent"><span class="octicon octicon-link"></span></a>Starting an agent</h2>
 
 <ul>
-<li>Clone or download the repository.</li>
-<li>Use the files in the dist/hearts// directory</li>
+<li>Clone or download this repository.</li>
+<li>Copy the files in the dist/// directory</li>
 </ul><h2>
 <a name="tips" class="anchor" href="#tips"><span class="octicon octicon-link"></span></a>Tips</h2>
 
@@ -98,7 +105,7 @@
 </ul>
 </li>
 </ul><h2>
-<a name="your-first-agent" class="anchor" href="#your-first-agent"><span class="octicon octicon-link"></span></a>Your first agent</h2>
+<a name="your-first-hearts-agent" class="anchor" href="#your-first-hearts-agent"><span class="octicon octicon-link"></span></a>Your first hearts agent</h2>
 
 <p>Simple heuristics should make a hearts agent very competitive. The sample agents already provide a list of cards that are valid to play, and then they choose from that list randomly.</p>
 
@@ -115,7 +122,7 @@
 <ul>
 <li>Team games: Spades, Bridge</li>
 <li>Variable # of players:</li>
-<li>Pathing: Othello (Reversi), Blokus, Tsuro</li>
+<li>Pathing: Othello (Reversi), Blokus, Tsuro, Cyclades</li>
 </ul><h2>
 <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
@@ -136,6 +143,12 @@
 <p>Sample agents for languages</p>
 
 <h2>
+<a name="known-major-issues" class="anchor" href="#known-major-issues"><span class="octicon octicon-link"></span></a>Known major issues</h2>
+
+<ul>
+<li>When a bot disconnects, the server still attempts to send them a message and will cause an exception</li>
+<li>Timeouts apply to the human player as well (1 second is not reasonable for a human)</li>
+</ul><h2>
 <a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
 
 <ul>
