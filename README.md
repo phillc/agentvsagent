@@ -30,7 +30,7 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 ## Starting an agent
 
 * Clone or download this repository.
-* Copy the files in the dist/<game>/<language>/ directory
+* Copy the files in the dist/::game::/::language::/ directory
 
 ## Tips
 
