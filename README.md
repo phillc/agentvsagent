@@ -2,18 +2,24 @@
 
 Agent vs. Agent is intended to be a collection of simple games that can be played by computer programs developed by people of various levels of experience. Agent vs. Agent targets small groups of people, and attempts to provide the tools necessary to conduct competitive agent vs agent combat. The ultimate goal is to help facilitate learning, whether that be through exploring new languages, learning new concepts, or smashing your co-workers egos.
 
+# Current games
+
+* Hearts
+* Ultimate tic tac toe (in the works)
+
 # This is an alpha release
 
 * The server isn't stable... it will leak memory (games don't clean up after them selves), it will crash when a client does something unexpected (like disconnect in the middle of a turn...), it will still assign disconnected players to games (and then crash).
 * The transport layer may change. The API might change.
 * I want to make the barrier to entry much lower, but I haven't tackled it yet.
+* See the milestones for more information.
 
 ## Goals
 
-* Privately deployable
-* Support many languages
-* Human playable
-* Low barrier to entry
+* Privately deployable: decentralized for low infrastructure costs
+* Support many languages: for a larger audience
+* Human playable games: to be able to see how your work is doing
+* Low barrier to entry: so anyone can start a server and challenge others
 
 ## Installation
 
@@ -23,8 +29,8 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 
 ## Starting an agent
 
-* Clone or download the repository.
-* Use the files in the dist/hearts/<language>/ directory
+* Clone or download this repository.
+* Copy the files in the dist/<game>/<language>/ directory
 
 ## Tips
 
@@ -34,7 +40,7 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Advanced
   * Unit test at least your supporting code
 
-## Your first agent
+## Your first hearts agent
 
 Simple heuristics should make a hearts agent very competitive. The sample agents already provide a list of cards that are valid to play, and then they choose from that list randomly.
 
@@ -49,7 +55,7 @@ From there, you should be able to code against other scenarios as you observe th
 
 * Team games: Spades, Bridge
 * Variable # of players:
-* Pathing: Othello (Reversi), Blokus, Tsuro
+* Pathing: Othello (Reversi), Blokus, Tsuro, Cyclades
 
 ## Contributing
 
@@ -64,6 +70,11 @@ The command `make setup` has a more complete setup, including thrift
 ## In need of
 
 Sample agents for languages
+
+## Known major issues
+
+* When a bot disconnects, the server still attempts to send them a message and will cause an exception
+* Timeouts apply to the human player as well (1 second is not reasonable for a human)
 
 ## Credits
 

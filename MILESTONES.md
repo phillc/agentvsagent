@@ -21,4 +21,4 @@
 # 2.0+
 
 * Eliminate ticket object
-* Centralized server over http
+* Centralized server, for people to "graduate" to bigger pools
