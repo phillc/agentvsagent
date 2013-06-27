@@ -11,11 +11,10 @@ block head
   script(src='/javascripts/thrift.js')
   script(src='/types/hearts/hearts_types.js')
   script(src='/types/hearts/Hearts.js')
-  != js('controllers')
-  != js('services')
-  != js('filters')
-  != js('app')
-
+  != js('hearts/controllers')
+  != js('hearts/services')
+  != js('hearts/filters')
+  != js('hearts/app')
 
 mixin cardBody
   span.rank {{card.rank | rankName | uppercase}}

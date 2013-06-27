@@ -4,14 +4,18 @@
 // DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 //
 
-if (typeof TicTacToe === 'undefined') {
-  TicTacToe = {};
+if (typeof AgentVsAgent === 'undefined') {
+  AgentVsAgent = {};
 }
-TicTacToe.Position = {
+AgentVsAgent.Position = {
 'X' : 1,
 'O' : 2
 };
-TicTacToe.EntryRequest = function(args) {
+AgentVsAgent.GameStatus = {
+'NEXT_MOVE' : 1,
+'END_GAME' : 2
+};
+AgentVsAgent.EntryRequest = function(args) {
   this.version = '0.0.11';
   if (args) {
     if (args.version !== undefined) {
@@ -19,8 +23,8 @@ TicTacToe.EntryRequest = function(args) {
     }
   }
 };
-TicTacToe.EntryRequest.prototype = {};
-TicTacToe.EntryRequest.prototype.read = function(input) {
+AgentVsAgent.EntryRequest.prototype = {};
+AgentVsAgent.EntryRequest.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -52,7 +56,7 @@ TicTacToe.EntryRequest.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.EntryRequest.prototype.write = function(output) {
+AgentVsAgent.EntryRequest.prototype.write = function(output) {
   output.writeStructBegin('EntryRequest');
   if (this.version !== null && this.version !== undefined) {
     output.writeFieldBegin('version', Thrift.Type.STRING, 1);
@@ -64,7 +68,7 @@ TicTacToe.EntryRequest.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.Ticket = function(args) {
+AgentVsAgent.Ticket = function(args) {
   this.gameId = null;
   this.agentId = null;
   if (args) {
@@ -76,8 +80,8 @@ TicTacToe.Ticket = function(args) {
     }
   }
 };
-TicTacToe.Ticket.prototype = {};
-TicTacToe.Ticket.prototype.read = function(input) {
+AgentVsAgent.Ticket.prototype = {};
+AgentVsAgent.Ticket.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -113,7 +117,7 @@ TicTacToe.Ticket.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.Ticket.prototype.write = function(output) {
+AgentVsAgent.Ticket.prototype.write = function(output) {
   output.writeStructBegin('Ticket');
   if (this.gameId !== null && this.gameId !== undefined) {
     output.writeFieldBegin('gameId', Thrift.Type.STRING, 1);
@@ -130,7 +134,7 @@ TicTacToe.Ticket.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.EntryResponse = function(args) {
+AgentVsAgent.EntryResponse = function(args) {
   this.ticket = null;
   this.message = null;
   if (args) {
@@ -142,8 +146,8 @@ TicTacToe.EntryResponse = function(args) {
     }
   }
 };
-TicTacToe.EntryResponse.prototype = {};
-TicTacToe.EntryResponse.prototype.read = function(input) {
+AgentVsAgent.EntryResponse.prototype = {};
+AgentVsAgent.EntryResponse.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -158,7 +162,7 @@ TicTacToe.EntryResponse.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ticket = new TicTacToe.Ticket();
+        this.ticket = new AgentVsAgent.Ticket();
         this.ticket.read(input);
       } else {
         input.skip(ftype);
@@ -180,7 +184,7 @@ TicTacToe.EntryResponse.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.EntryResponse.prototype.write = function(output) {
+AgentVsAgent.EntryResponse.prototype.write = function(output) {
   output.writeStructBegin('EntryResponse');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -197,7 +201,7 @@ TicTacToe.EntryResponse.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.GameInfo = function(args) {
+AgentVsAgent.GameInfo = function(args) {
   this.position = null;
   if (args) {
     if (args.position !== undefined) {
@@ -205,8 +209,8 @@ TicTacToe.GameInfo = function(args) {
     }
   }
 };
-TicTacToe.GameInfo.prototype = {};
-TicTacToe.GameInfo.prototype.read = function(input) {
+AgentVsAgent.GameInfo.prototype = {};
+AgentVsAgent.GameInfo.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -238,7 +242,7 @@ TicTacToe.GameInfo.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.GameInfo.prototype.write = function(output) {
+AgentVsAgent.GameInfo.prototype.write = function(output) {
   output.writeStructBegin('GameInfo');
   if (this.position !== null && this.position !== undefined) {
     output.writeFieldBegin('position', Thrift.Type.I32, 1);
@@ -250,7 +254,7 @@ TicTacToe.GameInfo.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.GameResult = function(args) {
+AgentVsAgent.GameResult = function(args) {
   this.winner = null;
   if (args) {
     if (args.winner !== undefined) {
@@ -258,8 +262,8 @@ TicTacToe.GameResult = function(args) {
     }
   }
 };
-TicTacToe.GameResult.prototype = {};
-TicTacToe.GameResult.prototype.read = function(input) {
+AgentVsAgent.GameResult.prototype = {};
+AgentVsAgent.GameResult.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -291,7 +295,7 @@ TicTacToe.GameResult.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.GameResult.prototype.write = function(output) {
+AgentVsAgent.GameResult.prototype.write = function(output) {
   output.writeStructBegin('GameResult');
   if (this.winner !== null && this.winner !== undefined) {
     output.writeFieldBegin('winner', Thrift.Type.I32, 1);
@@ -303,7 +307,7 @@ TicTacToe.GameResult.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.MoveResult = function(args) {
+AgentVsAgent.MoveResult = function(args) {
   this.opponent = null;
   this.status = null;
   if (args) {
@@ -315,8 +319,8 @@ TicTacToe.MoveResult = function(args) {
     }
   }
 };
-TicTacToe.MoveResult.prototype = {};
-TicTacToe.MoveResult.prototype.read = function(input) {
+AgentVsAgent.MoveResult.prototype = {};
+AgentVsAgent.MoveResult.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -350,8 +354,8 @@ TicTacToe.MoveResult.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.status = input.readString().value;
+      if (ftype == Thrift.Type.I32) {
+        this.status = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -365,7 +369,7 @@ TicTacToe.MoveResult.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.MoveResult.prototype.write = function(output) {
+AgentVsAgent.MoveResult.prototype.write = function(output) {
   output.writeStructBegin('MoveResult');
   if (this.opponent !== null && this.opponent !== undefined) {
     output.writeFieldBegin('opponent', Thrift.Type.LIST, 1);
@@ -382,8 +386,8 @@ TicTacToe.MoveResult.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.status !== null && this.status !== undefined) {
-    output.writeFieldBegin('status', Thrift.Type.STRING, 2);
-    output.writeString(this.status);
+    output.writeFieldBegin('status', Thrift.Type.I32, 2);
+    output.writeI32(this.status);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -391,7 +395,7 @@ TicTacToe.MoveResult.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.GameAbortedException = function(args) {
+AgentVsAgent.GameAbortedException = function(args) {
   this.message = null;
   if (args) {
     if (args.message !== undefined) {
@@ -399,9 +403,9 @@ TicTacToe.GameAbortedException = function(args) {
     }
   }
 };
-Thrift.inherits(TicTacToe.GameAbortedException, Thrift.TException);
-TicTacToe.GameAbortedException.prototype.name = 'GameAbortedException';
-TicTacToe.GameAbortedException.prototype.read = function(input) {
+Thrift.inherits(AgentVsAgent.GameAbortedException, Thrift.TException);
+AgentVsAgent.GameAbortedException.prototype.name = 'GameAbortedException';
+AgentVsAgent.GameAbortedException.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -433,7 +437,7 @@ TicTacToe.GameAbortedException.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.GameAbortedException.prototype.write = function(output) {
+AgentVsAgent.GameAbortedException.prototype.write = function(output) {
   output.writeStructBegin('GameAbortedException');
   if (this.message !== null && this.message !== undefined) {
     output.writeFieldBegin('message', Thrift.Type.STRING, 1);
@@ -445,4 +449,4 @@ TicTacToe.GameAbortedException.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.CURRENT_VERSION = '0.0.11';
+AgentVsAgent.CURRENT_VERSION = '0.0.11';

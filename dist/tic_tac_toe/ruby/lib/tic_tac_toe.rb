@@ -7,7 +7,7 @@
 require 'thrift'
 require 'tic_tac_toe_types'
 
-module TicTacToe
+module AgentVsAgent
   module TicTacToe
     class Client
       include ::Thrift::Client
@@ -92,7 +92,7 @@ module TicTacToe
         result = Get_game_info_result.new()
         begin
           result.success = @handler.get_game_info(args.ticket)
-        rescue ::TicTacToe::GameAbortedException => ex1
+        rescue ::AgentVsAgent::GameAbortedException => ex1
           result.ex1 = ex1
         end
         write_result(result, oprot, 'get_game_info', seqid)
@@ -103,7 +103,7 @@ module TicTacToe
         result = Make_move_result.new()
         begin
           result.success = @handler.make_move(args.ticket, args.coordinates)
-        rescue ::TicTacToe::GameAbortedException => ex1
+        rescue ::AgentVsAgent::GameAbortedException => ex1
           result.ex1 = ex1
         end
         write_result(result, oprot, 'make_move', seqid)
@@ -114,7 +114,7 @@ module TicTacToe
         result = Get_game_result_result.new()
         begin
           result.success = @handler.get_game_result(args.ticket)
-        rescue ::TicTacToe::GameAbortedException => ex2
+        rescue ::AgentVsAgent::GameAbortedException => ex2
           result.ex2 = ex2
         end
         write_result(result, oprot, 'get_game_result', seqid)
@@ -129,7 +129,7 @@ module TicTacToe
       REQUEST = 1
 
       FIELDS = {
-        REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::TicTacToe::EntryRequest}
+        REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::AgentVsAgent::EntryRequest}
       }
 
       def struct_fields; FIELDS; end
@@ -146,7 +146,7 @@ module TicTacToe
       SUCCESS = 0
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::TicTacToe::EntryResponse}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::EntryResponse}
       }
 
       def struct_fields; FIELDS; end
@@ -162,7 +162,7 @@ module TicTacToe
       TICKET = 1
 
       FIELDS = {
-        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::TicTacToe::Ticket}
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket}
       }
 
       def struct_fields; FIELDS; end
@@ -180,8 +180,8 @@ module TicTacToe
       EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::TicTacToe::GameInfo},
-        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::TicTacToe::GameAbortedException}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::GameInfo},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::GameAbortedException}
       }
 
       def struct_fields; FIELDS; end
@@ -198,7 +198,7 @@ module TicTacToe
       COORDINATES = 2
 
       FIELDS = {
-        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::TicTacToe::Ticket},
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket},
         COORDINATES => {:type => ::Thrift::Types::LIST, :name => 'coordinates', :element => {:type => ::Thrift::Types::I32}}
       }
 
@@ -218,8 +218,8 @@ module TicTacToe
       EX1 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::TicTacToe::MoveResult},
-        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::TicTacToe::GameAbortedException}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::MoveResult},
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::GameAbortedException}
       }
 
       def struct_fields; FIELDS; end
@@ -235,7 +235,7 @@ module TicTacToe
       TICKET = 1
 
       FIELDS = {
-        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::TicTacToe::Ticket}
+        TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket}
       }
 
       def struct_fields; FIELDS; end
@@ -253,8 +253,8 @@ module TicTacToe
       EX2 = 1
 
       FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::TicTacToe::GameResult},
-        EX2 => {:type => ::Thrift::Types::STRUCT, :name => 'ex2', :class => ::TicTacToe::GameAbortedException}
+        SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::GameResult},
+        EX2 => {:type => ::Thrift::Types::STRUCT, :name => 'ex2', :class => ::AgentVsAgent::GameAbortedException}
       }
 
       def struct_fields; FIELDS; end

@@ -1,6 +1,6 @@
-namespace rb TicTacToe
-namespace java TicTacToe
-namespace js TicTacToe
+namespace rb AgentVsAgent
+namespace java AgentVsAgent
+namespace js AgentVsAgent
 
 enum Position {
   X = 1,
@@ -30,9 +30,14 @@ struct GameResult {
   1: required Position winner
 }
 
+enum GameStatus {
+  NEXT_MOVE = 1,
+  END_GAME = 2
+}
+
 struct MoveResult {
   1: required list<i32> opponent,
-  2: required string status
+  2: required GameStatus status
 }
 
 exception GameAbortedException {

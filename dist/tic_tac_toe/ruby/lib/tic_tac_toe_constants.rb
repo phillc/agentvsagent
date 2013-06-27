@@ -7,7 +7,7 @@
 require 'thrift'
 require 'tic_tac_toe_types'
 
-module TicTacToe
+module AgentVsAgent
   CURRENT_VERSION = %q"0.0.11"
 
 end

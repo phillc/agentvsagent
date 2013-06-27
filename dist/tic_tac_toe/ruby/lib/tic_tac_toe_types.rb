@@ -6,12 +6,19 @@
 
 require 'thrift'
 
-module TicTacToe
+module AgentVsAgent
   module Position
     X = 1
     O = 2
     VALUE_MAP = {1 => "X", 2 => "O"}
     VALID_VALUES = Set.new([X, O]).freeze
+  end
+
+  module GameStatus
+    NEXT_MOVE = 1
+    END_GAME = 2
+    VALUE_MAP = {1 => "NEXT_MOVE", 2 => "END_GAME"}
+    VALID_VALUES = Set.new([NEXT_MOVE, END_GAME]).freeze
   end
 
   class EntryRequest
@@ -57,7 +64,7 @@ module TicTacToe
     MESSAGE = 2
 
     FIELDS = {
-      TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::TicTacToe::Ticket, :optional => true},
+      TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket, :optional => true},
       MESSAGE => {:type => ::Thrift::Types::STRING, :name => 'message', :optional => true}
     }
 
@@ -74,14 +81,14 @@ module TicTacToe
     POSITION = 1
 
     FIELDS = {
-      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::TicTacToe::Position}
+      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field position is unset!') unless @position
-      unless @position.nil? || ::TicTacToe::Position::VALID_VALUES.include?(@position)
+      unless @position.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@position)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field position!')
       end
     end
@@ -94,14 +101,14 @@ module TicTacToe
     WINNER = 1
 
     FIELDS = {
-      WINNER => {:type => ::Thrift::Types::I32, :name => 'winner', :enum_class => ::TicTacToe::Position}
+      WINNER => {:type => ::Thrift::Types::I32, :name => 'winner', :enum_class => ::AgentVsAgent::Position}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field winner is unset!') unless @winner
-      unless @winner.nil? || ::TicTacToe::Position::VALID_VALUES.include?(@winner)
+      unless @winner.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@winner)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field winner!')
       end
     end
@@ -116,7 +123,7 @@ module TicTacToe
 
     FIELDS = {
       OPPONENT => {:type => ::Thrift::Types::LIST, :name => 'opponent', :element => {:type => ::Thrift::Types::I32}},
-      STATUS => {:type => ::Thrift::Types::STRING, :name => 'status'}
+      STATUS => {:type => ::Thrift::Types::I32, :name => 'status', :enum_class => ::AgentVsAgent::GameStatus}
     }
 
     def struct_fields; FIELDS; end
@@ -124,6 +131,9 @@ module TicTacToe
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field opponent is unset!') unless @opponent
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field status is unset!') unless @status
+      unless @status.nil? || ::AgentVsAgent::GameStatus::VALID_VALUES.include?(@status)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field status!')
+      end
     end
 
     ::Thrift::Struct.generate_accessors self
