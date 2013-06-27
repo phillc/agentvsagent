@@ -7,6 +7,8 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 * Hearts
 * Ultimate tic tac toe (in the works)
 
+[![Build Status](https://travis-ci.org/phillc/agentvsagent.png)](https://travis-ci.org/phillc/agentvsagent)
+
 # This is an alpha release
 
 * The server isn't stable... it will leak memory (games don't clean up after them selves), it will crash when a client does something unexpected (like disconnect in the middle of a turn...), it will still assign disconnected players to games (and then crash).
