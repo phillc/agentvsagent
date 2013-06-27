@@ -79,9 +79,11 @@ module AgentVsAgent
   class GameInfo
     include ::Thrift::Struct, ::Thrift::Struct_Union
     POSITION = 1
+    OPPONENTS_MOVE = 2
 
     FIELDS = {
-      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position}
+      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position},
+      OPPONENTS_MOVE => {:type => ::Thrift::Types::LIST, :name => 'opponents_move', :element => {:type => ::Thrift::Types::I32}, :optional => true}
     }
 
     def struct_fields; FIELDS; end
@@ -118,18 +120,18 @@ module AgentVsAgent
 
   class MoveResult
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    OPPONENT = 1
+    OPPONENTS_MOVE = 1
     STATUS = 2
 
     FIELDS = {
-      OPPONENT => {:type => ::Thrift::Types::LIST, :name => 'opponent', :element => {:type => ::Thrift::Types::I32}},
+      OPPONENTS_MOVE => {:type => ::Thrift::Types::LIST, :name => 'opponents_move', :element => {:type => ::Thrift::Types::I32}},
       STATUS => {:type => ::Thrift::Types::I32, :name => 'status', :enum_class => ::AgentVsAgent::GameStatus}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field opponent is unset!') unless @opponent
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field opponents_move is unset!') unless @opponents_move
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field status is unset!') unless @status
       unless @status.nil? || ::AgentVsAgent::GameStatus::VALID_VALUES.include?(@status)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field status!')

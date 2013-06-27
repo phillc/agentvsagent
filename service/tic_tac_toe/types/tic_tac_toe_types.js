@@ -5,14 +5,18 @@
 //
 var Thrift = require('thrift').Thrift;
 var ttypes = module.exports = {};
-if (typeof TicTacToe === 'undefined') {
-  TicTacToe = {};
+if (typeof AgentVsAgent === 'undefined') {
+  AgentVsAgent = {};
 }
 ttypes.Position = {
 'X' : 1,
 'O' : 2
 };
-TicTacToe.EntryRequest = module.exports.EntryRequest = function(args) {
+ttypes.GameStatus = {
+'NEXT_MOVE' : 1,
+'END_GAME' : 2
+};
+AgentVsAgent.EntryRequest = module.exports.EntryRequest = function(args) {
   this.version = '0.0.11';
   if (args) {
     if (args.version !== undefined) {
@@ -20,8 +24,8 @@ TicTacToe.EntryRequest = module.exports.EntryRequest = function(args) {
     }
   }
 };
-TicTacToe.EntryRequest.prototype = {};
-TicTacToe.EntryRequest.prototype.read = function(input) {
+AgentVsAgent.EntryRequest.prototype = {};
+AgentVsAgent.EntryRequest.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -53,7 +57,7 @@ TicTacToe.EntryRequest.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.EntryRequest.prototype.write = function(output) {
+AgentVsAgent.EntryRequest.prototype.write = function(output) {
   output.writeStructBegin('EntryRequest');
   if (this.version !== null && this.version !== undefined) {
     output.writeFieldBegin('version', Thrift.Type.STRING, 1);
@@ -65,7 +69,7 @@ TicTacToe.EntryRequest.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.Ticket = module.exports.Ticket = function(args) {
+AgentVsAgent.Ticket = module.exports.Ticket = function(args) {
   this.gameId = null;
   this.agentId = null;
   if (args) {
@@ -77,8 +81,8 @@ TicTacToe.Ticket = module.exports.Ticket = function(args) {
     }
   }
 };
-TicTacToe.Ticket.prototype = {};
-TicTacToe.Ticket.prototype.read = function(input) {
+AgentVsAgent.Ticket.prototype = {};
+AgentVsAgent.Ticket.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -114,7 +118,7 @@ TicTacToe.Ticket.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.Ticket.prototype.write = function(output) {
+AgentVsAgent.Ticket.prototype.write = function(output) {
   output.writeStructBegin('Ticket');
   if (this.gameId !== null && this.gameId !== undefined) {
     output.writeFieldBegin('gameId', Thrift.Type.STRING, 1);
@@ -131,7 +135,7 @@ TicTacToe.Ticket.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.EntryResponse = module.exports.EntryResponse = function(args) {
+AgentVsAgent.EntryResponse = module.exports.EntryResponse = function(args) {
   this.ticket = null;
   this.message = null;
   if (args) {
@@ -143,8 +147,8 @@ TicTacToe.EntryResponse = module.exports.EntryResponse = function(args) {
     }
   }
 };
-TicTacToe.EntryResponse.prototype = {};
-TicTacToe.EntryResponse.prototype.read = function(input) {
+AgentVsAgent.EntryResponse.prototype = {};
+AgentVsAgent.EntryResponse.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -181,7 +185,7 @@ TicTacToe.EntryResponse.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.EntryResponse.prototype.write = function(output) {
+AgentVsAgent.EntryResponse.prototype.write = function(output) {
   output.writeStructBegin('EntryResponse');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -198,16 +202,20 @@ TicTacToe.EntryResponse.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.GameInfo = module.exports.GameInfo = function(args) {
+AgentVsAgent.GameInfo = module.exports.GameInfo = function(args) {
   this.position = null;
+  this.opponents_move = null;
   if (args) {
     if (args.position !== undefined) {
       this.position = args.position;
     }
+    if (args.opponents_move !== undefined) {
+      this.opponents_move = args.opponents_move;
+    }
   }
 };
-TicTacToe.GameInfo.prototype = {};
-TicTacToe.GameInfo.prototype.read = function(input) {
+AgentVsAgent.GameInfo.prototype = {};
+AgentVsAgent.GameInfo.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -227,9 +235,26 @@ TicTacToe.GameInfo.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 0:
+      case 2:
+      if (ftype == Thrift.Type.LIST) {
+        var _size0 = 0;
+        var _rtmp34;
+        this.opponents_move = [];
+        var _etype3 = 0;
+        _rtmp34 = input.readListBegin();
+        _etype3 = _rtmp34.etype;
+        _size0 = _rtmp34.size;
+        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        {
+          var elem6 = null;
+          elem6 = input.readI32();
+          this.opponents_move.push(elem6);
+        }
+        input.readListEnd();
+      } else {
         input.skip(ftype);
-        break;
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -239,11 +264,25 @@ TicTacToe.GameInfo.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.GameInfo.prototype.write = function(output) {
+AgentVsAgent.GameInfo.prototype.write = function(output) {
   output.writeStructBegin('GameInfo');
   if (this.position !== null && this.position !== undefined) {
     output.writeFieldBegin('position', Thrift.Type.I32, 1);
     output.writeI32(this.position);
+    output.writeFieldEnd();
+  }
+  if (this.opponents_move !== null && this.opponents_move !== undefined) {
+    output.writeFieldBegin('opponents_move', Thrift.Type.LIST, 2);
+    output.writeListBegin(Thrift.Type.I32, this.opponents_move.length);
+    for (var iter7 in this.opponents_move)
+    {
+      if (this.opponents_move.hasOwnProperty(iter7))
+      {
+        iter7 = this.opponents_move[iter7];
+        output.writeI32(iter7);
+      }
+    }
+    output.writeListEnd();
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -251,7 +290,7 @@ TicTacToe.GameInfo.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.GameResult = module.exports.GameResult = function(args) {
+AgentVsAgent.GameResult = module.exports.GameResult = function(args) {
   this.winner = null;
   if (args) {
     if (args.winner !== undefined) {
@@ -259,8 +298,8 @@ TicTacToe.GameResult = module.exports.GameResult = function(args) {
     }
   }
 };
-TicTacToe.GameResult.prototype = {};
-TicTacToe.GameResult.prototype.read = function(input) {
+AgentVsAgent.GameResult.prototype = {};
+AgentVsAgent.GameResult.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -292,7 +331,7 @@ TicTacToe.GameResult.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.GameResult.prototype.write = function(output) {
+AgentVsAgent.GameResult.prototype.write = function(output) {
   output.writeStructBegin('GameResult');
   if (this.winner !== null && this.winner !== undefined) {
     output.writeFieldBegin('winner', Thrift.Type.I32, 1);
@@ -304,20 +343,20 @@ TicTacToe.GameResult.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.MoveResult = module.exports.MoveResult = function(args) {
-  this.opponent = null;
+AgentVsAgent.MoveResult = module.exports.MoveResult = function(args) {
+  this.opponents_move = null;
   this.status = null;
   if (args) {
-    if (args.opponent !== undefined) {
-      this.opponent = args.opponent;
+    if (args.opponents_move !== undefined) {
+      this.opponents_move = args.opponents_move;
     }
     if (args.status !== undefined) {
       this.status = args.status;
     }
   }
 };
-TicTacToe.MoveResult.prototype = {};
-TicTacToe.MoveResult.prototype.read = function(input) {
+AgentVsAgent.MoveResult.prototype = {};
+AgentVsAgent.MoveResult.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -332,18 +371,18 @@ TicTacToe.MoveResult.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size0 = 0;
-        var _rtmp34;
-        this.opponent = [];
-        var _etype3 = 0;
-        _rtmp34 = input.readListBegin();
-        _etype3 = _rtmp34.etype;
-        _size0 = _rtmp34.size;
-        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        var _size8 = 0;
+        var _rtmp312;
+        this.opponents_move = [];
+        var _etype11 = 0;
+        _rtmp312 = input.readListBegin();
+        _etype11 = _rtmp312.etype;
+        _size8 = _rtmp312.size;
+        for (var _i13 = 0; _i13 < _size8; ++_i13)
         {
-          var elem6 = null;
-          elem6 = input.readI32();
-          this.opponent.push(elem6);
+          var elem14 = null;
+          elem14 = input.readI32();
+          this.opponents_move.push(elem14);
         }
         input.readListEnd();
       } else {
@@ -351,8 +390,8 @@ TicTacToe.MoveResult.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.status = input.readString();
+      if (ftype == Thrift.Type.I32) {
+        this.status = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -366,25 +405,25 @@ TicTacToe.MoveResult.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.MoveResult.prototype.write = function(output) {
+AgentVsAgent.MoveResult.prototype.write = function(output) {
   output.writeStructBegin('MoveResult');
-  if (this.opponent !== null && this.opponent !== undefined) {
-    output.writeFieldBegin('opponent', Thrift.Type.LIST, 1);
-    output.writeListBegin(Thrift.Type.I32, this.opponent.length);
-    for (var iter7 in this.opponent)
+  if (this.opponents_move !== null && this.opponents_move !== undefined) {
+    output.writeFieldBegin('opponents_move', Thrift.Type.LIST, 1);
+    output.writeListBegin(Thrift.Type.I32, this.opponents_move.length);
+    for (var iter15 in this.opponents_move)
     {
-      if (this.opponent.hasOwnProperty(iter7))
+      if (this.opponents_move.hasOwnProperty(iter15))
       {
-        iter7 = this.opponent[iter7];
-        output.writeI32(iter7);
+        iter15 = this.opponents_move[iter15];
+        output.writeI32(iter15);
       }
     }
     output.writeListEnd();
     output.writeFieldEnd();
   }
   if (this.status !== null && this.status !== undefined) {
-    output.writeFieldBegin('status', Thrift.Type.STRING, 2);
-    output.writeString(this.status);
+    output.writeFieldBegin('status', Thrift.Type.I32, 2);
+    output.writeI32(this.status);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -392,9 +431,9 @@ TicTacToe.MoveResult.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.GameAbortedException = module.exports.GameAbortedException = function(args) {
-  Thrift.TException.call(this, "TicTacToe.GameAbortedException")
-  this.name = "TicTacToe.GameAbortedException"
+AgentVsAgent.GameAbortedException = module.exports.GameAbortedException = function(args) {
+  Thrift.TException.call(this, "AgentVsAgent.GameAbortedException")
+  this.name = "AgentVsAgent.GameAbortedException"
   this.message = null;
   if (args) {
     if (args.message !== undefined) {
@@ -402,9 +441,9 @@ TicTacToe.GameAbortedException = module.exports.GameAbortedException = function(
     }
   }
 };
-Thrift.inherits(TicTacToe.GameAbortedException, Thrift.TException);
-TicTacToe.GameAbortedException.prototype.name = 'GameAbortedException';
-TicTacToe.GameAbortedException.prototype.read = function(input) {
+Thrift.inherits(AgentVsAgent.GameAbortedException, Thrift.TException);
+AgentVsAgent.GameAbortedException.prototype.name = 'GameAbortedException';
+AgentVsAgent.GameAbortedException.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -436,7 +475,7 @@ TicTacToe.GameAbortedException.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.GameAbortedException.prototype.write = function(output) {
+AgentVsAgent.GameAbortedException.prototype.write = function(output) {
   output.writeStructBegin('GameAbortedException');
   if (this.message !== null && this.message !== undefined) {
     output.writeFieldBegin('message', Thrift.Type.STRING, 1);

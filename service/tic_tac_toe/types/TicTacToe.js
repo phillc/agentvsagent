@@ -8,7 +8,7 @@ var Thrift = require('thrift').Thrift;
 var ttypes = require('./tic_tac_toe_types');
 //HELPER FUNCTIONS AND STRUCTURES
 
-TicTacToe.TicTacToe_enter_arena_args = function(args) {
+AgentVsAgent.TicTacToe_enter_arena_args = function(args) {
   this.request = null;
   if (args) {
     if (args.request !== undefined) {
@@ -16,8 +16,8 @@ TicTacToe.TicTacToe_enter_arena_args = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_enter_arena_args.prototype = {};
-TicTacToe.TicTacToe_enter_arena_args.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_enter_arena_args.prototype = {};
+AgentVsAgent.TicTacToe_enter_arena_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -50,7 +50,7 @@ TicTacToe.TicTacToe_enter_arena_args.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_enter_arena_args.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_enter_arena_args.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_enter_arena_args');
   if (this.request !== null && this.request !== undefined) {
     output.writeFieldBegin('request', Thrift.Type.STRUCT, 1);
@@ -62,7 +62,7 @@ TicTacToe.TicTacToe_enter_arena_args.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_enter_arena_result = function(args) {
+AgentVsAgent.TicTacToe_enter_arena_result = function(args) {
   this.success = null;
   if (args) {
     if (args.success !== undefined) {
@@ -70,8 +70,8 @@ TicTacToe.TicTacToe_enter_arena_result = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_enter_arena_result.prototype = {};
-TicTacToe.TicTacToe_enter_arena_result.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_enter_arena_result.prototype = {};
+AgentVsAgent.TicTacToe_enter_arena_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -104,7 +104,7 @@ TicTacToe.TicTacToe_enter_arena_result.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_enter_arena_result.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_enter_arena_result.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_enter_arena_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -116,7 +116,7 @@ TicTacToe.TicTacToe_enter_arena_result.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_info_args = function(args) {
+AgentVsAgent.TicTacToe_get_game_info_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -124,8 +124,8 @@ TicTacToe.TicTacToe_get_game_info_args = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_get_game_info_args.prototype = {};
-TicTacToe.TicTacToe_get_game_info_args.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_get_game_info_args.prototype = {};
+AgentVsAgent.TicTacToe_get_game_info_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -158,7 +158,7 @@ TicTacToe.TicTacToe_get_game_info_args.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_info_args.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_get_game_info_args.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_get_game_info_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -170,7 +170,7 @@ TicTacToe.TicTacToe_get_game_info_args.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_info_result = function(args) {
+AgentVsAgent.TicTacToe_get_game_info_result = function(args) {
   this.success = null;
   this.ex1 = null;
   if (args instanceof ttypes.GameAbortedException) {
@@ -186,8 +186,8 @@ TicTacToe.TicTacToe_get_game_info_result = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_get_game_info_result.prototype = {};
-TicTacToe.TicTacToe_get_game_info_result.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_get_game_info_result.prototype = {};
+AgentVsAgent.TicTacToe_get_game_info_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -225,7 +225,7 @@ TicTacToe.TicTacToe_get_game_info_result.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_info_result.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_get_game_info_result.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_get_game_info_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -242,7 +242,7 @@ TicTacToe.TicTacToe_get_game_info_result.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_make_move_args = function(args) {
+AgentVsAgent.TicTacToe_make_move_args = function(args) {
   this.ticket = null;
   this.coordinates = null;
   if (args) {
@@ -254,8 +254,8 @@ TicTacToe.TicTacToe_make_move_args = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_make_move_args.prototype = {};
-TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_make_move_args.prototype = {};
+AgentVsAgent.TicTacToe_make_move_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -278,18 +278,18 @@ TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size8 = 0;
-        var _rtmp312;
+        var _size16 = 0;
+        var _rtmp320;
         this.coordinates = [];
-        var _etype11 = 0;
-        _rtmp312 = input.readListBegin();
-        _etype11 = _rtmp312.etype;
-        _size8 = _rtmp312.size;
-        for (var _i13 = 0; _i13 < _size8; ++_i13)
+        var _etype19 = 0;
+        _rtmp320 = input.readListBegin();
+        _etype19 = _rtmp320.etype;
+        _size16 = _rtmp320.size;
+        for (var _i21 = 0; _i21 < _size16; ++_i21)
         {
-          var elem14 = null;
-          elem14 = input.readI32();
-          this.coordinates.push(elem14);
+          var elem22 = null;
+          elem22 = input.readI32();
+          this.coordinates.push(elem22);
         }
         input.readListEnd();
       } else {
@@ -305,7 +305,7 @@ TicTacToe.TicTacToe_make_move_args.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_make_move_args.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_make_move_args.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_make_move_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -315,12 +315,12 @@ TicTacToe.TicTacToe_make_move_args.prototype.write = function(output) {
   if (this.coordinates !== null && this.coordinates !== undefined) {
     output.writeFieldBegin('coordinates', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.I32, this.coordinates.length);
-    for (var iter15 in this.coordinates)
+    for (var iter23 in this.coordinates)
     {
-      if (this.coordinates.hasOwnProperty(iter15))
+      if (this.coordinates.hasOwnProperty(iter23))
       {
-        iter15 = this.coordinates[iter15];
-        output.writeI32(iter15);
+        iter23 = this.coordinates[iter23];
+        output.writeI32(iter23);
       }
     }
     output.writeListEnd();
@@ -331,7 +331,7 @@ TicTacToe.TicTacToe_make_move_args.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_make_move_result = function(args) {
+AgentVsAgent.TicTacToe_make_move_result = function(args) {
   this.success = null;
   this.ex1 = null;
   if (args instanceof ttypes.GameAbortedException) {
@@ -347,8 +347,8 @@ TicTacToe.TicTacToe_make_move_result = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_make_move_result.prototype = {};
-TicTacToe.TicTacToe_make_move_result.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_make_move_result.prototype = {};
+AgentVsAgent.TicTacToe_make_move_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -386,7 +386,7 @@ TicTacToe.TicTacToe_make_move_result.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_make_move_result.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_make_move_result.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_make_move_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -403,7 +403,7 @@ TicTacToe.TicTacToe_make_move_result.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_result_args = function(args) {
+AgentVsAgent.TicTacToe_get_game_result_args = function(args) {
   this.ticket = null;
   if (args) {
     if (args.ticket !== undefined) {
@@ -411,8 +411,8 @@ TicTacToe.TicTacToe_get_game_result_args = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_get_game_result_args.prototype = {};
-TicTacToe.TicTacToe_get_game_result_args.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_get_game_result_args.prototype = {};
+AgentVsAgent.TicTacToe_get_game_result_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -445,7 +445,7 @@ TicTacToe.TicTacToe_get_game_result_args.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_result_args.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_get_game_result_args.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_get_game_result_args');
   if (this.ticket !== null && this.ticket !== undefined) {
     output.writeFieldBegin('ticket', Thrift.Type.STRUCT, 1);
@@ -457,7 +457,7 @@ TicTacToe.TicTacToe_get_game_result_args.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_result_result = function(args) {
+AgentVsAgent.TicTacToe_get_game_result_result = function(args) {
   this.success = null;
   this.ex2 = null;
   if (args instanceof ttypes.GameAbortedException) {
@@ -473,8 +473,8 @@ TicTacToe.TicTacToe_get_game_result_result = function(args) {
     }
   }
 };
-TicTacToe.TicTacToe_get_game_result_result.prototype = {};
-TicTacToe.TicTacToe_get_game_result_result.prototype.read = function(input) {
+AgentVsAgent.TicTacToe_get_game_result_result.prototype = {};
+AgentVsAgent.TicTacToe_get_game_result_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -512,7 +512,7 @@ TicTacToe.TicTacToe_get_game_result_result.prototype.read = function(input) {
   return;
 };
 
-TicTacToe.TicTacToe_get_game_result_result.prototype.write = function(output) {
+AgentVsAgent.TicTacToe_get_game_result_result.prototype.write = function(output) {
   output.writeStructBegin('TicTacToe_get_game_result_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
@@ -529,30 +529,30 @@ TicTacToe.TicTacToe_get_game_result_result.prototype.write = function(output) {
   return;
 };
 
-TicTacToe.TicTacToeClient = exports.Client = function(output, pClass) {
+AgentVsAgent.TicTacToeClient = exports.Client = function(output, pClass) {
     this.output = output;
     this.pClass = pClass;
     this.seqid = 0;
     this._reqs = {};
 };
-TicTacToe.TicTacToeClient.prototype = {};
-TicTacToe.TicTacToeClient.prototype.enter_arena = function(request, callback) {
+AgentVsAgent.TicTacToeClient.prototype = {};
+AgentVsAgent.TicTacToeClient.prototype.enter_arena = function(request, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_enter_arena(request);
 };
 
-TicTacToe.TicTacToeClient.prototype.send_enter_arena = function(request) {
+AgentVsAgent.TicTacToeClient.prototype.send_enter_arena = function(request) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('enter_arena', Thrift.MessageType.CALL, this.seqid);
-  var args = new TicTacToe.TicTacToe_enter_arena_args();
+  var args = new AgentVsAgent.TicTacToe_enter_arena_args();
   args.request = request;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-TicTacToe.TicTacToeClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
+AgentVsAgent.TicTacToeClient.prototype.recv_enter_arena = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -561,7 +561,7 @@ TicTacToe.TicTacToeClient.prototype.recv_enter_arena = function(input,mtype,rseq
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new TicTacToe.TicTacToe_enter_arena_result();
+  var result = new AgentVsAgent.TicTacToe_enter_arena_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -570,23 +570,23 @@ TicTacToe.TicTacToeClient.prototype.recv_enter_arena = function(input,mtype,rseq
   }
   return callback('enter_arena failed: unknown result');
 };
-TicTacToe.TicTacToeClient.prototype.get_game_info = function(ticket, callback) {
+AgentVsAgent.TicTacToeClient.prototype.get_game_info = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_game_info(ticket);
 };
 
-TicTacToe.TicTacToeClient.prototype.send_get_game_info = function(ticket) {
+AgentVsAgent.TicTacToeClient.prototype.send_get_game_info = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_game_info', Thrift.MessageType.CALL, this.seqid);
-  var args = new TicTacToe.TicTacToe_get_game_info_args();
+  var args = new AgentVsAgent.TicTacToe_get_game_info_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-TicTacToe.TicTacToeClient.prototype.recv_get_game_info = function(input,mtype,rseqid) {
+AgentVsAgent.TicTacToeClient.prototype.recv_get_game_info = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -595,7 +595,7 @@ TicTacToe.TicTacToeClient.prototype.recv_get_game_info = function(input,mtype,rs
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new TicTacToe.TicTacToe_get_game_info_result();
+  var result = new AgentVsAgent.TicTacToe_get_game_info_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -607,16 +607,16 @@ TicTacToe.TicTacToeClient.prototype.recv_get_game_info = function(input,mtype,rs
   }
   return callback('get_game_info failed: unknown result');
 };
-TicTacToe.TicTacToeClient.prototype.make_move = function(ticket, coordinates, callback) {
+AgentVsAgent.TicTacToeClient.prototype.make_move = function(ticket, coordinates, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_make_move(ticket, coordinates);
 };
 
-TicTacToe.TicTacToeClient.prototype.send_make_move = function(ticket, coordinates) {
+AgentVsAgent.TicTacToeClient.prototype.send_make_move = function(ticket, coordinates) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('make_move', Thrift.MessageType.CALL, this.seqid);
-  var args = new TicTacToe.TicTacToe_make_move_args();
+  var args = new AgentVsAgent.TicTacToe_make_move_args();
   args.ticket = ticket;
   args.coordinates = coordinates;
   args.write(output);
@@ -624,7 +624,7 @@ TicTacToe.TicTacToeClient.prototype.send_make_move = function(ticket, coordinate
   return this.output.flush();
 };
 
-TicTacToe.TicTacToeClient.prototype.recv_make_move = function(input,mtype,rseqid) {
+AgentVsAgent.TicTacToeClient.prototype.recv_make_move = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -633,7 +633,7 @@ TicTacToe.TicTacToeClient.prototype.recv_make_move = function(input,mtype,rseqid
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new TicTacToe.TicTacToe_make_move_result();
+  var result = new AgentVsAgent.TicTacToe_make_move_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -645,23 +645,23 @@ TicTacToe.TicTacToeClient.prototype.recv_make_move = function(input,mtype,rseqid
   }
   return callback('make_move failed: unknown result');
 };
-TicTacToe.TicTacToeClient.prototype.get_game_result = function(ticket, callback) {
+AgentVsAgent.TicTacToeClient.prototype.get_game_result = function(ticket, callback) {
   this.seqid += 1;
   this._reqs[this.seqid] = callback;
   this.send_get_game_result(ticket);
 };
 
-TicTacToe.TicTacToeClient.prototype.send_get_game_result = function(ticket) {
+AgentVsAgent.TicTacToeClient.prototype.send_get_game_result = function(ticket) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('get_game_result', Thrift.MessageType.CALL, this.seqid);
-  var args = new TicTacToe.TicTacToe_get_game_result_args();
+  var args = new AgentVsAgent.TicTacToe_get_game_result_args();
   args.ticket = ticket;
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-TicTacToe.TicTacToeClient.prototype.recv_get_game_result = function(input,mtype,rseqid) {
+AgentVsAgent.TicTacToeClient.prototype.recv_get_game_result = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -670,7 +670,7 @@ TicTacToe.TicTacToeClient.prototype.recv_get_game_result = function(input,mtype,
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new TicTacToe.TicTacToe_get_game_result_result();
+  var result = new AgentVsAgent.TicTacToe_get_game_result_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -682,10 +682,10 @@ TicTacToe.TicTacToeClient.prototype.recv_get_game_result = function(input,mtype,
   }
   return callback('get_game_result failed: unknown result');
 };
-TicTacToe.TicTacToeProcessor = exports.Processor = function(handler) {
+AgentVsAgent.TicTacToeProcessor = exports.Processor = function(handler) {
   this._handler = handler
 }
-TicTacToe.TicTacToeProcessor.prototype.process = function(input, output) {
+AgentVsAgent.TicTacToeProcessor.prototype.process = function(input, output) {
   var r = input.readMessageBegin();
   if (this['process_' + r.fname]) {
     return this['process_' + r.fname].call(this, r.rseqid, input, output);
@@ -700,12 +700,12 @@ TicTacToe.TicTacToeProcessor.prototype.process = function(input, output) {
   }
 }
 
-TicTacToe.TicTacToeProcessor.prototype.process_enter_arena = function(seqid, input, output) {
-  var args = new TicTacToe.TicTacToe_enter_arena_args();
+AgentVsAgent.TicTacToeProcessor.prototype.process_enter_arena = function(seqid, input, output) {
+  var args = new AgentVsAgent.TicTacToe_enter_arena_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.enter_arena(args.request, function (err, result) {
-    var result = new TicTacToe.TicTacToe_enter_arena_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.TicTacToe_enter_arena_result((err != null ? err : {success: result}));
     output.writeMessageBegin("enter_arena", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -713,12 +713,12 @@ TicTacToe.TicTacToeProcessor.prototype.process_enter_arena = function(seqid, inp
   })
 }
 
-TicTacToe.TicTacToeProcessor.prototype.process_get_game_info = function(seqid, input, output) {
-  var args = new TicTacToe.TicTacToe_get_game_info_args();
+AgentVsAgent.TicTacToeProcessor.prototype.process_get_game_info = function(seqid, input, output) {
+  var args = new AgentVsAgent.TicTacToe_get_game_info_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_game_info(args.ticket, function (err, result) {
-    var result = new TicTacToe.TicTacToe_get_game_info_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.TicTacToe_get_game_info_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_game_info", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -726,12 +726,12 @@ TicTacToe.TicTacToeProcessor.prototype.process_get_game_info = function(seqid, i
   })
 }
 
-TicTacToe.TicTacToeProcessor.prototype.process_make_move = function(seqid, input, output) {
-  var args = new TicTacToe.TicTacToe_make_move_args();
+AgentVsAgent.TicTacToeProcessor.prototype.process_make_move = function(seqid, input, output) {
+  var args = new AgentVsAgent.TicTacToe_make_move_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.make_move(args.ticket, args.coordinates, function (err, result) {
-    var result = new TicTacToe.TicTacToe_make_move_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.TicTacToe_make_move_result((err != null ? err : {success: result}));
     output.writeMessageBegin("make_move", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
@@ -739,12 +739,12 @@ TicTacToe.TicTacToeProcessor.prototype.process_make_move = function(seqid, input
   })
 }
 
-TicTacToe.TicTacToeProcessor.prototype.process_get_game_result = function(seqid, input, output) {
-  var args = new TicTacToe.TicTacToe_get_game_result_args();
+AgentVsAgent.TicTacToeProcessor.prototype.process_get_game_result = function(seqid, input, output) {
+  var args = new AgentVsAgent.TicTacToe_get_game_result_args();
   args.read(input);
   input.readMessageEnd();
   this._handler.get_game_result(args.ticket, function (err, result) {
-    var result = new TicTacToe.TicTacToe_get_game_result_result((err != null ? err : {success: result}));
+    var result = new AgentVsAgent.TicTacToe_get_game_result_result((err != null ? err : {success: result}));
     output.writeMessageBegin("get_game_result", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();

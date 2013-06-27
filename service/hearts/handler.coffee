@@ -15,6 +15,7 @@ module.exports = class Handler
 
   enter_arena: (request, result) ->
     player = @arena.createPlayer()
+    # Instead of a message from the game, maybe the arena should have responded
     player.recvStartedGame (err, gameId) ->
       ticket = new types.Ticket(agentId: player.id, gameId: gameId)
       response = new types.EntryResponse(ticket: ticket)
@@ -29,6 +30,8 @@ module.exports = class Handler
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
+    # Perhaps this should have been pushed from the game, instead
+    # of the logic being here
     thriftPosition = mapper.positionToThrift(game.positionOf(player))
     gameInfo = new types.GameInfo(position: thriftPosition)
     logger.verbose "Returning game info", ticket

@@ -80,7 +80,7 @@ end
 
 guard :thrift, all_on_start: true,
                clean_target: true,
-               targets: { "lib/hearts/service/types" => "js:node",
+               targets: { "service/hearts/types" => "js:node",
                           "web/public/types/hearts" => "js:jquery",
                           "dist/hearts/nodejs/lib" => "js:node",
                           "dist/hearts/java/lib" => "java",
@@ -91,7 +91,7 @@ end
 
 guard :thrift, all_on_start: true,
                clean_target: true,
-               targets: { "lib/tic_tac_toe/service/types" => "js:node",
+               targets: { "service/tic_tac_toe/types" => "js:node",
                           "web/public/types/tic_tac_toe" => "js:jquery",
                           "dist/tic_tac_toe/nodejs/lib" => "js:node",
                           "dist/tic_tac_toe/ruby/lib" => "rb" } do

@@ -277,18 +277,18 @@ AgentVsAgent.TicTacToe_make_move_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size8 = 0;
-        var _rtmp312;
+        var _size16 = 0;
+        var _rtmp320;
         this.coordinates = [];
-        var _etype11 = 0;
-        _rtmp312 = input.readListBegin();
-        _etype11 = _rtmp312.etype;
-        _size8 = _rtmp312.size;
-        for (var _i13 = 0; _i13 < _size8; ++_i13)
+        var _etype19 = 0;
+        _rtmp320 = input.readListBegin();
+        _etype19 = _rtmp320.etype;
+        _size16 = _rtmp320.size;
+        for (var _i21 = 0; _i21 < _size16; ++_i21)
         {
-          var elem14 = null;
-          elem14 = input.readI32().value;
-          this.coordinates.push(elem14);
+          var elem22 = null;
+          elem22 = input.readI32().value;
+          this.coordinates.push(elem22);
         }
         input.readListEnd();
       } else {
@@ -314,12 +314,12 @@ AgentVsAgent.TicTacToe_make_move_args.prototype.write = function(output) {
   if (this.coordinates !== null && this.coordinates !== undefined) {
     output.writeFieldBegin('coordinates', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.I32, this.coordinates.length);
-    for (var iter15 in this.coordinates)
+    for (var iter23 in this.coordinates)
     {
-      if (this.coordinates.hasOwnProperty(iter15))
+      if (this.coordinates.hasOwnProperty(iter23))
       {
-        iter15 = this.coordinates[iter15];
-        output.writeI32(iter15);
+        iter23 = this.coordinates[iter23];
+        output.writeI32(iter23);
       }
     }
     output.writeListEnd();

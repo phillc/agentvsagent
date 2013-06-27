@@ -32,7 +32,7 @@ class Game
     socket = Thrift::Socket.new(host, port)
     transport = Thrift::FramedTransport.new(socket)
     protocol = Thrift::BinaryProtocol.new(transport)
-    client = TicTacToe::Client.new(protocol)
+    client = AgentVsAgent::TicTacToe::Client.new(protocol)
     transport.open
 
     request = EntryRequest.new
@@ -60,5 +60,5 @@ class Game
     transport.close
   end
 
-  include TicTacToe
+  include AgentVsAgent
 end

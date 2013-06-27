@@ -204,9 +204,13 @@ AgentVsAgent.EntryResponse.prototype.write = function(output) {
 
 AgentVsAgent.GameInfo = module.exports.GameInfo = function(args) {
   this.position = null;
+  this.opponents_move = null;
   if (args) {
     if (args.position !== undefined) {
       this.position = args.position;
+    }
+    if (args.opponents_move !== undefined) {
+      this.opponents_move = args.opponents_move;
     }
   }
 };
@@ -231,9 +235,26 @@ AgentVsAgent.GameInfo.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 0:
+      case 2:
+      if (ftype == Thrift.Type.LIST) {
+        var _size0 = 0;
+        var _rtmp34;
+        this.opponents_move = [];
+        var _etype3 = 0;
+        _rtmp34 = input.readListBegin();
+        _etype3 = _rtmp34.etype;
+        _size0 = _rtmp34.size;
+        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        {
+          var elem6 = null;
+          elem6 = input.readI32();
+          this.opponents_move.push(elem6);
+        }
+        input.readListEnd();
+      } else {
         input.skip(ftype);
-        break;
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -248,6 +269,20 @@ AgentVsAgent.GameInfo.prototype.write = function(output) {
   if (this.position !== null && this.position !== undefined) {
     output.writeFieldBegin('position', Thrift.Type.I32, 1);
     output.writeI32(this.position);
+    output.writeFieldEnd();
+  }
+  if (this.opponents_move !== null && this.opponents_move !== undefined) {
+    output.writeFieldBegin('opponents_move', Thrift.Type.LIST, 2);
+    output.writeListBegin(Thrift.Type.I32, this.opponents_move.length);
+    for (var iter7 in this.opponents_move)
+    {
+      if (this.opponents_move.hasOwnProperty(iter7))
+      {
+        iter7 = this.opponents_move[iter7];
+        output.writeI32(iter7);
+      }
+    }
+    output.writeListEnd();
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -309,11 +344,11 @@ AgentVsAgent.GameResult.prototype.write = function(output) {
 };
 
 AgentVsAgent.MoveResult = module.exports.MoveResult = function(args) {
-  this.opponent = null;
+  this.opponents_move = null;
   this.status = null;
   if (args) {
-    if (args.opponent !== undefined) {
-      this.opponent = args.opponent;
+    if (args.opponents_move !== undefined) {
+      this.opponents_move = args.opponents_move;
     }
     if (args.status !== undefined) {
       this.status = args.status;
@@ -336,18 +371,18 @@ AgentVsAgent.MoveResult.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size0 = 0;
-        var _rtmp34;
-        this.opponent = [];
-        var _etype3 = 0;
-        _rtmp34 = input.readListBegin();
-        _etype3 = _rtmp34.etype;
-        _size0 = _rtmp34.size;
-        for (var _i5 = 0; _i5 < _size0; ++_i5)
+        var _size8 = 0;
+        var _rtmp312;
+        this.opponents_move = [];
+        var _etype11 = 0;
+        _rtmp312 = input.readListBegin();
+        _etype11 = _rtmp312.etype;
+        _size8 = _rtmp312.size;
+        for (var _i13 = 0; _i13 < _size8; ++_i13)
         {
-          var elem6 = null;
-          elem6 = input.readI32();
-          this.opponent.push(elem6);
+          var elem14 = null;
+          elem14 = input.readI32();
+          this.opponents_move.push(elem14);
         }
         input.readListEnd();
       } else {
@@ -372,15 +407,15 @@ AgentVsAgent.MoveResult.prototype.read = function(input) {
 
 AgentVsAgent.MoveResult.prototype.write = function(output) {
   output.writeStructBegin('MoveResult');
-  if (this.opponent !== null && this.opponent !== undefined) {
-    output.writeFieldBegin('opponent', Thrift.Type.LIST, 1);
-    output.writeListBegin(Thrift.Type.I32, this.opponent.length);
-    for (var iter7 in this.opponent)
+  if (this.opponents_move !== null && this.opponents_move !== undefined) {
+    output.writeFieldBegin('opponents_move', Thrift.Type.LIST, 1);
+    output.writeListBegin(Thrift.Type.I32, this.opponents_move.length);
+    for (var iter15 in this.opponents_move)
     {
-      if (this.opponent.hasOwnProperty(iter7))
+      if (this.opponents_move.hasOwnProperty(iter15))
       {
-        iter7 = this.opponent[iter7];
-        output.writeI32(iter7);
+        iter15 = this.opponents_move[iter15];
+        output.writeI32(iter15);
       }
     }
     output.writeListEnd();
