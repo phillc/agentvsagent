@@ -1,7 +1,5 @@
 {EventEmitter} = require 'events'
 
-class Message
-
 module.exports = class Queue extends EventEmitter
   constructor: (@events) ->
     @messages = []

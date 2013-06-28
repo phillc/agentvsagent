@@ -8,23 +8,6 @@ describe "Player", ->
   it "has an id", ->
     @player.should.have.property('id')
 
-  #TODO: lots of these need to move to queue
-  describe "process", ->
-    it "returns waiting messages", (done) ->
-      @player.out.sendDealt "foo"
-      @player.out.process "dealt", (err, result) ->
-        should.not.exist(err)
-        result.should.eql "foo"
-        done()
-
-    it "returns outOfSequence errors", (done) ->
-      @player.out.sendDealt "foo"
-      @player.out.process "passed", (err, result) ->
-        err.type.should.eql "outOfSequence"
-        err.message.should.eql "Method call out of sequence"
-        should.not.exist(result)
-        done()
-
   describe "startedGame", ->
     it "returns the gameId if previously broadcasted", (done) ->
       @player.out.sendStartedGame "12345"
