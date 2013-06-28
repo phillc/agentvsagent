@@ -69,16 +69,16 @@ describe "Game", ->
   describe "#abort", ->
     it "raises the error to the culprit", ->
       @game.abort(@player2, type: "FOO", message: "BAR")
-      @player2.messages[0][0].should.equal("error")
-      @player2.messages[0][1].type.should.equal("FOO")
-      @player2.messages[0][1].message.should.equal("BAR")
+      @player2.out.messages[0][0].should.equal("error")
+      @player2.out.messages[0][1].type.should.equal("FOO")
+      @player2.out.messages[0][1].message.should.equal("BAR")
 
     it "tells everyone else the game is over", ->
       @game.abort(@player2, type: "FOO", message: "BAR")
       for player in [@player1, @player3, @player4]
-        player.messages[0][0].should.equal("error")
-        player.messages[0][1].type.should.equal("gameAborted")
-        player.messages[0][1].message.should.equal("Game ended due to an invalid action by another agent.")
+        player.out.messages[0][0].should.equal("error")
+        player.out.messages[0][1].type.should.equal("gameAborted")
+        player.out.messages[0][1].message.should.equal("Game ended due to an invalid action by another agent.")
 
     it "moves the game to GameEnded state", (done) ->
       @game.nextState = =>

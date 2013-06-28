@@ -19,7 +19,7 @@ module.exports = class Handler
 
   enter_arena: (request, result) ->
     player = @arena.createPlayer()
-    player.recvStartedGame (err, gameId) ->
+    player.out.recvStartedGame (err, gameId) ->
       ticket = new types.Ticket(agentId: player.id, gameId: gameId)
       response = new types.EntryResponse(ticket: ticket)
 

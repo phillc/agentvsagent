@@ -53,7 +53,7 @@ describe "Handler", ->
 
   describe "#get_hand", ->
     beforeEach ->
-      @game.positions.west.messages.splice(0, 1)
+      @game.positions.west.out.messages.splice(0, 1)
       @player = @game.positions.west
       @ticket = new types.Ticket(agentId: @player.id, gameId: @game.id)
 
@@ -64,7 +64,7 @@ describe "Handler", ->
         done()
 
     it "maps the cards to thrift types", (done) ->
-      @player.recvDealt = (callback) ->
+      @player.out.recvDealt = (callback) ->
         ranks = Rank.all()
         cards = [
           new Card(Suit.CLUBS, Rank.TWO)
@@ -114,7 +114,7 @@ describe "Handler", ->
         done()
 
     it "passes through errors", (done) ->
-      @player.messages.unshift ["foo"]
+      @player.out.messages.unshift ["foo"]
       @handler.get_hand @ticket, (err, card) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(card)
@@ -124,10 +124,10 @@ describe "Handler", ->
     beforeEach ->
       # @game.stack.push("passingLeft")
       # @game.nextState()
-      @game.positions.north.messages.splice(0, 10)
-      @game.positions.east.messages.splice(0, 10)
-      @game.positions.south.messages.splice(0, 10)
-      @game.positions.west.messages.splice(0, 10)
+      @game.positions.north.out.messages.splice(0, 10)
+      @game.positions.east.out.messages.splice(0, 10)
+      @game.positions.south.out.messages.splice(0, 10)
+      @game.positions.west.out.messages.splice(0, 10)
       @northTicket = new types.Ticket(agentId: @game.positions.north.id, gameId: @game.id)
       @eastTicket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
       @southTicket = new types.Ticket(agentId: @game.positions.south.id, gameId: @game.id)
@@ -194,7 +194,7 @@ describe "Handler", ->
         done()
 
     it "passes through errors", (done) ->
-      @game.positions.west.messages.unshift ["foo"]
+      @game.positions.west.out.messages.unshift ["foo"]
       @handler.pass_cards @westTicket, @westPassed, (err, cards) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(cards)
@@ -203,7 +203,7 @@ describe "Handler", ->
   describe "#get_trick", ->
     beforeEach ->
       @game.states.startingTrick.run()
-      @game.positions.east.messages.splice(0, 10)
+      @game.positions.east.out.messages.splice(0, 10)
       @game.states.waitingForCardFromEast.run()
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
 
@@ -219,7 +219,7 @@ describe "Handler", ->
         done()
 
     it "passes through errors", (done) ->
-      @game.positions.east.messages.unshift ["foo"]
+      @game.positions.east.out.messages.unshift ["foo"]
       @handler.get_trick @ticket, (err, trick) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(trick)
@@ -229,7 +229,7 @@ describe "Handler", ->
     beforeEach ->
       @game.states.startingTrick.run()
       @game.states.waitingForCardFromEast.run()
-      @game.positions.east.messages.splice(0, 10)
+      @game.positions.east.out.messages.splice(0, 10)
       @game.currentState = @game.states.waitingForCardFromEast
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
       @card = new Card(Suit.CLUBS, Rank.TWO)
@@ -253,7 +253,7 @@ describe "Handler", ->
       @game.states.endingTrick.run()
 
     it "passes through errors", (done) ->
-      @game.positions.east.messages.unshift ["foo"]
+      @game.positions.east.out.messages.unshift ["foo"]
       @handler.play_card @ticket, @thriftCard, (err, trick) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(trick)
@@ -262,7 +262,7 @@ describe "Handler", ->
   describe "#get_round_result", ->
     beforeEach ->
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
-      @game.positions.east.messages.splice(0, 10)
+      @game.positions.east.out.messages.splice(0, 10)
 
     it "returns the results of the previous round and play the next hand", (done) ->
       @game.rounds.push({ scores: -> { north: 99, east: 0, south: 15, west: 1 }})
@@ -290,7 +290,7 @@ describe "Handler", ->
         done()
 
     it "passes through errors", (done) ->
-      @game.positions.east.messages.unshift ["foo"]
+      @game.positions.east.out.messages.unshift ["foo"]
       @handler.get_round_result @ticket, (err, roundResult) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(roundResult)
@@ -299,7 +299,7 @@ describe "Handler", ->
   describe "#get_game_result", ->
     beforeEach ->
       @ticket = new types.Ticket(agentId: @game.positions.east.id, gameId: @game.id)
-      @game.positions.east.messages.splice(0, 10)
+      @game.positions.east.out.messages.splice(0, 10)
 
     it "returns the results of the game", (done) ->
       @game.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
@@ -314,7 +314,7 @@ describe "Handler", ->
         done()
 
     it "passes through errors", (done) ->
-      @game.positions.east.messages.unshift ["foo"]
+      @game.positions.east.out.messages.unshift ["foo"]
       @handler.get_game_result @ticket, (err, roundResult) ->
         err.message.should.equal("Method call out of sequence")
         should.not.exist(roundResult)

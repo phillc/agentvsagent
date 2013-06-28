@@ -18,10 +18,10 @@ describe "actions", ->
       @game.states.startingRound.run()
       @game.states.dealing.run()
       @game.currentState = @game.states.passingRight
-      @game.positions.north.messages.splice(0, 10)
-      @game.positions.east.messages.splice(0, 10)
-      @game.positions.south.messages.splice(0, 10)
-      @game.positions.west.messages.splice(0, 10)
+      @game.positions.north.out.messages.splice(0, 10)
+      @game.positions.east.out.messages.splice(0, 10)
+      @game.positions.south.out.messages.splice(0, 10)
+      @game.positions.west.out.messages.splice(0, 10)
 
     describe "#execute", ->
       it "applies and emits the passed cards for the player", ->
@@ -44,7 +44,7 @@ describe "actions", ->
         @game.currentRound().south.passed.cards.should.eql(southCards)
         @game.currentRound().west.passed.cards.should.eql(westCards)
 
-        @game.positions.north.recvPassed (err, passed) ->
+        @game.positions.north.out.recvPassed (err, passed) ->
           should.not.exist(err)
           passed.should.equal(southCards)
           done()

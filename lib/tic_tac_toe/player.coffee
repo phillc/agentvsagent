@@ -1,7 +1,9 @@
-AbstractPlayer = require '../abstractPlayer'
+IdGenerator = require '../idGenerator'
+Queue = require '../queue'
 
-module.exports = class Player extends AbstractPlayer
+module.exports = class Player
   constructor: ->
-    @events = ['startedGame', 'gameInfo']
-    super
+    @id = IdGenerator.generate()
+
+    @out = new Queue(['startedGame', 'gameInfo'])
 

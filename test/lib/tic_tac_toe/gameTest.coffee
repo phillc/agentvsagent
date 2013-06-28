@@ -37,7 +37,7 @@ describe "Game", ->
     it "emits a started event on the players", (done) ->
       @game.start()
 
-      @player1.recvStartedGame (err, gameId) =>
+      @player1.out.recvStartedGame (err, gameId) =>
         should.not.exist(err)
         gameId.should.equal(@game.id)
         done()
@@ -45,10 +45,10 @@ describe "Game", ->
     it "emits a game info event on the X player", (done) ->
       @game.start()
 
-      @game.positions.X.messages.should.have.length(2)
-      @game.positions.O.messages.should.have.length(1)
-      @game.positions.X.recvStartedGame (err, gameId) =>
-        @game.positions.X.recvGameInfo (err, gameInfo) =>
+      @game.positions.X.out.messages.should.have.length(2)
+      @game.positions.O.out.messages.should.have.length(1)
+      @game.positions.X.out.recvStartedGame (err, gameId) =>
+        @game.positions.X.out.recvGameInfo (err, gameInfo) =>
           should.not.exist(err)
           gameInfo.should.eql({position: "X", opponentsMove: []})
           done()
@@ -56,12 +56,11 @@ describe "Game", ->
     it "waits for a move from X then emits game info to Y", (done) ->
       @game.start()
 
-      @game.positions.X.messages.should.have.length(2)
-      @game.positions.O.messages.should.have.length(1)
-      @game.positions.X.recvStartedGame (err, gameId) =>
-        @game.positions.X.recvGameInfo (err, gameInfo) =>
+      @game.positions.X.out.recvStartedGame (err, gameId) =>
+        @game.positions.X.out.recvGameInfo (err, gameInfo) =>
           should.not.exist(err)
           gameInfo.should.eql({position: "X", opponentsMove: []})
+          # finish me...
           done()
 
 

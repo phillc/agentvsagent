@@ -25,7 +25,7 @@ exports.StartingGame = class StartingGame extends State
     for player in und.shuffle(@game.players)
       @game.positions[positions.shift()] = player
 
-      player.sendStartedGame @game.id
+      player.out.sendStartedGame @game.id
 
     @game.stack.push("startingRound")
     @game.nextState()
@@ -59,7 +59,7 @@ exports.Dealing = class Dealing extends State
       seat = @game.currentRound()[position]
       deck.moveCardsTo(13, seat.dealt)
       seat.dealt.copyAllCardsTo(seat.held)
-      @game.positions[position].sendDealt seat.dealt.cards
+      @game.positions[position].out.sendDealt seat.dealt.cards
 
 exports.Passing = class Passing extends State
   constructor: (game, @direction) ->
@@ -97,7 +97,7 @@ exports.Passing = class Passing extends State
           for card in passedCards
             fromSeat.held.moveCardTo(card, toSeat.held)
 
-          game.positions[toPosition].sendPassed passedCards
+          game.positions[toPosition].out.sendPassed passedCards
 
 exports.StartingTrick = class StartingTrick extends State
   run: ->
@@ -113,7 +113,7 @@ exports.WaitingForCard = class WaitingForCard extends State
 
   run: ->
     logger.verbose "Waiting for card from #{@position}, for #{@game.turnTime}"
-    @game.positions[@position].sendTurn @game.currentRound().currentTrick()
+    @game.positions[@position].out.sendTurn @game.currentRound().currentTrick()
     @timer = setTimeout =>
       logger.verbose "Timeout!"
       @game.abort(@game.positions[@position], {type: "invalidMove", message: "Your action took longer than allowed"})
@@ -130,7 +130,7 @@ exports.EndingTrick = class EndingTrick extends State
   run: ->
     logger.verbose "Trick ended"
     for player in @game.players
-      player.sendEndTrick @game.currentRound().currentTrick()
+      player.out.sendEndTrick @game.currentRound().currentTrick()
     @game.nextState()
 
 exports.EndingRound = class EndingRound extends State
@@ -139,11 +139,11 @@ exports.EndingRound = class EndingRound extends State
     if @game.maxPenaltyReached()
       @game.stack.push("endingGame")
       for player in @game.players
-        player.sendEndRound @game.currentRound().scores(), 'endGame'
+        player.out.sendEndRound @game.currentRound().scores(), 'endGame'
     else
       @game.stack.push("startingRound")
       for player in @game.players
-        player.sendEndRound @game.currentRound().scores(), 'nextRound'
+        player.out.sendEndRound @game.currentRound().scores(), 'nextRound'
 
     # Should this pause and wait for all bots
     # to check in before moving to the next round?
@@ -153,7 +153,7 @@ exports.EndingGame = class EndingGame extends State
   run: ->
     logger.info "sending scores", @game.scores()
     for player in @game.players
-      player.sendEndGame @game.scores()
+      player.out.sendEndGame @game.scores()
     @game.stack.push("gameEnded")
     @game.nextState()
 

@@ -24,6 +24,6 @@ module.exports = class Game extends EventEmitter
     for player in und.shuffle(@players)
       @positions[availablePositions.shift()] = player
 
-      player.sendStartedGame @id
+      player.out.sendStartedGame @id
 
-    @positions.X.sendGameInfo position: "X", opponentsMove: []
+    @positions.X.out.sendGameInfo position: "X", opponentsMove: []

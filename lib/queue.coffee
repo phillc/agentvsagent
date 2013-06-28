@@ -1,10 +1,9 @@
 {EventEmitter} = require 'events'
-IdGenerator = require './idGenerator'
 
-module.exports = class AbstractPlayer extends EventEmitter
-  constructor: ->
-    @id = IdGenerator.generate()
+class Message
 
+module.exports = class Queue extends EventEmitter
+  constructor: (@events) ->
     @messages = []
     @events.forEach (event) =>
       name = event.charAt(0).toUpperCase() + event.slice(1)
@@ -26,9 +25,4 @@ module.exports = class AbstractPlayer extends EventEmitter
       callback null, @messages.shift()[1]...
     else
       callback {type: "outOfSequence", message: "Method call out of sequence"}, null
-
-  raiseError: (error) ->
-    @messages.splice(0, @messages.length)
-    @messages.push(["error", error])
-    @emit "newMessage"
 
