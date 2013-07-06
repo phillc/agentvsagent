@@ -22,9 +22,8 @@ module.exports = class Player
   constructor: ->
     @id = IdGenerator.generate()
     @state = new PlayerState()
-    # @state.on "transition", (details) ->
-    #   console.log "changed state #{details}"
-    #   logger.verbose "changed state #{details}"
+    @state.on "transition", (details) ->
+      logger.verbose "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
 
   forward: (args...) ->
     request = Q.defer()

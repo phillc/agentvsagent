@@ -16,8 +16,11 @@ module.exports = class Game extends machina.Fsm
     @data =
       board: []
       turn: null
+      moves: []
 
     super()
+    @on "transition", (details) ->
+      logger.verbose "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
 
   getPlayer: (playerId) ->
     #TODO: remove me
