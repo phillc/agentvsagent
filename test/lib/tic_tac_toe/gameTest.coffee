@@ -1,66 +1,84 @@
 Game = require "../../../lib/tic_tac_toe/game"
 Player = require "../../../lib/tic_tac_toe/player"
-should = require("should")
 
 describe "Game", ->
   beforeEach ->
     @player1 = new Player()
     @player2 = new Player()
-    @game = new Game(@player1, @player2, @player3, @player4)
+    @game = new Game(@player1, @player2)
 
   it "has an id", ->
-    @game.should.have.property('id')
+    expect(@game).to.have.property('id')
 
   it "has players", ->
-    @game.players.length.should.equal(2)
+    expect(@game.players).to.have.length(2)
+
+  it "assigns each player a position", ->
+
+    positions = [
+      @game.positions.X.id
+      @game.positions.O.id
+    ]
+
+    players = @game.players.map (player) -> player.id
+
+    expect(positions.sort()).to.eql(players.sort())
 
   describe "#getPlayer", ->
     it "returns a player by id", ->
-      @game.getPlayer(@player2.id).id.should.equal(@player2.id)
+      expect(@game.getPlayer(@player2.id).id).to.equal(@player2.id)
 
     it "returns nothing if player doesn't exist", ->
-      should.not.exist(@game.getPlayer("foo"))
+      expect(@game.getPlayer("foo")).to.not.exist
 
-  describe "#start", ->
-    it "assigns each player a position", ->
-      @game.start()
+  describe "states", ->
+    describe "initialized", ->
+      it "is the starting state", ->
+        expect(@game.state).to.equal("initialized")
 
-      positions = [
-        @game.positions.X.id
-        @game.positions.O.id
-      ]
+      it "starts", ->
+        @game.start()
+        expect(@game.state).to.equal("started")
 
-      players = @game.players.map (player) -> player.id
-
-      positions.sort().should.eql players.sort()
-
-    it "emits a started event on the players", (done) ->
-      @game.start()
-
-      @player1.out.recvStartedGame (err, gameId) =>
-        should.not.exist(err)
-        gameId.should.equal(@game.id)
-        done()
-
-    it "emits a game info event on the X player", (done) ->
-      @game.start()
-
-      @game.positions.X.out.messages.should.have.length(2)
-      @game.positions.O.out.messages.should.have.length(1)
-      @game.positions.X.out.recvStartedGame (err, gameId) =>
-        @game.positions.X.out.recvGameInfo (err, gameInfo) =>
-          should.not.exist(err)
-          gameInfo.should.eql({position: "X", opponentsMove: []})
+    describe "started", ->
+      it "emits X started", (done) ->
+        @game.on "X.started", ->
           done()
+        @game.transition("started")
 
-    it "waits for a move from X then emits game info to Y", (done) ->
-      @game.start()
-
-      @game.positions.X.out.recvStartedGame (err, gameId) =>
-        @game.positions.X.out.recvGameInfo (err, gameInfo) =>
-          should.not.exist(err)
-          gameInfo.should.eql({position: "X", opponentsMove: []})
-          # finish me...
+      it "emits Y started", (done) ->
+        @game.on "Y.started", ->
           done()
+        @game.transition("started")
+
+      it "moves to the next state when both players have readied", ->
+        @game.transition("started")
+        @game.handle("ready.X")
+        expect(@game.state).to.equal("started")
+        @game.handle("ready.Y")
+        expect(@game.state).to.equal("waitingForX")
+
+    describe "waitingForX", ->
+      it "emits X turn", (done) ->
+        @game.on "X.turn", ->
+          done()
+        @game.transition("waitingForX")
+
+      it "moves to waitingForY on move by X", ->
+        @game.transition("waitingForX")
+
+        @game.handle("move.X")
+        expect(@game.state).to.equal("waitingForY")
 
 
+    describe "waitingForY", ->
+      it "emits Y turn", (done) ->
+        @game.on "Y.turn", ->
+          done()
+        @game.transition("waitingForY")
+
+      it "moves to waitingForX on move by Y", ->
+        @game.transition("waitingForY")
+
+        @game.handle("move.Y")
+        expect(@game.state).to.equal("waitingForX")

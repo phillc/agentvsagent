@@ -1,15 +1,26 @@
-{EventEmitter} = require 'events'
 und = require 'underscore'
 IdGenerator = require '../idGenerator'
 logger = require '../logger'
+machina = require('machina')()
 
-module.exports = class Game extends EventEmitter
+module.exports = class Game extends machina.Fsm
   constructor: (player1, player2) ->
+    #TODO: remove id (or atleast move it to arena)
     @id = IdGenerator.generate()
     @players = [player1, player2]
     @positions = {}
+    availablePositions = ["X", "O"]
+    for player in und.shuffle(@players)
+      @positions[availablePositions.shift()] = player
+
+    @data =
+      board: []
+      turn: null
+
+    super()
 
   getPlayer: (playerId) ->
+    #TODO: remove me
     for player in @players
       return player if player.id == playerId
 
@@ -20,10 +31,33 @@ module.exports = class Game extends EventEmitter
       "O"
 
   start: ->
-    availablePositions = ["X", "O"]
-    for player in und.shuffle(@players)
-      @positions[availablePositions.shift()] = player
+    @handle("start")
 
-      player.out.sendStartedGame @id
+  initialState: "initialized"
+  states:
+    initialized:
+      start: ->
+        @transition "started"
+    started:
+      _onEnter: ->
+        @emit "X.started"
+        @emit "Y.started"
+      "ready.X": ->
+        @data.readyX = true
+        if @data.readyX && @data.readyY
+          @transition("waitingForX")
+      "ready.Y": ->
+        @data.readyY = true
+        if @data.readyX && @data.readyY
+          @transition("waitingForX")
+    waitingForX:
+      _onEnter: ->
+        @emit "X.turn"
+      "move.X": ->
+        @transition("waitingForY")
+    waitingForY:
+      _onEnter: ->
+        @emit "Y.turn"
+      "move.Y": ->
+        @transition("waitingForX")
 
-    @positions.X.out.sendGameInfo position: "X", opponentsMove: []
