@@ -34,51 +34,51 @@ describe "Game", ->
   describe "states", ->
     describe "initialized", ->
       it "is the starting state", ->
-        expect(@game.state).to.equal("initialized")
+        expect(@game.engine.state).to.equal("initialized")
 
       it "starts", ->
         @game.start()
-        expect(@game.state).to.equal("started")
+        expect(@game.engine.state).to.equal("started")
 
     describe "started", ->
       it "emits X started", (done) ->
         @game.on "X.started", ->
           done()
-        @game.transition("started")
+        @game.engine.transition("started")
 
       it "emits Y started", (done) ->
         @game.on "Y.started", ->
           done()
-        @game.transition("started")
+        @game.engine.transition("started")
 
       it "moves to the next state when both players have readied", ->
-        @game.transition("started")
-        @game.handle("ready.X")
-        expect(@game.state).to.equal("started")
-        @game.handle("ready.Y")
-        expect(@game.state).to.equal("waitingForX")
+        @game.engine.transition("started")
+        @game.engine.handle("ready.X")
+        expect(@game.engine.state).to.equal("started")
+        @game.engine.handle("ready.Y")
+        expect(@game.engine.state).to.equal("waitingForX")
 
     describe "waitingForX", ->
       it "emits X turn", (done) ->
         @game.on "X.turn", ->
           done()
-        @game.transition("waitingForX")
+        @game.engine.transition("waitingForX")
 
       it "moves to waitingForY on move by X", ->
-        @game.transition("waitingForX")
+        @game.engine.transition("waitingForX")
 
-        @game.handle("move.X")
-        expect(@game.state).to.equal("waitingForY")
+        @game.engine.handle("move.X")
+        expect(@game.engine.state).to.equal("waitingForY")
 
 
     describe "waitingForY", ->
       it "emits Y turn", (done) ->
         @game.on "Y.turn", ->
           done()
-        @game.transition("waitingForY")
+        @game.engine.transition("waitingForY")
 
       it "moves to waitingForX on move by Y", ->
-        @game.transition("waitingForY")
+        @game.engine.transition("waitingForY")
 
-        @game.handle("move.Y")
-        expect(@game.state).to.equal("waitingForX")
+        @game.engine.handle("move.Y")
+        expect(@game.engine.state).to.equal("waitingForX")
