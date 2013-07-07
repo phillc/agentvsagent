@@ -46,8 +46,8 @@ describe "Game", ->
           done()
         @game.engine.transition("started")
 
-      it "emits Y started", (done) ->
-        @game.on "Y.started", ->
+      it "emits O started", (done) ->
+        @game.on "O.started", ->
           done()
         @game.engine.transition("started")
 
@@ -55,7 +55,7 @@ describe "Game", ->
         @game.engine.transition("started")
         @game.engine.handle("ready.X")
         expect(@game.engine.state).to.equal("started")
-        @game.engine.handle("ready.Y")
+        @game.engine.handle("ready.O")
         expect(@game.engine.state).to.equal("waitingForX")
 
     describe "waitingForX", ->
@@ -64,21 +64,21 @@ describe "Game", ->
           done()
         @game.engine.transition("waitingForX")
 
-      it "moves to waitingForY on move by X", ->
+      it "moves to waitingForO on move by X", ->
         @game.engine.transition("waitingForX")
 
         @game.engine.handle("move.X")
-        expect(@game.engine.state).to.equal("waitingForY")
+        expect(@game.engine.state).to.equal("waitingForO")
 
 
-    describe "waitingForY", ->
-      it "emits Y turn", (done) ->
-        @game.on "Y.turn", ->
+    describe "waitingForO", ->
+      it "emits O turn", (done) ->
+        @game.on "O.turn", ->
           done()
-        @game.engine.transition("waitingForY")
+        @game.engine.transition("waitingForO")
 
-      it "moves to waitingForX on move by Y", ->
-        @game.engine.transition("waitingForY")
+      it "moves to waitingForX on move by O", ->
+        @game.engine.transition("waitingForO")
 
-        @game.engine.handle("move.Y")
+        @game.engine.handle("move.O")
         expect(@game.engine.state).to.equal("waitingForX")

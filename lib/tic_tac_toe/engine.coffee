@@ -13,24 +13,24 @@ module.exports = Engine = machina.Fsm.extend
     started:
       _onEnter: ->
         @emit "X.started"
-        @emit "Y.started"
+        @emit "O.started"
       "ready.X": ->
         @data.readyX = true
-        if @data.readyX && @data.readyY
+        if @data.readyX && @data.readyO
           @transition("waitingForX")
-      "ready.Y": ->
-        @data.readyY = true
-        if @data.readyX && @data.readyY
+      "ready.O": ->
+        @data.readyO = true
+        if @data.readyX && @data.readyO
           @transition("waitingForX")
     waitingForX:
       _onEnter: ->
         @emit "X.turn"
       "move.X": (coordinates) ->
-        @transition("waitingForY")
-    waitingForY:
+        @transition("waitingForO")
+    waitingForO:
       _onEnter: ->
-        @emit "Y.turn"
-      "move.Y": (coordinates) ->
+        @emit "O.turn"
+      "move.O": (coordinates) ->
         @transition("waitingForX")
 
 
