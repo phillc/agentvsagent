@@ -24,11 +24,9 @@ describe "Handler", ->
   describe.only "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
       @handler.enter_arena new types.EntryRequest(), (err, response) =>
-        console.log("here?")
         expect(err).to.not.exist
         expect(response.ticket.agentId).to.be.a("string")
         expect(response.ticket.gameId).to.be.a("string")
-        expect(response.ticket.gameId).to.equal(@game.id)
         done()
 
       @arena.createGame(@arena.waitingRoom[0..2])

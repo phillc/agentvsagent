@@ -14,7 +14,6 @@ module.exports = Engine = machina.Fsm.extend
         @transition "started"
     started:
       _onEnter: ->
-        console.log "Sending players started"
         for position in ["X", "O"]
           @game.positions[position].send("started", player: @game.positions[position], game: @game)
       "ready.X": ->

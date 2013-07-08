@@ -9,7 +9,6 @@ PlayerState = machina.Fsm.extend
   states:
     waitingForServer:
       send: (message, data) ->
-        console.log("another send..", message, data)
         @request.resolve(message: message, data: data)
 
       forward: (args..., request) ->
@@ -21,7 +20,6 @@ PlayerState = machina.Fsm.extend
 
 module.exports = class Player
   constructor: ->
-    console.log("player made")
     @id = IdGenerator.generate()
     @state = new PlayerState()
     @state.on "transition", (details) ->
@@ -34,6 +32,5 @@ module.exports = class Player
     request.promise
 
   send: (args...) ->
-    console.log("SEND", args)
     @state.handle "send", args...
 

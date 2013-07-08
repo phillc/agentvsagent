@@ -20,11 +20,9 @@ module.exports = class Handler
   enter_arena: (request, result) ->
     player = @arena.createPlayer()
     player.forward("join").then (value) ->
-      console.log("HI?", value)
       ticket = new types.Ticket(agentId: value.data.player.id, gameId: value.data.game.id)
       response = new types.EntryResponse(ticket: ticket)
 
-      console.log("........HI?")
       result null, response
 
   get_game_info: (ticket, result) ->
