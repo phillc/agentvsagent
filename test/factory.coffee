@@ -1,5 +1,6 @@
 Arena = require "../lib/arena"
 HeartsFactory = require "../lib/hearts/factory"
+und = require 'underscore'
 
 exports.createArena = createArena = (options={}) ->
   factory = options.factory || new HeartsFactory()
@@ -8,12 +9,7 @@ exports.createArena = createArena = (options={}) ->
 exports.createGame = createGame = (options={}) ->
   arena = options.arena || createArena(options)
 
-  players = [
-    arena.createPlayer()
-    arena.createPlayer()
-    arena.createPlayer()
-    arena.createPlayer()
-  ]
+  players = und.map([0..arena.numberOfPlayers], -> arena.createPlayer())
 
   game = arena.createGame(players)
 

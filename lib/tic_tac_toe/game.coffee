@@ -9,15 +9,15 @@ module.exports = class Game
     @id = IdGenerator.generate()
     @players = [player1, player2]
     @positions = {}
-    availablePositions = ["X", "O"]
-    for player in und.shuffle(@players)
-      @positions[availablePositions.shift()] = player
-
+    @engine = new Engine(game: this)
     @state =
       board: []
       moves: []
 
-    @engine = new Engine({}, @state)
+    availablePositions = ["X", "O"]
+    for player in und.shuffle(@players)
+      position = availablePositions.shift()
+      @positions[position] = player
 
   getPlayer: (playerId) ->
     #TODO: remove me

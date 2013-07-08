@@ -10,7 +10,6 @@ describe "Handler", ->
     @arena = Factory.createArena(factory: new TicTacToeFactory())
     @arena.createPlayer()
     @handler = new Handler(@arena)
-    @game = Factory.createGame(arena: @arena)
 
   it "implements everything declared in the service", ->
     methods = Object.keys(TicTacToe.Client.prototype).filter (method) ->
@@ -22,15 +21,17 @@ describe "Handler", ->
 
     Object.keys(Handler.prototype).filter((name) -> name[0] != "_").length.should.equal(methods.length)
 
-  describe "#enter_arena", ->
+  describe.only "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
-      @handler.enter_arena new types.EntryRequest(), (err, response) ->
-        should.not.exist(err)
-        response.ticket.agentId.should.be.a("string")
-        response.ticket.gameId.should.be.a("string")
+      @handler.enter_arena new types.EntryRequest(), (err, response) =>
+        console.log("here?")
+        expect(err).to.not.exist
+        expect(response.ticket.agentId).to.be.a("string")
+        expect(response.ticket.gameId).to.be.a("string")
+        expect(response.ticket.gameId).to.equal(@game.id)
         done()
 
-      @arena.createGame(@arena.waitingRoom[0..1])
+      @arena.createGame(@arena.waitingRoom[0..2])
 
   describe "#get_game_info", ->
     beforeEach ->

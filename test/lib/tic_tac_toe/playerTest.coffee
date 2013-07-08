@@ -8,7 +8,7 @@ describe "Player", ->
     expect(@player).to.have.property('id')
 
   describe "#forward", ->
-    it "returns a promise that will be resolved on send", (done) ->
+    it "returns a promise that will be resolved on notify", (done) ->
       expect(@player.forward()).to.become("foo").notify(done)
 
       @player.send("foo")
@@ -21,4 +21,4 @@ describe "Player", ->
       @player.forward()
       expect(@player.forward()).to.be.rejected.with("unexpectedMessage").notify(done)
 
-  describe "#send", ->
+  describe "#notify", ->

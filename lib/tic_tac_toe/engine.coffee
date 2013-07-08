@@ -2,8 +2,10 @@ machina = require('machina')()
 logger = require '../logger'
 
 module.exports = Engine = machina.Fsm.extend
-  initialize: (options, @data) ->
+  initialize: (options) ->
+    @game = options.game
     @on "transition", (details) ->
+      console.log "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
       logger.verbose "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
   initialState: "initialized"
   states:
@@ -12,24 +14,25 @@ module.exports = Engine = machina.Fsm.extend
         @transition "started"
     started:
       _onEnter: ->
-        @emit "X.started"
-        @emit "O.started"
+        console.log "Sending players started"
+        for position in ["X", "O"]
+          @game.positions[position].send("started", player: @game.positions[position], game: @game)
       "ready.X": ->
-        @data.readyX = true
-        if @data.readyX && @data.readyO
+        @game.state.readyX = true
+        if @game.state.readyX && @game.state.readyO
           @transition("waitingForX")
       "ready.O": ->
-        @data.readyO = true
-        if @data.readyX && @data.readyO
+        @game.state.readyO = true
+        if @game.state.readyX && @game.state.readyO
           @transition("waitingForX")
     waitingForX:
       _onEnter: ->
-        @emit "X.turn"
+        @game.positions.X.send("turn")
       "move.X": (coordinates) ->
         @transition("waitingForO")
     waitingForO:
       _onEnter: ->
-        @emit "O.turn"
+        @game.positions.O.send("turn")
       "move.O": (coordinates) ->
         @transition("waitingForX")
 

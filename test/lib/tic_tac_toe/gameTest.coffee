@@ -42,12 +42,18 @@ describe "Game", ->
 
     describe "started", ->
       it "emits X started", (done) ->
-        @game.on "X.started", ->
+        @game.positions.X.forward().then (message, data) =>
+          expect(message).to.equal("started")
+          expect(data.game).to.equal(@game)
+          expect(data.player).to.equal(@game.positions.X)
           done()
         @game.engine.transition("started")
 
       it "emits O started", (done) ->
-        @game.on "O.started", ->
+        @game.positions.O.forward().then (message, data) =>
+          expect(message).to.equal("started")
+          expect(data.game).to.equal(@game)
+          expect(data.player).to.equal(@game.positions.O)
           done()
         @game.engine.transition("started")
 
@@ -60,7 +66,8 @@ describe "Game", ->
 
     describe "waitingForX", ->
       it "emits X turn", (done) ->
-        @game.on "X.turn", ->
+        @game.positions.X.forward().then (message) ->
+          expect(message).to.equal("turn")
           done()
         @game.engine.transition("waitingForX")
 
@@ -73,7 +80,8 @@ describe "Game", ->
 
     describe "waitingForO", ->
       it "emits O turn", (done) ->
-        @game.on "O.turn", ->
+        @game.positions.O.forward().then (message) ->
+          expect(message).to.equal("turn")
           done()
         @game.engine.transition("waitingForO")
 
