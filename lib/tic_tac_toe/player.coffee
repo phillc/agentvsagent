@@ -9,7 +9,7 @@ PlayerState = machina.Fsm.extend
   states:
     waitingForServer:
       send: (message, data) ->
-        @request.resolve(message: message, data: data)
+        @request.resolve(message: message, data: data || {})
 
       forward: (args..., request) ->
         request.reject(new Error("unexpectedMessage"))
@@ -23,7 +23,7 @@ module.exports = class Player
     @id = IdGenerator.generate()
     @state = new PlayerState()
     @state.on "transition", (details) ->
-      console.log "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
+      # console.log "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
       logger.verbose "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
 
   forward: (args...) ->

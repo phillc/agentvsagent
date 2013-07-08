@@ -9,7 +9,12 @@ describe "Player", ->
 
   describe "#forward", ->
     it "returns a promise that will be resolved on notify", (done) ->
-      expect(@player.forward()).to.become("foo").notify(done)
+      expect(@player.forward()).to.eventually.eql(message: "foo", data: {foo: "bar"}).notify(done)
+
+      @player.send("foo", {foo: "bar"})
+
+    it "returns a promise that will be resolved with no data on notify", (done) ->
+      expect(@player.forward()).to.eventually.eql(message: "foo", data: {}).notify(done)
 
       @player.send("foo")
 

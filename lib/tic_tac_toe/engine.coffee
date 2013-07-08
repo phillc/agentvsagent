@@ -5,7 +5,7 @@ module.exports = Engine = machina.Fsm.extend
   initialize: (options) ->
     @game = options.game
     @on "transition", (details) ->
-      console.log "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
+      # console.log "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
       logger.verbose "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
   initialState: "initialized"
   states:

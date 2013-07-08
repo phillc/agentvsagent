@@ -21,7 +21,7 @@ describe "Handler", ->
 
     Object.keys(Handler.prototype).filter((name) -> name[0] != "_").length.should.equal(methods.length)
 
-  describe.only "#enter_arena", ->
+  describe "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->
       @handler.enter_arena new types.EntryRequest(), (err, response) =>
         expect(err).to.not.exist
@@ -33,6 +33,8 @@ describe "Handler", ->
 
   describe "#get_game_info", ->
     beforeEach ->
+      @arena.createPlayer()
+      @game = @arena.createGame(@arena.waitingRoom[0..2])
       @ticket = new types.Ticket(agentId: @game.positions.X.id, gameId: @game.id)
 
     it "returns game info", (done) ->
