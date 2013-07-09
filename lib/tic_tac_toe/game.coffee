@@ -2,6 +2,7 @@ und = require 'underscore'
 IdGenerator = require '../idGenerator'
 logger = require '../logger'
 Engine = require './engine'
+Board = require './board'
 
 module.exports = class Game
   constructor: (player1, player2) ->
@@ -10,9 +11,12 @@ module.exports = class Game
     @players = [player1, player2]
     @positions = {}
     @engine = new Engine(game: this)
-    @state =
-      board: []
-      moves: []
+    @boards = [
+      [ new Board(), new Board(), new Board() ]
+      [ new Board(), new Board(), new Board() ]
+      [ new Board(), new Board(), new Board() ]
+    ]
+    @moves = []
 
     availablePositions = ["X", "O"]
     for player in und.shuffle(@players)
@@ -37,3 +41,8 @@ module.exports = class Game
   start: ->
     @engine.handle("start")
 
+  boardAt: (row, column) ->
+    @boards[row][column]
+
+  squareAt: (boardRow, boardCol, row, col) ->
+    @boardAt(boardRow, boardCol).squareAt(row, col)

@@ -74,9 +74,15 @@ describe "Game", ->
       it "moves to waitingForO on move by X", ->
         @game.engine.transition("waitingForX")
 
-        @game.engine.handle("move.X")
+        @game.engine.handle("move.X", 0, 0, 0, 0)
         expect(@game.engine.state).to.equal("waitingForO")
 
+      it "makes the move", ->
+        @game.engine.transition("waitingForX")
+
+        @game.engine.handle("move.X", 1, 2, 2, 0)
+
+        expect(@game.squareAt(1, 2, 2, 0).winner).to.equal("X")
 
     describe "waitingForO", ->
       it "emits O turn", (done) ->

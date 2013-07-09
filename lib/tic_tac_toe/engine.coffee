@@ -1,5 +1,6 @@
 machina = require('machina')()
 logger = require '../logger'
+Move = require './move'
 
 module.exports = Engine = machina.Fsm.extend
   initialize: (options) ->
@@ -17,17 +18,21 @@ module.exports = Engine = machina.Fsm.extend
         for position in ["X", "O"]
           @game.positions[position].send("started", player: @game.positions[position], game: @game)
       "ready.X": ->
-        @game.state.readyX = true
-        if @game.state.readyX && @game.state.readyO
+        @readyX = true
+        if @readyX && @readyO
           @transition("waitingForX")
       "ready.O": ->
-        @game.state.readyO = true
-        if @game.state.readyX && @game.state.readyO
+        @readyO = true
+        if @readyX && @readyO
           @transition("waitingForX")
     waitingForX:
       _onEnter: ->
         @game.positions.X.send("turn")
-      "move.X": (coordinates) ->
+      "move.X": (coordinates...) ->
+        move = new Move("X", coordinates...)
+        # move.valid?
+        move.execute(@game)
+
         @transition("waitingForO")
     waitingForO:
       _onEnter: ->
