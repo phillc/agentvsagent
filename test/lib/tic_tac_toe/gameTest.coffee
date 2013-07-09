@@ -84,6 +84,13 @@ describe "Game", ->
 
         expect(@game.squareAt(1, 2, 2, 0).winner).to.equal("X")
 
+      it "moves to game ended if won", ->
+        @game.engine.transition("waitingForX")
+
+        @game.winner = -> "X"
+        @game.engine.handle("move.X", 1, 2, 2, 0)
+        expect(@game.engine.state).to.equal("gameEnded")
+
     describe "waitingForO", ->
       it "emits O turn", (done) ->
         @game.positions.O.forward().then (value) ->

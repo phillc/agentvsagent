@@ -46,3 +46,6 @@ module.exports = class Game
 
   squareAt: (boardRow, boardCol, row, col) ->
     @boardAt(boardRow, boardCol).squareAt(row, col)
+
+  winner: ->
+    null

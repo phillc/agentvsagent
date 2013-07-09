@@ -32,12 +32,16 @@ module.exports = Engine = machina.Fsm.extend
         move = new Move("X", coordinates...)
         # move.valid?
         move.execute(@game)
-
-        @transition("waitingForO")
+        if @game.winner()
+          @transition("gameEnded")
+        else
+          @transition("waitingForO")
     waitingForO:
       _onEnter: ->
         @game.positions.O.send("turn")
       "move.O": (coordinates) ->
         @transition("waitingForX")
+
+    gameEnded: {}
 
 
