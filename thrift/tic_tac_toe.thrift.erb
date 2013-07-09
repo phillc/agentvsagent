@@ -7,7 +7,12 @@ enum Position {
   O = 2
 }
 
-typedef list<i32> Move
+struct Move {
+  1: required i32 boardRow
+  2: required i32 boardCol
+  3: required i32 squareRow
+  4: required i32 squareCol
+}
 
 const string CURRENT_VERSION = "<%= ava_version %>"
 struct EntryRequest {
@@ -50,7 +55,7 @@ exception GameAbortedException {
 service TicTacToe {
   EntryResponse enter_arena(1: required EntryRequest request),
   GameInfo get_game_info(1: required Ticket ticket) throws (1: GameAbortedException ex1),
-  MoveResult make_move(1: required Ticket ticket, 2: required list<i32> coordinates) throws (1: GameAbortedException ex1),
-  GameResult get_game_result(1: required Ticket ticket) throws (1: GameAbortedException ex2)
+  MoveResult make_move(1: required Ticket ticket, 2: required i32 boardRow, 3: required i32 boardCol, 4: required i32 squareRow, 5: required i32 squareCol) throws (1: GameAbortedException ex1),
+  GameResult get_game_result(1: required Ticket ticket) throws (1: GameAbortedException ex1)
 }
 

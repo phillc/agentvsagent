@@ -21,6 +21,32 @@ module AgentVsAgent
     VALID_VALUES = Set.new([NEXT_MOVE, END_GAME]).freeze
   end
 
+  class Move
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    BOARDROW = 1
+    BOARDCOL = 2
+    SQUAREROW = 3
+    SQUARECOL = 4
+
+    FIELDS = {
+      BOARDROW => {:type => ::Thrift::Types::I32, :name => 'boardRow'},
+      BOARDCOL => {:type => ::Thrift::Types::I32, :name => 'boardCol'},
+      SQUAREROW => {:type => ::Thrift::Types::I32, :name => 'squareRow'},
+      SQUARECOL => {:type => ::Thrift::Types::I32, :name => 'squareCol'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field boardRow is unset!') unless @boardRow
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field boardCol is unset!') unless @boardCol
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field squareRow is unset!') unless @squareRow
+      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field squareCol is unset!') unless @squareCol
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
   class EntryRequest
     include ::Thrift::Struct, ::Thrift::Struct_Union
     VERSION = 1
@@ -83,7 +109,7 @@ module AgentVsAgent
 
     FIELDS = {
       POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position},
-      OPPONENTS_MOVE => {:type => ::Thrift::Types::LIST, :name => 'opponents_move', :element => {:type => ::Thrift::Types::I32}, :optional => true}
+      OPPONENTS_MOVE => {:type => ::Thrift::Types::STRUCT, :name => 'opponents_move', :class => ::AgentVsAgent::Move, :optional => true}
     }
 
     def struct_fields; FIELDS; end
@@ -124,7 +150,7 @@ module AgentVsAgent
     STATUS = 2
 
     FIELDS = {
-      OPPONENTS_MOVE => {:type => ::Thrift::Types::LIST, :name => 'opponents_move', :element => {:type => ::Thrift::Types::I32}},
+      OPPONENTS_MOVE => {:type => ::Thrift::Types::STRUCT, :name => 'opponents_move', :class => ::AgentVsAgent::Move},
       STATUS => {:type => ::Thrift::Types::I32, :name => 'status', :enum_class => ::AgentVsAgent::GameStatus}
     }
 

@@ -243,13 +243,25 @@ AgentVsAgent.TicTacToe_get_game_info_result.prototype.write = function(output) {
 
 AgentVsAgent.TicTacToe_make_move_args = function(args) {
   this.ticket = null;
-  this.coordinates = null;
+  this.boardRow = null;
+  this.boardCol = null;
+  this.squareRow = null;
+  this.squareCol = null;
   if (args) {
     if (args.ticket !== undefined) {
       this.ticket = args.ticket;
     }
-    if (args.coordinates !== undefined) {
-      this.coordinates = args.coordinates;
+    if (args.boardRow !== undefined) {
+      this.boardRow = args.boardRow;
+    }
+    if (args.boardCol !== undefined) {
+      this.boardCol = args.boardCol;
+    }
+    if (args.squareRow !== undefined) {
+      this.squareRow = args.squareRow;
+    }
+    if (args.squareCol !== undefined) {
+      this.squareCol = args.squareCol;
     }
   }
 };
@@ -276,21 +288,29 @@ AgentVsAgent.TicTacToe_make_move_args.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.LIST) {
-        var _size16 = 0;
-        var _rtmp320;
-        this.coordinates = [];
-        var _etype19 = 0;
-        _rtmp320 = input.readListBegin();
-        _etype19 = _rtmp320.etype;
-        _size16 = _rtmp320.size;
-        for (var _i21 = 0; _i21 < _size16; ++_i21)
-        {
-          var elem22 = null;
-          elem22 = input.readI32().value;
-          this.coordinates.push(elem22);
-        }
-        input.readListEnd();
+      if (ftype == Thrift.Type.I32) {
+        this.boardRow = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.boardCol = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.squareRow = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.I32) {
+        this.squareCol = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -311,18 +331,24 @@ AgentVsAgent.TicTacToe_make_move_args.prototype.write = function(output) {
     this.ticket.write(output);
     output.writeFieldEnd();
   }
-  if (this.coordinates !== null && this.coordinates !== undefined) {
-    output.writeFieldBegin('coordinates', Thrift.Type.LIST, 2);
-    output.writeListBegin(Thrift.Type.I32, this.coordinates.length);
-    for (var iter23 in this.coordinates)
-    {
-      if (this.coordinates.hasOwnProperty(iter23))
-      {
-        iter23 = this.coordinates[iter23];
-        output.writeI32(iter23);
-      }
-    }
-    output.writeListEnd();
+  if (this.boardRow !== null && this.boardRow !== undefined) {
+    output.writeFieldBegin('boardRow', Thrift.Type.I32, 2);
+    output.writeI32(this.boardRow);
+    output.writeFieldEnd();
+  }
+  if (this.boardCol !== null && this.boardCol !== undefined) {
+    output.writeFieldBegin('boardCol', Thrift.Type.I32, 3);
+    output.writeI32(this.boardCol);
+    output.writeFieldEnd();
+  }
+  if (this.squareRow !== null && this.squareRow !== undefined) {
+    output.writeFieldBegin('squareRow', Thrift.Type.I32, 4);
+    output.writeI32(this.squareRow);
+    output.writeFieldEnd();
+  }
+  if (this.squareCol !== null && this.squareCol !== undefined) {
+    output.writeFieldBegin('squareCol', Thrift.Type.I32, 5);
+    output.writeI32(this.squareCol);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -458,17 +484,17 @@ AgentVsAgent.TicTacToe_get_game_result_args.prototype.write = function(output) {
 
 AgentVsAgent.TicTacToe_get_game_result_result = function(args) {
   this.success = null;
-  this.ex2 = null;
+  this.ex1 = null;
   if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex2 = args;
+    this.ex1 = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex2 !== undefined) {
-      this.ex2 = args.ex2;
+    if (args.ex1 !== undefined) {
+      this.ex1 = args.ex1;
     }
   }
 };
@@ -496,8 +522,8 @@ AgentVsAgent.TicTacToe_get_game_result_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex2 = new AgentVsAgent.GameAbortedException();
-        this.ex2.read(input);
+        this.ex1 = new AgentVsAgent.GameAbortedException();
+        this.ex1.read(input);
       } else {
         input.skip(ftype);
       }
@@ -518,9 +544,9 @@ AgentVsAgent.TicTacToe_get_game_result_result.prototype.write = function(output)
     this.success.write(output);
     output.writeFieldEnd();
   }
-  if (this.ex2 !== null && this.ex2 !== undefined) {
-    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 1);
-    this.ex2.write(output);
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -617,22 +643,25 @@ AgentVsAgent.TicTacToeClient.prototype.recv_get_game_info = function() {
   }
   throw 'get_game_info failed: unknown result';
 };
-AgentVsAgent.TicTacToeClient.prototype.make_move = function(ticket, coordinates, callback) {
+AgentVsAgent.TicTacToeClient.prototype.make_move = function(ticket, boardRow, boardCol, squareRow, squareCol, callback) {
   if (callback === undefined) {
-    this.send_make_move(ticket, coordinates);
+    this.send_make_move(ticket, boardRow, boardCol, squareRow, squareCol);
     return this.recv_make_move();
   } else {
-    var postData = this.send_make_move(ticket, coordinates, true);
+    var postData = this.send_make_move(ticket, boardRow, boardCol, squareRow, squareCol, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_make_move);
   }
 };
 
-AgentVsAgent.TicTacToeClient.prototype.send_make_move = function(ticket, coordinates, callback) {
+AgentVsAgent.TicTacToeClient.prototype.send_make_move = function(ticket, boardRow, boardCol, squareRow, squareCol, callback) {
   this.output.writeMessageBegin('make_move', Thrift.MessageType.CALL, this.seqid);
   var args = new AgentVsAgent.TicTacToe_make_move_args();
   args.ticket = ticket;
-  args.coordinates = coordinates;
+  args.boardRow = boardRow;
+  args.boardCol = boardCol;
+  args.squareRow = squareRow;
+  args.squareCol = squareCol;
   args.write(this.output);
   this.output.writeMessageEnd();
   return this.output.getTransport().flush(callback);
@@ -696,8 +725,8 @@ AgentVsAgent.TicTacToeClient.prototype.recv_get_game_result = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex2) {
-    throw result.ex2;
+  if (null !== result.ex1) {
+    throw result.ex1;
   }
   if (null !== result.success) {
     return result.success;

@@ -43,13 +43,13 @@ module AgentVsAgent
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_game_info failed: unknown result')
       end
 
-      def make_move(ticket, coordinates)
-        send_make_move(ticket, coordinates)
+      def make_move(ticket, boardRow, boardCol, squareRow, squareCol)
+        send_make_move(ticket, boardRow, boardCol, squareRow, squareCol)
         return recv_make_move()
       end
 
-      def send_make_move(ticket, coordinates)
-        send_message('make_move', Make_move_args, :ticket => ticket, :coordinates => coordinates)
+      def send_make_move(ticket, boardRow, boardCol, squareRow, squareCol)
+        send_message('make_move', Make_move_args, :ticket => ticket, :boardRow => boardRow, :boardCol => boardCol, :squareRow => squareRow, :squareCol => squareCol)
       end
 
       def recv_make_move()
@@ -71,7 +71,7 @@ module AgentVsAgent
       def recv_get_game_result()
         result = receive_message(Get_game_result_result)
         return result.success unless result.success.nil?
-        raise result.ex2 unless result.ex2.nil?
+        raise result.ex1 unless result.ex1.nil?
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'get_game_result failed: unknown result')
       end
 
@@ -102,7 +102,7 @@ module AgentVsAgent
         args = read_args(iprot, Make_move_args)
         result = Make_move_result.new()
         begin
-          result.success = @handler.make_move(args.ticket, args.coordinates)
+          result.success = @handler.make_move(args.ticket, args.boardRow, args.boardCol, args.squareRow, args.squareCol)
         rescue ::AgentVsAgent::GameAbortedException => ex1
           result.ex1 = ex1
         end
@@ -114,8 +114,8 @@ module AgentVsAgent
         result = Get_game_result_result.new()
         begin
           result.success = @handler.get_game_result(args.ticket)
-        rescue ::AgentVsAgent::GameAbortedException => ex2
-          result.ex2 = ex2
+        rescue ::AgentVsAgent::GameAbortedException => ex1
+          result.ex1 = ex1
         end
         write_result(result, oprot, 'get_game_result', seqid)
       end
@@ -195,18 +195,27 @@ module AgentVsAgent
     class Make_move_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
       TICKET = 1
-      COORDINATES = 2
+      BOARDROW = 2
+      BOARDCOL = 3
+      SQUAREROW = 4
+      SQUARECOL = 5
 
       FIELDS = {
         TICKET => {:type => ::Thrift::Types::STRUCT, :name => 'ticket', :class => ::AgentVsAgent::Ticket},
-        COORDINATES => {:type => ::Thrift::Types::LIST, :name => 'coordinates', :element => {:type => ::Thrift::Types::I32}}
+        BOARDROW => {:type => ::Thrift::Types::I32, :name => 'boardRow'},
+        BOARDCOL => {:type => ::Thrift::Types::I32, :name => 'boardCol'},
+        SQUAREROW => {:type => ::Thrift::Types::I32, :name => 'squareRow'},
+        SQUARECOL => {:type => ::Thrift::Types::I32, :name => 'squareCol'}
       }
 
       def struct_fields; FIELDS; end
 
       def validate
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field ticket is unset!') unless @ticket
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field coordinates is unset!') unless @coordinates
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field boardRow is unset!') unless @boardRow
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field boardCol is unset!') unless @boardCol
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field squareRow is unset!') unless @squareRow
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field squareCol is unset!') unless @squareCol
       end
 
       ::Thrift::Struct.generate_accessors self
@@ -250,11 +259,11 @@ module AgentVsAgent
     class Get_game_result_result
       include ::Thrift::Struct, ::Thrift::Struct_Union
       SUCCESS = 0
-      EX2 = 1
+      EX1 = 1
 
       FIELDS = {
         SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AgentVsAgent::GameResult},
-        EX2 => {:type => ::Thrift::Types::STRUCT, :name => 'ex2', :class => ::AgentVsAgent::GameAbortedException}
+        EX1 => {:type => ::Thrift::Types::STRUCT, :name => 'ex1', :class => ::AgentVsAgent::GameAbortedException}
       }
 
       def struct_fields; FIELDS; end

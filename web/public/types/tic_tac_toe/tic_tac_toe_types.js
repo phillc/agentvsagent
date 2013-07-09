@@ -15,6 +15,104 @@ AgentVsAgent.GameStatus = {
 'NEXT_MOVE' : 1,
 'END_GAME' : 2
 };
+AgentVsAgent.Move = function(args) {
+  this.boardRow = null;
+  this.boardCol = null;
+  this.squareRow = null;
+  this.squareCol = null;
+  if (args) {
+    if (args.boardRow !== undefined) {
+      this.boardRow = args.boardRow;
+    }
+    if (args.boardCol !== undefined) {
+      this.boardCol = args.boardCol;
+    }
+    if (args.squareRow !== undefined) {
+      this.squareRow = args.squareRow;
+    }
+    if (args.squareCol !== undefined) {
+      this.squareCol = args.squareCol;
+    }
+  }
+};
+AgentVsAgent.Move.prototype = {};
+AgentVsAgent.Move.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.boardRow = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.boardCol = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.squareRow = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.squareCol = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+AgentVsAgent.Move.prototype.write = function(output) {
+  output.writeStructBegin('Move');
+  if (this.boardRow !== null && this.boardRow !== undefined) {
+    output.writeFieldBegin('boardRow', Thrift.Type.I32, 1);
+    output.writeI32(this.boardRow);
+    output.writeFieldEnd();
+  }
+  if (this.boardCol !== null && this.boardCol !== undefined) {
+    output.writeFieldBegin('boardCol', Thrift.Type.I32, 2);
+    output.writeI32(this.boardCol);
+    output.writeFieldEnd();
+  }
+  if (this.squareRow !== null && this.squareRow !== undefined) {
+    output.writeFieldBegin('squareRow', Thrift.Type.I32, 3);
+    output.writeI32(this.squareRow);
+    output.writeFieldEnd();
+  }
+  if (this.squareCol !== null && this.squareCol !== undefined) {
+    output.writeFieldBegin('squareCol', Thrift.Type.I32, 4);
+    output.writeI32(this.squareCol);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 AgentVsAgent.EntryRequest = function(args) {
   this.version = '0.0.11';
   if (args) {
@@ -235,21 +333,9 @@ AgentVsAgent.GameInfo.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.LIST) {
-        var _size0 = 0;
-        var _rtmp34;
-        this.opponents_move = [];
-        var _etype3 = 0;
-        _rtmp34 = input.readListBegin();
-        _etype3 = _rtmp34.etype;
-        _size0 = _rtmp34.size;
-        for (var _i5 = 0; _i5 < _size0; ++_i5)
-        {
-          var elem6 = null;
-          elem6 = input.readI32().value;
-          this.opponents_move.push(elem6);
-        }
-        input.readListEnd();
+      if (ftype == Thrift.Type.STRUCT) {
+        this.opponents_move = new AgentVsAgent.Move();
+        this.opponents_move.read(input);
       } else {
         input.skip(ftype);
       }
@@ -271,17 +357,8 @@ AgentVsAgent.GameInfo.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.opponents_move !== null && this.opponents_move !== undefined) {
-    output.writeFieldBegin('opponents_move', Thrift.Type.LIST, 2);
-    output.writeListBegin(Thrift.Type.I32, this.opponents_move.length);
-    for (var iter7 in this.opponents_move)
-    {
-      if (this.opponents_move.hasOwnProperty(iter7))
-      {
-        iter7 = this.opponents_move[iter7];
-        output.writeI32(iter7);
-      }
-    }
-    output.writeListEnd();
+    output.writeFieldBegin('opponents_move', Thrift.Type.STRUCT, 2);
+    this.opponents_move.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -369,21 +446,9 @@ AgentVsAgent.MoveResult.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.LIST) {
-        var _size8 = 0;
-        var _rtmp312;
-        this.opponents_move = [];
-        var _etype11 = 0;
-        _rtmp312 = input.readListBegin();
-        _etype11 = _rtmp312.etype;
-        _size8 = _rtmp312.size;
-        for (var _i13 = 0; _i13 < _size8; ++_i13)
-        {
-          var elem14 = null;
-          elem14 = input.readI32().value;
-          this.opponents_move.push(elem14);
-        }
-        input.readListEnd();
+      if (ftype == Thrift.Type.STRUCT) {
+        this.opponents_move = new AgentVsAgent.Move();
+        this.opponents_move.read(input);
       } else {
         input.skip(ftype);
       }
@@ -407,17 +472,8 @@ AgentVsAgent.MoveResult.prototype.read = function(input) {
 AgentVsAgent.MoveResult.prototype.write = function(output) {
   output.writeStructBegin('MoveResult');
   if (this.opponents_move !== null && this.opponents_move !== undefined) {
-    output.writeFieldBegin('opponents_move', Thrift.Type.LIST, 1);
-    output.writeListBegin(Thrift.Type.I32, this.opponents_move.length);
-    for (var iter15 in this.opponents_move)
-    {
-      if (this.opponents_move.hasOwnProperty(iter15))
-      {
-        iter15 = this.opponents_move[iter15];
-        output.writeI32(iter15);
-      }
-    }
-    output.writeListEnd();
+    output.writeFieldBegin('opponents_move', Thrift.Type.STRUCT, 1);
+    this.opponents_move.write(output);
     output.writeFieldEnd();
   }
   if (this.status !== null && this.status !== undefined) {
