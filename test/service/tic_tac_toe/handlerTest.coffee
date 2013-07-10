@@ -12,14 +12,14 @@ describe "Handler", ->
     @handler = new Handler(@arena)
 
   it "implements everything declared in the service", ->
-    methods = Object.keys(TicTacToe.Client.prototype).filter (method) ->
+    serviceMethods = Object.keys(TicTacToe.Client.prototype).filter (method) ->
       method[0..3] != "send" && method[0..3] != "recv"
 
-    for method in methods
-      @handler.should.have.property method
-      @handler[method].length.should.equal(TicTacToe.Client.prototype[method].length)
+    for method in serviceMethods
+      expect(@handler).to.have.property(method)
+      expect(@handler[method]).to.have.length(TicTacToe.Client.prototype[method].length)
 
-    Object.keys(Handler.prototype).filter((name) -> name[0] != "_").length.should.equal(methods.length)
+    expect(Object.keys(Handler.prototype).filter((name) -> name[0] != "_").length).to.equal(serviceMethods.length)
 
   describe "#enter_arena", ->
     it "returns when there is a game to be played", (done) ->

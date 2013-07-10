@@ -26,6 +26,7 @@ module.exports = class Handler
       result null, response
 
   get_game_info: (ticket, result) ->
+    # This should be an event as well...
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
@@ -34,5 +35,5 @@ module.exports = class Handler
 
     result null, gameInfo
 
-  make_move: (ticket, coordinates, result) ->
+  make_move: (ticket, boardRow, boardCol, squareRow, squareCol, result) ->
   get_game_result: (ticket, result) ->
