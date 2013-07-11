@@ -6,8 +6,8 @@ module.exports = Engine = machina.Fsm.extend
   initialize: (options) ->
     @game = options.game
     @on "transition", (details) ->
-      # console.log "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
-      logger.verbose "changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
+      # console.log "engine changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
+      logger.verbose "engine changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
   initialState: "initialized"
   states:
     initialized:
@@ -28,8 +28,8 @@ module.exports = Engine = machina.Fsm.extend
     waitingForX:
       _onEnter: ->
         @game.positions.X.send("turn")
-      "move.X": (coordinates...) ->
-        move = new Move("X", coordinates...)
+      "move.X": (boardRow, boardCol, squareRow, squareCol) ->
+        move = new Move("X", boardRow, boardCol, squareRow, squareCol)
         # move.valid?
         move.execute(@game)
         if @game.winner()
