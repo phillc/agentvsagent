@@ -37,9 +37,14 @@ describe "Handler", ->
       @game = @arena.createGame(@arena.waitingRoom[0..2])
       @ticket = new types.Ticket(agentId: @game.positions.X.id, gameId: @game.id)
 
-    it "returns game info", (done) ->
+    it "returns when the first move is ready", (done) ->
       @handler.get_game_info @ticket, (err, gameInfo) ->
-        should.not.exist(err)
-        gameInfo.position.should.equal(types.Position.X)
+        expect(err).to.not.exist
+        expect(gameInfo.position).to.equal(types.Position.X)
         done()
+
+      @game.engine.transition("waitingForX")
+
+
+
 

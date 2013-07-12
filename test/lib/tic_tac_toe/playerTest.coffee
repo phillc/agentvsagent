@@ -35,3 +35,10 @@ describe "Player", ->
       expect(@player.forward()).to.be.rejected.with("unexpectedMessage").notify(done)
 
   describe "#send", ->
+    beforeEach ->
+      @player.forward()
+      expect(@player.state.state).to.equal("waitingForServer")
+
+    it "moves to waiting for client", ->
+      @player.send("foo")
+      expect(@player.state.state).to.equal("waitingForClient")

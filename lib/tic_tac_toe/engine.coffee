@@ -16,18 +16,21 @@ module.exports = Engine = machina.Fsm.extend
     started:
       _onEnter: ->
         for position in ["X", "O"]
+          # not happy about sending game... it supports a ticket being made, but maybe arena should just be responsible for it
           @game.positions[position].send("started", player: @game.positions[position], game: @game)
       "ready.X": ->
+        console.log("ready.X")
         @readyX = true
         if @readyX && @readyO
           @transition("waitingForX")
       "ready.O": ->
+        console.log("ready.O")
         @readyO = true
         if @readyX && @readyO
           @transition("waitingForX")
     waitingForX:
       _onEnter: ->
-        @game.positions.X.send("turn")
+        @game.positions.X.send("turn", position: "X")
       "move.X": (boardRow, boardCol, squareRow, squareCol) ->
         move = new Move("X", boardRow, boardCol, squareRow, squareCol)
         # move.valid?
@@ -38,7 +41,7 @@ module.exports = Engine = machina.Fsm.extend
           @transition("waitingForO")
     waitingForO:
       _onEnter: ->
-        @game.positions.O.send("turn")
+        @game.positions.O.send("turn", position: "O")
       "move.O": (coordinates) ->
         @transition("waitingForX")
 

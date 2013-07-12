@@ -10,7 +10,7 @@ module.exports = class Game
     @id = IdGenerator.generate()
     @players = [player1, player2]
     @positions = {}
-    @engine = new Engine(game: this)
+    @engine = engine = new Engine(game: this)
     @boards = [
       [ new Board(), new Board(), new Board() ]
       [ new Board(), new Board(), new Board() ]
@@ -22,18 +22,14 @@ module.exports = class Game
     for player in und.shuffle(@players)
       position = availablePositions.shift()
       @positions[position] = player
+      do (player, position, engine) ->
+        player.on "message", (message, data) ->
+          engine.handle "#{message}.#{position}", data
 
   getPlayer: (playerId) ->
     #TODO: remove me
     for player in @players
       return player if player.id == playerId
-
-
-  positionOf: (player) ->
-    if @positions.X == player
-      "X"
-    else if @positions.O == player
-      "O"
 
   on: (args...) ->
     @engine.on(args...)
@@ -48,4 +44,5 @@ module.exports = class Game
     @boardAt(boardRow, boardCol).squareAt(row, col)
 
   winner: ->
-    null
+    if @moves.length > 5
+      "X"

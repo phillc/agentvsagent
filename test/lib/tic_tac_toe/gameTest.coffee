@@ -14,7 +14,6 @@ describe "Game", ->
     expect(@game.players).to.have.length(2)
 
   it "assigns each player a position", ->
-
     positions = [
       @game.positions.X.id
       @game.positions.O.id
@@ -23,6 +22,14 @@ describe "Game", ->
     players = @game.players.map (player) -> player.id
 
     expect(positions.sort()).to.eql(players.sort())
+
+  it "listens for player messages and handles them", (done) ->
+    @game.engine["*"] = (message, data) ->
+      expect(message).to.equal("foo.X")
+      expect(data).to.equal("bar")
+      done()
+
+    @game.positions.X.forward 'foo', 'bar'
 
   describe "#getPlayer", ->
     it "returns a player by id", ->
@@ -68,6 +75,7 @@ describe "Game", ->
       it "emits X turn", (done) ->
         @game.positions.X.forward().then (value) ->
           expect(value.message).to.equal("turn")
+          expect(value.data.position).to.equal("X")
           done()
         @game.engine.transition("waitingForX")
 
@@ -95,6 +103,7 @@ describe "Game", ->
       it "emits O turn", (done) ->
         @game.positions.O.forward().then (value) ->
           expect(value.message).to.equal("turn")
+          expect(value.data.position).to.equal("O")
           done()
         @game.engine.transition("waitingForO")
 

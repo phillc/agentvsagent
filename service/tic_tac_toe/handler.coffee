@@ -18,22 +18,31 @@ module.exports = class Handler
     game.getPlayer(ticket.agentId)
 
   enter_arena: (request, result) ->
+    console.log("enter_arena")
     player = @arena.createPlayer()
-    player.forward("join").then (value) ->
-      ticket = new types.Ticket(agentId: value.data.player.id, gameId: value.data.game.id)
-      response = new types.EntryResponse(ticket: ticket)
+    player.forward("join")
+      .then (value) ->
+        ticket = new types.Ticket(agentId: value.data.player.id, gameId: value.data.game.id)
+        response = new types.EntryResponse(ticket: ticket)
 
-      result null, response
+        console.log("respond enter_arena")
+        result null, response
+      .done()
 
   get_game_info: (ticket, result) ->
-    # This should be an event as well...
+    console.log("get_game_info")
     game = @arena.getGame(ticket.gameId)
     player = game.getPlayer(ticket.agentId)
 
-    thriftPosition = mapper.positionToThrift(game.positionOf(player))
-    gameInfo = new types.GameInfo(position: thriftPosition)
+    player.forward("ready")
+      .then (value) ->
+        console.log("back..", value)
+        thriftPosition = mapper.positionToThrift(value.data.position)
+        gameInfo = new types.GameInfo(position: thriftPosition)
 
-    result null, gameInfo
+        console.log("respond get_game_info")
+        result null, gameInfo
+      .done()
 
   make_move: (ticket, boardRow, boardCol, squareRow, squareCol, result) ->
   get_game_result: (ticket, result) ->
