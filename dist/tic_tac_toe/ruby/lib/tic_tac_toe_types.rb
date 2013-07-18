@@ -66,18 +66,15 @@ module AgentVsAgent
 
   class Ticket
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    GAMEID = 1
-    AGENTID = 2
+    AGENTID = 1
 
     FIELDS = {
-      GAMEID => {:type => ::Thrift::Types::STRING, :name => 'gameId'},
       AGENTID => {:type => ::Thrift::Types::STRING, :name => 'agentId'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field gameId is unset!') unless @gameId
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field agentId is unset!') unless @agentId
     end
 

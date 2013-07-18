@@ -2,8 +2,9 @@ actions = require '../../lib/hearts/actions'
 logger = require '../../lib/logger'
 types = require './types/hearts_types'
 mapper = require './mapper'
+AbstractHandler = require '../abstractHandler'
 
-module.exports = class Handler
+module.exports = class Handler extends AbstractHandler
   constructor: (@arena) ->
 
   _game: (ticket) ->

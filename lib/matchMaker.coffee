@@ -4,11 +4,13 @@ module.exports = class MatchMaker
   constructor: (@arena) ->
 
   findMatch: ->
-    if @arena.waitingRoom.length >= @arena.numberOfPlayers
+    waiting = @arena.waitingRoom.length
+    if waiting >= @arena.numberOfAgents
       logger.verbose "Match maker is creating a game!"
-      @arena.createGame @arena.waitingRoom[0..(@arena.numberOfPlayers - 1)]
-
+      @arena.createGame @arena.waitingRoom[0..(@arena.numberOfAgents - 1)]
+    else
+      logger.verbose "Match maker did not find a game. #{waiting} waiting, need #{@arena.numberOfAgents}"
   start: ->
-    @arena.on 'newPlayer', =>
+    @arena.on 'agentJoined', =>
       @findMatch()
 

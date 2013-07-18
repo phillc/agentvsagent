@@ -5,9 +5,14 @@ Handler = require './handler'
 
 module.exports = class Service
   constructor: (@arena) ->
-    @handler = new Handler(@arena)
+    @tcpHandler = new Handler()
+    @binaryHandler = new Handler()
+    @jsonHandler = new Handler()
 
-  createTCPServer: -> thrift.createServer(TicTacToe, @handler)
-  binaryHttpMiddleware: -> thrift.httpMiddleware(TicTacToe, @handler)
-  jsonHttpMiddleware: -> thrift.httpMiddleware(TicTacToe, @handler, protocol: thrift.TJSONProtocol)
+  handlers: ->
+    [@tcpHandler, @binaryHandler, @jsonHandler]
+
+  createTCPServer: -> thrift.createServer(TicTacToe, @tcpHandler)
+  binaryHttpMiddleware: -> thrift.httpMiddleware(TicTacToe, @binaryHandler)
+  jsonHttpMiddleware: -> thrift.httpMiddleware(TicTacToe, @jsonHandler, protocol: thrift.TJSONProtocol)
 

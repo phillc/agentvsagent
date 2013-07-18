@@ -167,12 +167,8 @@ AgentVsAgent.EntryRequest.prototype.write = function(output) {
 };
 
 AgentVsAgent.Ticket = function(args) {
-  this.gameId = null;
   this.agentId = null;
   if (args) {
-    if (args.gameId !== undefined) {
-      this.gameId = args.gameId;
-    }
     if (args.agentId !== undefined) {
       this.agentId = args.agentId;
     }
@@ -194,18 +190,14 @@ AgentVsAgent.Ticket.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRING) {
-        this.gameId = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
         this.agentId = input.readString().value;
       } else {
         input.skip(ftype);
       }
       break;
+      case 0:
+        input.skip(ftype);
+        break;
       default:
         input.skip(ftype);
     }
@@ -217,13 +209,8 @@ AgentVsAgent.Ticket.prototype.read = function(input) {
 
 AgentVsAgent.Ticket.prototype.write = function(output) {
   output.writeStructBegin('Ticket');
-  if (this.gameId !== null && this.gameId !== undefined) {
-    output.writeFieldBegin('gameId', Thrift.Type.STRING, 1);
-    output.writeString(this.gameId);
-    output.writeFieldEnd();
-  }
   if (this.agentId !== null && this.agentId !== undefined) {
-    output.writeFieldBegin('agentId', Thrift.Type.STRING, 2);
+    output.writeFieldBegin('agentId', Thrift.Type.STRING, 1);
     output.writeString(this.agentId);
     output.writeFieldEnd();
   }

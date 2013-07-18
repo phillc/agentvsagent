@@ -1,5 +1,6 @@
 logger = require '../../lib/logger'
 types = require './types/tic_tac_toe_types'
+AbstractHandler = require '../abstractHandler'
 
 mapper = {}
 mapper.positionToThrift = positionToThrift = (position) ->
@@ -7,22 +8,15 @@ mapper.positionToThrift = positionToThrift = (position) ->
     when "X" then types.Position.X
     when "O" then types.Position.O
 
-module.exports = class Handler
-  constructor: (@arena) ->
-
-  _game: (ticket) ->
-    @arena.getGame(ticket.gameId)
-
-  _player: (ticket) ->
-    game = @_game(ticket)
-    game.getPlayer(ticket.agentId)
-
+module.exports = class Handler extends AbstractHandler
   enter_arena: (request, result) ->
     console.log("enter_arena")
-    player = @arena.createPlayer()
-    player.forward("join")
-      .then (value) ->
-        ticket = new types.Ticket(agentId: value.data.player.id, gameId: value.data.game.id)
+
+    agentId = @_createAgent()
+
+    @_getAgent(agentId).forward("join")
+      .then ->
+        ticket = new types.Ticket(agentId: agentId)
         response = new types.EntryResponse(ticket: ticket)
 
         console.log("respond enter_arena")
@@ -31,10 +25,8 @@ module.exports = class Handler
 
   get_game_info: (ticket, result) ->
     console.log("get_game_info")
-    game = @arena.getGame(ticket.gameId)
-    player = game.getPlayer(ticket.agentId)
-
-    player.forward("ready")
+    agent = @_getAgent(ticket.agentId)
+    agent.forward("ready")
       .then (value) ->
         console.log("back..", value)
         thriftPosition = mapper.positionToThrift(value.data.position)
@@ -45,4 +37,5 @@ module.exports = class Handler
       .done()
 
   make_move: (ticket, boardRow, boardCol, squareRow, squareCol, result) ->
+    console.log "make move"
   get_game_result: (ticket, result) ->

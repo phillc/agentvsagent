@@ -6,10 +6,10 @@ Arena = require './lib/arena'
 MatchMaker = require './lib/matchMaker'
 
 HeartsService = require './service/hearts'
-HeartsFactory = require './lib/hearts/factory'
+HeartsBuilder = require './lib/hearts/builder'
 
 TicTacToeService = require './service/tic_tac_toe'
-TicTacToeFactory = require './lib/tic_tac_toe/factory'
+TicTacToeBuilder = require './lib/tic_tac_toe/builder'
 
 createHttp = () ->
   app = express()
@@ -26,12 +26,13 @@ createHttp = () ->
   app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><br /><a href='/game/tic_tac_toe/play'>Tic Tac Toe</a>")
   return app
 
-buildService = (serviceClass, factoryClass, options) ->
-  factory = new factoryClass(options)
-  arena = new Arena(factory)
+buildService = (serviceClass, builderClass, options) ->
+  builder = new builderClass(options)
+  service = new serviceClass()
+  arena = new Arena(builder, service.handlers())
   matchMaker = new MatchMaker(arena)
   matchMaker.start()
-  new serviceClass(arena)
+  service
 
 mountGame = (app, name, service, tcpPort) ->
   app.use "/game/#{name}/service.json", service.jsonHttpMiddleware()
@@ -54,8 +55,8 @@ exports.start = (options) ->
     loggerOptions.level = 'info'
   logger.add winston.transports.Console, loggerOptions
 
-  heartsService = buildService(HeartsService, HeartsFactory, options)
-  ticTacToeService = buildService(TicTacToeService, TicTacToeFactory, options)
+  heartsService = buildService(HeartsService, HeartsBuilder, options)
+  ticTacToeService = buildService(TicTacToeService, TicTacToeBuilder, options)
 
   mountGame(app, "hearts", heartsService, 4001)
   mountGame(app, "tic_tac_toe", ticTacToeService, 4002)

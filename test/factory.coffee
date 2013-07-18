@@ -1,10 +1,11 @@
 Arena = require "../lib/arena"
-HeartsFactory = require "../lib/hearts/factory"
+HeartsBuilder = require "../lib/hearts/builder"
+Agent = require "../lib/agent"
 und = require 'underscore'
 
 exports.createArena = createArena = (options={}) ->
-  factory = options.factory || new HeartsFactory()
-  new Arena(factory)
+  builder = options.builder || new HeartsBuilder()
+  new Arena(builder, [])
 
 exports.createGame = createGame = (options={}) ->
   arena = options.arena || createArena(options)
@@ -15,3 +16,5 @@ exports.createGame = createGame = (options={}) ->
 
   game
 
+exports.createAgent = createAgent = (options={}) ->
+  new Agent()
