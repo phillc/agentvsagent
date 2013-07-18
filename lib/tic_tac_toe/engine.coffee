@@ -10,10 +10,10 @@ waitingFor = (waitingForPosition) ->
     # @game.positions.X.send("turn", position: "X")
     @game.emit "#{waitingForPosition}.turn", position: waitingForPosition
 
-  handlers["move.#{waitingForPosition}"] = (boardRow, boardCol, squareRow, squareCol) ->
-    move = new Move(waitingForPosition, boardRow, boardCol, squareRow, squareCol)
+  handlers["move.#{waitingForPosition}"] = (move) ->
     # move.valid?
-    move.execute(@game)
+    @game.state.moves.push(move)
+    move.execute(@game, waitingForPosition)
     if @game.winner()
       @transition("gameEnded")
     else

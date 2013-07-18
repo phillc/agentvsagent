@@ -33,5 +33,5 @@ module.exports = class Game extends EventEmitter
     @boardAt(boardRow, boardCol).squareAt(row, col)
 
   winner: ->
-    # if @state.moves.length > 5
-    #   "X"
+    if @state.moves.length > 5
+      "X"

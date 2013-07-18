@@ -1,6 +1,6 @@
 module.exports = class Move
-  constructor: (@position, @boardRow, @boardCol, @squareRow, @squareCol) ->
+  constructor: (@boardRow, @boardCol, @squareRow, @squareCol) ->
 
-  execute: (game) ->
+  execute: (game, position) ->
     square = game.squareAt(@boardRow, @boardCol, @squareRow, @squareCol)
-    square.winner = @position
+    square.winner = position

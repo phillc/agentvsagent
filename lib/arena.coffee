@@ -46,9 +46,9 @@ module.exports = class Arena extends EventEmitter
     availablePositions = @builder.positions()
     for agent in und.shuffle(agents)
       position = availablePositions.shift()
-      do (game, position, agent) -> 
-        agent.on "message", (messageType, data) ->
-          game.handle [messageType, position].join("."), data
+      do (game, position, agent) ->
+        agent.on "move", (args...) ->
+          game.handle ["move", position].join("."), args...
 
         game.on [position, "turn"].join("."), (data) ->
           agent.send("turn", data)

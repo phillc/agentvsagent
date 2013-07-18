@@ -36,10 +36,24 @@ describe "Handler", ->
       @agent = @handler._getAgent(agentId)
       @ticket = new types.Ticket(agentId: agentId)
 
-    it "returns when the first move is ready", (done) ->
+    it "returns when the move is sent", (done) ->
       @handler.get_game_info @ticket, (err, gameInfo) ->
         expect(err).to.not.exist
         expect(gameInfo.position).to.equal(types.Position.X)
+        done()
+
+      @agent.send("turn", position: "X")
+
+  describe "#make_move", ->
+    beforeEach ->
+      agentId = @handler._createAgent()
+      @agent = @handler._getAgent(agentId)
+      @ticket = new types.Ticket(agentId: agentId)
+
+    it "returns when the move is sent", (done) ->
+      @handler.make_move @ticket, 0, 0, 0, 0, (err, moveResult) ->
+        expect(err).to.not.exist
+        expect(moveResult.opponents_move.boardRow).to.equal(0)
         done()
 
       @agent.send("turn", position: "X")
