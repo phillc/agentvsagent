@@ -12,7 +12,6 @@ module.exports = class Game
     @maxPenalty = options.heartsMaxPoints || 100
     @engine = new Engine(game: this)
     @emitter = new EventEmitter()
-    # @turnTime = options.turnTime || 1000
 
     @state =
       rounds: []

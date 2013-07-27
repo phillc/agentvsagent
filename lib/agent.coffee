@@ -5,8 +5,9 @@ logger = require '../lib/logger'
 
 # Time each state, emit 'end' on timeout
 AgentState = machina.Fsm.extend
-  initialize: (info) ->
-    @agent = info.agent
+  initialize: (options) ->
+    @agent = options.agent
+    @timeout = options.timeout
   # "*": ->
   #   console.log "=( =( unexpected message =( =( =(", @state, arguments
   initialState: "waitingForClient"
@@ -17,19 +18,32 @@ AgentState = machina.Fsm.extend
         @request.resolve(message: message, data: data || {})
 
       forward: (message, data, request) ->
-        request.reject(new Error("unexpectedMessage"))
+        request.reject("unexpectedMessage")
 
     waitingForClient:
+      _onEnter: ->
+        if @timeout
+          @timer = setTimeout =>
+            logger.error "timeout!"
+            @transition("timedout")
+          , @timeout
+
       forward: (message, data, @request)->
         @transition "waitingForServer"
         heard = @agent.emit message, data
         if !heard
           logger.error "no one was listening to #{message}"
 
+      _onExit: ->
+        clearTimeout(@timer)
+
+    timedout:
+      _onEnter: ->
+        @agent.emit "timeout"
 
 module.exports = class Agent extends EventEmitter
-  constructor: ->
-    @state = new AgentState(agent: this)
+  constructor: (options={}) ->
+    @state = new AgentState(agent: this, timeout: options.timeout)
     @state.on "transition", (details) ->
       message = "AGENT changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
       # console.log message

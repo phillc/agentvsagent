@@ -4,9 +4,9 @@ Hearts = require './types/Hearts'
 Handler = require './handler'
 
 module.exports = class Service
-  constructor: (@arena) ->
-    @tcpHandler = new Handler()
-    @binaryHandler = new Handler()
+  constructor: (options) ->
+    @tcpHandler = new Handler(agentTimeout: options.agentTimeout)
+    @binaryHandler = new Handler(agentTimeout: options.agentTimeout)
     @jsonHandler = new Handler()
 
   handlers: ->

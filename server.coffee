@@ -28,7 +28,7 @@ createHttp = () ->
 
 buildService = (serviceClass, builderClass, options) ->
   builder = new builderClass(options)
-  service = new serviceClass()
+  service = new serviceClass(agentTimeout: options.turnTime)
   arena = new Arena(builder, service.handlers())
   matchMaker = new MatchMaker(arena)
   matchMaker.start()

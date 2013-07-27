@@ -10,7 +10,7 @@ module.exports = class Heartsbuilder
     Game.positions()
 
   createGame: (positions) ->
-    new Game(positions, @gameOptions)
+    new Game(positions, {})
 
   events: ->
     Game.EVENTS

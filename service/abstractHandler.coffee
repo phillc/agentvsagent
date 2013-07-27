@@ -3,12 +3,12 @@ IdGenerator = require '../lib/idGenerator'
 Agent = require '../lib/agent'
 
 module.exports = class AbstractHandler extends EventEmitter
-  constructor: ->
+  constructor: (@options={}) ->
     @ticketToAgent = {}
 
   _createAgent: ->
     id = IdGenerator.generate()
-    agent = new Agent()
+    agent = new Agent(timeout: @options.agentTimeout)
     @ticketToAgent[id] = agent
     @emit 'connect', agent
     id
