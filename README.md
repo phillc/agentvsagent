@@ -78,6 +78,13 @@ Sample agents for languages
 * When a bot disconnects, the server still attempts to send them a message and will cause an exception
 * Timeouts apply to the human player as well (1 second is not reasonable for a human)
 
+## Changelog
+
+# 0.0.12
+
+* Changed position from an enumerable to a string
+
+
 ## Credits
 
 * Thrift: http://thrift.apache.org/

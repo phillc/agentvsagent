@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("GameInfo");
 
-  private static final org.apache.thrift.protocol.TField POSITION_FIELD_DESC = new org.apache.thrift.protocol.TField("position", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField POSITION_FIELD_DESC = new org.apache.thrift.protocol.TField("position", org.apache.thrift.protocol.TType.STRING, (short)1);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -41,18 +41,10 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
     schemes.put(TupleScheme.class, new GameInfoTupleSchemeFactory());
   }
 
-  /**
-   * 
-   * @see Position
-   */
-  public Position position; // required
+  public String position; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    /**
-     * 
-     * @see Position
-     */
     POSITION((short)1, "position");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
@@ -114,7 +106,7 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.POSITION, new org.apache.thrift.meta_data.FieldMetaData("position", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-        new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, Position.class)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , "Position")));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(GameInfo.class, metaDataMap);
   }
@@ -123,7 +115,7 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
   }
 
   public GameInfo(
-    Position position)
+    String position)
   {
     this();
     this.position = position;
@@ -147,19 +139,11 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
     this.position = null;
   }
 
-  /**
-   * 
-   * @see Position
-   */
-  public Position getPosition() {
+  public String getPosition() {
     return this.position;
   }
 
-  /**
-   * 
-   * @see Position
-   */
-  public GameInfo setPosition(Position position) {
+  public GameInfo setPosition(String position) {
     this.position = position;
     return this;
   }
@@ -185,7 +169,7 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
       if (value == null) {
         unsetPosition();
       } else {
-        setPosition((Position)value);
+        setPosition((String)value);
       }
       break;
 
@@ -336,8 +320,8 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
         }
         switch (schemeField.id) {
           case 1: // POSITION
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.position = Position.findByValue(iprot.readI32());
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.position = iprot.readString();
               struct.setPositionIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -360,7 +344,7 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
       oprot.writeStructBegin(STRUCT_DESC);
       if (struct.position != null) {
         oprot.writeFieldBegin(POSITION_FIELD_DESC);
-        oprot.writeI32(struct.position.getValue());
+        oprot.writeString(struct.position);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -380,13 +364,13 @@ public class GameInfo implements org.apache.thrift.TBase<GameInfo, GameInfo._Fie
     @Override
     public void write(org.apache.thrift.protocol.TProtocol prot, GameInfo struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
-      oprot.writeI32(struct.position.getValue());
+      oprot.writeString(struct.position);
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, GameInfo struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      struct.position = Position.findByValue(iprot.readI32());
+      struct.position = iprot.readString();
       struct.setPositionIsSet(true);
     }
   }

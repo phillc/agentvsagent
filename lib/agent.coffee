@@ -22,22 +22,26 @@ AgentState = machina.Fsm.extend
     waitingForClient:
       forward: (message, data, @request)->
         @transition "waitingForServer"
-        @agent.emit message, data
+        heard = @agent.emit message, data
+        if !heard
+          logger.error "no one was listening to #{message}"
+
 
 module.exports = class Agent extends EventEmitter
   constructor: ->
     @state = new AgentState(agent: this)
     @state.on "transition", (details) ->
-      # console.log "agent changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
-      logger.verbose "agent changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
+      message = "AGENT changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
+      # console.log message
+      logger.verbose message
 
   forward: (message, data) ->
-    logger.verbose "forwarding #{message}, #{data}"
+    logger.verbose "<<<<<forwarding", message, " - ", data
     request = Q.defer()
     @state.handle "forward", message, data, request
     request.promise
 
   send: (message, data) ->
-    logger.verbose "sending", message, data
+    logger.verbose ">>>>>>>sending", message, " - ", data
     @state.handle "send", message, data
 

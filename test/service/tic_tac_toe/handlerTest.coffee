@@ -39,7 +39,7 @@ describe "Handler", ->
     it "returns when the move is sent", (done) ->
       @handler.get_game_info @ticket, (err, gameInfo) ->
         expect(err).to.not.exist
-        expect(gameInfo.position).to.equal(types.Position.X)
+        expect(gameInfo.position).to.equal("X")
         done()
 
       @agent.send("turn", position: "X")

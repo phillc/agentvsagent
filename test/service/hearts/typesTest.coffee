@@ -1,5 +1,4 @@
 types = require("../../../service/hearts/types/hearts_types")
-require("should")
 
 describe "types", ->
   describe "Card", ->
@@ -7,8 +6,8 @@ describe "types", ->
       @card = new types.Card(suit: types.Suit.SPADES, rank: types.Rank.FOUR)
 
     it "has a suit", ->
-      @card.suit.should.equal(types.Suit.SPADES)
+      expect(@card.suit).to.equal(types.Suit.SPADES)
 
     it "has a rank", ->
-      @card.rank.should.equal(types.Rank.FOUR)
+      expect(@card.rank).to.equal(types.Rank.FOUR)
 

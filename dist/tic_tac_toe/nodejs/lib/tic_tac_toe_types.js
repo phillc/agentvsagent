@@ -8,10 +8,6 @@ var ttypes = module.exports = {};
 if (typeof AgentVsAgent === 'undefined') {
   AgentVsAgent = {};
 }
-ttypes.Position = {
-'X' : 1,
-'O' : 2
-};
 ttypes.GameStatus = {
 'NEXT_MOVE' : 1,
 'END_GAME' : 2
@@ -314,8 +310,8 @@ AgentVsAgent.GameInfo.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.position = input.readI32();
+      if (ftype == Thrift.Type.STRING) {
+        this.position = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -340,8 +336,8 @@ AgentVsAgent.GameInfo.prototype.read = function(input) {
 AgentVsAgent.GameInfo.prototype.write = function(output) {
   output.writeStructBegin('GameInfo');
   if (this.position !== null && this.position !== undefined) {
-    output.writeFieldBegin('position', Thrift.Type.I32, 1);
-    output.writeI32(this.position);
+    output.writeFieldBegin('position', Thrift.Type.STRING, 1);
+    output.writeString(this.position);
     output.writeFieldEnd();
   }
   if (this.opponents_move !== null && this.opponents_move !== undefined) {
@@ -377,8 +373,8 @@ AgentVsAgent.GameResult.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.winner = input.readI32();
+      if (ftype == Thrift.Type.STRING) {
+        this.winner = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -398,8 +394,8 @@ AgentVsAgent.GameResult.prototype.read = function(input) {
 AgentVsAgent.GameResult.prototype.write = function(output) {
   output.writeStructBegin('GameResult');
   if (this.winner !== null && this.winner !== undefined) {
-    output.writeFieldBegin('winner', Thrift.Type.I32, 1);
-    output.writeI32(this.winner);
+    output.writeFieldBegin('winner', Thrift.Type.STRING, 1);
+    output.writeString(this.winner);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

@@ -7,13 +7,6 @@
 require 'thrift'
 
 module AgentVsAgent
-  module Position
-    X = 1
-    O = 2
-    VALUE_MAP = {1 => "X", 2 => "O"}
-    VALID_VALUES = Set.new([X, O]).freeze
-  end
-
   module GameStatus
     NEXT_MOVE = 1
     END_GAME = 2
@@ -105,7 +98,7 @@ module AgentVsAgent
     OPPONENTS_MOVE = 2
 
     FIELDS = {
-      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position},
+      POSITION => {:type => ::Thrift::Types::STRING, :name => 'position'},
       OPPONENTS_MOVE => {:type => ::Thrift::Types::STRUCT, :name => 'opponents_move', :class => ::AgentVsAgent::Move, :optional => true}
     }
 
@@ -113,9 +106,6 @@ module AgentVsAgent
 
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field position is unset!') unless @position
-      unless @position.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@position)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field position!')
-      end
     end
 
     ::Thrift::Struct.generate_accessors self
@@ -126,16 +116,13 @@ module AgentVsAgent
     WINNER = 1
 
     FIELDS = {
-      WINNER => {:type => ::Thrift::Types::I32, :name => 'winner', :enum_class => ::AgentVsAgent::Position}
+      WINNER => {:type => ::Thrift::Types::STRING, :name => 'winner'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field winner is unset!') unless @winner
-      unless @winner.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@winner)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field winner!')
-      end
     end
 
     ::Thrift::Struct.generate_accessors self

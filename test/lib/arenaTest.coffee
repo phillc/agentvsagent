@@ -4,7 +4,10 @@ describe "Arena", ->
   beforeEach ->
     builder =
       positions: -> ["A", "B"]
-      createGame: -> {start: ->}
+      createGame: ->
+        start: ->
+        on: ->
+      events: -> []
     @arena = new Arena(builder, [])
 
   describe "#addAgent", ->
@@ -14,16 +17,16 @@ describe "Arena", ->
       expect(@arena.waitingRoom).to.have.length(1)
 
     it "emits an event", (done) ->
-      @arena.on 'newAgent', done
-      @arena.addAgent({})
+      @arena.on 'agentJoined', done
+      @arena.addAgent(Factory.createAgent())
 
   describe "#removeAgent", ->
     beforeEach ->
-      @agent1 = {}
+      @agent1 = Factory.createAgent()
       @arena.addAgent(@agent1)
-      @agent2 = {}
+      @agent2 = Factory.createAgent()
       @arena.addAgent(@agent2)
-      @agent3 = {}
+      @agent3 = Factory.createAgent()
       @arena.addAgent(@agent3)
       expect(@arena.waitingRoom).to.have.length(3)
 
@@ -36,7 +39,7 @@ describe "Arena", ->
   describe "#createGame", ->
     beforeEach ->
       for _ in [1..10]
-        @arena.addAgent({})
+        @arena.addAgent(Factory.createAgent())
       expect(@arena.waitingRoom).to.have.length(10)
       expect(Object.keys(@arena.runningMatches)).to.have.length(0)
       @matchedAgents = @arena.waitingRoom[2..5]

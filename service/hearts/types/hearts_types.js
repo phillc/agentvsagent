@@ -29,12 +29,6 @@ ttypes.Rank = {
 'KING' : 13,
 'ACE' : 14
 };
-ttypes.Position = {
-'NORTH' : 1,
-'EAST' : 2,
-'SOUTH' : 3,
-'WEST' : 4
-};
 ttypes.GameStatus = {
 'NEXT_ROUND' : 1,
 'END_GAME' : 2
@@ -106,12 +100,8 @@ AgentVsAgent.Card.prototype.write = function(output) {
 };
 
 AgentVsAgent.Ticket = module.exports.Ticket = function(args) {
-  this.gameId = null;
   this.agentId = null;
   if (args) {
-    if (args.gameId !== undefined) {
-      this.gameId = args.gameId;
-    }
     if (args.agentId !== undefined) {
       this.agentId = args.agentId;
     }
@@ -133,18 +123,14 @@ AgentVsAgent.Ticket.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRING) {
-        this.gameId = input.readString();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
         this.agentId = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
+      case 0:
+        input.skip(ftype);
+        break;
       default:
         input.skip(ftype);
     }
@@ -156,13 +142,8 @@ AgentVsAgent.Ticket.prototype.read = function(input) {
 
 AgentVsAgent.Ticket.prototype.write = function(output) {
   output.writeStructBegin('Ticket');
-  if (this.gameId !== null && this.gameId !== undefined) {
-    output.writeFieldBegin('gameId', Thrift.Type.STRING, 1);
-    output.writeString(this.gameId);
-    output.writeFieldEnd();
-  }
   if (this.agentId !== null && this.agentId !== undefined) {
-    output.writeFieldBegin('agentId', Thrift.Type.STRING, 2);
+    output.writeFieldBegin('agentId', Thrift.Type.STRING, 1);
     output.writeString(this.agentId);
     output.writeFieldEnd();
   }
@@ -314,8 +295,8 @@ AgentVsAgent.GameInfo.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.position = input.readI32();
+      if (ftype == Thrift.Type.STRING) {
+        this.position = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -335,8 +316,8 @@ AgentVsAgent.GameInfo.prototype.read = function(input) {
 AgentVsAgent.GameInfo.prototype.write = function(output) {
   output.writeStructBegin('GameInfo');
   if (this.position !== null && this.position !== undefined) {
-    output.writeFieldBegin('position', Thrift.Type.I32, 1);
-    output.writeI32(this.position);
+    output.writeFieldBegin('position', Thrift.Type.STRING, 1);
+    output.writeString(this.position);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -371,8 +352,8 @@ AgentVsAgent.Trick.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.leader = input.readI32();
+      if (ftype == Thrift.Type.STRING) {
+        this.leader = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -410,8 +391,8 @@ AgentVsAgent.Trick.prototype.read = function(input) {
 AgentVsAgent.Trick.prototype.write = function(output) {
   output.writeStructBegin('Trick');
   if (this.leader !== null && this.leader !== undefined) {
-    output.writeFieldBegin('leader', Thrift.Type.I32, 1);
-    output.writeI32(this.leader);
+    output.writeFieldBegin('leader', Thrift.Type.STRING, 1);
+    output.writeString(this.leader);
     output.writeFieldEnd();
   }
   if (this.played !== null && this.played !== undefined) {

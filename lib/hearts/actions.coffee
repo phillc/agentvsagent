@@ -2,26 +2,18 @@ Pile = require './pile'
 Card = require './card'
 Rank = require './rank'
 Suit = require './suit'
-states = require './states'
+# states = require './states'
 logger = require '../logger'
 
 # I'm happy with the way this logic is separated, but I am not happy with
 # the fact that messages to the agents are in this async callback world,
 # but messages from the agent to the game are going through the handleAction path
-class Action
-  constructor: (@player) ->
 
-exports.PassCards = class PassCards extends Action
-  constructor: (player, @cards) ->
-    super(player)
+exports.PassCards = class PassCards
+  constructor: (@cards) ->
 
-  validate: (game) ->
-    position = game.positionOf(@player)
-    seat = game.currentRound()[position]
-
-    validateState = ->
-      if !(game.currentState instanceof states.Passing)
-        {type: "outOfSequence", message: "Action requested out of sequence."}
+  validate: (game, position) ->
+    seat = game.currentRound().seats[position]
 
     validatePassingAllowed = ->
       if seat.passed.cards.length > 0
@@ -44,37 +36,25 @@ exports.PassCards = class PassCards extends Action
       if @cards.length != 3
         return {type: "invalidMove", message: "Must pass three cards. You passed #{@cards.length}."}
 
-    validateState() ||
-      validatePassingAllowed() ||
+    validatePassingAllowed() ||
       validateUniqueCards() ||
       validateOwnCards() ||
       validateNumberCards() ||
       null
 
-  execute: (game) ->
-    position = game.positionOf(@player)
-    seat = game.currentRound()[position]
+  execute: (game, position) ->
+    seat = game.currentRound().seats[position]
     logger.verbose "PASSING CARDS", @cards
 
-    (new Pile(@cards)).copyAllCardsTo game.currentRound()[position].passed
+    (new Pile(@cards)).copyAllCardsTo seat.passed
 
-exports.PlayCard = class PlayCard extends Action
-  constructor: (player, @card) ->
-    super(player)
+exports.PlayCard = class PlayCard
+  constructor: (@card) ->
 
-  validate: (game) ->
-    position = game.positionOf(@player)
+  validate: (game, position) ->
     round = game.currentRound()
-    seat = round[position]
+    seat = round.seats[position]
     trick = round.currentTrick()
-
-    validateState = ->
-      if !(game.currentState instanceof states.WaitingForCard)
-        return {type: "outOfSequence", message: "Action requested out of sequence."}
-
-    validatePlayer = ->
-      if position != game.currentState.position
-        return {type: "outOfSequence", message: "Card played out of sequence."}
 
     validateOwnCard = =>
       if !seat.held.cards.some((heldCard) => heldCard.isEqual(@card))
@@ -114,15 +94,12 @@ exports.PlayCard = class PlayCard extends Action
       else
         validateTrickCard()
 
-    validateState() ||
-      validatePlayer() ||
-      validateOwnCard() ||
+    validateOwnCard() ||
       validateCard() ||
       null
 
-  execute: (game) ->
+  execute: (game, position) ->
     logger.verbose "PLAYING CARD", @card
-    position = game.positionOf(@player)
     round = game.currentRound()
 
-    round[position].held.moveCardTo(@card, round.currentTrick().played)
+    round.seats[position].held.moveCardTo(@card, round.currentTrick().played)

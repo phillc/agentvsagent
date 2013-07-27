@@ -2,43 +2,42 @@ Pile = require "../../../lib/hearts/pile"
 Card = require "../../../lib/hearts/card"
 Suit = require "../../../lib/hearts/suit"
 Rank = require "../../../lib/hearts/rank"
-should = require("should")
 
 describe "Pile", ->
   beforeEach ->
     @pile = new Pile()
 
   it "starts with no cards", ->
-    @pile.cards.length.should.equal(0)
+    expect(@pile.cards).to.have.length(0)
 
   describe "::createDeck", ->
     it "makes a pile of all 52 cards", ->
-      Pile.createDeck().should.have.property('cards').with.length(52)
+      expect(Pile.createDeck()).to.have.property('cards').with.length(52)
 
   describe "::createShuffledDeck", ->
     it "shuffles the pile of 52", ->
-      Pile.createShuffledDeck().should.have.property('cards').with.length(52)
+      expect(Pile.createShuffledDeck()).to.have.property('cards').with.length(52)
 
   describe "#addCard", ->
     it "adds a card", ->
       @pile.addCard(Card.all()[0])
-      @pile.cards.length.should.equal(1)
+      expect(@pile.cards).to.have.length(1)
 
   describe "#allOfSuit", ->
     beforeEach ->
       @pile = Pile.createDeck()
 
     it "returns a pile with all the clubs", ->
-      @pile.allOfSuit(Suit.CLUBS).cards.length.should.equal(13)
+      expect(@pile.allOfSuit(Suit.CLUBS).cards).to.have.length(13)
 
     it "returns a pile with all the diamonds", ->
-      @pile.allOfSuit(Suit.DIAMONDS).cards.length.should.equal(13)
+      expect(@pile.allOfSuit(Suit.DIAMONDS).cards).to.have.length(13)
 
     it "returns a pile with all the spades", ->
-      @pile.allOfSuit(Suit.SPADES).cards.length.should.equal(13)
+      expect(@pile.allOfSuit(Suit.SPADES).cards).to.have.length(13)
 
     it "returns a pile with all the hearts", ->
-      @pile.allOfSuit(Suit.HEARTS).cards.length.should.equal(13)
+      expect(@pile.allOfSuit(Suit.HEARTS).cards).to.have.length(13)
 
   describe "#highestRankedCard", ->
     beforeEach ->
@@ -51,8 +50,8 @@ describe "Pile", ->
       @pile.cards.push(new Card(Suit.HEARTS, Rank.KING))
 
       card = @pile.highestRankedCard()
-      card.suit.should.equal Suit.HEARTS
-      card.rank.should.equal Rank.ACE
+      expect(card.suit).to.equal Suit.HEARTS
+      expect(card.rank).to.equal Rank.ACE
 
   describe "#moveCardsTo", ->
     beforeEach ->
@@ -65,8 +64,8 @@ describe "Pile", ->
     it "moves the first n cards to the other pile", ->
       @pile.moveCardsTo(2, @otherPile)
 
-      @pile.cards.length.should.equal(1)
-      @otherPile.cards.length.should.equal(2)
+      expect(@pile.cards).to.have.length(1)
+      expect(@otherPile.cards).to.have.length(2)
 
   describe "#moveAllCardsTo", ->
     beforeEach ->
@@ -79,8 +78,8 @@ describe "Pile", ->
     it "moves all cards to the other pile", ->
       @pile.moveAllCardsTo(@otherPile)
 
-      @pile.cards.length.should.equal(0)
-      @otherPile.cards.length.should.equal(3)
+      expect(@pile.cards).to.have.length(0)
+      expect(@otherPile.cards).to.have.length(3)
 
   describe "#copyAllCardsTo", ->
     beforeEach ->
@@ -93,8 +92,8 @@ describe "Pile", ->
     it "copies all cards to the other pile", ->
       @pile.copyAllCardsTo(@otherPile)
 
-      @pile.cards.length.should.equal(3)
-      @otherPile.cards.length.should.equal(3)
+      expect(@pile.cards).to.have.length(3)
+      expect(@otherPile.cards).to.have.length(3)
 
   describe "#moveCardTo", ->
     it "moves a card from one pile to another", ->
@@ -104,25 +103,25 @@ describe "Pile", ->
       @pile.addCard(new Card(Suit.CLUBS, Rank.THREE))
       @pile.addCard(new Card(Suit.CLUBS, Rank.FOUR))
       @pile.addCard(new Card(Suit.CLUBS, Rank.FIVE))
-      @pile.cards.should.have.length(4)
-      anotherPile.cards.should.have.length(0)
+      expect(@pile.cards).to.have.length(4)
+      expect(anotherPile.cards).to.have.length(0)
 
       cardToMove = new Card(Suit.CLUBS, Rank.FOUR)
       @pile.moveCardTo(cardToMove, anotherPile)
 
-      should.not.exist(@pile.findCard(cardToMove.suit, cardToMove.rank))
-      @pile.cards.should.have.length(3)
-      anotherPile.cards.should.have.length(1)
-      anotherPile.findCard(cardToMove.suit, cardToMove.rank).rank.should.equal cardToMove.rank
+      expect(@pile.findCard(cardToMove.suit, cardToMove.rank)).to.not.exist
+      expect(@pile.cards).to.have.length(3)
+      expect(anotherPile.cards).to.have.length(1)
+      expect(anotherPile.findCard(cardToMove.suit, cardToMove.rank).rank).to.equal cardToMove.rank
 
   describe "#findCard", ->
     beforeEach ->
       @pile.addCard(new Card(Suit.CLUBS, Rank.TWO))
 
     it "returns the card", ->
-      @pile.findCard(Suit.CLUBS, Rank.TWO).suit.should.equal(Suit.CLUBS)
-      @pile.findCard(Suit.CLUBS, Rank.TWO).rank.should.equal(Rank.TWO)
+      expect(@pile.findCard(Suit.CLUBS, Rank.TWO).suit).to.equal(Suit.CLUBS)
+      expect(@pile.findCard(Suit.CLUBS, Rank.TWO).rank).to.equal(Rank.TWO)
 
     it "returns null if card not in the pile", ->
-      should.not.exist(@pile.findCard(Suit.CLUBS, Rank.THREE))
+      expect(@pile.findCard(Suit.CLUBS, Rank.THREE)).to.not.exist
 

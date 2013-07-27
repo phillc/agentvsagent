@@ -34,15 +34,6 @@ module AgentVsAgent
     VALID_VALUES = Set.new([TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE]).freeze
   end
 
-  module Position
-    NORTH = 1
-    EAST = 2
-    SOUTH = 3
-    WEST = 4
-    VALUE_MAP = {1 => "NORTH", 2 => "EAST", 3 => "SOUTH", 4 => "WEST"}
-    VALID_VALUES = Set.new([NORTH, EAST, SOUTH, WEST]).freeze
-  end
-
   module GameStatus
     NEXT_ROUND = 1
     END_GAME = 2
@@ -78,18 +69,15 @@ module AgentVsAgent
 
   class Ticket
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    GAMEID = 1
-    AGENTID = 2
+    AGENTID = 1
 
     FIELDS = {
-      GAMEID => {:type => ::Thrift::Types::STRING, :name => 'gameId'},
       AGENTID => {:type => ::Thrift::Types::STRING, :name => 'agentId'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field gameId is unset!') unless @gameId
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field agentId is unset!') unless @agentId
     end
 
@@ -136,16 +124,13 @@ module AgentVsAgent
     POSITION = 1
 
     FIELDS = {
-      POSITION => {:type => ::Thrift::Types::I32, :name => 'position', :enum_class => ::AgentVsAgent::Position}
+      POSITION => {:type => ::Thrift::Types::STRING, :name => 'position'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field position is unset!') unless @position
-      unless @position.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@position)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field position!')
-      end
     end
 
     ::Thrift::Struct.generate_accessors self
@@ -157,7 +142,7 @@ module AgentVsAgent
     PLAYED = 2
 
     FIELDS = {
-      LEADER => {:type => ::Thrift::Types::I32, :name => 'leader', :enum_class => ::AgentVsAgent::Position},
+      LEADER => {:type => ::Thrift::Types::STRING, :name => 'leader'},
       PLAYED => {:type => ::Thrift::Types::LIST, :name => 'played', :element => {:type => ::Thrift::Types::STRUCT, :class => ::AgentVsAgent::Card}}
     }
 
@@ -166,9 +151,6 @@ module AgentVsAgent
     def validate
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field leader is unset!') unless @leader
       raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field played is unset!') unless @played
-      unless @leader.nil? || ::AgentVsAgent::Position::VALID_VALUES.include?(@leader)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field leader!')
-      end
     end
 
     ::Thrift::Struct.generate_accessors self

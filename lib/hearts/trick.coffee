@@ -18,3 +18,7 @@ module.exports = class Trick
     positions = ["north", "east", "south", "west"]
     leaderIndex = positions.indexOf(@leader)
     positions.slice(leaderIndex, 4).concat(positions.slice(0, leaderIndex))
+
+  positionsMissing: ->
+    @positionsFromLeader().slice(@played.cards.length)
+

@@ -14,7 +14,6 @@ class Trick
 
   def run
     log "Starting trick"
-
     trick = @options[:client].get_trick @options[:ticket]
     @leader = trick.leader
     @played = trick.played

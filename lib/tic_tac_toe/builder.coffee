@@ -8,3 +8,6 @@ module.exports = class TicTacToeBuilder
 
   createGame: (positions) ->
     new Game(positions, @gameOptions)
+
+  events: ->
+    []

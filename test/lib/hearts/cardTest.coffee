@@ -2,8 +2,6 @@ Card = require "../../../lib/hearts/card"
 Suit = require "../../../lib/hearts/suit"
 Rank = require "../../../lib/hearts/rank"
 
-require("should")
-
 describe "Card", ->
   beforeEach ->
     @suit = Suit.all()[0]
@@ -11,54 +9,54 @@ describe "Card", ->
     @card = new Card(@suit, @rank)
 
   it "has a suit", ->
-    @card.suit.should.equal(@suit)
+    expect(@card.suit).to.equal(@suit)
 
   it "has a rank", ->
-    @card.rank.should.equal(@rank)
+    expect(@card.rank).to.equal(@rank)
 
   describe "::all", ->
     beforeEach ->
       @cards = Card.all()
 
     it "has 52 cards", ->
-      @cards.length.should.equal(52)
+      expect(@cards).to.have.length(52)
 
     it "has 13 diamonds", ->
       diamonds = @cards.filter (card) ->
         card.suit.name == 'diamonds'
-      diamonds.length.should.equal(13)
+      expect(diamonds).to.have.length(13)
 
     it "has 4 J's", ->
       jacks = @cards.filter (card) ->
         card.rank.name == 'J'
-      jacks.length.should.equal(4)
+      expect(jacks).to.have.length(4)
 
   describe "score", ->
     it "is 1 for hearts", ->
-      new Card(Suit.HEARTS, Rank.ACE).score().should.equal(1)
-      new Card(Suit.HEARTS, Rank.KING).score().should.equal(1)
-      new Card(Suit.HEARTS, Rank.QUEEN).score().should.equal(1)
-      new Card(Suit.HEARTS, Rank.THREE).score().should.equal(1)
-      new Card(Suit.HEARTS, Rank.TWO).score().should.equal(1)
+      expect(new Card(Suit.HEARTS, Rank.ACE).score()).to.equal(1)
+      expect(new Card(Suit.HEARTS, Rank.KING).score()).to.equal(1)
+      expect(new Card(Suit.HEARTS, Rank.QUEEN).score()).to.equal(1)
+      expect(new Card(Suit.HEARTS, Rank.THREE).score()).to.equal(1)
+      expect(new Card(Suit.HEARTS, Rank.TWO).score()).to.equal(1)
 
     it "is 0 for clubs", ->
-      new Card(Suit.CLUBS, Rank.ACE).score().should.equal(0)
-      new Card(Suit.CLUBS, Rank.KING).score().should.equal(0)
-      new Card(Suit.CLUBS, Rank.QUEEN).score().should.equal(0)
-      new Card(Suit.CLUBS, Rank.THREE).score().should.equal(0)
-      new Card(Suit.CLUBS, Rank.TWO).score().should.equal(0)
+      expect(new Card(Suit.CLUBS, Rank.ACE).score()).to.equal(0)
+      expect(new Card(Suit.CLUBS, Rank.KING).score()).to.equal(0)
+      expect(new Card(Suit.CLUBS, Rank.QUEEN).score()).to.equal(0)
+      expect(new Card(Suit.CLUBS, Rank.THREE).score()).to.equal(0)
+      expect(new Card(Suit.CLUBS, Rank.TWO).score()).to.equal(0)
 
     it "is 0 for diamonds", ->
-      new Card(Suit.DIAMONDS, Rank.ACE).score().should.equal(0)
-      new Card(Suit.DIAMONDS, Rank.KING).score().should.equal(0)
-      new Card(Suit.DIAMONDS, Rank.QUEEN).score().should.equal(0)
-      new Card(Suit.DIAMONDS, Rank.THREE).score().should.equal(0)
-      new Card(Suit.DIAMONDS, Rank.TWO).score().should.equal(0)
+      expect(new Card(Suit.DIAMONDS, Rank.ACE).score()).to.equal(0)
+      expect(new Card(Suit.DIAMONDS, Rank.KING).score()).to.equal(0)
+      expect(new Card(Suit.DIAMONDS, Rank.QUEEN).score()).to.equal(0)
+      expect(new Card(Suit.DIAMONDS, Rank.THREE).score()).to.equal(0)
+      expect(new Card(Suit.DIAMONDS, Rank.TWO).score()).to.equal(0)
 
     it "is 13 for the queen of spades", ->
-      new Card(Suit.SPADES, Rank.ACE).score().should.equal(0)
-      new Card(Suit.SPADES, Rank.KING).score().should.equal(0)
-      new Card(Suit.SPADES, Rank.QUEEN).score().should.equal(13)
-      new Card(Suit.SPADES, Rank.THREE).score().should.equal(0)
-      new Card(Suit.CLUBS, Rank.TWO).score().should.equal(0)
+      expect(new Card(Suit.SPADES, Rank.ACE).score()).to.equal(0)
+      expect(new Card(Suit.SPADES, Rank.KING).score()).to.equal(0)
+      expect(new Card(Suit.SPADES, Rank.QUEEN).score()).to.equal(13)
+      expect(new Card(Suit.SPADES, Rank.THREE).score()).to.equal(0)
+      expect(new Card(Suit.CLUBS, Rank.TWO).score()).to.equal(0)
 

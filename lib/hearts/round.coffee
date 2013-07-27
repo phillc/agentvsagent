@@ -2,13 +2,15 @@ Seat = require './seat'
 Suit = require './suit'
 Rank = require './rank'
 Trick = require './trick'
+Pile = require './pile'
 
 module.exports = class Round
-  constructor: ->
-    @north = new Seat()
-    @east = new Seat()
-    @south = new Seat()
-    @west = new Seat()
+  constructor: (@passing) ->
+    @seats =
+      north: new Seat()
+      east: new Seat()
+      south: new Seat()
+      west: new Seat()
 
     @tricks = []
 
@@ -22,15 +24,45 @@ module.exports = class Round
 
       startingPosition = do (positions) =>
         for position in positions
-          return position if @[position].held.findCard(Suit.CLUBS, Rank.TWO)
+          return position if @seats[position].held.findCard(Suit.CLUBS, Rank.TWO)
 
       @tricks.push(new Trick(startingPosition))
     else
       winner = @currentTrick().winner()
       @tricks.push(new Trick(winner))
 
+    @currentTrick()
+
   allHavePassed: ->
-    @north.hasPassed() && @east.hasPassed() && @south.hasPassed() && @west.hasPassed()
+    @seats.north.hasPassed() && @seats.east.hasPassed() && @seats.south.hasPassed() && @seats.west.hasPassed()
+
+  exchange: ->
+    exchangePairs =
+      right: [["north", "west"], ["east", "north"], ["south", "east"], ["west", "south"]]
+      left: [["north", "east"], ["east", "south"], ["south", "west"], ["west", "north"]]
+      across: [["north", "south"], ["east", "west"], ["south", "north"], ["west", "east"]]
+
+    pairs = exchangePairs[@passing]
+
+    for pair in pairs
+      do =>
+        fromPosition = pair[0]
+        toPosition = pair[1]
+        fromSeat = @seats[fromPosition]
+        toSeat = @seats[toPosition]
+        passedCards = fromSeat.passed.cards
+
+        for card in passedCards
+          toSeat.received.addCard(card)
+          fromSeat.held.moveCardTo(card, toSeat.held)
+
+  deal: ->
+    deck = Pile.createShuffledDeck()
+    positions = ["north", "east", "south", "west"]
+    for position in positions
+      seat = @seats[position]
+      deck.moveCardsTo(13, seat.dealt)
+      seat.dealt.copyAllCardsTo(seat.held)
 
   scores: ->
     zeroscores =

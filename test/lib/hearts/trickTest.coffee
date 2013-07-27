@@ -14,7 +14,7 @@ describe "Trick", ->
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.KING))
       @trick.played.addCard(new Card(Suit.HEARTS, Rank.ACE))
 
-      @trick.winner().should.equal("north")
+      expect(@trick.winner()).to.equal("north")
 
     it "returns east when east is the winner", ->
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.FOUR))
@@ -22,7 +22,7 @@ describe "Trick", ->
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.KING))
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.ACE))
 
-      @trick.winner().should.equal("east")
+      expect(@trick.winner()).to.equal("east")
 
     it "returns south when south is the winner", ->
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.ACE))
@@ -30,7 +30,7 @@ describe "Trick", ->
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.KING))
       @trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
 
-      @trick.winner().should.equal("south")
+      expect(@trick.winner()).to.equal("south")
 
     it "returns west when west is the winner", ->
       @trick.played.addCard(new Card(Suit.CLUBS, Rank.TWO))
@@ -38,18 +38,50 @@ describe "Trick", ->
       @trick.played.addCard(new Card(Suit.DIAMONDS, Rank.KING))
       @trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
 
-      @trick.winner().should.equal("west")
+      expect(@trick.winner()).to.equal("west")
 
   describe "#score", ->
     it "returns the score", ->
       trick = new Trick("south")
-      trick.score().should.equal(0)
+      expect(trick.score()).to.equal(0)
       trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
-      trick.score().should.equal(1)
+      expect(trick.score()).to.equal(1)
       trick.played.addCard(new Card(Suit.DIAMONDS, Rank.KING))
-      trick.score().should.equal(1)
+      expect(trick.score()).to.equal(1)
       trick.played.addCard(new Card(Suit.HEARTS, Rank.ACE))
-      trick.score().should.equal(2)
+      expect(trick.score()).to.equal(2)
       trick.played.addCard(new Card(Suit.SPADES, Rank.QUEEN))
-      trick.score().should.equal(15)
+      expect(trick.score()).to.equal(15)
+
+  describe "#positionsMissing", ->
+    it "returns the starting position", ->
+      trick = new Trick("south")
+      expect(trick.positionsMissing()).to.eql(["south", "west", "north", "east"])
+
+    it "returns the second position", ->
+      trick = new Trick("south")
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      expect(trick.positionsMissing()).to.eql(["west", "north", "east"])
+
+    it "returns the third position", ->
+      trick = new Trick("south")
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      expect(trick.positionsMissing()).to.eql(["north", "east"])
+
+    it "returns the fourth position", ->
+      trick = new Trick("south")
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      expect(trick.positionsMissing()).to.eql(["east"])
+
+    it "returns nothing when all four cards", ->
+      trick = new Trick("south")
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
+      expect(trick.positionsMissing()).to.eql([])
+
 

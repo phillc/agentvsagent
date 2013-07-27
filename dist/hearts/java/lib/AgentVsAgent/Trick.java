@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Trick");
 
-  private static final org.apache.thrift.protocol.TField LEADER_FIELD_DESC = new org.apache.thrift.protocol.TField("leader", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField LEADER_FIELD_DESC = new org.apache.thrift.protocol.TField("leader", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField PLAYED_FIELD_DESC = new org.apache.thrift.protocol.TField("played", org.apache.thrift.protocol.TType.LIST, (short)2);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
@@ -42,19 +42,11 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     schemes.put(TupleScheme.class, new TrickTupleSchemeFactory());
   }
 
-  /**
-   * 
-   * @see Position
-   */
-  public Position leader; // required
+  public String leader; // required
   public List<Card> played; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    /**
-     * 
-     * @see Position
-     */
     LEADER((short)1, "leader"),
     PLAYED((short)2, "played");
 
@@ -119,7 +111,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.LEADER, new org.apache.thrift.meta_data.FieldMetaData("leader", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-        new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, Position.class)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING        , "Position")));
     tmpMap.put(_Fields.PLAYED, new org.apache.thrift.meta_data.FieldMetaData("played", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
             new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Card.class))));
@@ -131,7 +123,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
   }
 
   public Trick(
-    Position leader,
+    String leader,
     List<Card> played)
   {
     this();
@@ -165,19 +157,11 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     this.played = null;
   }
 
-  /**
-   * 
-   * @see Position
-   */
-  public Position getLeader() {
+  public String getLeader() {
     return this.leader;
   }
 
-  /**
-   * 
-   * @see Position
-   */
-  public Trick setLeader(Position leader) {
+  public Trick setLeader(String leader) {
     this.leader = leader;
     return this;
   }
@@ -242,7 +226,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
       if (value == null) {
         unsetLeader();
       } else {
-        setLeader((Position)value);
+        setLeader((String)value);
       }
       break;
 
@@ -436,8 +420,8 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
         }
         switch (schemeField.id) {
           case 1: // LEADER
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.leader = Position.findByValue(iprot.readI32());
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.leader = iprot.readString();
               struct.setLeaderIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -479,7 +463,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
       oprot.writeStructBegin(STRUCT_DESC);
       if (struct.leader != null) {
         oprot.writeFieldBegin(LEADER_FIELD_DESC);
-        oprot.writeI32(struct.leader.getValue());
+        oprot.writeString(struct.leader);
         oprot.writeFieldEnd();
       }
       if (struct.played != null) {
@@ -511,7 +495,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     @Override
     public void write(org.apache.thrift.protocol.TProtocol prot, Trick struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
-      oprot.writeI32(struct.leader.getValue());
+      oprot.writeString(struct.leader);
       {
         oprot.writeI32(struct.played.size());
         for (Card _iter4 : struct.played)
@@ -524,7 +508,7 @@ public class Trick implements org.apache.thrift.TBase<Trick, Trick._Fields>, jav
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Trick struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      struct.leader = Position.findByValue(iprot.readI32());
+      struct.leader = iprot.readString();
       struct.setLeaderIsSet(true);
       {
         org.apache.thrift.protocol.TList _list5 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());

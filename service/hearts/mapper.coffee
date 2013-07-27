@@ -48,16 +48,9 @@ exports.cardToThrift = cardToThrift = (card) ->
 exports.thriftToCard = thriftToCard = (thriftCard) ->
   new Card(thriftToSuit(thriftCard.suit), thriftToRank(thriftCard.rank))
 
-exports.positionToThrift = positionToThrift = (position) ->
-  switch position
-    when "north" then types.Position.NORTH
-    when "east" then types.Position.EAST
-    when "south" then types.Position.SOUTH
-    when "west" then types.Position.WEST
-
 exports.trickToThrift = trickToThrift = (trick) ->
   cards = trick.played.cards.map cardToThrift
-  new types.Trick leader: positionToThrift(trick.leader), played: cards
+  new types.Trick leader: trick.leader, played: cards
 
 exports.errorToThrift = errorToThrift = (err) ->
   switch err.type

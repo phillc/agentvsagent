@@ -27,8 +27,7 @@
     "node-int64": "0.3.x"
   },
   "devDependencies": {
-    "mocha": "1.7.0",
-    "should": "1.2.x",
+    "mocha": "1.12.0",
     "nodemon": "0.7.x"
   },
   "bundledDependencies": [

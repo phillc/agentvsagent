@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
 public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Ticket");
 
-  private static final org.apache.thrift.protocol.TField GAME_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("gameId", org.apache.thrift.protocol.TType.STRING, (short)1);
-  private static final org.apache.thrift.protocol.TField AGENT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("agentId", org.apache.thrift.protocol.TType.STRING, (short)2);
+  private static final org.apache.thrift.protocol.TField AGENT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("agentId", org.apache.thrift.protocol.TType.STRING, (short)1);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -42,13 +41,11 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
     schemes.put(TupleScheme.class, new TicketTupleSchemeFactory());
   }
 
-  public String gameId; // required
   public String agentId; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    GAME_ID((short)1, "gameId"),
-    AGENT_ID((short)2, "agentId");
+    AGENT_ID((short)1, "agentId");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -63,9 +60,7 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // GAME_ID
-          return GAME_ID;
-        case 2: // AGENT_ID
+        case 1: // AGENT_ID
           return AGENT_ID;
         default:
           return null;
@@ -110,8 +105,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.GAME_ID, new org.apache.thrift.meta_data.FieldMetaData("gameId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.AGENT_ID, new org.apache.thrift.meta_data.FieldMetaData("agentId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -122,11 +115,9 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
   }
 
   public Ticket(
-    String gameId,
     String agentId)
   {
     this();
-    this.gameId = gameId;
     this.agentId = agentId;
   }
 
@@ -134,9 +125,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
    * Performs a deep copy on <i>other</i>.
    */
   public Ticket(Ticket other) {
-    if (other.isSetGameId()) {
-      this.gameId = other.gameId;
-    }
     if (other.isSetAgentId()) {
       this.agentId = other.agentId;
     }
@@ -148,32 +136,7 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
 
   @Override
   public void clear() {
-    this.gameId = null;
     this.agentId = null;
-  }
-
-  public String getGameId() {
-    return this.gameId;
-  }
-
-  public Ticket setGameId(String gameId) {
-    this.gameId = gameId;
-    return this;
-  }
-
-  public void unsetGameId() {
-    this.gameId = null;
-  }
-
-  /** Returns true if field gameId is set (has been assigned a value) and false otherwise */
-  public boolean isSetGameId() {
-    return this.gameId != null;
-  }
-
-  public void setGameIdIsSet(boolean value) {
-    if (!value) {
-      this.gameId = null;
-    }
   }
 
   public String getAgentId() {
@@ -202,14 +165,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case GAME_ID:
-      if (value == null) {
-        unsetGameId();
-      } else {
-        setGameId((String)value);
-      }
-      break;
-
     case AGENT_ID:
       if (value == null) {
         unsetAgentId();
@@ -223,9 +178,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case GAME_ID:
-      return getGameId();
-
     case AGENT_ID:
       return getAgentId();
 
@@ -240,8 +192,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
     }
 
     switch (field) {
-    case GAME_ID:
-      return isSetGameId();
     case AGENT_ID:
       return isSetAgentId();
     }
@@ -260,15 +210,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
   public boolean equals(Ticket that) {
     if (that == null)
       return false;
-
-    boolean this_present_gameId = true && this.isSetGameId();
-    boolean that_present_gameId = true && that.isSetGameId();
-    if (this_present_gameId || that_present_gameId) {
-      if (!(this_present_gameId && that_present_gameId))
-        return false;
-      if (!this.gameId.equals(that.gameId))
-        return false;
-    }
 
     boolean this_present_agentId = true && this.isSetAgentId();
     boolean that_present_agentId = true && that.isSetAgentId();
@@ -295,16 +236,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
     int lastComparison = 0;
     Ticket typedOther = (Ticket)other;
 
-    lastComparison = Boolean.valueOf(isSetGameId()).compareTo(typedOther.isSetGameId());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetGameId()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.gameId, typedOther.gameId);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     lastComparison = Boolean.valueOf(isSetAgentId()).compareTo(typedOther.isSetAgentId());
     if (lastComparison != 0) {
       return lastComparison;
@@ -335,14 +266,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
     StringBuilder sb = new StringBuilder("Ticket(");
     boolean first = true;
 
-    sb.append("gameId:");
-    if (this.gameId == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.gameId);
-    }
-    first = false;
-    if (!first) sb.append(", ");
     sb.append("agentId:");
     if (this.agentId == null) {
       sb.append("null");
@@ -356,9 +279,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
 
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
-    if (gameId == null) {
-      throw new org.apache.thrift.protocol.TProtocolException("Required field 'gameId' was not present! Struct: " + toString());
-    }
     if (agentId == null) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'agentId' was not present! Struct: " + toString());
     }
@@ -399,15 +319,7 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
           break;
         }
         switch (schemeField.id) {
-          case 1: // GAME_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.gameId = iprot.readString();
-              struct.setGameIdIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 2: // AGENT_ID
+          case 1: // AGENT_ID
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.agentId = iprot.readString();
               struct.setAgentIdIsSet(true);
@@ -430,11 +342,6 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.gameId != null) {
-        oprot.writeFieldBegin(GAME_ID_FIELD_DESC);
-        oprot.writeString(struct.gameId);
-        oprot.writeFieldEnd();
-      }
       if (struct.agentId != null) {
         oprot.writeFieldBegin(AGENT_ID_FIELD_DESC);
         oprot.writeString(struct.agentId);
@@ -457,15 +364,12 @@ public class Ticket implements org.apache.thrift.TBase<Ticket, Ticket._Fields>, 
     @Override
     public void write(org.apache.thrift.protocol.TProtocol prot, Ticket struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
-      oprot.writeString(struct.gameId);
       oprot.writeString(struct.agentId);
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Ticket struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      struct.gameId = iprot.readString();
-      struct.setGameIdIsSet(true);
       struct.agentId = iprot.readString();
       struct.setAgentIdIsSet(true);
     }

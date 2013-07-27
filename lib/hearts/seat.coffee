@@ -4,7 +4,7 @@ module.exports = class Seat
   constructor: ->
     @dealt = new Pile()
     @passed = new Pile()
-    #TODO:  @received = new Pile()
+    @received = new Pile()
     @held = new Pile()
 
   hasPassed: ->

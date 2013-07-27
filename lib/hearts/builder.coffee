@@ -1,12 +1,17 @@
-Player = require './player'
 Game = require './game'
+
+#TODO: Remove me
 
 module.exports = class Heartsbuilder
   constructor: (@gameOptions) ->
-    @numberOfPlayers = 4
+    @numberOfPlayers = Game.positions().length
 
   positions: ->
-    ["north", "south", "east", "west"]
+    Game.positions()
 
   createGame: (positions) ->
     new Game(positions, @gameOptions)
+
+  events: ->
+    Game.EVENTS
+

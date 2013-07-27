@@ -4,7 +4,6 @@ Card = require "../../../lib/hearts/card"
 Suit = require "../../../lib/hearts/suit"
 Rank = require "../../../lib/hearts/rank"
 Trick = require "../../../lib/hearts/trick"
-should = require("should")
 
 describe "Round", ->
   beforeEach ->
@@ -12,30 +11,30 @@ describe "Round", ->
 
   describe "#allHavePassed", ->
     it "is false if none have passed cards", ->
-      @round.allHavePassed().should.equal(false)
+      expect(@round.allHavePassed()).to.equal(false)
 
     it "is false if some have passed cards", ->
-      Pile.createDeck().moveCardsTo 1, @round.north.passed
-      @round.allHavePassed().should.equal(false)
+      Pile.createDeck().moveCardsTo(1, @round.seats.north.passed)
+      expect(@round.allHavePassed()).to.equal(false)
 
     it "is true if all have passed cards", ->
-      Pile.createDeck().moveCardsTo 1, @round.north.passed
-      Pile.createDeck().moveCardsTo 1, @round.east.passed
-      Pile.createDeck().moveCardsTo 1, @round.south.passed
-      Pile.createDeck().moveCardsTo 1, @round.west.passed
-      @round.allHavePassed().should.equal(true)
+      Pile.createDeck().moveCardsTo(1, @round.seats.north.passed)
+      Pile.createDeck().moveCardsTo(1, @round.seats.east.passed)
+      Pile.createDeck().moveCardsTo(1, @round.seats.south.passed)
+      Pile.createDeck().moveCardsTo(1, @round.seats.west.passed)
+      expect(@round.allHavePassed()).to.equal(true)
 
   describe "#newTrick", ->
     it "starts the first trick with the player with the 2 of clubs", ->
-      @round.north.held.addCard(new Card(Suit.DIAMONDS, Rank.TWO))
-      @round.north.held.addCard(new Card(Suit.CLUBS, Rank.THREE))
-      @round.east.held.addCard(new Card(Suit.SPADES, Rank.TWO))
-      @round.south.held.addCard(new Card(Suit.CLUBS, Rank.TWO))
-      @round.west.held.addCard(new Card(Suit.HEARTS, Rank.TWO))
-      @round.tricks.should.have.length(0)
+      @round.seats.north.held.addCard(new Card(Suit.DIAMONDS, Rank.TWO))
+      @round.seats.north.held.addCard(new Card(Suit.CLUBS, Rank.THREE))
+      @round.seats.east.held.addCard(new Card(Suit.SPADES, Rank.TWO))
+      @round.seats.south.held.addCard(new Card(Suit.CLUBS, Rank.TWO))
+      @round.seats.west.held.addCard(new Card(Suit.HEARTS, Rank.TWO))
+      expect(@round.tricks).to.have.length(0)
       @round.newTrick()
-      @round.tricks.should.have.length(1)
-      @round.currentTrick().leader.should.equal("south")
+      expect(@round.tricks).to.have.length(1)
+      expect(@round.currentTrick().leader).to.equal("south")
 
     it "starts the next round with winner of previous round", ->
       @round.newTrick()
@@ -45,10 +44,13 @@ describe "Round", ->
       trick.played.addCard new Card(Suit.CLUBS, Rank.THREE)
       trick.played.addCard new Card(Suit.CLUBS, Rank.TWO)
       trick.played.addCard new Card(Suit.CLUBS, Rank.ACE)
-      @round.tricks.should.have.length(1)
+      expect(@round.tricks).to.have.length(1)
       @round.newTrick()
-      @round.tricks.should.have.length(2)
-      @round.currentTrick().leader.should.equal("west")
+      expect(@round.tricks).to.have.length(2)
+      expect(@round.currentTrick().leader).to.equal("west")
+
+    it "returns the current trick", ->
+      expect(@round.newTrick()).to.equal(@round.currentTrick())
 
   describe "#scores", ->
     it "returns the scores", ->
@@ -74,10 +76,10 @@ describe "Round", ->
       @round.tricks.push trick2
       @round.tricks.push trick3
       scores = @round.scores()
-      scores.north.should.equal(0)
-      scores.east.should.equal(13)
-      scores.south.should.equal(2)
-      scores.west.should.equal(0)
+      expect(scores.north).to.equal(0)
+      expect(scores.east).to.equal(13)
+      expect(scores.south).to.equal(2)
+      expect(scores.west).to.equal(0)
 
     it "accounts for shooting the moon", ->
       trick = new Trick("north")
@@ -88,10 +90,52 @@ describe "Round", ->
       @round.tricks.push trick
 
       scores = @round.scores()
-      scores.north.should.equal(0)
-      scores.east.should.equal(26)
-      scores.south.should.equal(26)
-      scores.west.should.equal(26)
+      expect(scores.north).to.equal(0)
+      expect(scores.east).to.equal(26)
+      expect(scores.south).to.equal(26)
+      expect(scores.west).to.equal(26)
 
+  describe "#exchange", ->
+    beforeEach ->
+      @round.deal()
+      @northPassedCards = @round.seats.north.dealt.cards[0..2]
+      @eastPassedCards = @round.seats.east.dealt.cards[0..2]
+      @southPassedCards = @round.seats.south.dealt.cards[0..2]
+      @westPassedCards = @round.seats.west.dealt.cards[0..2]
+      (new Pile(@northPassedCards)).copyAllCardsTo @round.seats.north.passed
+      (new Pile(@eastPassedCards)).copyAllCardsTo @round.seats.east.passed
+      (new Pile(@southPassedCards)).copyAllCardsTo @round.seats.south.passed
+      (new Pile(@westPassedCards)).copyAllCardsTo @round.seats.west.passed
 
+    it "passes left", ->
+      @round.passing = "left"
 
+      @round.exchange()
+
+      for card in @northPassedCards
+        expect(@round.seats.north.held.findCard(card.suit, card.rank)).to.not.exist
+        expect(@round.seats.north.passed.findCard(card.suit, card.rank)).to.equal(card)
+        expect(@round.seats.east.received.findCard(card.suit, card.rank)).to.equal(card)
+        expect(@round.seats.east.held.findCard(card.suit, card.rank)).to.equal(card)
+
+    it "passes right", ->
+      @round.passing = "right"
+
+      @round.exchange()
+
+      for card in @northPassedCards
+        expect(@round.seats.north.held.findCard(card.suit, card.rank)).to.not.exist
+        expect(@round.seats.north.passed.findCard(card.suit, card.rank)).to.equal(card)
+        expect(@round.seats.west.received.findCard(card.suit, card.rank)).to.equal(card)
+        expect(@round.seats.west.held.findCard(card.suit, card.rank)).to.equal(card)
+
+    it "passes across", ->
+      @round.passing = "across"
+
+      @round.exchange()
+
+      for card in @northPassedCards
+        expect(@round.seats.north.held.findCard(card.suit, card.rank)).to.not.exist
+        expect(@round.seats.north.passed.findCard(card.suit, card.rank)).to.equal(card)
+        expect(@round.seats.south.received.findCard(card.suit, card.rank)).to.equal(card)
+        expect(@round.seats.south.held.findCard(card.suit, card.rank)).to.equal(card)

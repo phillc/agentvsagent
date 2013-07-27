@@ -81,21 +81,6 @@ instance Enum Rank where
     _ -> throw ThriftException
 instance Hashable Rank where
   hashWithSalt salt = hashWithSalt salt . fromEnum
-data Position = NORTH|EAST|SOUTH|WEST  deriving (Show,Eq, Typeable, Ord)
-instance Enum Position where
-  fromEnum t = case t of
-    NORTH -> 1
-    EAST -> 2
-    SOUTH -> 3
-    WEST -> 4
-  toEnum t = case t of
-    1 -> NORTH
-    2 -> EAST
-    3 -> SOUTH
-    4 -> WEST
-    _ -> throw ThriftException
-instance Hashable Position where
-  hashWithSalt salt = hashWithSalt salt . fromEnum
 data GameStatus = NEXT_ROUND|END_GAME  deriving (Show,Eq, Typeable, Ord)
 instance Enum GameStatus where
   fromEnum t = case t of
@@ -107,6 +92,8 @@ instance Enum GameStatus where
     _ -> throw ThriftException
 instance Hashable GameStatus where
   hashWithSalt salt = hashWithSalt salt . fromEnum
+type Position = Text
+
 type Score = Int32
 
 data Card = Card{f_Card_suit :: Maybe Suit,f_Card_rank :: Maybe Rank} deriving (Show,Eq,Typeable)
@@ -149,17 +136,13 @@ read_Card iprot = do
   record <- read_Card_fields iprot (Card{f_Card_suit=Nothing,f_Card_rank=Nothing})
   readStructEnd iprot
   return record
-data Ticket = Ticket{f_Ticket_gameId :: Maybe Text,f_Ticket_agentId :: Maybe Text} deriving (Show,Eq,Typeable)
+data Ticket = Ticket{f_Ticket_agentId :: Maybe Text} deriving (Show,Eq,Typeable)
 instance Hashable Ticket where
-  hashWithSalt salt record = salt   `hashWithSalt` f_Ticket_gameId record   `hashWithSalt` f_Ticket_agentId record  
+  hashWithSalt salt record = salt   `hashWithSalt` f_Ticket_agentId record  
 write_Ticket oprot record = do
   writeStructBegin oprot "Ticket"
-  case f_Ticket_gameId record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("gameId",T_STRING,1)
-    writeString oprot _v
-    writeFieldEnd oprot}
   case f_Ticket_agentId record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("agentId",T_STRING,2)
+    writeFieldBegin oprot ("agentId",T_STRING,1)
     writeString oprot _v
     writeFieldEnd oprot}
   writeFieldStop oprot
@@ -169,12 +152,6 @@ read_Ticket_fields iprot record = do
   if _t8 == T_STOP then return record else
     case _id9 of 
       1 -> if _t8 == T_STRING then do
-        s <- readString iprot
-        read_Ticket_fields iprot record{f_Ticket_gameId=Just s}
-        else do
-          skip iprot _t8
-          read_Ticket_fields iprot record
-      2 -> if _t8 == T_STRING then do
         s <- readString iprot
         read_Ticket_fields iprot record{f_Ticket_agentId=Just s}
         else do
@@ -186,7 +163,7 @@ read_Ticket_fields iprot record = do
         read_Ticket_fields iprot record
 read_Ticket iprot = do
   _ <- readStructBegin iprot
-  record <- read_Ticket_fields iprot (Ticket{f_Ticket_gameId=Nothing,f_Ticket_agentId=Nothing})
+  record <- read_Ticket_fields iprot (Ticket{f_Ticket_agentId=Nothing})
   readStructEnd iprot
   return record
 data EntryRequest = EntryRequest{f_EntryRequest_version :: Maybe Text} deriving (Show,Eq,Typeable)
@@ -259,14 +236,14 @@ read_EntryResponse iprot = do
   record <- read_EntryResponse_fields iprot (EntryResponse{f_EntryResponse_ticket=Nothing,f_EntryResponse_message=Nothing})
   readStructEnd iprot
   return record
-data GameInfo = GameInfo{f_GameInfo_position :: Maybe Position} deriving (Show,Eq,Typeable)
+data GameInfo = GameInfo{f_GameInfo_position :: Maybe Text} deriving (Show,Eq,Typeable)
 instance Hashable GameInfo where
   hashWithSalt salt record = salt   `hashWithSalt` f_GameInfo_position record  
 write_GameInfo oprot record = do
   writeStructBegin oprot "GameInfo"
   case f_GameInfo_position record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("position",T_I32,1)
-    writeI32 oprot (fromIntegral $ fromEnum _v)
+    writeFieldBegin oprot ("position",T_STRING,1)
+    writeString oprot _v
     writeFieldEnd oprot}
   writeFieldStop oprot
   writeStructEnd oprot
@@ -274,8 +251,8 @@ read_GameInfo_fields iprot record = do
   (_,_t23,_id24) <- readFieldBegin iprot
   if _t23 == T_STOP then return record else
     case _id24 of 
-      1 -> if _t23 == T_I32 then do
-        s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
+      1 -> if _t23 == T_STRING then do
+        s <- readString iprot
         read_GameInfo_fields iprot record{f_GameInfo_position=Just s}
         else do
           skip iprot _t23
@@ -289,14 +266,14 @@ read_GameInfo iprot = do
   record <- read_GameInfo_fields iprot (GameInfo{f_GameInfo_position=Nothing})
   readStructEnd iprot
   return record
-data Trick = Trick{f_Trick_leader :: Maybe Position,f_Trick_played :: Maybe (Vector.Vector Card)} deriving (Show,Eq,Typeable)
+data Trick = Trick{f_Trick_leader :: Maybe Text,f_Trick_played :: Maybe (Vector.Vector Card)} deriving (Show,Eq,Typeable)
 instance Hashable Trick where
   hashWithSalt salt record = salt   `hashWithSalt` f_Trick_leader record   `hashWithSalt` f_Trick_played record  
 write_Trick oprot record = do
   writeStructBegin oprot "Trick"
   case f_Trick_leader record of {Nothing -> return (); Just _v -> do
-    writeFieldBegin oprot ("leader",T_I32,1)
-    writeI32 oprot (fromIntegral $ fromEnum _v)
+    writeFieldBegin oprot ("leader",T_STRING,1)
+    writeString oprot _v
     writeFieldEnd oprot}
   case f_Trick_played record of {Nothing -> return (); Just _v -> do
     writeFieldBegin oprot ("played",T_LIST,2)
@@ -308,8 +285,8 @@ read_Trick_fields iprot record = do
   (_,_t29,_id30) <- readFieldBegin iprot
   if _t29 == T_STOP then return record else
     case _id30 of 
-      1 -> if _t29 == T_I32 then do
-        s <- (do {i <- readI32 iprot; return $ toEnum $ fromIntegral i})
+      1 -> if _t29 == T_STRING then do
+        s <- readString iprot
         read_Trick_fields iprot record{f_Trick_leader=Just s}
         else do
           skip iprot _t29
