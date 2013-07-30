@@ -50,6 +50,7 @@ module.exports = class Arena extends EventEmitter
       do (game, position, agent, gameEvents) ->
         logger.info "wiring up #{agent} to #{position}"
 
+        #TODO: clearly, this needs a cleanup
         # Tic tac toe
         agent.on "move", (args...) ->
           game.handle ["move", position].join("."), args...
@@ -57,11 +58,15 @@ module.exports = class Arena extends EventEmitter
           agent.send("turn", data)
 
         # Hearts
-        for agentEvent in ["readyForRound", "passCards", "readyForTrick", "playCard", "finishedRound", "finishedGame"]
+        agentEvents = ["timeout"]
+        defaultEvents = ["end", "error"]
+
+        gameAgentEvents = ["readyForRound", "passCards", "readyForTrick", "playCard", "finishedRound", "finishedGame"]
+        for agentEvent in agentEvents.concat(gameAgentEvents)
           do (agent, agentEvent, position) ->
             agent.on agentEvent, (args...) ->
               game.handle [agentEvent, position].join("."), args...
-        for gameEvent in gameEvents
+        for gameEvent in gameEvents.concat(defaultEvents)
           do (game, gameEvent, position) ->
             game.on [position, gameEvent].join("."), (data) ->
               agent.send(gameEvent, data)

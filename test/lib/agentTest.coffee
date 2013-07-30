@@ -1,6 +1,6 @@
 Agent = require "../../lib/agent"
 
-describe.only "Agent", ->
+describe "Agent", ->
   beforeEach ->
     @agent = new Agent()
 
@@ -48,9 +48,9 @@ describe.only "Agent", ->
         agent = new Agent(timeout: 10)
         expect(agent.state.state).to.equal("waitingForClient")
         setTimeout ->
-          expect(agent.state.state).to.equal("timedout")
+          expect(agent.state.state).to.equal("timedOut")
           agent.forward()
-          expect(agent.state.state).to.equal("timedout")
+          expect(agent.state.state).to.equal("timedOut")
           done()
         , 25
 
@@ -76,7 +76,7 @@ describe.only "Agent", ->
 
     describe "waitingForServer", ->
       beforeEach ->
-        @agent.forward()
+        @promise = @agent.forward()
         expect(@agent.state.state).to.equal("waitingForServer")
 
       it "returns an error for any forwards", (done) ->
@@ -85,10 +85,30 @@ describe.only "Agent", ->
           done()
         .done()
 
+      it "sends something", (done) ->
+        @agent.send()
+        @promise.then ->
+          done()
+
+      it "sends and transitions to finished", (done) ->
+        @agent.send("end")
+        expect(@agent.state.state).to.equal("finished")
+        @promise.then ->
+          done()
+
+      it "sends and transitions to finished on error", (done) ->
+        @agent.send("error")
+        expect(@agent.state.state).to.equal("finished")
+
+        @promise.fail (message) ->
+          expect(message.message).to.equal("error")
+
+          done()
+
     describe "timedout", ->
       it "emits timeout", (done) ->
         @agent.on "timeout", ->
           done()
-        @agent.state.transition("timedout")
+        @agent.state.transition("timedOut")
 
 

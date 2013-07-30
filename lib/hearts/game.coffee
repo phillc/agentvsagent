@@ -5,7 +5,7 @@ und = require 'underscore'
 Round = require './round'
 
 module.exports = class Game
-  @EVENTS = ["roundStarted", "dealt", "received", "turn", "finishedTrick", "roundFinished", "gameFinished"]
+  @EVENTS = ["roundStarted", "dealt", "received", "turn", "finishedTrick", "roundFinished"]
   @positions = -> ["north", "east", "south", "west"]
 
   constructor: (options={}) ->
@@ -25,10 +25,9 @@ module.exports = class Game
         @emitPosition(position, message, data)
 
   emitPosition: (position, message, data) ->
-    # maybe, change to logger, or only in dev, or do this in tests?
-    if Game.EVENTS.indexOf(message) < 0
-      throw new Error("Unexpected event #{message}")
-
+    # # maybe, change to logger, or only in dev, or do this in tests?
+    # if Game.EVENTS.indexOf(message) < 0
+    #   throw new Error("Unexpected event #{message}")
     logger.verbose "GAME emitting to #{position} - #{message} with #{data}"
     heard = @emitter.emit([position, message].join("."), data)
     if !heard
@@ -112,19 +111,15 @@ module.exports = class Game
       @emitAll("roundFinished", roundScores: @currentRound().scores(), status: 'nextRound')
 
   finish: ->
-    @emitAll("gameFinished", gameScores: @scores())
-    @engine.transition("done")
+    @emitAll("end", gameScores: @scores())
+    @engine.transition("finished")
 
-
-  # abort: (culprit, error) ->
-  #   #what if game already aborted/gameEnded?
-  #   logger.warn "Game has been aborted: #{error.type} :: #{error.message}."
-  #   culprit.raiseError(error)
-  #   for player in @players when player isnt culprit
-  #     player.raiseError type: "gameAborted", message: "Game ended due to an invalid action by another agent."
-  #   @stack.splice(0, @stack.length)
-  #   @stack.push("gameEnded")
-  #   @nextState()
+  abort: (culprit, error) ->
+    logger.warn "Game has been aborted: #{error.type} :: #{error.message}."
+    @emitPosition(culprit, "error", error)
+    for position in @positions() when position isnt culprit
+      @emitPosition(position, "error", type: "gameAborted", message: "Game ended due to an invalid action by another agent.")
+    @engine.transition("aborted")
 
 Engine = machina.Fsm.extend
   initialize: (options) ->
@@ -139,13 +134,14 @@ Engine = machina.Fsm.extend
       @game.startRound()
 
   handlePassCards: (action, position) ->
-    # error = action.validate(@game)
-    # if !error
-    action.execute(@game, position)
-    # else
-    #   @game.abort(action.player, error)
-    if @game.currentRound().allHavePassed()
-      @game.finishPassing()
+    error = action.validate(@game, position)
+    if !error
+      action.execute(@game, position)
+      if @game.currentRound().allHavePassed()
+        @game.finishPassing()
+    else
+      @game.abort(position, error)
+      @transition("aborted")
 
   handlePlayCard: (action, position) ->
     action.execute(@game, position)
@@ -169,8 +165,13 @@ Engine = machina.Fsm.extend
     if @finishedGame.length == 4
       @game.finish()
 
-  "*": ->
-    logger.error "Unhandled event", arguments
+  "*": (message, args...) ->
+    [event, position] = message.split(".")
+    if event == "timeout"
+      logger.error "timeout received", position
+      @game.abort(position, {type: "timeout", message: "Your action took longer than allowed"})
+    else
+      logger.error "Unhandled event", arguments
 
   initialState: "initialized"
 
@@ -245,8 +246,7 @@ Engine = machina.Fsm.extend
         @handleFinishedGame("south")
       "finishedGame.west": ->
         @handleFinishedGame("west")
-    # go to done
-    # aborted: (all checked in, go to done)
-    done: {}
+    aborted: {} # (all checked in, go to finished)
+    finished: {}
 
 

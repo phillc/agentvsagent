@@ -1,6 +1,7 @@
 IdGenerator = require '../lib/idGenerator'
 {EventEmitter} = require 'events'
 Agent = require '../lib/agent'
+logger = require '../lib/logger'
 
 module.exports = class AbstractHandler extends EventEmitter
   constructor: (@options={}) ->

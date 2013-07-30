@@ -1,6 +1,4 @@
 Game = require "../../../lib/hearts/game"
-# Game = require "../../../lib/hearts/game"
-# Pile = require "../../../lib/hearts/pile"
 Card = require "../../../lib/hearts/card"
 Suit = require "../../../lib/hearts/suit"
 Rank = require "../../../lib/hearts/rank"
@@ -264,7 +262,7 @@ describe "Game", ->
       @game.state.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
 
     it "send the game scores to each player", (done) ->
-      @game.on "north.gameFinished", (data) ->
+      @game.on "north.end", (data) ->
         expect(data.gameScores.north).to.equal(100)
         expect(data.gameScores.east).to.equal(0)
         expect(data.gameScores.south).to.equal(30)
@@ -273,37 +271,9 @@ describe "Game", ->
 
       @game.finish()
 
-
     it "moves on", ->
       @game.finish()
-      expect(@game.engine.state).to.equal("done")
-
-
-  #   it "waits for cards starting with the last winner south", ->
-  #     @game.states.startingTrick.run()
-  #     @game.currentRound().currentTrick().winner = -> "south"
-  #     @game.stack.splice(0, @game.stack.length)
-  #     @game.stack.should.have.length(0)
-  #     @game.states.startingTrick.run()
-  #     @game.stack.should.have.length(5)
-  #     @game.stack[4].should.equal("waitingForCardFromSouth")
-  #     @game.stack[3].should.equal("waitingForCardFromWest")
-  #     @game.stack[2].should.equal("waitingForCardFromNorth")
-  #     @game.stack[1].should.equal("waitingForCardFromEast")
-  #     @game.stack[0].should.equal("endingTrick")
-
-  #   it "waits for cards starting with the last winner north", ->
-  #     @game.states.startingTrick.run()
-  #     @game.currentRound().currentTrick().winner = -> "north"
-  #     @game.stack.splice(0, @game.stack.length)
-  #     @game.stack.should.have.length(0)
-  #     @game.states.startingTrick.run()
-  #     @game.stack.should.have.length(5)
-  #     @game.stack[4].should.equal("waitingForCardFromNorth")
-  #     @game.stack[3].should.equal("waitingForCardFromEast")
-  #     @game.stack[2].should.equal("waitingForCardFromSouth")
-  #     @game.stack[1].should.equal("waitingForCardFromWest")
-  #     @game.stack[0].should.equal("endingTrick")
+      expect(@game.engine.state).to.equal("finished")
 
   describe "#waitingForCardFrom", ->
     beforeEach ->
@@ -317,7 +287,7 @@ describe "Game", ->
       @game.waitingForCardFrom("north")
 
   describe "states", ->
-    describe "starting", ->
+    describe "startingRound", ->
       it "moves to the next state once all have checked in", ->
         @game.engine.transition("startingRound")
         @game.handle "readyForRound.north"
@@ -333,15 +303,19 @@ describe "Game", ->
       beforeEach ->
         @game.startRound()
         @game.engine.transition("passing")
+        @northAction = new actions.PassCards(@game.currentRound().seats.north.held.cards[0..2])
+        @eastAction = new actions.PassCards(@game.currentRound().seats.east.held.cards[0..2])
+        @southAction = new actions.PassCards(@game.currentRound().seats.south.held.cards[0..2])
+        @westAction = new actions.PassCards(@game.currentRound().seats.west.held.cards[0..2])
 
       it "starts trick after all have passed", ->
-        @game.handle "passCards.north", new actions.PassCards([{}])
+        @game.handle "passCards.north", @northAction
         expect(@game.engine.state).to.equal("passing")
-        @game.handle "passCards.east", new actions.PassCards([{}])
+        @game.handle "passCards.east", @eastAction
         expect(@game.engine.state).to.equal("passing")
-        @game.handle "passCards.south", new actions.PassCards([{}])
+        @game.handle "passCards.south", @southAction
         expect(@game.engine.state).to.equal("passing")
-        @game.handle "passCards.west", new actions.PassCards([{}])
+        @game.handle "passCards.west", @westAction
         expect(@game.engine.state).to.equal("startingTrick")
 
       it "emits passed", (done) ->
@@ -349,112 +323,105 @@ describe "Game", ->
           expect(data.cards).to.not.be.empty
           done()
 
-        @game.handle "passCards.north", new actions.PassCards([{}])
-        @game.handle "passCards.east", new actions.PassCards([{}])
-        @game.handle "passCards.south", new actions.PassCards([{}])
-        @game.handle "passCards.west", new actions.PassCards([{}])
+        @game.handle "passCards.north", @northAction
+        @game.handle "passCards.east", @eastAction
+        @game.handle "passCards.south", @southAction
+        @game.handle "passCards.west", @westAction
 
-  describe "startingTrick", ->
-    beforeEach ->
-      @game.startRound()
-      @game.engine.transition("startingTrick")
+      it "aborts if passing invalid cards", ->
+        @game.handle "passCards.south", @westAction
 
-    it "waits for the first player after all are ready", ->
-      @game.handle "readyForTrick.north"
-      expect(@game.engine.state).to.equal("startingTrick")
-      @game.handle "readyForTrick.east"
-      expect(@game.engine.state).to.equal("startingTrick")
-      @game.handle "readyForTrick.south"
-      expect(@game.engine.state).to.equal("startingTrick")
-      @game.handle "readyForTrick.west"
-      expect(@game.engine.state).to.include("waitingForCardFrom")
+        expect(@game.engine.state).to.equal("aborted")
 
-  describe "waitingForCard", ->
-    beforeEach ->
-      @game.startRound()
-      @northCard = new Card(Suit.CLUBS, Rank.TWO)
-      @eastCard = new Card(Suit.CLUBS, Rank.THREE)
-      @southCard = new Card(Suit.CLUBS, Rank.FOUR)
-      @westCard = new Card(Suit.CLUBS, Rank.FIVE)
-      @game.currentRound().seats.north.held.cards = [@northCard]
-      @game.currentRound().seats.east.held.cards = [@eastCard]
-      @game.currentRound().seats.south.held.cards = [@southCard]
-      @game.currentRound().seats.west.held.cards = [@westCard]
-      @game.startTrick()
-      expect(@game.engine.state).to.equal("waitingForCardFromNorth")
+      it "notifies the culprit of an invalid action", (done) ->
+        @game.on "south.error", (error) ->
+          expect(error.type).to.equal("invalidMove")
+          done()
 
-    it "applies the card to the player", ->
-      action = new actions.PlayCard(@northCard)
-      @game.handle "playCard.north", action
+        @game.handle "passCards.south", @westAction
 
-      expect(@game.currentRound().currentTrick().played.cards[0]).to.equal(@northCard)
+      it "notifies others of an invalid action", (done) ->
+        @game.on "north.error", (error) ->
+          expect(error.type).to.equal("gameAborted")
+          done()
 
-    it "waits for the next player", ->
-      action = new actions.PlayCard(@northCard)
-      @game.handle "playCard.north", action
+        @game.handle "passCards.south", @westAction
 
-      expect(@game.engine.state).to.equal("waitingForCardFromEast")
+    describe "startingTrick", ->
+      beforeEach ->
+        @game.startRound()
+        @game.engine.transition("startingTrick")
 
-  describe "endingRound", ->
-    it "moves on after all have checked in", ->
-      @game.state.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
-      @game.engine.transition("endingRound")
-      @game.handle "finishedRound.north"
-      expect(@game.engine.state).to.equal("endingRound")
-      @game.handle "finishedRound.east"
-      expect(@game.engine.state).to.equal("endingRound")
-      @game.handle "finishedRound.south"
-      expect(@game.engine.state).to.equal("endingRound")
-      @game.handle "finishedRound.west"
-      expect(@game.engine.state).to.equal("startingRound")
+      it "waits for the first player after all are ready", ->
+        @game.handle "readyForTrick.north"
+        expect(@game.engine.state).to.equal("startingTrick")
+        @game.handle "readyForTrick.east"
+        expect(@game.engine.state).to.equal("startingTrick")
+        @game.handle "readyForTrick.south"
+        expect(@game.engine.state).to.equal("startingTrick")
+        @game.handle "readyForTrick.west"
+        expect(@game.engine.state).to.include("waitingForCardFrom")
 
-  describe "endingGame", ->
-    beforeEach ->
-      @game.state.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
-      @game.state.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
+    describe "waitingForCard", ->
+      beforeEach ->
+        @game.startRound()
+        @northCard = new Card(Suit.CLUBS, Rank.TWO)
+        @eastCard = new Card(Suit.CLUBS, Rank.THREE)
+        @southCard = new Card(Suit.CLUBS, Rank.FOUR)
+        @westCard = new Card(Suit.CLUBS, Rank.FIVE)
+        @game.currentRound().seats.north.held.cards = [@northCard]
+        @game.currentRound().seats.east.held.cards = [@eastCard]
+        @game.currentRound().seats.south.held.cards = [@southCard]
+        @game.currentRound().seats.west.held.cards = [@westCard]
+        @game.startTrick()
+        expect(@game.engine.state).to.equal("waitingForCardFromNorth")
 
-    it "moves on after all have checked in", ->
-      @game.engine.transition("endingGame")
-      @game.handle "finishedGame.north"
-      expect(@game.engine.state).to.equal("endingGame")
-      @game.handle "finishedGame.east"
-      expect(@game.engine.state).to.equal("endingGame")
-      @game.handle "finishedGame.south"
-      expect(@game.engine.state).to.equal("endingGame")
-      @game.handle "finishedGame.west"
-      expect(@game.engine.state).to.equal("done")
+      it "applies the card to the player", ->
+        action = new actions.PlayCard(@northCard)
+        @game.handle "playCard.north", action
 
+        expect(@game.currentRound().currentTrick().played.cards[0]).to.equal(@northCard)
 
+      it "waits for the next player", ->
+        action = new actions.PlayCard(@northCard)
+        @game.handle "playCard.north", action
 
-  #   it "aborts if the player takes longer than the allowed time", (done) ->
-  #     @game.turnTime = 50
-  #     @game.currentState.run()
+        expect(@game.engine.state).to.equal("waitingForCardFromEast")
 
-  #     @nextStateCalls.should.equal(0)
-  #     setTimeout =>
-  #       @nextStateCalls.should.equal(1)
-  #       @game.stack[0].should.equal("gameEnded")
-  #       @game.currentState = @game.states.gameEnded
+    describe "endingRound", ->
+      it "moves on after all have checked in", ->
+        @game.state.rounds.push({ scores: -> { north: 10, east: 0, south: 15, west: 1 }})
+        @game.engine.transition("endingRound")
+        @game.handle "finishedRound.north"
+        expect(@game.engine.state).to.equal("endingRound")
+        @game.handle "finishedRound.east"
+        expect(@game.engine.state).to.equal("endingRound")
+        @game.handle "finishedRound.south"
+        expect(@game.engine.state).to.equal("endingRound")
+        @game.handle "finishedRound.west"
+        expect(@game.engine.state).to.equal("startingRound")
 
-  #       action = new actions.PlayCard(@game.positions.north, @card)
-  #       @game.currentState.handleAction(action)
-  #       @nextStateCalls.should.equal(1)
+    describe "endingGame", ->
+      beforeEach ->
+        @game.state.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
+        @game.state.rounds.push({ scores: -> { north: 50, east: 0, south: 15, west: 1 }})
 
-  #       @game.positions.north.out.recvTurn (err, trick) =>
-  #         err.type.should.equal("invalidMove")
-  #         err.message.should.equal("Your action took longer than allowed")
-  #         done()
-  #     , 75
+      it "moves on after all have checked in", ->
+        @game.engine.transition("endingGame")
+        @game.handle "finishedGame.north"
+        expect(@game.engine.state).to.equal("endingGame")
+        @game.handle "finishedGame.east"
+        expect(@game.engine.state).to.equal("endingGame")
+        @game.handle "finishedGame.south"
+        expect(@game.engine.state).to.equal("endingGame")
+        @game.handle "finishedGame.west"
+        expect(@game.engine.state).to.equal("finished")
 
-  #   it "applies the card if the player takes less than the allowed time", (done) ->
-  #     @game.turnTime = 200
-  #     @game.currentState.run()
+    describe "aborted", ->
+      it "can be reached by a timeout", ->
+        @game.engine.transition("startingRound")
 
-  #     setTimeout =>
-  #       @nextStateCalls.should.equal(0)
-  #       action = new actions.PlayCard(@game.positions.north, @card)
-  #       @game.currentState.handleAction(action)
-  #       @game.currentRound().currentTrick().played.cards[0].should.equal(@card)
-  #       @nextStateCalls.should.equal(1)
-  #       done()
-  #     , 75
+        @game.handle "timeout.north"
+
+        expect(@game.engine.state).to.equal("aborted")
+

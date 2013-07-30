@@ -56,4 +56,5 @@ exports.errorToThrift = errorToThrift = (err) ->
   switch err.type
     when "outOfSequence" then new types.OutOfSequenceException(message: err.message)
     when "invalidMove" then new types.InvalidMoveException(message: err.message)
+    when "timeout" then new types.InvalidMoveException(message: err.message)
     when "gameAborted" then new types.GameAbortedException(message: err.message)

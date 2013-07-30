@@ -14,8 +14,15 @@ AgentState = machina.Fsm.extend
   states:
     waitingForServer:
       send: (message, data) ->
-        @transition "waitingForClient"
-        @request.resolve(message: message, data: data || {})
+        if message == "end" || message == "error"
+          @transition("finished")
+        else
+          @transition("waitingForClient")
+
+        if message == "error"
+          @request.reject(message: message, data: data || {})
+        else
+          @request.resolve(message: message, data: data || {})
 
       forward: (message, data, request) ->
         request.reject("unexpectedMessage")
@@ -25,7 +32,7 @@ AgentState = machina.Fsm.extend
         if @timeout
           @timer = setTimeout =>
             logger.error "timeout!"
-            @transition("timedout")
+            @transition("timedOut")
           , @timeout
 
       forward: (message, data, @request)->
@@ -37,9 +44,12 @@ AgentState = machina.Fsm.extend
       _onExit: ->
         clearTimeout(@timer)
 
-    timedout:
+    timedOut:
       _onEnter: ->
+        logger.error "agent timeout"
         @agent.emit "timeout"
+
+    finished: {}
 
 module.exports = class Agent extends EventEmitter
   constructor: (options={}) ->
@@ -58,4 +68,3 @@ module.exports = class Agent extends EventEmitter
   send: (message, data) ->
     logger.verbose ">>>>>>>sending", message, " - ", data
     @state.handle "send", message, data
-

@@ -111,49 +111,6 @@ describe "Handler", ->
         done()
 
   describe "#pass_cards", ->
-    beforeEach ->
-# 
-# 
-#       @game.currentRound().north.held.cards.splice(0, 13)
-#       @game.currentRound().north.held.addCard(new Card(Suit.HEARTS, Rank.THREE))
-#       @game.currentRound().north.held.addCard(new Card(Suit.CLUBS, Rank.TWO))
-#       @game.currentRound().north.held.addCard(new Card(Suit.SPADES, Rank.QUEEN))
-#       @northPassed = [
-#         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.THREE)
-#         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.TWO)
-#         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.QUEEN)
-#       ]
-# 
-#       @game.currentRound().east.held.cards.splice(0, 13)
-#       @game.currentRound().east.held.addCard(new Card(Suit.HEARTS, Rank.FOUR))
-#       @game.currentRound().east.held.addCard(new Card(Suit.CLUBS, Rank.THREE))
-#       @game.currentRound().east.held.addCard(new Card(Suit.SPADES, Rank.KING))
-#       @eastPassed = [
-#         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.FOUR)
-#         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.THREE)
-#         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.KING)
-#       ]
-# 
-#       @game.currentRound().south.held.cards.splice(0, 13)
-#       @game.currentRound().south.held.addCard(new Card(Suit.HEARTS, Rank.FIVE))
-#       @game.currentRound().south.held.addCard(new Card(Suit.CLUBS, Rank.FOUR))
-#       @game.currentRound().south.held.addCard(new Card(Suit.SPADES, Rank.ACE))
-#       @southPassed = [
-#         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.FIVE)
-#         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.FOUR)
-#         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.ACE)
-#       ]
-# 
-#       @game.currentRound().west.held.cards.splice(0, 13)
-#       @game.currentRound().west.held.addCard(new Card(Suit.HEARTS, Rank.SIX))
-#       @game.currentRound().west.held.addCard(new Card(Suit.CLUBS, Rank.FIVE))
-#       @game.currentRound().west.held.addCard(new Card(Suit.SPADES, Rank.TWO))
-#       @westPassed = [
-#         new types.Card(suit: types.Suit.HEARTS, rank: types.Rank.SIX)
-#         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.FIVE)
-#         new types.Card(suit: types.Suit.SPADES, rank: types.Rank.TWO)
-#       ]
-
     it "passes the card", (done) ->
       cards = [
         new types.Card(suit: types.Suit.CLUBS, rank: types.Rank.TWO)
