@@ -147,12 +147,13 @@ describe "Handler", ->
       ]
       @agent.send("received", cards: cards)
 
-    it.skip "passes through errors", (done) ->
-      @game.positions.west.out.messages.unshift ["foo"]
-      @handler.pass_cards @westTicket, @westPassed, (err, cards) ->
-        err.message.should.equal("Method call out of sequence")
-        should.not.exist(cards)
+    it "passes through errors", (done) ->
+      @handler.pass_cards @ticket, [], (err, cards) ->
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(cards).to.not.exist
         done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
 
   describe "#get_trick", ->
     it "returns the current trick", (done) ->

@@ -58,3 +58,4 @@ exports.errorToThrift = errorToThrift = (err) ->
     when "invalidMove" then new types.InvalidMoveException(message: err.message)
     when "timeout" then new types.InvalidMoveException(message: err.message)
     when "gameAborted" then new types.GameAbortedException(message: err.message)
+    else new types.GameAbortedException(message: "An unknown error has occured")

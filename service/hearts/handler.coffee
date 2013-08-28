@@ -51,9 +51,10 @@ module.exports = class Handler extends AbstractHandler
     agent = @_getAgent(ticket.agentId)
     agent.forward("passCards", action)
       .then (message) ->
-        # return result mapper.errorToThrift(err), null if err
         thriftCards = message.data.cards.map mapper.cardToThrift
         result null, thriftCards
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
 
   get_trick: (ticket, result) ->

@@ -329,23 +329,35 @@ describe "Game", ->
         @game.handle "passCards.west", @westAction
 
       it "aborts if passing invalid cards", ->
-        @game.handle "passCards.south", @westAction
+        @game.handle "passCards.east", @eastAction
+        @game.handle "passCards.north", @northAction
+        @game.handle "passCards.west", @westAction
+
+        @game.handle "passCards.south", @westAction #invalid
 
         expect(@game.engine.state).to.equal("aborted")
 
       it "notifies the culprit of an invalid action", (done) ->
+        @game.handle "passCards.east", @eastAction
+        @game.handle "passCards.north", @northAction
+        @game.handle "passCards.west", @westAction
+
         @game.on "south.error", (error) ->
           expect(error.type).to.equal("invalidMove")
           done()
 
-        @game.handle "passCards.south", @westAction
+        @game.handle "passCards.south", @westAction #invalid
 
       it "notifies others of an invalid action", (done) ->
+        @game.handle "passCards.east", @eastAction
+        @game.handle "passCards.north", @northAction
+        @game.handle "passCards.west", @westAction
+
         @game.on "north.error", (error) ->
           expect(error.type).to.equal("gameAborted")
           done()
 
-        @game.handle "passCards.south", @westAction
+        @game.handle "passCards.south", @westAction #invalid
 
     describe "startingTrick", ->
       beforeEach ->

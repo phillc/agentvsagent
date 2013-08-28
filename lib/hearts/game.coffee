@@ -134,14 +134,22 @@ Engine = machina.Fsm.extend
       @game.startRound()
 
   handlePassCards: (action, position) ->
-    error = action.validate(@game, position)
-    if !error
-      action.execute(@game, position)
-      if @game.currentRound().allHavePassed()
+    @passedCards[position] = action
+    if und.size(@passedCards) == 4
+      errors = {}
+      for position, action of @passedCards
+        do (errors, position, action) =>
+          error = action.validate(@game, position)
+          if !error
+            action.execute(@game, position)
+          else
+            errors[position] = error
+      # if @game.currentRound().allHavePassed()
+      if und.isEmpty(errors)
         @game.finishPassing()
-    else
-      @game.abort(position, error)
-      @transition("aborted")
+      else
+        errorPosition = Object.keys(errors)[0]
+        @game.abort(errorPosition, errors[errorPosition])
 
   handlePlayCard: (action, position) ->
     action.execute(@game, position)
@@ -186,6 +194,8 @@ Engine = machina.Fsm.extend
       "readyForRound.west": -> @handleReadyForRound("west")
 
     passing:
+      _onEnter: ->
+        @passedCards = {}
       "passCards.north": (action) ->
         @handlePassCards(action, "north")
       "passCards.east": (action) ->

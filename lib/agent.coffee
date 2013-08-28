@@ -8,8 +8,9 @@ AgentState = machina.Fsm.extend
   initialize: (options) ->
     @agent = options.agent
     @timeout = options.timeout
-  # "*": ->
-  #   console.log "=( =( unexpected message =( =( =(", @state, arguments
+  "*": ->
+    logger.error "Agent received unexpected message", @state, arguments
+
   initialState: "waitingForClient"
   states:
     waitingForServer:
