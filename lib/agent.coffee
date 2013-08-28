@@ -3,7 +3,6 @@ Q = require 'q'
 logger = require '../lib/logger'
 {EventEmitter} = require 'events'
 
-# Time each state, emit 'end' on timeout
 AgentState = machina.Fsm.extend
   initialize: (options) ->
     @agent = options.agent
@@ -69,3 +68,6 @@ module.exports = class Agent extends EventEmitter
   send: (message, data) ->
     logger.verbose ">>>>>>>sending", message, " - ", data
     @state.handle "send", message, data
+
+  # end: (message, data)
+

@@ -25,9 +25,6 @@ module.exports = class Game
         @emitPosition(position, message, data)
 
   emitPosition: (position, message, data) ->
-    # # maybe, change to logger, or only in dev, or do this in tests?
-    # if Game.EVENTS.indexOf(message) < 0
-    #   throw new Error("Unexpected event #{message}")
     logger.verbose "GAME emitting to #{position} - #{message} with #{data}"
     heard = @emitter.emit([position, message].join("."), data)
     if !heard
@@ -260,7 +257,8 @@ Engine = machina.Fsm.extend
         @handleFinishedGame("south")
       "finishedGame.west": ->
         @handleFinishedGame("west")
-    aborted: {} # (all checked in, go to finished)
+    aborted: {}
     finished: {}
+
 
 

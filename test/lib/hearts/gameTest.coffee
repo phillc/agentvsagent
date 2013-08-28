@@ -430,3 +430,13 @@ describe "Game", ->
 
         expect(@game.engine.state).to.equal("aborted")
 
+      # it "reponds to everyone that the game is over", ->
+      #   @game.engine.transition("aborted")
+
+      #   @game.on "south.error", (error) ->
+      #     expect(error.type).to.equal("gameEnded")
+      #     done()
+
+      #   @game.handle "something.west"
+      it "moves to finished after everyone has checked in"
+

@@ -2,7 +2,6 @@ Pile = require './pile'
 Card = require './card'
 Rank = require './rank'
 Suit = require './suit'
-# states = require './states'
 logger = require '../logger'
 
 # I'm happy with the way this logic is separated, but I am not happy with
