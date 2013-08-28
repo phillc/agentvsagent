@@ -87,6 +87,9 @@ Sample agents for languages
 # 0.0.11
 
 * Implemented turn time
+* Nicer error messages
+* Cleaned up server input
+* Cleaned up Sample agents
 
 # 0.0.10
 
