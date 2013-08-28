@@ -52,10 +52,10 @@ module.exports = class Arena extends EventEmitter
 
         #TODO: clearly, this needs a cleanup
         # Tic tac toe
-        agent.on "move", (args...) ->
-          game.handle ["move", position].join("."), args...
-        game.on [position, "turn"].join("."), (data) ->
-          agent.send("turn", data)
+        # agent.on "move", (args...) ->
+        #   game.handle ["move", position].join("."), args...
+        # game.on [position, "turn"].join("."), (data) ->
+        #   agent.send("turn", data)
 
         # Hearts
         agentEvents = ["timeout"]
