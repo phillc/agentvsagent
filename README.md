@@ -84,6 +84,22 @@ Sample agents for languages
 
 * Changed position from an enumerable to a string
 
+# 0.0.11
+
+* Implemented turn time
+
+# 0.0.10
+
+* Implemented validation of legal plays
+
+# 0.0.9
+
+* Haskell bot
+
+# 0.0.6
+
+* Hearts human player implemented
+
 
 ## Credits
 
