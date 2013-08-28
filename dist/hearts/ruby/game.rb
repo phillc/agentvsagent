@@ -161,6 +161,9 @@ class Game
       puts "No ticket"
     end
     transport.close
+  rescue ::Thrift::Exception => e
+    puts "Game ended in an exception"
+    puts e.message
   end
 
   include AgentVsAgent
