@@ -168,12 +168,13 @@ describe "Handler", ->
       trick.played.addCard(new Card(Suit.HEARTS, Rank.NINE))
       @agent.send("turn", trick: trick)
 
-    it.skip "passes through errors", (done) ->
-      @game.positions.east.out.messages.unshift ["foo"]
+    it "passes through errors", (done) ->
       @handler.get_trick @ticket, (err, trick) ->
-        err.message.should.equal("Method call out of sequence")
-        should.not.exist(trick)
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(trick).to.not.exist
         done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
 
   describe "#play_card", ->
     beforeEach ->
@@ -199,12 +200,13 @@ describe "Handler", ->
       trick.played.addCard(new Card(Suit.HEARTS, Rank.NINE))
       @agent.send("trickEnded", trick: trick)
 
-    it.skip "passes through errors", (done) ->
-      @game.positions.east.out.messages.unshift ["foo"]
+    it "passes through errors", (done) ->
       @handler.play_card @ticket, @thriftCard, (err, trick) ->
-        err.message.should.equal("Method call out of sequence")
-        expect(ticket).to.not.exist
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(trick).to.not.exist
         done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
 
   describe "#get_round_result", ->
     it "waits for round result", (done) ->

@@ -46,27 +46,6 @@ describe "Game", ->
         @game.scores = -> { north: 40, east: 10, south: 0, west: 3 }
         expect(@game.maxPenaltyReached()).to.be.true
 
-  # describe "#abort", ->
-  #   it "raises the error to the culprit", ->
-  #     @game.abort(@player2, type: "FOO", message: "BAR")
-  #     @player2.out.messages[0][0].should.equal("error")
-  #     @player2.out.messages[0][1].type.should.equal("FOO")
-  #     @player2.out.messages[0][1].message.should.equal("BAR")
-
-  #   it "tells everyone else the game is over", ->
-  #     @game.abort(@player2, type: "FOO", message: "BAR")
-  #     for player in [@player1, @player3, @player4]
-  #       player.out.messages[0][0].should.equal("error")
-  #       player.out.messages[0][1].type.should.equal("gameAborted")
-  #       player.out.messages[0][1].message.should.equal("Game ended due to an invalid action by another agent.")
-
-  #   it "moves the game to GameEnded state", (done) ->
-  #     @game.nextState = =>
-  #       @game.stack.length.should.equal(1)
-  #       @game.stack[0].should.equal("gameEnded")
-  #       done()
-  #     @game.abort(@player2, type: "FOO", message: "BAR")
-
   describe "#start", ->
     it "transitions to starting", ->
       @game.start()
@@ -399,6 +378,20 @@ describe "Game", ->
         @game.handle "playCard.north", action
 
         expect(@game.engine.state).to.equal("waitingForCardFromEast")
+
+      it "aborts if playing an invalid card", ->
+        action = new actions.PlayCard(@southCard)
+        @game.handle "playCard.north", action
+
+        expect(@game.engine.state).to.equal("aborted")
+
+      it "notifies the culprit of an invalid action", (done) ->
+        @game.on "north.error", (error) ->
+          expect(error.type).to.equal("invalidMove")
+          done()
+
+        action = new actions.PlayCard(@southCard)
+        @game.handle "playCard.north", action
 
     describe "endingRound", ->
       it "moves on after all have checked in", ->

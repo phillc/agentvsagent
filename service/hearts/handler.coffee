@@ -63,8 +63,9 @@ module.exports = class Handler extends AbstractHandler
     agent = @_getAgent(ticket.agentId)
     agent.forward("readyForTrick")
       .then (message) ->
-        # return result mapper.errorToThrift(err), null if err
         result null, mapper.trickToThrift(message.data.trick)
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
 
   play_card: (ticket, card, result) ->
@@ -75,8 +76,9 @@ module.exports = class Handler extends AbstractHandler
 
     agent.forward("playCard", action)
       .then (message) ->
-        # return result mapper.errorToThrift(err), null if err
         result null, mapper.trickToThrift(message.data.trick)
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
 
   get_round_result: (ticket, result) ->

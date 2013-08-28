@@ -152,11 +152,15 @@ Engine = machina.Fsm.extend
         @game.abort(errorPosition, errors[errorPosition])
 
   handlePlayCard: (action, position) ->
-    action.execute(@game, position)
-    if nextPosition = @game.currentRound().currentTrick().positionsMissing()[0]
-      @game.waitingForCardFrom(nextPosition)
+    error = action.validate(@game, position)
+    if !error
+      action.execute(@game, position)
+      if nextPosition = @game.currentRound().currentTrick().positionsMissing()[0]
+        @game.waitingForCardFrom(nextPosition)
+      else
+        @game.finishTrick()
     else
-      @game.finishTrick()
+      @game.abort(position, error)
 
   handleReadyForTrick: (position) ->
     @readyForTrick.push(position)
