@@ -8,6 +8,6 @@ require 'thrift'
 require 'tic_tac_toe_types'
 
 module AgentVsAgent
-  CURRENT_VERSION = %q"0.0.12"
+  CURRENT_VERSION = %q"0.0.13"
 
 end
