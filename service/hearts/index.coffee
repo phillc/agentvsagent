@@ -12,7 +12,7 @@ module.exports = class Service
   handlers: ->
     [@tcpHandler, @binaryHandler, @jsonHandler]
 
-  createTCPServer: -> thrift.createServer(Hearts, @tcpHandler)
-  binaryHttpMiddleware: -> thrift.httpMiddleware(Hearts, @binaryHandler)
+  createTCPServer: -> thrift.createServer(Hearts, @tcpHandler, transport: thrift.TFramedTransport)
+  binaryHttpMiddleware: -> thrift.httpMiddleware(Hearts, @binaryHandler, transport: thrift.TFramedTransport)
   jsonHttpMiddleware: -> thrift.httpMiddleware(Hearts, @jsonHandler, protocol: thrift.TJSONProtocol)
 

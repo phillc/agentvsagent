@@ -28,8 +28,7 @@ package-thrift:
 	rm -rf node_modules/thrift
 	cp -r vendor/thrift/lib/nodejs node_modules/thrift
 	git add -A -f node_modules/thrift
-	cp vendor/thrift/lib/js/thrift.js lib/hearts/web/public/thrift.js
-	cp vendor/thrift/lib/js/thrift.js lib/tic_tac_toe/web/public/thrift.js
-	git add lib/hearts/web/public/thrift.js
+	cp vendor/thrift/lib/js/thrift.js web/public/javascripts/thrift.js
+	git add web/public/javascripts/thrift.js
 
 .PHONY: test stats clean all
