@@ -98,7 +98,7 @@ guard :thrift, all_on_start: true,
   watch('thrift/gen/tic_tac_toe.thrift')
 end
 
-guard :shell, all_on_start: true do
+guard :shell do
   watch(%r{vendor/thrift/lib/nodejs/(.*)}) {|m| puts "#{m[0]} changed, packaging thrift"; puts `make package-thrift` }
   ignore! []
 end
