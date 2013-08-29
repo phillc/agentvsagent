@@ -12,10 +12,10 @@ window.HeartsCtrl = HeartsCtrl = ($scope, GameService) ->
     game.playCard()
 
   positions = [
-    AgentVsAgent.Position.NORTH
-    AgentVsAgent.Position.EAST
-    AgentVsAgent.Position.SOUTH
-    AgentVsAgent.Position.WEST
+    "north"
+    "east"
+    "south"
+    "west"
   ]
 
   $scope.Positions = AgentVsAgent.Position
