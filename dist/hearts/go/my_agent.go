@@ -3,7 +3,7 @@ package main
 import (
   "fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"./lib/hearts/Hearts"
+	"./lib/hearts/hearts"
 )
 
 func main() {

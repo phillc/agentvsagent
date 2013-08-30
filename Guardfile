@@ -42,7 +42,7 @@ module ::Guard
     def clean_targets!
       if @options[:clean_target] && @options[:targets].is_a?(Hash)
         @options[:targets].keys.each do |path|
-          command = "rm #{path}/*"
+          command = "rm -rf #{path}/*"
           puts "running #{command}"
           puts `#{command}`
         end
