@@ -21,9 +21,15 @@ module ::Guard
     def run_on_changes(paths)
       clean_targets!
 
-      ["thrift"].product(language_options, paths.uniq).map{|c| c.join(" ")}.map do |command|
+      statuses = ["thrift"].product(language_options, paths.uniq).map{|c| c.join(" ")}.map do |command|
         puts "running #{command}"
         puts `#{command}`
+        $?
+      end
+
+      if statuses.any?{ |status| !status.success? }
+        puts "******errored******"
+        throw :task_has_failed
       end
     end
 
