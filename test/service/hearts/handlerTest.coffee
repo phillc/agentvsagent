@@ -46,6 +46,14 @@ describe "Handler", ->
 
       @agent.send("begin", position: "west")
 
+    it "passes through errors", (done) ->
+      @handler.get_game_info @ticket, (err, gameInfo) ->
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(gameInfo).to.not.exist
+        done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
+
   describe "#get_hand", ->
     it "returns the players hand", (done) ->
       @handler.get_hand @ticket, (err, hand) ->
@@ -103,12 +111,13 @@ describe "Handler", ->
       ]
       @agent.send("dealt", cards: cards)
 
-    it.skip "passes through errors", (done) ->
-      @player.out.messages.unshift ["foo"]
-      @handler.get_hand @ticket, (err, card) ->
-        err.message.should.equal("Method call out of sequence")
-        should.not.exist(card)
+    it "passes through errors", (done) ->
+      @handler.get_hand @ticket, (err, cards) ->
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(cards).to.not.exist
         done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
 
   describe "#pass_cards", ->
     it "passes the card", (done) ->
@@ -239,12 +248,13 @@ describe "Handler", ->
 
       @agent.send("roundEnded", roundScores: { north: 51, east: 0, south: 15, west: 1 }, status: "endGame")
 
-    it.skip "passes through errors", (done) ->
-      @game.positions.east.out.messages.unshift ["foo"]
+    it "passes through errors", (done) ->
       @handler.get_round_result @ticket, (err, roundResult) ->
-        err.message.should.equal("Method call out of sequence")
-        should.not.exist(roundResult)
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(roundResult).to.not.exist
         done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
 
   describe "#get_game_result", ->
     it "waits for round result", (done) ->
@@ -254,8 +264,8 @@ describe "Handler", ->
       @handler.get_game_result @ticket, ->
 
     it "returns the results of the game", (done) ->
-      @handler.get_game_result @ticket, (error, gameResult) =>
-        expect(error).to.not.exist
+      @handler.get_game_result @ticket, (err, gameResult) =>
+        expect(err).to.not.exist
         expect(gameResult.north).to.equal(101)
         expect(gameResult.east).to.equal(0)
         expect(gameResult.south).to.equal(30)
@@ -263,9 +273,10 @@ describe "Handler", ->
         done()
       @agent.send("gameEnded", gameScores: { north: 101, east: 0, south: 30, west: 2 })
 
-    it.skip "passes through errors", (done) ->
-      @game.positions.east.out.messages.unshift ["foo"]
-      @handler.get_game_result @ticket, (err, roundResult) ->
-        err.message.should.equal("Method call out of sequence")
-        should.not.exist(roundResult)
+    it "passes through errors", (done) ->
+      @handler.get_game_result @ticket, (err, gameResult) =>
+        expect(err.message).to.equal("Method call out of sequence")
+        expect(gameResult).to.not.exist
         done()
+
+      @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})

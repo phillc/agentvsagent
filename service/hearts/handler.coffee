@@ -29,6 +29,8 @@ module.exports = class Handler extends AbstractHandler
 
         logger.verbose "Returning game info", ticket
         result null, gameInfo
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
 
   get_hand: (ticket, result) ->
@@ -37,9 +39,10 @@ module.exports = class Handler extends AbstractHandler
     agent = @_getAgent(ticket.agentId)
     agent.forward("readyForRound")
       .then (message) ->
-        # return result mapper.errorToThrift(err), null if err
         thriftCards = message.data.cards.map mapper.cardToThrift
         result null, thriftCards
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
 
   pass_cards: (ticket, cards, result) ->
@@ -87,20 +90,22 @@ module.exports = class Handler extends AbstractHandler
     agent = @_getAgent(ticket.agentId)
     agent.forward("finishedRound")
       .then (message) ->
-      # return result mapper.errorToThrift(err), null if err
         roundResult = new types.RoundResult(message.data.roundScores)
         roundResult.status = switch message.data.status
           when "endGame" then types.GameStatus.END_GAME
           when "nextRound" then types.GameStatus.NEXT_ROUND
         logger.verbose "returning get_round_result", roundResult
         result null, roundResult
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
 
   get_game_result: (ticket, result) ->
     agent = @_getAgent(ticket.agentId)
     agent.forward("finishedGame")
       .then (message) ->
-        # return result mapper.errorToThrift(err), null if err
         gameResult = new types.GameResult(message.data.gameScores)
         result null, gameResult
+      .fail (message) ->
+        result mapper.errorToThrift(message.data)
       .done()
