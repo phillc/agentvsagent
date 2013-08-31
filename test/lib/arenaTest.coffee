@@ -7,7 +7,7 @@ describe "Arena", ->
       createGame: ->
         start: ->
         on: ->
-      events: -> []
+      Game: {}
     @arena = new Arena(builder, [])
 
   describe "#addAgent", ->

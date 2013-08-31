@@ -278,6 +278,16 @@ describe "Game", ->
         @game.handle "readyForRound.west"
         expect(@game.engine.state).to.equal("passing")
 
+      it "response to other events with outOfSequence", (done) ->
+        @game.engine.transition("startingRound")
+
+        @game.on "north.error", (error) ->
+          expect(error.type).to.equal("outOfSequence")
+          done()
+
+        @game.handle "passCards.north"
+        expect(@game.engine.state).to.equal("aborted")
+
     describe "passing", ->
       beforeEach ->
         @game.startRound()
