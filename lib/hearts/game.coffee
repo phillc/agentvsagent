@@ -180,6 +180,7 @@ Engine = machina.Fsm.extend
       logger.error "timeout received", position
       @game.abort(position, {type: "timeout", message: "Your action took longer than allowed"})
     else
+      # TODO: check @EVENTS... if one of those, you are out of sequence
       logger.error "Unhandled event", arguments
 
   initialState: "initialized"
