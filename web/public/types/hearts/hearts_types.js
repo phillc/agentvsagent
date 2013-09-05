@@ -626,17 +626,21 @@ AgentVsAgent.GameResult.prototype.write = function(output) {
   return;
 };
 
-AgentVsAgent.OutOfSequenceException = function(args) {
+AgentVsAgent.GameException = function(args) {
   this.message = null;
+  this.type = null;
   if (args) {
     if (args.message !== undefined) {
       this.message = args.message;
     }
+    if (args.type !== undefined) {
+      this.type = args.type;
+    }
   }
 };
-Thrift.inherits(AgentVsAgent.OutOfSequenceException, Thrift.TException);
-AgentVsAgent.OutOfSequenceException.prototype.name = 'OutOfSequenceException';
-AgentVsAgent.OutOfSequenceException.prototype.read = function(input) {
+Thrift.inherits(AgentVsAgent.GameException, Thrift.TException);
+AgentVsAgent.GameException.prototype.name = 'GameException';
+AgentVsAgent.GameException.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -656,9 +660,13 @@ AgentVsAgent.OutOfSequenceException.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 0:
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.type = input.readString().value;
+      } else {
         input.skip(ftype);
-        break;
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -668,119 +676,16 @@ AgentVsAgent.OutOfSequenceException.prototype.read = function(input) {
   return;
 };
 
-AgentVsAgent.OutOfSequenceException.prototype.write = function(output) {
-  output.writeStructBegin('OutOfSequenceException');
+AgentVsAgent.GameException.prototype.write = function(output) {
+  output.writeStructBegin('GameException');
   if (this.message !== null && this.message !== undefined) {
     output.writeFieldBegin('message', Thrift.Type.STRING, 1);
     output.writeString(this.message);
     output.writeFieldEnd();
   }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-AgentVsAgent.InvalidMoveException = function(args) {
-  this.message = null;
-  if (args) {
-    if (args.message !== undefined) {
-      this.message = args.message;
-    }
-  }
-};
-Thrift.inherits(AgentVsAgent.InvalidMoveException, Thrift.TException);
-AgentVsAgent.InvalidMoveException.prototype.name = 'InvalidMoveException';
-AgentVsAgent.InvalidMoveException.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.message = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-AgentVsAgent.InvalidMoveException.prototype.write = function(output) {
-  output.writeStructBegin('InvalidMoveException');
-  if (this.message !== null && this.message !== undefined) {
-    output.writeFieldBegin('message', Thrift.Type.STRING, 1);
-    output.writeString(this.message);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-AgentVsAgent.GameAbortedException = function(args) {
-  this.message = null;
-  if (args) {
-    if (args.message !== undefined) {
-      this.message = args.message;
-    }
-  }
-};
-Thrift.inherits(AgentVsAgent.GameAbortedException, Thrift.TException);
-AgentVsAgent.GameAbortedException.prototype.name = 'GameAbortedException';
-AgentVsAgent.GameAbortedException.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.message = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-AgentVsAgent.GameAbortedException.prototype.write = function(output) {
-  output.writeStructBegin('GameAbortedException');
-  if (this.message !== null && this.message !== undefined) {
-    output.writeFieldBegin('message', Thrift.Type.STRING, 1);
-    output.writeString(this.message);
+  if (this.type !== null && this.type !== undefined) {
+    output.writeFieldBegin('type', Thrift.Type.STRING, 2);
+    output.writeString(this.type);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

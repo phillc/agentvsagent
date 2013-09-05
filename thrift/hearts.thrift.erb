@@ -80,16 +80,9 @@ struct GameResult {
   4: required Score west
 }
 
-exception OutOfSequenceException {
+exception GameException {
   1: required string message
-}
-
-exception InvalidMoveException {
-  1: required string message
-}
-
-exception GameAbortedException {
-  1: required string message
+  2: optional string type
 }
 
 # Right now, server not expecting you to call pass cards on the 4th round.
@@ -97,12 +90,12 @@ exception GameAbortedException {
 # return number of cards to pass, or tells you the position you are passing to
 service Hearts {
   EntryResponse enter_arena(1: required EntryRequest request),
-  GameInfo get_game_info(1: required Ticket ticket) throws (1: GameAbortedException ex1),
-  list<Card> get_hand(1: required Ticket ticket) throws (1: OutOfSequenceException ex1, 2: GameAbortedException ex2),
-  list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards) throws (1: OutOfSequenceException ex1, 2: InvalidMoveException ex2, 3: GameAbortedException ex3),
-  Trick get_trick(1: required Ticket ticket) throws (1: OutOfSequenceException ex1, 2: GameAbortedException ex3),
-  Trick play_card(1: required Ticket ticket, 2: required Card card) throws (1: OutOfSequenceException ex1, 2: InvalidMoveException ex2, 3: GameAbortedException ex3),
-  RoundResult get_round_result(1: required Ticket ticket) throws (1: OutOfSequenceException ex1, 2: GameAbortedException ex3),
-  GameResult get_game_result(1: required Ticket ticket) throws (1: OutOfSequenceException ex1, 2: GameAbortedException ex3)
+  GameInfo get_game_info(1: required Ticket ticket) throws (1: GameException ex),
+  list<Card> get_hand(1: required Ticket ticket) throws (1: GameException ex),
+  list<Card> pass_cards(1: required Ticket ticket, 2: required list<Card> cards) throws (1: GameException ex),
+  Trick get_trick(1: required Ticket ticket) throws (1: GameException ex),
+  Trick play_card(1: required Ticket ticket, 2: required Card card) throws (1: GameException ex),
+  RoundResult get_round_result(1: required Ticket ticket) throws (1: GameException ex),
+  GameResult get_game_result(1: required Ticket ticket) throws (1: GameException ex),
 }
 

@@ -171,17 +171,17 @@ AgentVsAgent.Hearts_get_game_info_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_get_game_info_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex1 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -209,8 +209,8 @@ AgentVsAgent.Hearts_get_game_info_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.GameAbortedException();
-        this.ex1.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -231,9 +231,9 @@ AgentVsAgent.Hearts_get_game_info_result.prototype.write = function(output) {
     this.success.write(output);
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -297,25 +297,17 @@ AgentVsAgent.Hearts_get_hand_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_get_hand_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  this.ex2 = null;
-  if (args instanceof AgentVsAgent.OutOfSequenceException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex2 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
-    }
-    if (args.ex2 !== undefined) {
-      this.ex2 = args.ex2;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -356,16 +348,8 @@ AgentVsAgent.Hearts_get_hand_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.OutOfSequenceException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex2 = new AgentVsAgent.GameAbortedException();
-        this.ex2.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -395,14 +379,9 @@ AgentVsAgent.Hearts_get_hand_result.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex2 !== null && this.ex2 !== undefined) {
-    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
-    this.ex2.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -502,33 +481,17 @@ AgentVsAgent.Hearts_pass_cards_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_pass_cards_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  this.ex2 = null;
-  this.ex3 = null;
-  if (args instanceof AgentVsAgent.OutOfSequenceException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.InvalidMoveException) {
-    this.ex2 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex3 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
-    }
-    if (args.ex2 !== undefined) {
-      this.ex2 = args.ex2;
-    }
-    if (args.ex3 !== undefined) {
-      this.ex3 = args.ex3;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -569,24 +532,8 @@ AgentVsAgent.Hearts_pass_cards_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.OutOfSequenceException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex2 = new AgentVsAgent.InvalidMoveException();
-        this.ex2.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex3 = new AgentVsAgent.GameAbortedException();
-        this.ex3.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -616,19 +563,9 @@ AgentVsAgent.Hearts_pass_cards_result.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex2 !== null && this.ex2 !== undefined) {
-    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
-    this.ex2.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex3 !== null && this.ex3 !== undefined) {
-    output.writeFieldBegin('ex3', Thrift.Type.STRUCT, 3);
-    this.ex3.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -692,25 +629,17 @@ AgentVsAgent.Hearts_get_trick_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_get_trick_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  this.ex3 = null;
-  if (args instanceof AgentVsAgent.OutOfSequenceException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex3 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
-    }
-    if (args.ex3 !== undefined) {
-      this.ex3 = args.ex3;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -738,16 +667,8 @@ AgentVsAgent.Hearts_get_trick_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.OutOfSequenceException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex3 = new AgentVsAgent.GameAbortedException();
-        this.ex3.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -768,14 +689,9 @@ AgentVsAgent.Hearts_get_trick_result.prototype.write = function(output) {
     this.success.write(output);
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex3 !== null && this.ex3 !== undefined) {
-    output.writeFieldBegin('ex3', Thrift.Type.STRUCT, 2);
-    this.ex3.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -853,33 +769,17 @@ AgentVsAgent.Hearts_play_card_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_play_card_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  this.ex2 = null;
-  this.ex3 = null;
-  if (args instanceof AgentVsAgent.OutOfSequenceException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.InvalidMoveException) {
-    this.ex2 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex3 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
-    }
-    if (args.ex2 !== undefined) {
-      this.ex2 = args.ex2;
-    }
-    if (args.ex3 !== undefined) {
-      this.ex3 = args.ex3;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -907,24 +807,8 @@ AgentVsAgent.Hearts_play_card_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.OutOfSequenceException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex2 = new AgentVsAgent.InvalidMoveException();
-        this.ex2.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex3 = new AgentVsAgent.GameAbortedException();
-        this.ex3.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -945,19 +829,9 @@ AgentVsAgent.Hearts_play_card_result.prototype.write = function(output) {
     this.success.write(output);
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex2 !== null && this.ex2 !== undefined) {
-    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
-    this.ex2.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex3 !== null && this.ex3 !== undefined) {
-    output.writeFieldBegin('ex3', Thrift.Type.STRUCT, 3);
-    this.ex3.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -1021,25 +895,17 @@ AgentVsAgent.Hearts_get_round_result_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_get_round_result_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  this.ex3 = null;
-  if (args instanceof AgentVsAgent.OutOfSequenceException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex3 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
-    }
-    if (args.ex3 !== undefined) {
-      this.ex3 = args.ex3;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -1067,16 +933,8 @@ AgentVsAgent.Hearts_get_round_result_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.OutOfSequenceException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex3 = new AgentVsAgent.GameAbortedException();
-        this.ex3.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -1097,14 +955,9 @@ AgentVsAgent.Hearts_get_round_result_result.prototype.write = function(output) {
     this.success.write(output);
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex3 !== null && this.ex3 !== undefined) {
-    output.writeFieldBegin('ex3', Thrift.Type.STRUCT, 2);
-    this.ex3.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -1168,25 +1021,17 @@ AgentVsAgent.Hearts_get_game_result_args.prototype.write = function(output) {
 
 AgentVsAgent.Hearts_get_game_result_result = function(args) {
   this.success = null;
-  this.ex1 = null;
-  this.ex3 = null;
-  if (args instanceof AgentVsAgent.OutOfSequenceException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args instanceof AgentVsAgent.GameAbortedException) {
-    this.ex3 = args;
+  this.ex = null;
+  if (args instanceof AgentVsAgent.GameException) {
+    this.ex = args;
     return;
   }
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
     }
-    if (args.ex1 !== undefined) {
-      this.ex1 = args.ex1;
-    }
-    if (args.ex3 !== undefined) {
-      this.ex3 = args.ex3;
+    if (args.ex !== undefined) {
+      this.ex = args.ex;
     }
   }
 };
@@ -1214,16 +1059,8 @@ AgentVsAgent.Hearts_get_game_result_result.prototype.read = function(input) {
       break;
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new AgentVsAgent.OutOfSequenceException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex3 = new AgentVsAgent.GameAbortedException();
-        this.ex3.read(input);
+        this.ex = new AgentVsAgent.GameException();
+        this.ex.read(input);
       } else {
         input.skip(ftype);
       }
@@ -1244,14 +1081,9 @@ AgentVsAgent.Hearts_get_game_result_result.prototype.write = function(output) {
     this.success.write(output);
     output.writeFieldEnd();
   }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.ex3 !== null && this.ex3 !== undefined) {
-    output.writeFieldBegin('ex3', Thrift.Type.STRUCT, 2);
-    this.ex3.write(output);
+  if (this.ex !== null && this.ex !== undefined) {
+    output.writeFieldBegin('ex', Thrift.Type.STRUCT, 1);
+    this.ex.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -1340,8 +1172,8 @@ AgentVsAgent.HeartsClient.prototype.recv_get_game_info = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;
@@ -1383,11 +1215,8 @@ AgentVsAgent.HeartsClient.prototype.recv_get_hand = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.ex2) {
-    throw result.ex2;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;
@@ -1430,14 +1259,8 @@ AgentVsAgent.HeartsClient.prototype.recv_pass_cards = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.ex2) {
-    throw result.ex2;
-  }
-  if (null !== result.ex3) {
-    throw result.ex3;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;
@@ -1479,11 +1302,8 @@ AgentVsAgent.HeartsClient.prototype.recv_get_trick = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.ex3) {
-    throw result.ex3;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;
@@ -1526,14 +1346,8 @@ AgentVsAgent.HeartsClient.prototype.recv_play_card = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.ex2) {
-    throw result.ex2;
-  }
-  if (null !== result.ex3) {
-    throw result.ex3;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;
@@ -1575,11 +1389,8 @@ AgentVsAgent.HeartsClient.prototype.recv_get_round_result = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.ex3) {
-    throw result.ex3;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;
@@ -1621,11 +1432,8 @@ AgentVsAgent.HeartsClient.prototype.recv_get_game_result = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.ex3) {
-    throw result.ex3;
+  if (null !== result.ex) {
+    throw result.ex;
   }
   if (null !== result.success) {
     return result.success;

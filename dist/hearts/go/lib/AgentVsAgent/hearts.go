@@ -20,27 +20,27 @@ type Hearts interface {
 	EnterArena(request *EntryRequest) (r *EntryResponse, err error)
 	// Parameters:
 	//  - Ticket
-	GetGameInfo(ticket *Ticket) (r *GameInfo, ex1 *GameAbortedException, err error)
+	GetGameInfo(ticket *Ticket) (r *GameInfo, ex *GameException, err error)
 	// Parameters:
 	//  - Ticket
-	GetHand(ticket *Ticket) (r []*Card, ex1 *OutOfSequenceException, ex2 *GameAbortedException, err error)
+	GetHand(ticket *Ticket) (r []*Card, ex *GameException, err error)
 	// Parameters:
 	//  - Ticket
 	//  - Cards
-	PassCards(ticket *Ticket, cards []*Card) (r []*Card, ex1 *OutOfSequenceException, ex2 *InvalidMoveException, ex3 *GameAbortedException, err error)
+	PassCards(ticket *Ticket, cards []*Card) (r []*Card, ex *GameException, err error)
 	// Parameters:
 	//  - Ticket
-	GetTrick(ticket *Ticket) (r *Trick, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error)
+	GetTrick(ticket *Ticket) (r *Trick, ex *GameException, err error)
 	// Parameters:
 	//  - Ticket
 	//  - Card
-	PlayCard(ticket *Ticket, card *Card) (r *Trick, ex1 *OutOfSequenceException, ex2 *InvalidMoveException, ex3 *GameAbortedException, err error)
+	PlayCard(ticket *Ticket, card *Card) (r *Trick, ex *GameException, err error)
 	// Parameters:
 	//  - Ticket
-	GetRoundResult(ticket *Ticket) (r *RoundResult, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error)
+	GetRoundResult(ticket *Ticket) (r *RoundResult, ex *GameException, err error)
 	// Parameters:
 	//  - Ticket
-	GetGameResult(ticket *Ticket) (r *GameResult, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error)
+	GetGameResult(ticket *Ticket) (r *GameResult, ex *GameException, err error)
 }
 
 type HeartsClient struct {
@@ -130,7 +130,7 @@ func (p *HeartsClient) recvEnterArena() (value *EntryResponse, err error) {
 
 // Parameters:
 //  - Ticket
-func (p *HeartsClient) GetGameInfo(ticket *Ticket) (r *GameInfo, ex1 *GameAbortedException, err error) {
+func (p *HeartsClient) GetGameInfo(ticket *Ticket) (r *GameInfo, ex *GameException, err error) {
 	if err = p.sendGetGameInfo(ticket); err != nil {
 		return
 	}
@@ -153,7 +153,7 @@ func (p *HeartsClient) sendGetGameInfo(ticket *Ticket) (err error) {
 	return
 }
 
-func (p *HeartsClient) recvGetGameInfo() (value *GameInfo, ex1 *GameAbortedException, err error) {
+func (p *HeartsClient) recvGetGameInfo() (value *GameInfo, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -184,15 +184,15 @@ func (p *HeartsClient) recvGetGameInfo() (value *GameInfo, ex1 *GameAbortedExcep
 	err = result6.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result6.Success
-	if result6.Ex1 != nil {
-		ex1 = result6.Ex1
+	if result6.Ex != nil {
+		ex = result6.Ex
 	}
 	return
 }
 
 // Parameters:
 //  - Ticket
-func (p *HeartsClient) GetHand(ticket *Ticket) (r []*Card, ex1 *OutOfSequenceException, ex2 *GameAbortedException, err error) {
+func (p *HeartsClient) GetHand(ticket *Ticket) (r []*Card, ex *GameException, err error) {
 	if err = p.sendGetHand(ticket); err != nil {
 		return
 	}
@@ -215,7 +215,7 @@ func (p *HeartsClient) sendGetHand(ticket *Ticket) (err error) {
 	return
 }
 
-func (p *HeartsClient) recvGetHand() (value []*Card, ex1 *OutOfSequenceException, ex2 *GameAbortedException, err error) {
+func (p *HeartsClient) recvGetHand() (value []*Card, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -246,11 +246,8 @@ func (p *HeartsClient) recvGetHand() (value []*Card, ex1 *OutOfSequenceException
 	err = result10.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result10.Success
-	if result10.Ex1 != nil {
-		ex1 = result10.Ex1
-	}
-	if result10.Ex2 != nil {
-		ex2 = result10.Ex2
+	if result10.Ex != nil {
+		ex = result10.Ex
 	}
 	return
 }
@@ -258,7 +255,7 @@ func (p *HeartsClient) recvGetHand() (value []*Card, ex1 *OutOfSequenceException
 // Parameters:
 //  - Ticket
 //  - Cards
-func (p *HeartsClient) PassCards(ticket *Ticket, cards []*Card) (r []*Card, ex1 *OutOfSequenceException, ex2 *InvalidMoveException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) PassCards(ticket *Ticket, cards []*Card) (r []*Card, ex *GameException, err error) {
 	if err = p.sendPassCards(ticket, cards); err != nil {
 		return
 	}
@@ -282,7 +279,7 @@ func (p *HeartsClient) sendPassCards(ticket *Ticket, cards []*Card) (err error) 
 	return
 }
 
-func (p *HeartsClient) recvPassCards() (value []*Card, ex1 *OutOfSequenceException, ex2 *InvalidMoveException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) recvPassCards() (value []*Card, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -313,21 +310,15 @@ func (p *HeartsClient) recvPassCards() (value []*Card, ex1 *OutOfSequenceExcepti
 	err = result14.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result14.Success
-	if result14.Ex1 != nil {
-		ex1 = result14.Ex1
-	}
-	if result14.Ex2 != nil {
-		ex2 = result14.Ex2
-	}
-	if result14.Ex3 != nil {
-		ex3 = result14.Ex3
+	if result14.Ex != nil {
+		ex = result14.Ex
 	}
 	return
 }
 
 // Parameters:
 //  - Ticket
-func (p *HeartsClient) GetTrick(ticket *Ticket) (r *Trick, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) GetTrick(ticket *Ticket) (r *Trick, ex *GameException, err error) {
 	if err = p.sendGetTrick(ticket); err != nil {
 		return
 	}
@@ -350,7 +341,7 @@ func (p *HeartsClient) sendGetTrick(ticket *Ticket) (err error) {
 	return
 }
 
-func (p *HeartsClient) recvGetTrick() (value *Trick, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) recvGetTrick() (value *Trick, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -381,11 +372,8 @@ func (p *HeartsClient) recvGetTrick() (value *Trick, ex1 *OutOfSequenceException
 	err = result18.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result18.Success
-	if result18.Ex1 != nil {
-		ex1 = result18.Ex1
-	}
-	if result18.Ex3 != nil {
-		ex3 = result18.Ex3
+	if result18.Ex != nil {
+		ex = result18.Ex
 	}
 	return
 }
@@ -393,7 +381,7 @@ func (p *HeartsClient) recvGetTrick() (value *Trick, ex1 *OutOfSequenceException
 // Parameters:
 //  - Ticket
 //  - Card
-func (p *HeartsClient) PlayCard(ticket *Ticket, card *Card) (r *Trick, ex1 *OutOfSequenceException, ex2 *InvalidMoveException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) PlayCard(ticket *Ticket, card *Card) (r *Trick, ex *GameException, err error) {
 	if err = p.sendPlayCard(ticket, card); err != nil {
 		return
 	}
@@ -417,7 +405,7 @@ func (p *HeartsClient) sendPlayCard(ticket *Ticket, card *Card) (err error) {
 	return
 }
 
-func (p *HeartsClient) recvPlayCard() (value *Trick, ex1 *OutOfSequenceException, ex2 *InvalidMoveException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) recvPlayCard() (value *Trick, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -448,21 +436,15 @@ func (p *HeartsClient) recvPlayCard() (value *Trick, ex1 *OutOfSequenceException
 	err = result22.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result22.Success
-	if result22.Ex1 != nil {
-		ex1 = result22.Ex1
-	}
-	if result22.Ex2 != nil {
-		ex2 = result22.Ex2
-	}
-	if result22.Ex3 != nil {
-		ex3 = result22.Ex3
+	if result22.Ex != nil {
+		ex = result22.Ex
 	}
 	return
 }
 
 // Parameters:
 //  - Ticket
-func (p *HeartsClient) GetRoundResult(ticket *Ticket) (r *RoundResult, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) GetRoundResult(ticket *Ticket) (r *RoundResult, ex *GameException, err error) {
 	if err = p.sendGetRoundResult(ticket); err != nil {
 		return
 	}
@@ -485,7 +467,7 @@ func (p *HeartsClient) sendGetRoundResult(ticket *Ticket) (err error) {
 	return
 }
 
-func (p *HeartsClient) recvGetRoundResult() (value *RoundResult, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) recvGetRoundResult() (value *RoundResult, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -516,18 +498,15 @@ func (p *HeartsClient) recvGetRoundResult() (value *RoundResult, ex1 *OutOfSeque
 	err = result26.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result26.Success
-	if result26.Ex1 != nil {
-		ex1 = result26.Ex1
-	}
-	if result26.Ex3 != nil {
-		ex3 = result26.Ex3
+	if result26.Ex != nil {
+		ex = result26.Ex
 	}
 	return
 }
 
 // Parameters:
 //  - Ticket
-func (p *HeartsClient) GetGameResult(ticket *Ticket) (r *GameResult, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) GetGameResult(ticket *Ticket) (r *GameResult, ex *GameException, err error) {
 	if err = p.sendGetGameResult(ticket); err != nil {
 		return
 	}
@@ -550,7 +529,7 @@ func (p *HeartsClient) sendGetGameResult(ticket *Ticket) (err error) {
 	return
 }
 
-func (p *HeartsClient) recvGetGameResult() (value *GameResult, ex1 *OutOfSequenceException, ex3 *GameAbortedException, err error) {
+func (p *HeartsClient) recvGetGameResult() (value *GameResult, ex *GameException, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -581,11 +560,8 @@ func (p *HeartsClient) recvGetGameResult() (value *GameResult, ex1 *OutOfSequenc
 	err = result30.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result30.Success
-	if result30.Ex1 != nil {
-		ex1 = result30.Ex1
-	}
-	if result30.Ex3 != nil {
-		ex3 = result30.Ex3
+	if result30.Ex != nil {
+		ex = result30.Ex
 	}
 	return
 }
@@ -701,7 +677,7 @@ func (p *heartsProcessorGetGameInfo) Process(seqId int32, iprot, oprot thrift.TP
 	}
 	iprot.ReadMessageEnd()
 	result := NewGetGameInfoResult()
-	if result.Success, result.Ex1, err = p.handler.GetGameInfo(args.Ticket); err != nil {
+	if result.Success, result.Ex, err = p.handler.GetGameInfo(args.Ticket); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing get_game_info: "+err.Error())
 		oprot.WriteMessageBegin("get_game_info", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -744,7 +720,7 @@ func (p *heartsProcessorGetHand) Process(seqId int32, iprot, oprot thrift.TProto
 	}
 	iprot.ReadMessageEnd()
 	result := NewGetHandResult()
-	if result.Success, result.Ex1, result.Ex2, err = p.handler.GetHand(args.Ticket); err != nil {
+	if result.Success, result.Ex, err = p.handler.GetHand(args.Ticket); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing get_hand: "+err.Error())
 		oprot.WriteMessageBegin("get_hand", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -787,7 +763,7 @@ func (p *heartsProcessorPassCards) Process(seqId int32, iprot, oprot thrift.TPro
 	}
 	iprot.ReadMessageEnd()
 	result := NewPassCardsResult()
-	if result.Success, result.Ex1, result.Ex2, result.Ex3, err = p.handler.PassCards(args.Ticket, args.Cards); err != nil {
+	if result.Success, result.Ex, err = p.handler.PassCards(args.Ticket, args.Cards); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing pass_cards: "+err.Error())
 		oprot.WriteMessageBegin("pass_cards", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -830,7 +806,7 @@ func (p *heartsProcessorGetTrick) Process(seqId int32, iprot, oprot thrift.TProt
 	}
 	iprot.ReadMessageEnd()
 	result := NewGetTrickResult()
-	if result.Success, result.Ex1, result.Ex3, err = p.handler.GetTrick(args.Ticket); err != nil {
+	if result.Success, result.Ex, err = p.handler.GetTrick(args.Ticket); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing get_trick: "+err.Error())
 		oprot.WriteMessageBegin("get_trick", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -873,7 +849,7 @@ func (p *heartsProcessorPlayCard) Process(seqId int32, iprot, oprot thrift.TProt
 	}
 	iprot.ReadMessageEnd()
 	result := NewPlayCardResult()
-	if result.Success, result.Ex1, result.Ex2, result.Ex3, err = p.handler.PlayCard(args.Ticket, args.Card); err != nil {
+	if result.Success, result.Ex, err = p.handler.PlayCard(args.Ticket, args.Card); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing play_card: "+err.Error())
 		oprot.WriteMessageBegin("play_card", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -916,7 +892,7 @@ func (p *heartsProcessorGetRoundResult) Process(seqId int32, iprot, oprot thrift
 	}
 	iprot.ReadMessageEnd()
 	result := NewGetRoundResultResult()
-	if result.Success, result.Ex1, result.Ex3, err = p.handler.GetRoundResult(args.Ticket); err != nil {
+	if result.Success, result.Ex, err = p.handler.GetRoundResult(args.Ticket); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing get_round_result: "+err.Error())
 		oprot.WriteMessageBegin("get_round_result", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -959,7 +935,7 @@ func (p *heartsProcessorGetGameResult) Process(seqId int32, iprot, oprot thrift.
 	}
 	iprot.ReadMessageEnd()
 	result := NewGetGameResultResult()
-	if result.Success, result.Ex1, result.Ex3, err = p.handler.GetGameResult(args.Ticket); err != nil {
+	if result.Success, result.Ex, err = p.handler.GetGameResult(args.Ticket); err != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing get_game_result: "+err.Error())
 		oprot.WriteMessageBegin("get_game_result", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -1249,8 +1225,8 @@ func (p *GetGameInfoArgs) String() string {
 }
 
 type GetGameInfoResult struct {
-	Success *GameInfo             `thrift:"success,0"`
-	Ex1     *GameAbortedException `thrift:"ex1,1"`
+	Success *GameInfo      `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewGetGameInfoResult() *GetGameInfoResult {
@@ -1302,9 +1278,9 @@ func (p *GetGameInfoResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *GetGameInfoResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewGameAbortedException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -1314,7 +1290,7 @@ func (p *GetGameInfoResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -1348,15 +1324,15 @@ func (p *GetGameInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *GetGameInfoResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err
@@ -1456,9 +1432,8 @@ func (p *GetHandArgs) String() string {
 }
 
 type GetHandResult struct {
-	Success []*Card                 `thrift:"success,0"`
-	Ex1     *OutOfSequenceException `thrift:"ex1,1"`
-	Ex2     *GameAbortedException   `thrift:"ex2,2"`
+	Success []*Card        `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewGetHandResult() *GetHandResult {
@@ -1484,10 +1459,6 @@ func (p *GetHandResult) Read(iprot thrift.TProtocol) error {
 			}
 		case 1:
 			if err := p.readField1(iprot); err != nil {
-				return err
-			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
 				return err
 			}
 		default:
@@ -1525,17 +1496,9 @@ func (p *GetHandResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *GetHandResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewOutOfSequenceException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
-	}
-	return nil
-}
-
-func (p *GetHandResult) readField2(iprot thrift.TProtocol) error {
-	p.Ex2 = NewGameAbortedException()
-	if err := p.Ex2.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex2)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -1545,11 +1508,7 @@ func (p *GetHandResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex2 != nil:
-		if err := p.writeField2(oprot); err != nil {
-			return err
-		}
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -1591,30 +1550,15 @@ func (p *GetHandResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *GetHandResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *GetHandResult) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.Ex2 != nil {
-		if err := oprot.WriteFieldBegin("ex2", thrift.STRUCT, 2); err != nil {
-			return fmt.Errorf("%T write field begin error 2:ex2: %s", p, err)
-		}
-		if err := p.Ex2.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex2)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 2:ex2: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err
@@ -1764,10 +1708,8 @@ func (p *PassCardsArgs) String() string {
 }
 
 type PassCardsResult struct {
-	Success []*Card                 `thrift:"success,0"`
-	Ex1     *OutOfSequenceException `thrift:"ex1,1"`
-	Ex2     *InvalidMoveException   `thrift:"ex2,2"`
-	Ex3     *GameAbortedException   `thrift:"ex3,3"`
+	Success []*Card        `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewPassCardsResult() *PassCardsResult {
@@ -1793,14 +1735,6 @@ func (p *PassCardsResult) Read(iprot thrift.TProtocol) error {
 			}
 		case 1:
 			if err := p.readField1(iprot); err != nil {
-				return err
-			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
-				return err
-			}
-		case 3:
-			if err := p.readField3(iprot); err != nil {
 				return err
 			}
 		default:
@@ -1838,25 +1772,9 @@ func (p *PassCardsResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *PassCardsResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewOutOfSequenceException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
-	}
-	return nil
-}
-
-func (p *PassCardsResult) readField2(iprot thrift.TProtocol) error {
-	p.Ex2 = NewInvalidMoveException()
-	if err := p.Ex2.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex2)
-	}
-	return nil
-}
-
-func (p *PassCardsResult) readField3(iprot thrift.TProtocol) error {
-	p.Ex3 = NewGameAbortedException()
-	if err := p.Ex3.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex3)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -1866,15 +1784,7 @@ func (p *PassCardsResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex3 != nil:
-		if err := p.writeField3(oprot); err != nil {
-			return err
-		}
-	case p.Ex2 != nil:
-		if err := p.writeField2(oprot); err != nil {
-			return err
-		}
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -1916,45 +1826,15 @@ func (p *PassCardsResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *PassCardsResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *PassCardsResult) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.Ex2 != nil {
-		if err := oprot.WriteFieldBegin("ex2", thrift.STRUCT, 2); err != nil {
-			return fmt.Errorf("%T write field begin error 2:ex2: %s", p, err)
-		}
-		if err := p.Ex2.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex2)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 2:ex2: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *PassCardsResult) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.Ex3 != nil {
-		if err := oprot.WriteFieldBegin("ex3", thrift.STRUCT, 3); err != nil {
-			return fmt.Errorf("%T write field begin error 3:ex3: %s", p, err)
-		}
-		if err := p.Ex3.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex3)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 3:ex3: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err
@@ -2054,9 +1934,8 @@ func (p *GetTrickArgs) String() string {
 }
 
 type GetTrickResult struct {
-	Success *Trick                  `thrift:"success,0"`
-	Ex1     *OutOfSequenceException `thrift:"ex1,1"`
-	Ex3     *GameAbortedException   `thrift:"ex3,2"`
+	Success *Trick         `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewGetTrickResult() *GetTrickResult {
@@ -2084,10 +1963,6 @@ func (p *GetTrickResult) Read(iprot thrift.TProtocol) error {
 			if err := p.readField1(iprot); err != nil {
 				return err
 			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -2112,17 +1987,9 @@ func (p *GetTrickResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *GetTrickResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewOutOfSequenceException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
-	}
-	return nil
-}
-
-func (p *GetTrickResult) readField2(iprot thrift.TProtocol) error {
-	p.Ex3 = NewGameAbortedException()
-	if err := p.Ex3.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex3)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -2132,11 +1999,7 @@ func (p *GetTrickResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex3 != nil:
-		if err := p.writeField2(oprot); err != nil {
-			return err
-		}
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -2170,30 +2033,15 @@ func (p *GetTrickResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *GetTrickResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *GetTrickResult) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.Ex3 != nil {
-		if err := oprot.WriteFieldBegin("ex3", thrift.STRUCT, 2); err != nil {
-			return fmt.Errorf("%T write field begin error 2:ex3: %s", p, err)
-		}
-		if err := p.Ex3.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex3)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 2:ex3: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err
@@ -2324,10 +2172,8 @@ func (p *PlayCardArgs) String() string {
 }
 
 type PlayCardResult struct {
-	Success *Trick                  `thrift:"success,0"`
-	Ex1     *OutOfSequenceException `thrift:"ex1,1"`
-	Ex2     *InvalidMoveException   `thrift:"ex2,2"`
-	Ex3     *GameAbortedException   `thrift:"ex3,3"`
+	Success *Trick         `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewPlayCardResult() *PlayCardResult {
@@ -2355,14 +2201,6 @@ func (p *PlayCardResult) Read(iprot thrift.TProtocol) error {
 			if err := p.readField1(iprot); err != nil {
 				return err
 			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
-				return err
-			}
-		case 3:
-			if err := p.readField3(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -2387,25 +2225,9 @@ func (p *PlayCardResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *PlayCardResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewOutOfSequenceException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
-	}
-	return nil
-}
-
-func (p *PlayCardResult) readField2(iprot thrift.TProtocol) error {
-	p.Ex2 = NewInvalidMoveException()
-	if err := p.Ex2.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex2)
-	}
-	return nil
-}
-
-func (p *PlayCardResult) readField3(iprot thrift.TProtocol) error {
-	p.Ex3 = NewGameAbortedException()
-	if err := p.Ex3.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex3)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -2415,15 +2237,7 @@ func (p *PlayCardResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex3 != nil:
-		if err := p.writeField3(oprot); err != nil {
-			return err
-		}
-	case p.Ex2 != nil:
-		if err := p.writeField2(oprot); err != nil {
-			return err
-		}
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -2457,45 +2271,15 @@ func (p *PlayCardResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *PlayCardResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *PlayCardResult) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.Ex2 != nil {
-		if err := oprot.WriteFieldBegin("ex2", thrift.STRUCT, 2); err != nil {
-			return fmt.Errorf("%T write field begin error 2:ex2: %s", p, err)
-		}
-		if err := p.Ex2.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex2)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 2:ex2: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *PlayCardResult) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.Ex3 != nil {
-		if err := oprot.WriteFieldBegin("ex3", thrift.STRUCT, 3); err != nil {
-			return fmt.Errorf("%T write field begin error 3:ex3: %s", p, err)
-		}
-		if err := p.Ex3.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex3)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 3:ex3: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err
@@ -2595,9 +2379,8 @@ func (p *GetRoundResultArgs) String() string {
 }
 
 type GetRoundResultResult struct {
-	Success *RoundResult            `thrift:"success,0"`
-	Ex1     *OutOfSequenceException `thrift:"ex1,1"`
-	Ex3     *GameAbortedException   `thrift:"ex3,2"`
+	Success *RoundResult   `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewGetRoundResultResult() *GetRoundResultResult {
@@ -2625,10 +2408,6 @@ func (p *GetRoundResultResult) Read(iprot thrift.TProtocol) error {
 			if err := p.readField1(iprot); err != nil {
 				return err
 			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -2653,17 +2432,9 @@ func (p *GetRoundResultResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *GetRoundResultResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewOutOfSequenceException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
-	}
-	return nil
-}
-
-func (p *GetRoundResultResult) readField2(iprot thrift.TProtocol) error {
-	p.Ex3 = NewGameAbortedException()
-	if err := p.Ex3.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex3)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -2673,11 +2444,7 @@ func (p *GetRoundResultResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex3 != nil:
-		if err := p.writeField2(oprot); err != nil {
-			return err
-		}
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -2711,30 +2478,15 @@ func (p *GetRoundResultResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *GetRoundResultResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *GetRoundResultResult) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.Ex3 != nil {
-		if err := oprot.WriteFieldBegin("ex3", thrift.STRUCT, 2); err != nil {
-			return fmt.Errorf("%T write field begin error 2:ex3: %s", p, err)
-		}
-		if err := p.Ex3.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex3)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 2:ex3: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err
@@ -2834,9 +2586,8 @@ func (p *GetGameResultArgs) String() string {
 }
 
 type GetGameResultResult struct {
-	Success *GameResult             `thrift:"success,0"`
-	Ex1     *OutOfSequenceException `thrift:"ex1,1"`
-	Ex3     *GameAbortedException   `thrift:"ex3,2"`
+	Success *GameResult    `thrift:"success,0"`
+	Ex      *GameException `thrift:"ex,1"`
 }
 
 func NewGetGameResultResult() *GetGameResultResult {
@@ -2864,10 +2615,6 @@ func (p *GetGameResultResult) Read(iprot thrift.TProtocol) error {
 			if err := p.readField1(iprot); err != nil {
 				return err
 			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -2892,17 +2639,9 @@ func (p *GetGameResultResult) readField0(iprot thrift.TProtocol) error {
 }
 
 func (p *GetGameResultResult) readField1(iprot thrift.TProtocol) error {
-	p.Ex1 = NewOutOfSequenceException()
-	if err := p.Ex1.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex1)
-	}
-	return nil
-}
-
-func (p *GetGameResultResult) readField2(iprot thrift.TProtocol) error {
-	p.Ex3 = NewGameAbortedException()
-	if err := p.Ex3.Read(iprot); err != nil {
-		return fmt.Errorf("%T error reading struct: %s", p.Ex3)
+	p.Ex = NewGameException()
+	if err := p.Ex.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Ex)
 	}
 	return nil
 }
@@ -2912,11 +2651,7 @@ func (p *GetGameResultResult) Write(oprot thrift.TProtocol) error {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
-	case p.Ex3 != nil:
-		if err := p.writeField2(oprot); err != nil {
-			return err
-		}
-	case p.Ex1 != nil:
+	case p.Ex != nil:
 		if err := p.writeField1(oprot); err != nil {
 			return err
 		}
@@ -2950,30 +2685,15 @@ func (p *GetGameResultResult) writeField0(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *GetGameResultResult) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.Ex1 != nil {
-		if err := oprot.WriteFieldBegin("ex1", thrift.STRUCT, 1); err != nil {
-			return fmt.Errorf("%T write field begin error 1:ex1: %s", p, err)
+	if p.Ex != nil {
+		if err := oprot.WriteFieldBegin("ex", thrift.STRUCT, 1); err != nil {
+			return fmt.Errorf("%T write field begin error 1:ex: %s", p, err)
 		}
-		if err := p.Ex1.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex1)
-		}
-		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 1:ex1: %s", p, err)
-		}
-	}
-	return err
-}
-
-func (p *GetGameResultResult) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.Ex3 != nil {
-		if err := oprot.WriteFieldBegin("ex3", thrift.STRUCT, 2); err != nil {
-			return fmt.Errorf("%T write field begin error 2:ex3: %s", p, err)
-		}
-		if err := p.Ex3.Write(oprot); err != nil {
-			return fmt.Errorf("%T error writing struct: %s", p.Ex3)
+		if err := p.Ex.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Ex)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
-			return fmt.Errorf("%T write field end error 2:ex3: %s", p, err)
+			return fmt.Errorf("%T write field end error 1:ex: %s", p, err)
 		}
 	}
 	return err

@@ -1205,15 +1205,20 @@ func (p *GameResult) String() string {
 	return fmt.Sprintf("GameResult(%+v)", *p)
 }
 
-type OutOfSequenceException struct {
+type GameException struct {
 	Message string `thrift:"message,1,required"`
+	TypeA1  string `thrift:"type,2"`
 }
 
-func NewOutOfSequenceException() *OutOfSequenceException {
-	return &OutOfSequenceException{}
+func NewGameException() *GameException {
+	return &GameException{}
 }
 
-func (p *OutOfSequenceException) Read(iprot thrift.TProtocol) error {
+func (p *GameException) IsSetTypeA1() bool {
+	return p.TypeA1 != ""
+}
+
+func (p *GameException) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return fmt.Errorf("%T read error", p)
 	}
@@ -1228,6 +1233,10 @@ func (p *OutOfSequenceException) Read(iprot thrift.TProtocol) error {
 		switch fieldId {
 		case 1:
 			if err := p.readField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.readField2(iprot); err != nil {
 				return err
 			}
 		default:
@@ -1245,7 +1254,7 @@ func (p *OutOfSequenceException) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *OutOfSequenceException) readField1(iprot thrift.TProtocol) error {
+func (p *GameException) readField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return fmt.Errorf("error reading field 1: %s")
 	} else {
@@ -1254,11 +1263,23 @@ func (p *OutOfSequenceException) readField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *OutOfSequenceException) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("OutOfSequenceException"); err != nil {
+func (p *GameException) readField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return fmt.Errorf("error reading field 2: %s")
+	} else {
+		p.TypeA1 = v
+	}
+	return nil
+}
+
+func (p *GameException) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("GameException"); err != nil {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	if err := p.writeField1(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField2(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -1270,7 +1291,7 @@ func (p *OutOfSequenceException) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *OutOfSequenceException) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *GameException) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("message", thrift.STRING, 1); err != nil {
 		return fmt.Errorf("%T write field begin error 1:message: %s", p, err)
 	}
@@ -1283,179 +1304,24 @@ func (p *OutOfSequenceException) writeField1(oprot thrift.TProtocol) (err error)
 	return err
 }
 
-func (p *OutOfSequenceException) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("OutOfSequenceException(%+v)", *p)
-}
-
-type InvalidMoveException struct {
-	Message string `thrift:"message,1,required"`
-}
-
-func NewInvalidMoveException() *InvalidMoveException {
-	return &InvalidMoveException{}
-}
-
-func (p *InvalidMoveException) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
+func (p *GameException) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetTypeA1() {
+		if err := oprot.WriteFieldBegin("type", thrift.STRING, 2); err != nil {
+			return fmt.Errorf("%T write field begin error 2:type: %s", p, err)
 		}
-		if fieldTypeId == thrift.STOP {
-			break
+		if err := oprot.WriteString(string(p.TypeA1)); err != nil {
+			return fmt.Errorf("%T.type (2) field write error: %s", p)
 		}
-		switch fieldId {
-		case 1:
-			if err := p.readField1(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return fmt.Errorf("%T write field end error 2:type: %s", p, err)
 		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *InvalidMoveException) readField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 1: %s")
-	} else {
-		p.Message = v
-	}
-	return nil
-}
-
-func (p *InvalidMoveException) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("InvalidMoveException"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := p.writeField1(oprot); err != nil {
-		return err
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *InvalidMoveException) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("message", thrift.STRING, 1); err != nil {
-		return fmt.Errorf("%T write field begin error 1:message: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Message)); err != nil {
-		return fmt.Errorf("%T.message (1) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 1:message: %s", p, err)
 	}
 	return err
 }
 
-func (p *InvalidMoveException) String() string {
+func (p *GameException) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("InvalidMoveException(%+v)", *p)
-}
-
-type GameAbortedException struct {
-	Message string `thrift:"message,1,required"`
-}
-
-func NewGameAbortedException() *GameAbortedException {
-	return &GameAbortedException{}
-}
-
-func (p *GameAbortedException) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		switch fieldId {
-		case 1:
-			if err := p.readField1(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GameAbortedException) readField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 1: %s")
-	} else {
-		p.Message = v
-	}
-	return nil
-}
-
-func (p *GameAbortedException) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("GameAbortedException"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := p.writeField1(oprot); err != nil {
-		return err
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GameAbortedException) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("message", thrift.STRING, 1); err != nil {
-		return fmt.Errorf("%T write field begin error 1:message: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Message)); err != nil {
-		return fmt.Errorf("%T.message (1) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 1:message: %s", p, err)
-	}
-	return err
-}
-
-func (p *GameAbortedException) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GameAbortedException(%+v)", *p)
+	return fmt.Sprintf("GameException(%+v)", *p)
 }

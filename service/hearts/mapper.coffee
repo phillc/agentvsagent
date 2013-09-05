@@ -53,9 +53,4 @@ exports.trickToThrift = trickToThrift = (trick) ->
   new types.Trick leader: trick.leader, played: cards
 
 exports.errorToThrift = errorToThrift = (err) ->
-  switch err.type
-    when "outOfSequence" then new types.OutOfSequenceException(message: err.message)
-    when "invalidMove" then new types.InvalidMoveException(message: err.message)
-    when "timeout" then new types.InvalidMoveException(message: err.message)
-    when "gameAborted" then new types.GameAbortedException(message: err.message)
-    else new types.GameAbortedException(message: "An unknown error has occured")
+  new types.GameException(message: err.message, type: err.type)

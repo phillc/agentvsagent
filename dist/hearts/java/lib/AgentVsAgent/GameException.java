@@ -32,22 +32,25 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OutOfSequenceException extends TException implements org.apache.thrift.TBase<OutOfSequenceException, OutOfSequenceException._Fields>, java.io.Serializable, Cloneable, Comparable<OutOfSequenceException> {
-  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("OutOfSequenceException");
+public class GameException extends TException implements org.apache.thrift.TBase<GameException, GameException._Fields>, java.io.Serializable, Cloneable, Comparable<GameException> {
+  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("GameException");
 
   private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)1);
+  private static final org.apache.thrift.protocol.TField TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("type", org.apache.thrift.protocol.TType.STRING, (short)2);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
-    schemes.put(StandardScheme.class, new OutOfSequenceExceptionStandardSchemeFactory());
-    schemes.put(TupleScheme.class, new OutOfSequenceExceptionTupleSchemeFactory());
+    schemes.put(StandardScheme.class, new GameExceptionStandardSchemeFactory());
+    schemes.put(TupleScheme.class, new GameExceptionTupleSchemeFactory());
   }
 
   public String message; // required
+  public String type; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    MESSAGE((short)1, "message");
+    MESSAGE((short)1, "message"),
+    TYPE((short)2, "type");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -64,6 +67,8 @@ public class OutOfSequenceException extends TException implements org.apache.thr
       switch(fieldId) {
         case 1: // MESSAGE
           return MESSAGE;
+        case 2: // TYPE
+          return TYPE;
         default:
           return null;
       }
@@ -104,19 +109,22 @@ public class OutOfSequenceException extends TException implements org.apache.thr
   }
 
   // isset id assignments
+  private _Fields optionals[] = {_Fields.TYPE};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(OutOfSequenceException.class, metaDataMap);
+    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(GameException.class, metaDataMap);
   }
 
-  public OutOfSequenceException() {
+  public GameException() {
   }
 
-  public OutOfSequenceException(
+  public GameException(
     String message)
   {
     this();
@@ -126,26 +134,30 @@ public class OutOfSequenceException extends TException implements org.apache.thr
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public OutOfSequenceException(OutOfSequenceException other) {
+  public GameException(GameException other) {
     if (other.isSetMessage()) {
       this.message = other.message;
     }
+    if (other.isSetType()) {
+      this.type = other.type;
+    }
   }
 
-  public OutOfSequenceException deepCopy() {
-    return new OutOfSequenceException(this);
+  public GameException deepCopy() {
+    return new GameException(this);
   }
 
   @Override
   public void clear() {
     this.message = null;
+    this.type = null;
   }
 
   public String getMessage() {
     return this.message;
   }
 
-  public OutOfSequenceException setMessage(String message) {
+  public GameException setMessage(String message) {
     this.message = message;
     return this;
   }
@@ -165,6 +177,30 @@ public class OutOfSequenceException extends TException implements org.apache.thr
     }
   }
 
+  public String getType() {
+    return this.type;
+  }
+
+  public GameException setType(String type) {
+    this.type = type;
+    return this;
+  }
+
+  public void unsetType() {
+    this.type = null;
+  }
+
+  /** Returns true if field type is set (has been assigned a value) and false otherwise */
+  public boolean isSetType() {
+    return this.type != null;
+  }
+
+  public void setTypeIsSet(boolean value) {
+    if (!value) {
+      this.type = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case MESSAGE:
@@ -175,6 +211,14 @@ public class OutOfSequenceException extends TException implements org.apache.thr
       }
       break;
 
+    case TYPE:
+      if (value == null) {
+        unsetType();
+      } else {
+        setType((String)value);
+      }
+      break;
+
     }
   }
 
@@ -182,6 +226,9 @@ public class OutOfSequenceException extends TException implements org.apache.thr
     switch (field) {
     case MESSAGE:
       return getMessage();
+
+    case TYPE:
+      return getType();
 
     }
     throw new IllegalStateException();
@@ -196,6 +243,8 @@ public class OutOfSequenceException extends TException implements org.apache.thr
     switch (field) {
     case MESSAGE:
       return isSetMessage();
+    case TYPE:
+      return isSetType();
     }
     throw new IllegalStateException();
   }
@@ -204,12 +253,12 @@ public class OutOfSequenceException extends TException implements org.apache.thr
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof OutOfSequenceException)
-      return this.equals((OutOfSequenceException)that);
+    if (that instanceof GameException)
+      return this.equals((GameException)that);
     return false;
   }
 
-  public boolean equals(OutOfSequenceException that) {
+  public boolean equals(GameException that) {
     if (that == null)
       return false;
 
@@ -222,6 +271,15 @@ public class OutOfSequenceException extends TException implements org.apache.thr
         return false;
     }
 
+    boolean this_present_type = true && this.isSetType();
+    boolean that_present_type = true && that.isSetType();
+    if (this_present_type || that_present_type) {
+      if (!(this_present_type && that_present_type))
+        return false;
+      if (!this.type.equals(that.type))
+        return false;
+    }
+
     return true;
   }
 
@@ -231,7 +289,7 @@ public class OutOfSequenceException extends TException implements org.apache.thr
   }
 
   @Override
-  public int compareTo(OutOfSequenceException other) {
+  public int compareTo(GameException other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
@@ -244,6 +302,16 @@ public class OutOfSequenceException extends TException implements org.apache.thr
     }
     if (isSetMessage()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetType()).compareTo(other.isSetType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetType()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.type, other.type);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -265,7 +333,7 @@ public class OutOfSequenceException extends TException implements org.apache.thr
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("OutOfSequenceException(");
+    StringBuilder sb = new StringBuilder("GameException(");
     boolean first = true;
 
     sb.append("message:");
@@ -275,6 +343,16 @@ public class OutOfSequenceException extends TException implements org.apache.thr
       sb.append(this.message);
     }
     first = false;
+    if (isSetType()) {
+      if (!first) sb.append(", ");
+      sb.append("type:");
+      if (this.type == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.type);
+      }
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }
@@ -303,15 +381,15 @@ public class OutOfSequenceException extends TException implements org.apache.thr
     }
   }
 
-  private static class OutOfSequenceExceptionStandardSchemeFactory implements SchemeFactory {
-    public OutOfSequenceExceptionStandardScheme getScheme() {
-      return new OutOfSequenceExceptionStandardScheme();
+  private static class GameExceptionStandardSchemeFactory implements SchemeFactory {
+    public GameExceptionStandardScheme getScheme() {
+      return new GameExceptionStandardScheme();
     }
   }
 
-  private static class OutOfSequenceExceptionStandardScheme extends StandardScheme<OutOfSequenceException> {
+  private static class GameExceptionStandardScheme extends StandardScheme<GameException> {
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot, OutOfSequenceException struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol iprot, GameException struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TField schemeField;
       iprot.readStructBegin();
       while (true)
@@ -329,6 +407,14 @@ public class OutOfSequenceException extends TException implements org.apache.thr
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 2: // TYPE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.type = iprot.readString();
+              struct.setTypeIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -340,7 +426,7 @@ public class OutOfSequenceException extends TException implements org.apache.thr
       struct.validate();
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot, OutOfSequenceException struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol oprot, GameException struct) throws org.apache.thrift.TException {
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
@@ -349,31 +435,51 @@ public class OutOfSequenceException extends TException implements org.apache.thr
         oprot.writeString(struct.message);
         oprot.writeFieldEnd();
       }
+      if (struct.type != null) {
+        if (struct.isSetType()) {
+          oprot.writeFieldBegin(TYPE_FIELD_DESC);
+          oprot.writeString(struct.type);
+          oprot.writeFieldEnd();
+        }
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
 
   }
 
-  private static class OutOfSequenceExceptionTupleSchemeFactory implements SchemeFactory {
-    public OutOfSequenceExceptionTupleScheme getScheme() {
-      return new OutOfSequenceExceptionTupleScheme();
+  private static class GameExceptionTupleSchemeFactory implements SchemeFactory {
+    public GameExceptionTupleScheme getScheme() {
+      return new GameExceptionTupleScheme();
     }
   }
 
-  private static class OutOfSequenceExceptionTupleScheme extends TupleScheme<OutOfSequenceException> {
+  private static class GameExceptionTupleScheme extends TupleScheme<GameException> {
 
     @Override
-    public void write(org.apache.thrift.protocol.TProtocol prot, OutOfSequenceException struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol prot, GameException struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       oprot.writeString(struct.message);
+      BitSet optionals = new BitSet();
+      if (struct.isSetType()) {
+        optionals.set(0);
+      }
+      oprot.writeBitSet(optionals, 1);
+      if (struct.isSetType()) {
+        oprot.writeString(struct.type);
+      }
     }
 
     @Override
-    public void read(org.apache.thrift.protocol.TProtocol prot, OutOfSequenceException struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol prot, GameException struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
       struct.message = iprot.readString();
       struct.setMessageIsSet(true);
+      BitSet incoming = iprot.readBitSet(1);
+      if (incoming.get(0)) {
+        struct.type = iprot.readString();
+        struct.setTypeIsSet(true);
+      }
     }
   }
 

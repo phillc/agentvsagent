@@ -79,6 +79,10 @@ Sample agents for languages
 
 ## Changelog
 
+# 0.0.14
+
+* Reduced number of exceptions to one
+
 # 0.0.12
 
 * Changed position from an enumerable to a string *turns ouut to be potentially backwards incompatible*
