@@ -14,7 +14,7 @@ class Trick
       @leader = trick.leader
       @played = trick.played
 
-      cardToPlay = @options.playCardFn @round, this
+      cardToPlay = @options.playCardFn this
       @round.held.splice(@round.held.indexOf(cardToPlay), 1)
       @options.client.play_card @options.ticket, cardToPlay, (err, trickResult) =>
         throw err if err

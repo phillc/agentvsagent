@@ -49,10 +49,10 @@ Game.do_pass_cards do |round|
   cards_to_pass
 end
 
-Game.do_play_card do |round, trick|
-  round.log "Current trick: #{trick.played.inspect}"
+Game.do_play_card do |trick|
+  trick.log "Current trick: #{trick.played.inspect}"
   card_to_play = playable_cards(trick)[0]
-  round.log "Playing card: #{card_to_play}"
+  trick.log "Playing card: #{card_to_play}"
 
   card_to_play
 end

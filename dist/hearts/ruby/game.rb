@@ -18,7 +18,7 @@ class Trick
     @leader = trick.leader
     @played = trick.played
 
-    card_to_play = @options[:play_card_fn].(@round, self)
+    card_to_play = @options[:play_card_fn].(self)
     @round.held.delete(card_to_play)
     trick_result = @options[:client].play_card @options[:ticket], card_to_play
     log "trick: result #{trick_result.inspect}"

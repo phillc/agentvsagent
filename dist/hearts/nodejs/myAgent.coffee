@@ -41,10 +41,10 @@ doPassCards = (round) ->
 
   cardsToPass
 
-doPlayCard = (round, trick) ->
-  round.log "Current trick:", trick.played
+doPlayCard = (trick) ->
+  trick.log "Current trick:", trick.played
   cardToPlay = playableCards(trick)[0]
-  round.log "Playing card:", cardToPlay
+  trick.log "Playing card:", cardToPlay
 
   cardToPlay
 
