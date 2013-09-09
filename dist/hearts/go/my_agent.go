@@ -9,7 +9,16 @@ func isLeadingTrick(trick *Trick) bool {
 }
 
 func isHeartsBroken(trick *Trick) bool {
-	return true
+	broken := false
+	for h := 0; h < len(trick.round.tricks); h++ {
+		cards := trick.round.tricks[h].played
+		for i := 0; i < len(cards); i++ {
+			if cards[i].Suit == AgentVsAgent.Suit_HEARTS {
+				broken = true
+			}
+		}
+	}
+	return broken
 }
 
 func onlyTwoClubs(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
@@ -22,12 +31,59 @@ func onlyTwoClubs(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
 	return matchedCards
 }
 
+func noHearts(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
+	var matchedCards []*AgentVsAgent.Card
+	for i := 0; i < len(cards); i++ {
+		if cards[i].Suit != AgentVsAgent.Suit_HEARTS {
+			matchedCards = append(matchedCards, cards[i])
+		}
+	}
+	return matchedCards
+}
+
+func noPoints(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
+	matchedCards := noHearts(cards)
+	for i := 0; i < len(cards); i++ {
+		if cards[i].Suit != AgentVsAgent.Suit_SPADES && cards[i].Rank != AgentVsAgent.Rank_QUEEN {
+			matchedCards = append(matchedCards, cards[i])
+		}
+	}
+	return matchedCards
+}
+
+func followSuit(cards []*AgentVsAgent.Card, trick *Trick) []*AgentVsAgent.Card {
+	var matchedCards []*AgentVsAgent.Card
+	suit := trick.played[0].Suit
+	for i := 0; i < len(cards); i++ {
+		if cards[i].Suit == suit {
+			matchedCards = append(matchedCards, cards[i])
+		}
+	}
+	if len(matchedCards) == 0 {
+		matchedCards = cards
+	}
+	return matchedCards
+}
+
 func playableCards(trick *Trick) []*AgentVsAgent.Card {
 	validCards := trick.round.held
 
 	if trick.number == 1 && isLeadingTrick(trick) {
 		validCards = onlyTwoClubs(validCards)
 	}
+
+	if trick.number == 1 {
+		validCards = noPoints(validCards)
+	}
+
+	if isLeadingTrick(trick) && !isHeartsBroken(trick) && len(noHearts(trick.round.held)) > 0 {
+		validCards = noHearts(validCards)
+	}
+
+	if !isLeadingTrick(trick) {
+		validCards = followSuit(validCards, trick)
+	}
+
 	trick.log("Valid cards:", validCards)
 	return validCards
 }
