@@ -8,12 +8,8 @@ import (
 	"errors"
 )
 
-/*func (ex *AgentVsAgent.GameException) Error() string {*/
-/*	return "errr????"*/
-/*}*/
-
-type passCardFn func(*Round) []*AgentVsAgent.Card
-type playCardFn func(*Trick) *AgentVsAgent.Card
+type passCardFn func(Round) []*AgentVsAgent.Card
+type playCardFn func(Trick) *AgentVsAgent.Card
 
 type options struct {
 	ticket *AgentVsAgent.Ticket
@@ -37,7 +33,15 @@ func (trick *Trick) run(opts *options) (err error) {
 	trick.leader = string(currentTrick.Leader)
 	trick.played = currentTrick.Played
 
-	cardToPlay := (*opts.doPlayCard)(trick)
+	cardToPlay := (*opts.doPlayCard)(*trick)
+
+	var remainingCards []*AgentVsAgent.Card
+	for i := 0; i < len(trick.round.held); i++ {
+		if !(trick.round.held[i].Suit == cardToPlay.Suit && trick.round.held[i].Rank == cardToPlay.Rank) {
+			remainingCards = append(remainingCards, trick.round.held[i])
+		}
+	}
+	trick.round.held = remainingCards
 
 	trickResult, ex, err := opts.client.PlayCard(opts.ticket, cardToPlay)
 	if err != nil { return err }
@@ -85,7 +89,7 @@ func (round *Round) passCards(opts *options) (err error) {
 		round.log("Not passing cards")
 	} else {
 		round.log("About to pass cards")
-		cardsToPass := (*opts.doPassCards)(round)
+		cardsToPass := (*opts.doPassCards)(*round)
 
 		var newHeld []*AgentVsAgent.Card
 		for i := 0; i < len(round.held); i++ {

@@ -41,10 +41,11 @@ func noHearts(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
 	return matchedCards
 }
 
-func noPoints(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
-	matchedCards := noHearts(cards)
+func noPoints(allCards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
+	var matchedCards []*AgentVsAgent.Card
+	cards := noHearts(allCards)
 	for i := 0; i < len(cards); i++ {
-		if cards[i].Suit != AgentVsAgent.Suit_SPADES && cards[i].Rank != AgentVsAgent.Rank_QUEEN {
+		if !(cards[i].Suit == AgentVsAgent.Suit_SPADES && cards[i].Rank == AgentVsAgent.Rank_QUEEN) {
 			matchedCards = append(matchedCards, cards[i])
 		}
 	}
@@ -88,16 +89,16 @@ func playableCards(trick *Trick) []*AgentVsAgent.Card {
 	return validCards
 }
 
-func doPassCards(round *Round) []*AgentVsAgent.Card {
+func doPassCards(round Round) []*AgentVsAgent.Card {
 	cardsToPass := round.dealt[0:3]
 	round.log("Passing cards", cardsToPass)
 
 	return cardsToPass
 }
 
-func doPlayCard(trick *Trick) *AgentVsAgent.Card {
+func doPlayCard(trick Trick) *AgentVsAgent.Card {
 	trick.log("Current trick:", trick)
-	cardToPlay := playableCards(trick)[0]
+	cardToPlay := playableCards(&trick)[0]
 	trick.log("Playing card:", cardToPlay)
 	return cardToPlay
 }
