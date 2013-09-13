@@ -52,7 +52,7 @@ func (trick *Trick) run(opts *options) (err error) {
 	return
 }
 
-func (trick Trick) log(message ...interface{}) {
+func (trick *Trick) log(message ...interface{}) {
 	newMessage := append([]interface{}{"T:", trick.number}, message...)
 	trick.round.log(newMessage...)
 }
@@ -126,23 +126,23 @@ func (round *Round) playTrick(opts *options) (err error) {
 	return err
 }
 
-func (round Round) log(message ...interface{}) {
+func (round *Round) log(message ...interface{}) {
 	newMessage := append([]interface{}{"R:", round.number}, message...)
 	round.game.log(newMessage...)
 }
 
 type Game struct {
-	rounds []Round
+	rounds []*Round
 	info *AgentVsAgent.GameInfo
 }
 
-func (game *Game) createRound() Round {
+func (game *Game) createRound() *Round {
 	round := Round{number: len(game.rounds) + 1, game: game}
-	game.rounds = append(game.rounds, round)
-	return round
+	game.rounds = append(game.rounds, &round)
+	return &round
 }
 
-func (game Game) run(opts *options) (err error) {
+func (game *Game) run(opts *options) (err error) {
 	game.log("Starting game")
 
 	round := game.createRound()

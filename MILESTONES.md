@@ -6,7 +6,9 @@
 # 0.3
 
 * Respond to invalid plays with what cards were held and which one was played
+* Respond with how many points the game is being played with
 * Allow identitfy of bots via username
+* Game event notifications (like shooting the moon)
 
 * 0.4
 
