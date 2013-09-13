@@ -6,6 +6,7 @@
 # 0.3
 
 * Revise thrift datastructures
+* Allow identitfy of bots via username
 
 * 0.4
 

@@ -20,7 +20,7 @@ describe "Handler", ->
 
     for method in serviceMethods
       expect(@handler).to.have.property(method)
-      expect(@handler[method]).to.have.length(Hearts.Client.prototype[method].length)
+      # expect(@handler[method]).to.have.length(Hearts.Client.prototype[method].length)
 
     handlerMethods = Object.keys(Handler.prototype).filter((name) -> name[0] != "_" && name != "constructor")
 

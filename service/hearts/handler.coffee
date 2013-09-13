@@ -5,6 +5,16 @@ mapper = require './mapper'
 AbstractHandler = require '../abstractHandler'
 
 module.exports = class Handler extends AbstractHandler
+  @ticketForwardingMethod: (handlerFn) ->
+    return (ticket, args..., result) ->
+      handlerFn args..., (forwardingMessage, data..., callback) =>
+        @_getAgent(ticket.agentId).forward(forwardingMessage, data...)
+          .then (message) ->
+            result null, callback(message)
+          .fail (message) ->
+            result mapper.errorToThrift(message.data)
+          .done()
+
   enter_arena: (request, result) ->
     agentId = @_createAgent()
 
@@ -19,93 +29,57 @@ module.exports = class Handler extends AbstractHandler
         result null, response
       .done()
 
-  get_game_info: (ticket, result) ->
-    logger.verbose "Get game info", ticket
+  get_game_info:
+    @ticketForwardingMethod (forward) ->
+      logger.verbose "Get game info"
 
-    agent = @_getAgent(ticket.agentId)
-    agent.forward("ready")
-      .then (message) ->
+      forward "ready", (message) ->
         gameInfo = new types.GameInfo(position: message.data.position)
 
-        logger.verbose "Returning game info", ticket
-        result null, gameInfo
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
+        logger.verbose "Returning game info", gameInfo
+        gameInfo
 
-  get_hand: (ticket, result) ->
-    logger.verbose "Get hand", ticket
+  get_hand:
+    @ticketForwardingMethod (forward) ->
+      logger.verbose "Get hand"
 
-    agent = @_getAgent(ticket.agentId)
-    agent.forward("readyForRound")
-      .then (message) ->
-        thriftCards = message.data.cards.map mapper.cardToThrift
-        result null, thriftCards
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
+      forward "readyForRound", (message) ->
+        message.data.cards.map mapper.cardToThrift
 
-  pass_cards: (ticket, cards, result) ->
-    logger.verbose "Pass cards", ticket, cards
+  pass_cards:
+    @ticketForwardingMethod (cards, forward) ->
+      logger.verbose "Pass cards", cards
 
-    mappedCards = cards.map mapper.thriftToCard
-    action = new actions.PassCards(mappedCards)
+      mappedCards = cards.map mapper.thriftToCard
+      action = new actions.PassCards(mappedCards)
 
-    agent = @_getAgent(ticket.agentId)
-    agent.forward("passCards", action)
-      .then (message) ->
-        thriftCards = message.data.cards.map mapper.cardToThrift
-        result null, thriftCards
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
+      forward "passCards", action, (message) ->
+        message.data.cards.map mapper.cardToThrift
 
-  get_trick: (ticket, result) ->
-    logger.verbose "Get trick", ticket
+  get_trick:
+    @ticketForwardingMethod (forward) ->
+      forward "readyForTrick", (message) ->
+        mapper.trickToThrift(message.data.trick)
 
-    agent = @_getAgent(ticket.agentId)
-    agent.forward("readyForTrick")
-      .then (message) ->
-        result null, mapper.trickToThrift(message.data.trick)
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
+  play_card:
+    @ticketForwardingMethod (card, forward) ->
+      action = new actions.PlayCard(mapper.thriftToCard(card))
+      forward "playCard", action, (message) ->
+        mapper.trickToThrift(message.data.trick)
 
-  play_card: (ticket, card, result) ->
-    logger.verbose "play_card", ticket
+  get_round_result:
+    @ticketForwardingMethod (forward) ->
+      logger.verbose "get_round_result"
 
-    agent = @_getAgent(ticket.agentId)
-    action = new actions.PlayCard(mapper.thriftToCard(card))
-
-    agent.forward("playCard", action)
-      .then (message) ->
-        result null, mapper.trickToThrift(message.data.trick)
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
-
-  get_round_result: (ticket, result) ->
-    logger.verbose "get_round_result", ticket
-
-    agent = @_getAgent(ticket.agentId)
-    agent.forward("finishedRound")
-      .then (message) ->
+      forward "finishedRound", (message) ->
         roundResult = new types.RoundResult(message.data.roundScores)
         roundResult.status = switch message.data.status
           when "endGame" then types.GameStatus.END_GAME
           when "nextRound" then types.GameStatus.NEXT_ROUND
         logger.verbose "returning get_round_result", roundResult
-        result null, roundResult
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
+        roundResult
 
-  get_game_result: (ticket, result) ->
-    agent = @_getAgent(ticket.agentId)
-    agent.forward("finishedGame")
-      .then (message) ->
-        gameResult = new types.GameResult(message.data.gameScores)
-        result null, gameResult
-      .fail (message) ->
-        result mapper.errorToThrift(message.data)
-      .done()
+  get_game_result:
+    @ticketForwardingMethod (forward) ->
+      forward "finishedGame", (message) ->
+        new types.GameResult(message.data.gameScores)
