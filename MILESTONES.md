@@ -5,7 +5,7 @@
 
 # 0.3
 
-* Revise thrift datastructures
+* Respond to invalid plays with what cards were held and which one was played
 * Allow identitfy of bots via username
 
 * 0.4
@@ -16,6 +16,7 @@
 # 1.0
 
 * Easy Agent starting
+  * Post install message?
 * Few more languages
 * Stable for small group consumption
 
