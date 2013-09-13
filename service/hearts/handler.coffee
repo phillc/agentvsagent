@@ -9,24 +9,25 @@ module.exports = class Handler extends AbstractHandler
     return (ticket, args..., result) ->
       handlerFn args..., (forwardingMessage, data..., callback) =>
         @_getAgent(ticket.agentId).forward(forwardingMessage, data...)
-          .then (message) ->
-            result null, callback(message)
-          .fail (message) ->
-            result mapper.errorToThrift(message.data)
+          .then(
+            (message) -> result null, callback(message)
+            (message) -> result mapper.errorToThrift(message.data)
+          )
+          .catch ->
+            logger.error "A failure occured while attempting to deliver a message", arguments
           .done()
 
   enter_arena: (request, result) ->
     agentId = @_createAgent()
 
     @_getAgent(agentId).forward("join")
-      .then ->
-        ticket = new types.Ticket(agentId: agentId)
-        response = new types.EntryResponse(ticket: ticket)
-
-        #player disconnected before response returned
-        #if this were updated in npm, would be fine
-        # so either need to wrap in a try, or somehow get that newest version
-        result null, response
+      .then(
+        ->
+          ticket = new types.Ticket(agentId: agentId)
+          response = new types.EntryResponse(ticket: ticket)
+          result null, response
+      ).fail ->
+        logger.error "A failure occured while attempting to deliver a message", arguments
       .done()
 
   get_game_info:

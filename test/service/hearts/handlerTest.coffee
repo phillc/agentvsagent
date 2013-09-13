@@ -32,10 +32,18 @@ describe "Handler", ->
         connection.on 'join', ->
           connection.send("joined")
 
-      @handler.enter_arena new types.EntryRequest(), (err, response) =>
+      @handler.enter_arena new types.EntryRequest(), (err, response) ->
         expect(err).to.not.exist
         expect(response.ticket.agentId).to.be.a("string")
         done()
+
+    it "ignores thrift exceptions", ->
+      @handler.on 'connect', (connection) ->
+        connection.on 'join', ->
+          connection.send("joined")
+
+      @handler.enter_arena new types.EntryRequest(), (err, response) ->
+        throw new Error("HELL")
 
   describe "#get_game_info", ->
     it "returns game info", (done) ->
@@ -53,6 +61,12 @@ describe "Handler", ->
         done()
 
       @agent.send("error", {type: "outOfSequence", message: "Method call out of sequence"})
+
+    it "ignores thrift exceptions", ->
+      @handler.get_game_info @ticket, (err, gameInfo) ->
+        throw new Error("HELL")
+
+      @agent.send("begin", position: "west")
 
   describe "#get_hand", ->
     it "returns the players hand", (done) ->
