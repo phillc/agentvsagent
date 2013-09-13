@@ -1,7 +1,7 @@
 {
   "name": "agentvsagent",
   "description": "Agent vs Agent",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "author": "Phillip <spyyderz@gmail.com>",
   "repository": {
     "type": "git",

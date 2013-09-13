@@ -153,7 +153,7 @@ AgentVsAgent.Ticket.prototype.write = function(output) {
 };
 
 AgentVsAgent.EntryRequest = function(args) {
-  this.version = '0.0.14';
+  this.version = '0.0.15';
   if (args) {
     if (args.version !== undefined) {
       this.version = args.version;
@@ -693,4 +693,4 @@ AgentVsAgent.GameException.prototype.write = function(output) {
   return;
 };
 
-AgentVsAgent.CURRENT_VERSION = '0.0.14';
+AgentVsAgent.CURRENT_VERSION = '0.0.15';
