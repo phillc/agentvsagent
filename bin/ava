@@ -10,7 +10,7 @@ program
 program
   .option('--server', 'start a local server')
   .option('--hearts-max-points <points>', 'Points for game end', parseInt)
-  .option('--debug', 'Show debug log')
+  .option('--debug', 'Show debug log (note: server performance takes a hit)')
   .option('--turn-time', 'Time allowed for each action (ms)', parseInt)
 
 // TODO: ava update, looks at a yml file for update dir

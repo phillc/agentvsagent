@@ -79,6 +79,11 @@ Sample agents for languages
 
 ## Changelog
 
+# 0.0.15
+
+* Fixes bug where the server would crash if an agent disconnected too early
+* Fixes bug where --hearts-max-points was ignored
+
 # 0.0.14
 
 * Reduced number of exceptions to one

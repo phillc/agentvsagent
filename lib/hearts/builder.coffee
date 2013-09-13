@@ -8,8 +8,8 @@ module.exports = class Heartsbuilder
     @Game = Game
 
   positions: ->
-    Game.positions()
+    @Game.positions()
 
-  createGame: (positions) ->
-    new Game(positions, {})
+  createGame: ->
+    new @Game({heartsMaxPoints: @gameOptions.heartsMaxPoints})
 
