@@ -56,6 +56,8 @@ exports.start = (options) ->
     loggerOptions.level = 'info'
   logger.add winston.transports.Console, loggerOptions
 
+  logger.info "Starting Agent vs Agent server, version #{require('./package.json').version}"
+
   heartsService = buildService(HeartsService, HeartsBuilder, options)
   ticTacToeService = buildService(TicTacToeService, TicTacToeBuilder, options)
 
