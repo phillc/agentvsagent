@@ -79,6 +79,11 @@ Sample agents for languages
 
 ## Changelog
 
+# 0.0.16
+
+* Engine reports final score
+* Engine reports moon shooting
+
 # 0.0.15
 
 * Fixes bug where the server would crash if an agent disconnected too early

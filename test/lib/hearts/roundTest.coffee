@@ -80,6 +80,7 @@ describe "Round", ->
       expect(scores.east).to.equal(13)
       expect(scores.south).to.equal(2)
       expect(scores.west).to.equal(0)
+      expect(scores.shooter).to.not.exist
 
     it "accounts for shooting the moon", ->
       trick = new Trick("north")
@@ -94,6 +95,7 @@ describe "Round", ->
       expect(scores.east).to.equal(26)
       expect(scores.south).to.equal(26)
       expect(scores.west).to.equal(26)
+      expect(scores.shooter).to.equal("north")
 
   describe "#exchange", ->
     beforeEach ->

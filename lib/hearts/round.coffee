@@ -83,6 +83,7 @@ module.exports = class Round
         scores.south = 26
         scores.west = 26
         scores[position] = 0
+        scores.shooter = position
         break
     scores
 

@@ -101,16 +101,22 @@ module.exports = class Game
       @engine.transition("endingRound")
 
   finishRound: ->
-    logger.verbose "round ended", @currentRound().scores()
+    scores = @currentRound().scores()
+    logger.verbose "round ended", scores
+    if scores.shooter
+      logger.info "#{scores.shooter} HAS SHOT THE MOON!"
+
     if @maxPenaltyReached()
       @engine.transition("endingGame")
-      @emitAll("roundFinished", roundScores: @currentRound().scores(), status: 'endGame')
+      @emitAll("roundFinished", roundScores: scores, status: 'endGame')
     else
       @engine.transition("startingRound")
-      @emitAll("roundFinished", roundScores: @currentRound().scores(), status: 'nextRound')
+      @emitAll("roundFinished", roundScores: scores, status: 'nextRound')
 
   finish: ->
-    @emitAll("end", gameScores: @scores())
+    scores = @scores()
+    logger.info "Game ending with scores:", scores
+    @emitAll("end", gameScores: scores)
     @engine.transition("finished")
 
   abort: (culprit, error) ->
