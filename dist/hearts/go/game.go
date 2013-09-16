@@ -65,10 +65,10 @@ type Round struct {
 	game *Game
 }
 
-func (round *Round) createTrick() Trick {
+func (round *Round) createTrick() *Trick {
 	trick := Trick{number: len(round.tricks) + 1, round: round}
 	round.tricks = append(round.tricks, &trick)
-	return trick
+	return &trick
 }
 
 func (round *Round) run(opts *options) (err error) {
