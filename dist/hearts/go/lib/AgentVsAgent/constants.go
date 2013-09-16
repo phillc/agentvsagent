@@ -14,7 +14,7 @@ var _ = math.MinInt32
 var _ = thrift.ZERO
 var _ = fmt.Printf
 
-const CURRENT_VERSION = "0.0.15"
+const CURRENT_VERSION = "0.0.16"
 
 func init() {
 }

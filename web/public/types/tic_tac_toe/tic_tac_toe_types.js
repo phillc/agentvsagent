@@ -111,7 +111,7 @@ AgentVsAgent.Move.prototype.write = function(output) {
 };
 
 AgentVsAgent.EntryRequest = function(args) {
-  this.version = '0.0.15';
+  this.version = '0.0.16';
   if (args) {
     if (args.version !== undefined) {
       this.version = args.version;
@@ -524,4 +524,4 @@ AgentVsAgent.GameAbortedException.prototype.write = function(output) {
   return;
 };
 
-AgentVsAgent.CURRENT_VERSION = '0.0.15';
+AgentVsAgent.CURRENT_VERSION = '0.0.16';

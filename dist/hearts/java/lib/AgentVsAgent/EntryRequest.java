@@ -114,7 +114,7 @@ public class EntryRequest implements org.apache.thrift.TBase<EntryRequest, Entry
   }
 
   public EntryRequest() {
-    this.version = "0.0.15";
+    this.version = "0.0.16";
 
   }
 
@@ -140,7 +140,7 @@ public class EntryRequest implements org.apache.thrift.TBase<EntryRequest, Entry
 
   @Override
   public void clear() {
-    this.version = "0.0.15";
+    this.version = "0.0.16";
 
   }
 
