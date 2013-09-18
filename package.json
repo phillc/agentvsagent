@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "mocha": "1.12.0",
-    "nodemon": "0.7.x"
+    "nodemon": "0.7.2"
   },
   "bundledDependencies": [
     "thrift"
