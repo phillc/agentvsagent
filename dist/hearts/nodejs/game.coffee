@@ -29,6 +29,8 @@ class Round
   constructor: (@number, @game, @options) ->
     @tricks = []
     @dealt = []
+    @passed = []
+    @received = []
     @held = []
 
   createTrick: ->
@@ -54,14 +56,15 @@ class Round
       callback()
     else
       @log "About to pass cards"
-      cardsToPass = @options.passCardsFn this
-      for cardToPass in cardsToPass
+      @passed = @options.passCardsFn this
+      for cardToPass in @passed
         @held.splice(@held.indexOf(cardToPass), 1)
 
-      @options.client.pass_cards @options.ticket, cardsToPass, (err, receivedCards) =>
+      @options.client.pass_cards @options.ticket, @passed, (err, receivedCards) =>
         throw err if err
-        @log "Received cards:", receivedCards
-        @held = @held.concat(receivedCards)
+        @received = receivedCards
+        @log "Received cards:", @received
+        @held = @held.concat(@received)
         callback()
 
   playTrick: (callback) ->
@@ -106,7 +109,8 @@ class Game
 exports.play = (passCardsFn, playCardFn) ->
   host = process.env.AVA_HOST || '127.0.0.1'
   port = process.env.AVA_PORT || 4001
-  connection = thrift.createConnection(host, port)
+  transport = thrift.TFramedTransport
+  connection = thrift.createConnection(host, port, {transport: transport})
   client = thrift.createClient(Hearts, connection)
 
   request = new types.EntryRequest()

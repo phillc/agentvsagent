@@ -39,6 +39,8 @@ class Round
 
     @tricks = []
     @dealt = []
+    @passed = []
+    @received = []
     @held = []
   end
 
@@ -68,11 +70,13 @@ class Round
       log "About to pass cards"
       cards_to_pass = @options[:pass_cards_fn].(self)
 
-      @held = @held - cards_to_pass
+      @passed = cards_to_pass
+      @held = @held - @passed
 
       received_cards = @options[:client].pass_cards @options[:ticket], cards_to_pass
       log "Received cards: #{received_cards.inspect}"
-      @held = @held + received_cards
+      @received = received_cards
+      @held = @held + @received
     end
   end
 

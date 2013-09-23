@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "coffee-script": "1.4.x",
-    "thrift": "1.0.0-dev",
+    "thrift": "0.9.1",
     "node-int64": "0.3.x",
     "underscore": "1.4.x"
   }

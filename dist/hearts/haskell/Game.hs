@@ -25,6 +25,8 @@ data Round = Round
   { number :: Int
   , tricks :: [Trick]
   , dealt :: [Card]
+  , passed :: [Card]
+  , received :: [Card]
   , held :: [Card]
   } deriving (Show)
 
@@ -46,6 +48,8 @@ createRound gs =
   let newRound = Round{ number = length (rounds gs) + 1
                    , tricks = []
                    , dealt = []
+                   , passed = []
+                   , received = []
                    , held = [] }
   in gs{ rounds = newRound : rounds gs
      }
@@ -87,7 +91,7 @@ passCards passCardsFn handler ticket gs = do
       let cardsToPass = passCardsFn gs
       received <- pass_cards handler ticket $ V.fromList cardsToPass
       let holding = (held (currentRound gs) \\ cardsToPass) ++ V.toList received
-          ags = gs{ rounds = (currentRound gs){ held = holding } : tail (rounds gs) }
+          ags = gs{ rounds = (currentRound gs){ held = holding, received = (V.toList received), passed = cardsToPass } : tail (rounds gs) }
 
       logit $ "Passing:" ++ show cardsToPass
       logit $ "Received cards:" ++ show received
