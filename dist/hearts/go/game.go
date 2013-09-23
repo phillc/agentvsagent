@@ -96,7 +96,7 @@ func (round *Round) passCards(opts *options) (err error) {
 			toRemove := false
 
 			for _, cardToPass := range cardsToPass {
-				if cardToPass == heldCard {
+				if cardToPass.Suit == heldCard.Suit && cardToPass.Rank == heldCard.Rank {
 					toRemove = true
 				}
 			}
