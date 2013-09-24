@@ -1,4 +1,3 @@
-express = require 'express'
 winston = require 'winston'
 logger = require './lib/logger'
 
@@ -11,20 +10,19 @@ HeartsBuilder = require './lib/hearts/builder'
 TicTacToeService = require './service/tic_tac_toe'
 TicTacToeBuilder = require './lib/tic_tac_toe/builder'
 
-createHttp = () ->
-  app = express()
-  app.enable('strict routing')
-  app.set 'view engine', 'jade'
-  app.set 'views', __dirname + '/web/views'
-  app.use '/', express.static(__dirname + '/web/public')
-  app.use require("connect-assets")(src: __dirname + "/web/assets")
-  app.configure 'development', ->
-    app.use (req, res, next) ->
-      res.locals.pretty = true
-      next()
-
-  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><br /><a href='/game/tic_tac_toe/play'>Tic Tac Toe</a>")
-  return app
+loadSails = (callback) ->
+  sailsOptions = {
+    ava: {
+      port: 4000,
+      http: true
+    },
+    log: {
+      # level: 'silent'
+    }
+  }
+  require('sails').lift sailsOptions, ->
+    logger.info "HTTP Server listening on", sails.config.port
+    callback()
 
 buildService = (serviceClass, builderClass, options) ->
   builder = new builderClass(options)
@@ -45,11 +43,9 @@ mountGame = (app, name, service, tcpPort) ->
   logger.info "TCP Server listening on", tcpServer.address()
 
 exports.start = (options) ->
-  app = createHttp()
-
   loggerOptions = timestamp: true, colorize: true
   if options.debug
-    app.use express.logger(format: 'dev')
+    # app.use express.logger(format: 'dev')
     loggerOptions.level = 'verbose'
     require('q').longStackSupport = true
   else
@@ -58,12 +54,12 @@ exports.start = (options) ->
 
   logger.info "Starting Agent vs Agent server, version #{require('./package.json').version}"
 
-  heartsService = buildService(HeartsService, HeartsBuilder, options)
-  ticTacToeService = buildService(TicTacToeService, TicTacToeBuilder, options)
+  loadSails ->
 
-  mountGame(app, "hearts", heartsService, 4001)
-  mountGame(app, "tic_tac_toe", ticTacToeService, 4002)
+    heartsService = buildService(HeartsService, HeartsBuilder, options)
+    ticTacToeService = buildService(TicTacToeService, TicTacToeBuilder, options)
 
-  httpServer = app.listen(4000)
-  logger.info "HTTP Server listening on", httpServer.address()
+    # mountGame(app, "hearts", heartsService, 4001)
+    # mountGame(app, "tic_tac_toe", ticTacToeService, 4002)
+    logger.info "Finished starting server"
 

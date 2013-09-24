@@ -9,8 +9,14 @@
  */
 
 module.exports.bootstrap = function (cb) {
-
-  // It's very important to trigger this callack method when you are finished 
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+  if (sails.config.ava) {
+    sails.config.port = sails.config.ava.port //no, environment variable does not win
+    if (sails.config.ava.http) {
+      cb();
+    } else {
+      cb("Not starting http server");
+    }
+  } else {
+    cb("Not starting http server");
+  }
 };
