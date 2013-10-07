@@ -95,7 +95,7 @@ Sample agents for languages
 
 # 0.0.12
 
-* Changed position from an enumerable to a string *turns ouut to be potentially backwards incompatible*
+* Changed position from an enumerable to a string *turns out to be potentially backwards incompatible*
 
 # 0.0.11
 
