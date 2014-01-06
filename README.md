@@ -58,6 +58,7 @@ From there, you should be able to code against other scenarios as you observe th
 * Team games: Spades, Bridge
 * Variable # of players:
 * Pathing: Othello (Reversi), Blokus, Tsuro, Cyclades
+* Hnefatafl
 
 ## Contributing
 
