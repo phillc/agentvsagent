@@ -17,7 +17,7 @@ setup:
 	npm install
 	brew install haskell-platform
 	brew install go
-	brew install thrift --with-haskell --HEAD
+	brew install thrift --with-haskell
 	gem install thrift
 
 update-thrift:
