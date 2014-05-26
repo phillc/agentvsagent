@@ -73,15 +73,6 @@ guard :shell, all_on_start: true do
     contents = ::ERB.new(File.read(file)).result(binding)
     File.open(output, 'w'){ |f| f.write(contents) }
   end
-
-  watch("thrift/tic_tac_toe.thrift.erb") do
-    ava_version = JSON.parse(File.read("package.json"))["version"]
-    puts "AVA VERSION #{ava_version}"
-    file = "thrift/tic_tac_toe.thrift.erb"
-    output = "thrift/gen/tic_tac_toe.thrift"
-    contents = ::ERB.new(File.read(file)).result(binding)
-    File.open(output, 'w'){ |f| f.write(contents) }
-  end
 end
 
 guard :thrift, all_on_start: true,
@@ -94,15 +85,6 @@ guard :thrift, all_on_start: true,
                           "dist/hearts/go/lib" => "go",
                           "dist/hearts/ruby/lib" => "rb" } do
   watch('thrift/gen/hearts.thrift')
-end
-
-guard :thrift, all_on_start: true,
-               clean_target: true,
-               targets: { "service/tic_tac_toe/types" => "js:node",
-                          "web/public/types/tic_tac_toe" => "js:jquery",
-                          "dist/tic_tac_toe/nodejs/lib" => "js:node",
-                          "dist/tic_tac_toe/ruby/lib" => "rb" } do
-  watch('thrift/gen/tic_tac_toe.thrift')
 end
 
 guard :shell do

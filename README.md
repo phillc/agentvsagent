@@ -5,7 +5,6 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 # Current games
 
 * Hearts
-* Ultimate tic tac toe (in the works)
 
 [![Build Status](https://travis-ci.org/phillc/agentvsagent.png)](https://travis-ci.org/phillc/agentvsagent)
 

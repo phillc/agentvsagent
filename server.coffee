@@ -8,9 +8,6 @@ MatchMaker = require './lib/matchMaker'
 HeartsService = require './service/hearts'
 HeartsBuilder = require './lib/hearts/builder'
 
-TicTacToeService = require './service/tic_tac_toe'
-TicTacToeBuilder = require './lib/tic_tac_toe/builder'
-
 createHttp = () ->
   app = express()
   app.enable('strict routing')
@@ -23,7 +20,7 @@ createHttp = () ->
       res.locals.pretty = true
       next()
 
-  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><br /><a href='/game/tic_tac_toe/play'>Tic Tac Toe</a>")
+  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><br />")
   return app
 
 buildService = (serviceClass, builderClass, options) ->
@@ -59,10 +56,8 @@ exports.start = (options) ->
   logger.info "Starting Agent vs Agent server, version #{require('./package.json').version}"
 
   heartsService = buildService(HeartsService, HeartsBuilder, options)
-  ticTacToeService = buildService(TicTacToeService, TicTacToeBuilder, options)
 
   mountGame(app, "hearts", heartsService, 4001)
-  mountGame(app, "tic_tac_toe", ticTacToeService, 4002)
 
   httpServer = app.listen(4000)
   logger.info "HTTP Server listening on", httpServer.address()
