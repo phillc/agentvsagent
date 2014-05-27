@@ -3,7 +3,7 @@ MatchMaker = require '../../lib/matchMaker'
 describe "MatchMaker", ->
   beforeEach ->
     @arena = Factory.createArena()
-    @matchMaker = new MatchMaker(@arena)
+    @matchMaker = new MatchMaker(@arena, 50)
 
   describe "#findMatch", ->
     it "does nothing if there are only three players", ->
@@ -51,8 +51,6 @@ describe "MatchMaker", ->
       expect(@arena.waitingRoom).to.have.length(0)
 
     it "creates a game if there are two players for a game of two to five players", (done) ->
-      @timeout(1000)
-
       @arena.builder.minAgents = 2
       @arena.builder.maxAgents = 5
       @arena.addAgent(Factory.createAgent())
@@ -66,7 +64,7 @@ describe "MatchMaker", ->
         expect(Object.keys(@arena.runningMatches)).to.have.length(1)
         expect(@arena.waitingRoom).to.have.length(0)
         done()
-      , 200
+      , 100
 
   describe "#start", ->
     it "automatically finds matches as players join", ->

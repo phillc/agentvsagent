@@ -1,7 +1,7 @@
 logger = require './logger'
 
 module.exports = class MatchMaker
-  constructor: (@arena) ->
+  constructor: (@arena, @waitTime) ->
 
   findMatch: ->
     waiting = @arena.waitingRoom.length
@@ -10,7 +10,7 @@ module.exports = class MatchMaker
     else if waiting >= @arena.builder.minAgents
       @delayCreate = setTimeout =>
         @createGame()
-      , 100
+      , @waitTime
     else
       logger.verbose "Match maker did not find a game. #{waiting} waiting, need #{@arena.numberOfAgents}"
 
