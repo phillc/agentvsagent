@@ -50,6 +50,24 @@ describe "MatchMaker", ->
       expect(Object.keys(@arena.runningMatches)).to.have.length(1)
       expect(@arena.waitingRoom).to.have.length(0)
 
+    it "creates a game if there are two players for a game of two to five players", (done) ->
+      @timeout(1000)
+
+      @arena.builder.minAgents = 2
+      @arena.builder.maxAgents = 5
+      @arena.addAgent(Factory.createAgent())
+      @arena.addAgent(Factory.createAgent())
+
+      @matchMaker.findMatch()
+
+      expect(Object.keys(@arena.runningMatches)).to.have.length(0)
+      expect(@arena.waitingRoom).to.have.length(2)
+      setTimeout =>
+        expect(Object.keys(@arena.runningMatches)).to.have.length(1)
+        expect(@arena.waitingRoom).to.have.length(0)
+        done()
+      , 200
+
   describe "#start", ->
     it "automatically finds matches as players join", ->
       expect(Object.keys(@arena.runningMatches)).to.have.length(0)
