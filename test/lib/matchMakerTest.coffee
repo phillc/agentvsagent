@@ -40,7 +40,8 @@ describe "MatchMaker", ->
       expect(@arena.waitingRoom).to.have.length(1)
 
     it "creates a game if there are two players for a game of two players", ->
-      @arena.numberOfAgents = 2
+      @arena.builder.minAgents = 2
+      @arena.builder.maxAgents = 2
       @arena.addAgent(Factory.createAgent())
       @arena.addAgent(Factory.createAgent())
 

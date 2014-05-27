@@ -1,15 +1,16 @@
-Game = require './game'
-
-#TODO: Remove me
+FireworksGame = require './game'
 
 module.exports = class FireworksBuilder
+  minAgents: 2
+  maxAgents: 5
+  agentEvents: []
+  events: []
+
   constructor: (@gameOptions={}) ->
-    @numberOfPlayers = Game.positions().length
-    @Game = Game
 
   positions: ->
-    @Game.positions()
+    FireworksGame.positions()
 
   createGame: ->
-    new @Game({})
+    new FireworksGame({})
 

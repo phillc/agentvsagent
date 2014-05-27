@@ -1,8 +1,8 @@
 HeartsGame = require './game'
 
 module.exports = class HeartsBuilder
-  minPlayers: 4
-  maxPlayers: 4
+  minAgents: 4
+  maxAgents: 4
   agentEvents: ["readyForRound", "passCards", "readyForTrick", "playCard", "finishedRound", "finishedGame"]
   events: ["roundStarted", "dealt", "received", "turn", "finishedTrick", "roundFinished"]
 
