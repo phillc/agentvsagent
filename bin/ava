@@ -3,7 +3,6 @@
 var program = require('commander')
 
 var ran = false;
-// TODO: read from package.json
 program
   .version(require('../package.json').version)
 
@@ -12,8 +11,6 @@ program
   .option('--hearts-max-points <points>', 'Points for game end', parseInt)
   .option('--debug', 'Show debug log (note: server performance takes a hit)')
   .option('--turn-time', 'Time allowed for each action (ms)', parseInt)
-
-// TODO: ava update, looks at a yml file for update dir
 
 program.parse(process.argv)
 

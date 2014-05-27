@@ -1,15 +1,16 @@
-Game = require './game'
-
-#TODO: Remove me
+HeartsGame = require './game'
 
 module.exports = class HeartsBuilder
+  minPlayers: 4
+  maxPlayers: 4
+  agentEvents: ["readyForRound", "passCards", "readyForTrick", "playCard", "finishedRound", "finishedGame"]
+  events: ["roundStarted", "dealt", "received", "turn", "finishedTrick", "roundFinished"]
+
   constructor: (@gameOptions={}) ->
-    @numberOfPlayers = Game.positions().length
-    @Game = Game
 
   positions: ->
-    @Game.positions()
+    HeartsGame.positions()
 
   createGame: ->
-    new @Game({heartsMaxPoints: @gameOptions.heartsMaxPoints})
+    new HeartsGame({heartsMaxPoints: @gameOptions.heartsMaxPoints})
 

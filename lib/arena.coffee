@@ -42,30 +42,21 @@ module.exports = class Arena extends EventEmitter
     for agent in agents
       @removeAgent(agent)
 
-    gameClass = @builder.Game
     game = @builder.createGame()
     availablePositions = @builder.positions()
     for agent in und.shuffle(agents)
       position = availablePositions.shift()
-      do (game, gameClass, position, agent) ->
+      do (game, position, agent) =>
         logger.info "wiring up #{agent} to #{position}"
 
-        #TODO: clearly, this needs a cleanup
-        # Tic tac toe
-        # agent.on "move", (args...) ->
-        #   game.handle ["move", position].join("."), args...
-        # game.on [position, "turn"].join("."), (data) ->
-        #   agent.send("turn", data)
-
-        # Hearts
         defaultAgentEvents = ["timeout"]
         defaultGameEvents = ["end", "error"]
 
-        for agentEvent in defaultAgentEvents.concat(gameClass.AGENT_EVENTS)
+        for agentEvent in defaultAgentEvents.concat(@builder.agentEvents)
           do (agent, agentEvent, position) ->
             agent.on agentEvent, (args...) ->
               game.handle [agentEvent, position].join("."), args...
-        for gameEvent in defaultGameEvents.concat(gameClass.EVENTS)
+        for gameEvent in defaultGameEvents.concat(@builder.events)
           do (game, gameEvent, position) ->
             game.on [position, gameEvent].join("."), (data) ->
               agent.send(gameEvent, data)

@@ -5,8 +5,6 @@ und = require 'underscore'
 Round = require './round'
 
 module.exports = class Game
-  @AGENT_EVENTS = ["readyForRound", "passCards", "readyForTrick", "playCard", "finishedRound", "finishedGame"]
-  @EVENTS = ["roundStarted", "dealt", "received", "turn", "finishedTrick", "roundFinished"]
   @positions = -> ["north", "east", "south", "west"]
 
   constructor: (options={}) ->
@@ -187,10 +185,9 @@ Engine = machina.Fsm.extend
     if event == "timeout"
       logger.error "timeout received", position
       @game.abort(position, {type: "timeout", message: "Your action took longer than allowed"})
-    else if Game.AGENT_EVENTS.indexOf(event) >= 0
-      @game.abort(position, {type: "outOfSequence", message: "Method call out of sequence"})
     else
       logger.error "Unexpected event", arguments
+      @game.abort(position, {type: "outOfSequence", message: "Method call out of sequence"})
 
   initialState: "initialized"
 
