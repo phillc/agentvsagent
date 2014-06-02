@@ -24,6 +24,12 @@ class Agent
   end
 end
 
+class RunAgent < Agent
+  def command
+    %{#{cd} && ../../../bin/ava run --exec="#{@command}"}
+  end
+end
+
 desc "run ruby random agents"
 task :agents, :number, :langs, :game, :sleep do |t, args|
   args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee", game: "hearts"
@@ -34,6 +40,9 @@ task :agents, :number, :langs, :game, :sleep do |t, args|
       "coffee" => Agent.new(directory: 'dist/hearts/nodejs', command: 'coffee myAgent.coffee'),
       "haskell" => Agent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent'),
       "go" => Agent.new(directory: 'dist/hearts/go', compile: 'make', command: 'bin/my_agent')
+    },
+    "fireworks" => {
+      "ruby" => RunAgent.new(directory: 'dist/fireworks/ruby', command: 'ruby my_agent.rb'),
     }
   }
 
@@ -50,6 +59,7 @@ task :agents, :number, :langs, :game, :sleep do |t, args|
       STDOUT.sync = true
 
       begin
+        puts command
         PTY.spawn(command) do |stdin, stdout, pid|
           begin
             stdin.each { |line| puts "[#{i}] #{line}" }

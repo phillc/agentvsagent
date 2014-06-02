@@ -7,10 +7,14 @@ program
   .version(require('../package.json').version)
 
 program
-  .option('--server', 'start a local server')
+  .option('server', 'start a local server')
   .option('--hearts-max-points <points>', 'Points for game end', parseInt)
   .option('--debug', 'Show debug log (note: server performance takes a hit)')
   .option('--turn-time', 'Time allowed for each action (ms)', parseInt)
+  .option('run', 'Start bot and connect to server.')
+  .option('--exec', 'Command to run.')
+  .option('--port', 'Port to server. Default 4001')
+  .option('--host', 'Host to server. Default 127.0.0.1')
 
 program.parse(process.argv)
 
@@ -20,6 +24,11 @@ if(program.server) {
     debug: !!program.debug,
     turnTime: program.turnTime
   });
+} else if(program.run) {
+  require('../index').run(program.args[0], {
+    port: program.port || 4001,
+    host: program.host || "127.0.0.1"
+  })
 } else {
   program.outputHelp()
 }

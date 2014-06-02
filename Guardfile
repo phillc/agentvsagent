@@ -65,7 +65,7 @@ module ::Guard
 end
 
 guard :shell, all_on_start: true do
-  %w(hearts fireworks).each do |game|
+  %w(hearts).each do |game|
     watch("thrift/#{game}.thrift.erb") do
       ava_version = JSON.parse(File.read("package.json"))["version"]
       puts "AVA VERSION #{ava_version}"
@@ -87,14 +87,6 @@ guard :thrift, all_on_start: true,
                           "dist/hearts/go/lib" => "go",
                           "dist/hearts/ruby/lib" => "rb" } do
   watch('thrift/gen/hearts.thrift')
-end
-
-guard :thrift, all_on_start: true,
-               clean_target: true,
-               targets: { "service/fireworks/types" => "js:node",
-                          "web/public/types/fireworks" => "js:jquery",
-                          "dist/fireworks/ruby/lib" => "rb" } do
-  watch('thrift/gen/fireworks.thrift')
 end
 
 guard :shell do

@@ -35,8 +35,8 @@ buildService = (serviceClass, builderClass, options) ->
   service
 
 mountGame = (app, name, service, tcpPort) ->
-  app.use "/game/#{name}/service.json", service.jsonHttpMiddleware()
-  app.use "/game/#{name}/service.thrift", service.binaryHttpMiddleware()
+  app.use "/game/#{name}/service.json", service.jsonHttpMiddleware() if service.jsonHttpMiddleware
+  app.use "/game/#{name}/service.thrift", service.binaryHttpMiddleware() if service.binaryHttpMiddleware
   app.use "/game/#{name}/play", (req, res) ->
     res.render "#{name}/play"
 

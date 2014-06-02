@@ -1,18 +1,34 @@
-thrift = require 'thrift'
+net = require 'net'
 logger = require '../../lib/logger'
-Fireworks = require './types/Fireworks'
 Handler = require './handler'
 
 module.exports = class Service
   constructor: (options) ->
-    @tcpHandler = new Handler(agentTimeout: options.agentTimeout)
-    @binaryHandler = new Handler(agentTimeout: options.agentTimeout)
-    @jsonHandler = new Handler()
+    @handler = new Handler()
 
   handlers: ->
-    [@tcpHandler, @binaryHandler, @jsonHandler]
+    [@handler]
 
-  createTCPServer: -> thrift.createServer(Fireworks, @tcpHandler, transport: thrift.TFramedTransport)
-  binaryHttpMiddleware: -> thrift.httpMiddleware(Fireworks, @binaryHandler, transport: thrift.TFramedTransport)
-  jsonHttpMiddleware: -> thrift.httpMiddleware(Fireworks, @jsonHandler, protocol: thrift.TJSONProtocol)
+  createTCPServer: ->
+    net.createServer (socket) =>
+      socket.write 'Heya!\n'
+
+      processLine = (line) ->
+        console.log "line: ", line
+
+      buffer = ''
+      socket.on 'data', (data) =>
+        console.log "DATA!", data.toString()
+        lines = data.toString().split("\n")
+        lines[0] = buffer + lines[0]
+        buffer = ''
+        if lines[lines.length - 1] != ""
+          buffer = lines[lines.length - 1]
+          lines.splice(lines.length - 1, 1)
+
+        for line in lines
+          processLine(line)
+
+      socket.on 'end', ->
+        console.log 'disconnected'
 

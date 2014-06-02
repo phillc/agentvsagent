@@ -8,30 +8,23 @@ require 'thrift'
 
 module AgentVsAgent
   module Suit
-    CLUBS = 21
-    DIAMONDS = 22
-    SPADES = 23
-    HEARTS = 24
-    VALUE_MAP = {21 => "CLUBS", 22 => "DIAMONDS", 23 => "SPADES", 24 => "HEARTS"}
-    VALID_VALUES = Set.new([CLUBS, DIAMONDS, SPADES, HEARTS]).freeze
+    RED = 21
+    YELLOW = 22
+    GREEN = 23
+    BLUE = 24
+    WHITE = 25
+    VALUE_MAP = {21 => "RED", 22 => "YELLOW", 23 => "GREEN", 24 => "BLUE", 25 => "WHITE"}
+    VALID_VALUES = Set.new([RED, YELLOW, GREEN, BLUE, WHITE]).freeze
   end
 
   module Rank
+    ONE = 1
     TWO = 2
     THREE = 3
     FOUR = 4
     FIVE = 5
-    SIX = 6
-    SEVEN = 7
-    EIGHT = 8
-    NINE = 9
-    TEN = 10
-    JACK = 11
-    QUEEN = 12
-    KING = 13
-    ACE = 14
-    VALUE_MAP = {2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE", 6 => "SIX", 7 => "SEVEN", 8 => "EIGHT", 9 => "NINE", 10 => "TEN", 11 => "JACK", 12 => "QUEEN", 13 => "KING", 14 => "ACE"}
-    VALID_VALUES = Set.new([TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE]).freeze
+    VALUE_MAP = {1 => "ONE", 2 => "TWO", 3 => "THREE", 4 => "FOUR", 5 => "FIVE"}
+    VALID_VALUES = Set.new([ONE, TWO, THREE, FOUR, FIVE]).freeze
   end
 
   module GameStatus

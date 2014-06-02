@@ -10,25 +10,18 @@ if (typeof AgentVsAgent === 'undefined') {
   AgentVsAgent = {};
 }
 ttypes.Suit = {
-'CLUBS' : 21,
-'DIAMONDS' : 22,
-'SPADES' : 23,
-'HEARTS' : 24
+'RED' : 21,
+'YELLOW' : 22,
+'GREEN' : 23,
+'BLUE' : 24,
+'WHITE' : 25
 };
 ttypes.Rank = {
+'ONE' : 1,
 'TWO' : 2,
 'THREE' : 3,
 'FOUR' : 4,
-'FIVE' : 5,
-'SIX' : 6,
-'SEVEN' : 7,
-'EIGHT' : 8,
-'NINE' : 9,
-'TEN' : 10,
-'JACK' : 11,
-'QUEEN' : 12,
-'KING' : 13,
-'ACE' : 14
+'FIVE' : 5
 };
 ttypes.GameStatus = {
 'NEXT_ROUND' : 1,

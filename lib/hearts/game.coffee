@@ -5,6 +5,7 @@ und = require 'underscore'
 Round = require './round'
 
 module.exports = class Game
+  #TODO: rename to availablePositions to distinguish between what can be filled, vs instance level is what IS filled.
   @positions = -> ["north", "east", "south", "west"]
 
   constructor: (options={}) ->
