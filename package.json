@@ -21,10 +21,7 @@
     "machina": "0.3.4",
     "q": "0.9.6",
     "chai": "1.7.2",
-    "chai-as-promised": "3.3.1",
-
-    "thrift": "1.0.0-dev",
-    "node-int64": "0.3.x"
+    "chai-as-promised": "3.3.1"
   },
   "devDependencies": {
     "mocha": "1.12.0",

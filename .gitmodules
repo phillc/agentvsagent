@@ -1,3 +1,0 @@
-[submodule "vendor/thrift"]
-	path = vendor/thrift
-	url = git://git.apache.org/thrift.git
