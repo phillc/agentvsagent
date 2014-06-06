@@ -1,17 +1,17 @@
 module.exports = class Rank
-  @TWO = new Rank(1, 2)
-  @THREE = new Rank(2, 3)
-  @FOUR = new Rank(3, 4)
-  @FIVE = new Rank(4, 5)
-  @SIX = new Rank(5, 6)
-  @SEVEN = new Rank(6, 7)
-  @EIGHT = new Rank(7, 8)
-  @NINE = new Rank(8, 9)
-  @TEN = new Rank(9, 10)
-  @JACK = new Rank(10, 'J')
-  @QUEEN = new Rank(11, 'Q')
-  @KING = new Rank(12, 'K')
-  @ACE = new Rank(13, 'A')
+  @TWO = new Rank(1, "two")
+  @THREE = new Rank(2, "three")
+  @FOUR = new Rank(3, "four")
+  @FIVE = new Rank(4, "five")
+  @SIX = new Rank(5, "six")
+  @SEVEN = new Rank(6, "seven")
+  @EIGHT = new Rank(7, "eight")
+  @NINE = new Rank(8, "nine")
+  @TEN = new Rank(9, "ten")
+  @JACK = new Rank(10, "jack")
+  @QUEEN = new Rank(11, "queen")
+  @KING = new Rank(12, "king")
+  @ACE = new Rank(13, "ace")
 
   @all: ->
     [
@@ -31,3 +31,12 @@ module.exports = class Rank
     ]
 
   constructor: (@order, @name) ->
+
+  toJSON: ->
+    @name
+
+  @fromJSON: (json) ->
+    for rank in @all()
+      return rank if json == rank.name
+
+

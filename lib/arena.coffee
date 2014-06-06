@@ -1,34 +1,13 @@
 {EventEmitter} = require 'events'
 logger = require './logger'
 und = require 'underscore'
-Agent = require './agent'
-
-# class User
-#   constructor: ->
-#
-#   name: ->
-#     "anonymous"
 
 module.exports = class Arena extends EventEmitter
-  constructor: (@builder, @handlers)->
+  constructor: (@builder)->
     @waitingRoom = []
     @runningMatches = []
     @lingerTime = 5000
     @numberOfAgents = @builder.positions().length
-
-    for handler in handlers
-      handler.on 'connect', (agent) =>
-        agent.on 'join', =>
-          # We would login here-ish...
-          # accept username/password parameters perhaps
-          # user = @getUser()
-          # connection.send("joined", user)
-          # or agent.user = user
-
-          agent.send("joined")
-
-        agent.on 'ready', =>
-          @addAgent agent
 
   addAgent: (agent) ->
     @waitingRoom.push agent
@@ -54,7 +33,7 @@ module.exports = class Arena extends EventEmitter
 
         for agentEvent in defaultAgentEvents.concat(@builder.agentEvents)
           do (agent, agentEvent, position) ->
-            agent.on agentEvent, (args...) ->
+            agent.in.on agentEvent, (args...) ->
               game.handle [agentEvent, position].join("."), args...
         for gameEvent in defaultGameEvents.concat(@builder.events)
           do (game, gameEvent, position) ->

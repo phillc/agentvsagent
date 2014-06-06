@@ -25,3 +25,10 @@ module.exports = class Card
   # For debug
   inspect: ->
     "#{@rank.name} of #{@suit.name}"
+
+  toJSON: ->
+    suit: @suit.toJSON(), rank: @rank.toJSON()
+
+  @fromJSON: (json) ->
+    new Card(Suit.fromJSON(json.suit), Rank.fromJSON(json.rank))
+

@@ -7,30 +7,40 @@ program
   .version(require('../package.json').version)
 
 program
-  .option('server', 'start a local server')
+  .command('server')
+  .description('start a local server')
   .option('--hearts-max-points <points>', 'Points for game end', parseInt)
   .option('--debug', 'Show debug log (note: server performance takes a hit)')
   .option('--turn-time', 'Time allowed for each action (ms)', parseInt)
-  .option('run', 'Start bot and connect to server.')
-  .option('--exec', 'Command to run.')
-  .option('--port', 'Port to server. Default 4001')
-  .option('--host', 'Host to server. Default 127.0.0.1')
+  .action(function(options) {
+    require('../index').start({
+      heartsMaxPoints: options.heartsMaxPoints,
+      debug: !!options.debug,
+      turnTime: options.turnTime
+    });
+  });
+
+program
+  .command('play <game>')
+  .description('Start bot and connect to server.')
+  .option('--port <port>', 'Port to server. Default 4001', '4001')
+  .option('--host <host>', 'Host to server. Default 127.0.0.1', "127.0.0.1")
+  .option('--run <command>', 'Hearts')
+  .action(function(game, options) {
+    require('../index').run(game, options.run, {
+      port: options.port,
+      host: options.host
+    });
+  });
+
+program
+  .on('*', function() {
+    program.outputHelp()
+  });
 
 program.parse(process.argv)
 
-if(program.server) {
-  require('../index').start({
-    heartsMaxPoints: program.heartsMaxPoints,
-    debug: !!program.debug,
-    turnTime: program.turnTime
-  });
-} else if(program.run) {
-  require('../index').run(program.args[0], {
-    port: program.port || 4001,
-    host: program.host || "127.0.0.1"
-  })
-} else {
+if (program.args.length < 1 ) {
   program.outputHelp()
+  console.log(program.args)
 }
-
-

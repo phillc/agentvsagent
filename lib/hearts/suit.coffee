@@ -8,3 +8,10 @@ module.exports = class Suit
     [@CLUBS, @DIAMONDS, @SPADES, @HEARTS]
 
   constructor: (@name) ->
+
+  toJSON: ->
+    @name
+
+  @fromJSON: (json) ->
+    for suit in @all()
+      return suit if json == suit.name

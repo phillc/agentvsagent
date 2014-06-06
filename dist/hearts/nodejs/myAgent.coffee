@@ -1,20 +1,20 @@
-game = require('./game')
+Game = require('./game').Game
 und = require('underscore')
 
 isLeadingTrick = (trick) ->
   trick.played.length == 0
 
 isHeartsBroken = (trick)  ->
-  trick.round.tricks.some((trick) -> trick.played.some((card) -> card.suit == game.Suit.HEARTS))
+  trick.round.tricks.some((trick) -> trick.played.some((card) -> card.suit == Game.Suit.HEARTS))
 
 onlyTwoClubs = (cards) ->
-  und.select(cards, (card) -> card.suit == game.Suit.CLUBS && card.rank == game.Rank.TWO)
+  und.select(cards, (card) -> card.suit == Game.Suit.CLUBS && card.rank == Game.Rank.TWO)
 
 noHearts = (cards) ->
-  und.reject(cards, (card) -> card.suit == game.Suit.HEARTS)
+  und.reject(cards, (card) -> card.suit == Game.Suit.HEARTS)
 
 noPoints = (cards) ->
-  und.reject(noHearts(cards), (card) -> card.suit == game.Suit.SPADES && card.rank == game.Rank.QUEEN)
+  und.reject(noHearts(cards), (card) -> card.suit == Game.Suit.SPADES && card.rank == Game.Rank.QUEEN)
 
 followSuit = (cards, trick) ->
   suit = trick.played[0].suit
@@ -48,5 +48,5 @@ doPlayCard = (trick) ->
 
   cardToPlay
 
-game.play(doPassCards, doPlayCard)
+Game.play(doPassCards, doPlayCard)
 

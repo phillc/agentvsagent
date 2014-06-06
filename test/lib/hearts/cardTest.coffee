@@ -28,7 +28,7 @@ describe "Card", ->
 
     it "has 4 J's", ->
       jacks = @cards.filter (card) ->
-        card.rank.name == 'J'
+        card.rank.name == 'jack'
       expect(jacks).to.have.length(4)
 
   describe "score", ->

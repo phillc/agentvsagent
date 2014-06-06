@@ -1,17 +1,18 @@
+net = require 'net'
 express = require 'express'
 winston = require 'winston'
 logger = require './lib/logger'
 
+Agent = require './lib/agent'
+Entrance = require './lib/entrance'
 Arena = require './lib/arena'
 MatchMaker = require './lib/matchMaker'
 
-HeartsService = require './service/hearts'
 HeartsBuilder = require './lib/hearts/builder'
 
-FireworksService = require './service/fireworks'
 FireworksBuilder = require './lib/fireworks/builder'
 
-createHttp = () ->
+createHttp = ->
   app = express()
   app.enable('strict routing')
   app.set 'view engine', 'jade'
@@ -26,23 +27,45 @@ createHttp = () ->
   app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><br /><a href='/game/fireworks/play'>Fireworks</a>")
   return app
 
-buildService = (serviceClass, builderClass, options) ->
+createIoGameServer = (httpServer, entrance) ->
+  io = require('socket.io')(httpServer)
+
+createTcpGameServer = (tcpServer, entrance) ->
+  tcpServer.on 'connection', (socket) ->
+    agent = new Agent()
+    entrance.addAgent(agent)
+
+    agent.out.on 'success', (data) ->
+      socket.write(JSON.stringify(data))
+      socket.write("\n")
+
+    processLine = (line) ->
+      console.log "PROCESSLINE", line
+      parsed = JSON.parse(line)
+      agent.forward(parsed.message, parsed.data)
+
+    buffer = ''
+    socket.on 'data', (data) ->
+      lines = data.toString().split("\n")
+      lines[0] = buffer + lines[0]
+      buffer = ''
+      if lines[lines.length - 1] != ""
+        buffer = lines[lines.length - 1]
+        lines.splice(lines.length - 1, 1)
+
+      for line in lines
+        if line != ''
+          processLine(line)
+
+    socket.on 'end', ->
+      console.log 'disconnected'
+
+buildArena = (builderClass, options) ->
   builder = new builderClass(options)
-  service = new serviceClass(agentTimeout: options.turnTime || 1000)
-  arena = new Arena(builder, service.handlers())
+  arena = new Arena(builder)
   matchMaker = new MatchMaker(arena, 10000)
   matchMaker.start()
-  service
-
-mountGame = (app, name, service, tcpPort) ->
-  app.use "/game/#{name}/service.json", service.jsonHttpMiddleware() if service.jsonHttpMiddleware
-  app.use "/game/#{name}/service.thrift", service.binaryHttpMiddleware() if service.binaryHttpMiddleware
-  app.use "/game/#{name}/play", (req, res) ->
-    res.render "#{name}/play"
-
-  tcpServer = service.createTCPServer()
-  tcpServer.listen(tcpPort)
-  logger.info "TCP Server listening on", tcpServer.address()
+  arena
 
 exports.start = (options) ->
   app = createHttp()
@@ -58,12 +81,19 @@ exports.start = (options) ->
 
   logger.info "Starting Agent vs Agent server, version #{require('./package.json').version}"
 
-  heartsService = buildService(HeartsService, HeartsBuilder, options)
-  fireworksService = buildService(FireworksService, FireworksBuilder, options)
-
-  mountGame(app, "hearts", heartsService, 4001)
-  mountGame(app, "fireworks", fireworksService, 4002)
-
   httpServer = app.listen(4000)
   logger.info "HTTP Server listening on", httpServer.address()
+
+  tcpServer = net.createServer()
+  tcpServer.listen(4001)
+  logger.info "TCP Server listening on", tcpServer.address()
+
+  heartsArena = buildArena(HeartsBuilder, options)
+  fireworksArena = buildArena(FireworksBuilder, options)
+
+  entrance = new Entrance
+    hearts: heartsArena
+    fireworks: fireworksArena
+  createIoGameServer(httpServer, entrance)
+  createTcpGameServer(tcpServer, entrance)
 

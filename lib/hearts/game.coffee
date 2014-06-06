@@ -3,6 +3,7 @@ logger = require '../logger'
 machina = require('machina')()
 und = require 'underscore'
 Round = require './round'
+actions = require './actions'
 
 module.exports = class Game
   #TODO: rename to availablePositions to distinguish between what can be filled, vs instance level is what IS filled.
@@ -137,7 +138,8 @@ Engine = machina.Fsm.extend
     if @readyForRound.length == 4
       @game.startRound()
 
-  handlePassCards: (action, position) ->
+  handlePassCards: (data, position) ->
+    action = actions.PassCards.build(data)
     @passedCards[position] = action
     if und.size(@passedCards) == 4
       errors = {}
@@ -155,7 +157,8 @@ Engine = machina.Fsm.extend
         errorPosition = Object.keys(errors)[0]
         @game.abort(errorPosition, errors[errorPosition])
 
-  handlePlayCard: (action, position) ->
+  handlePlayCard: (data, position) ->
+    action = actions.PlayCard.build(data)
     error = action.validate(@game, position)
     if !error
       action.execute(@game, position)
@@ -205,14 +208,14 @@ Engine = machina.Fsm.extend
     passing:
       _onEnter: ->
         @passedCards = {}
-      "passCards.north": (action) ->
-        @handlePassCards(action, "north")
-      "passCards.east": (action) ->
-        @handlePassCards(action, "east")
-      "passCards.south": (action) ->
-        @handlePassCards(action, "south")
-      "passCards.west": (action) ->
-        @handlePassCards(action, "west")
+      "passCards.north": (data) ->
+        @handlePassCards(data, "north")
+      "passCards.east": (data) ->
+        @handlePassCards(data, "east")
+      "passCards.south": (data) ->
+        @handlePassCards(data, "south")
+      "passCards.west": (data) ->
+        @handlePassCards(data, "west")
 
     startingTrick:
       _onEnter: ->
@@ -227,20 +230,20 @@ Engine = machina.Fsm.extend
         @handleReadyForTrick("west")
 
     waitingForCardFromNorth:
-      "playCard.north": (action) ->
-        @handlePlayCard(action, "north")
+      "playCard.north": (data) ->
+        @handlePlayCard(data, "north")
 
     waitingForCardFromEast:
-      "playCard.east": (action) ->
-        @handlePlayCard(action, "east")
+      "playCard.east": (data) ->
+        @handlePlayCard(data, "east")
 
     waitingForCardFromSouth:
-      "playCard.south": (action) ->
-        @handlePlayCard(action, "south")
+      "playCard.south": (data) ->
+        @handlePlayCard(data, "south")
 
     waitingForCardFromWest:
-      "playCard.west": (action) ->
-        @handlePlayCard(action, "west")
+      "playCard.west": (data) ->
+        @handlePlayCard(data, "west")
 
     endingRound:
       _onEnter: ->

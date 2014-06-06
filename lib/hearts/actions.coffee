@@ -9,6 +9,9 @@ logger = require '../logger'
 # but messages from the agent to the game are going through the handleAction path
 
 exports.PassCards = class PassCards
+  @build: (data) ->
+    new PassCards(data.cards.map (jsonCard) -> Card.fromJSON(jsonCard))
+
   constructor: (@cards) ->
 
   validate: (game, position) ->
@@ -48,6 +51,9 @@ exports.PassCards = class PassCards
     (new Pile(@cards)).copyAllCardsTo seat.passed
 
 exports.PlayCard = class PlayCard
+  @build: (data) ->
+    new PlayCard(Card.fromJSON(data.card))
+
   constructor: (@card) ->
 
   validate: (game, position) ->

@@ -1,9 +1,8 @@
 machina = require('machina')()
-Q = require 'q'
 logger = require '../lib/logger'
 {EventEmitter} = require 'events'
 
-AgentState = machina.Fsm.extend
+ConnectionState = machina.Fsm.extend
   initialize: (options) ->
     @agent = options.agent
     @timeout = options.timeout
@@ -20,12 +19,12 @@ AgentState = machina.Fsm.extend
           @transition("waitingForClient")
 
         if message == "error"
-          @request.reject(message: message, data: data || {})
+          @agent.out.emit('failure', message: message, data: data || {})
         else
-          @request.resolve(message: message, data: data || {})
+          @agent.out.emit('success', message: message, data: data || {})
 
-      forward: (message, data, request) ->
-        request.reject("unexpectedMessage")
+      forward: (message, data) ->
+        @agent.out.emit('failure', message: "unexpectedMessage")
 
     waitingForClient:
       _onEnter: ->
@@ -35,11 +34,12 @@ AgentState = machina.Fsm.extend
             @transition("timedOut")
           , @timeout
 
-      forward: (message, data, @request)->
+      forward: (message, data) ->
         @transition "waitingForServer"
-        heard = @agent.emit message, data
+        heard = @agent.in.emit message, data
         if !heard
           logger.error "no one was listening to #{message}"
+          #TODO: Error out (if they send a login request in the middle of a game)
 
       _onExit: ->
         clearTimeout(@timer)
@@ -47,27 +47,29 @@ AgentState = machina.Fsm.extend
     timedOut:
       _onEnter: ->
         logger.error "agent timeout"
-        @agent.emit "timeout"
+        @agent.in.emit "timeout"
 
     finished: {}
 
-module.exports = class Agent extends EventEmitter
+module.exports = class Agent
   constructor: (options={}) ->
-    @state = new AgentState(agent: this, timeout: options.timeout)
-    @state.on "transition", (details) ->
+    @in = new EventEmitter()
+    @out = new EventEmitter()
+
+    @connectionState = new ConnectionState(agent: this, timeout: options.timeout)
+
+    @connectionState.on "transition", (details) ->
       message = "AGENT changed state from #{details.fromState} to #{details.toState}, because of #{details.action}"
       # console.log message
       logger.verbose message
 
   forward: (message, data) ->
     logger.verbose "<<<<<forwarding", message, " - ", data
-    request = Q.defer()
-    @state.handle "forward", message, data, request
-    request.promise
+    @connectionState.handle "forward", message, data
 
   send: (message, data) ->
     logger.verbose ">>>>>>>sending", message, " - ", data
-    @state.handle "send", message, data
+    @connectionState.handle "send", message, data
 
   # end: (message, data)
 

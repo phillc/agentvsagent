@@ -292,19 +292,19 @@ describe "Game", ->
       beforeEach ->
         @game.startRound()
         @game.engine.transition("passing")
-        @northAction = new actions.PassCards(@game.currentRound().seats.north.held.cards[0..2])
-        @eastAction = new actions.PassCards(@game.currentRound().seats.east.held.cards[0..2])
-        @southAction = new actions.PassCards(@game.currentRound().seats.south.held.cards[0..2])
-        @westAction = new actions.PassCards(@game.currentRound().seats.west.held.cards[0..2])
+        @northCards = @game.currentRound().seats.north.held.cards[0..2].map((c) -> c.toJSON())
+        @eastCards = @game.currentRound().seats.east.held.cards[0..2].map((c) -> c.toJSON())
+        @southCards = @game.currentRound().seats.south.held.cards[0..2].map((c) -> c.toJSON())
+        @westCards = @game.currentRound().seats.west.held.cards[0..2].map((c) -> c.toJSON())
 
       it "starts trick after all have passed", ->
-        @game.handle "passCards.north", @northAction
+        @game.handle "passCards.north", cards: @northCards
         expect(@game.engine.state).to.equal("passing")
-        @game.handle "passCards.east", @eastAction
+        @game.handle "passCards.east", cards: @eastCards
         expect(@game.engine.state).to.equal("passing")
-        @game.handle "passCards.south", @southAction
+        @game.handle "passCards.south", cards: @southCards
         expect(@game.engine.state).to.equal("passing")
-        @game.handle "passCards.west", @westAction
+        @game.handle "passCards.west", cards: @westCards
         expect(@game.engine.state).to.equal("startingTrick")
 
       it "emits passed", (done) ->
@@ -312,41 +312,41 @@ describe "Game", ->
           expect(data.cards).to.not.be.empty
           done()
 
-        @game.handle "passCards.north", @northAction
-        @game.handle "passCards.east", @eastAction
-        @game.handle "passCards.south", @southAction
-        @game.handle "passCards.west", @westAction
+        @game.handle "passCards.north", cards: @northCards
+        @game.handle "passCards.east", cards: @eastCards
+        @game.handle "passCards.south", cards: @southCards
+        @game.handle "passCards.west", cards: @westCards
 
       it "aborts if passing invalid cards", ->
-        @game.handle "passCards.east", @eastAction
-        @game.handle "passCards.north", @northAction
-        @game.handle "passCards.west", @westAction
+        @game.handle "passCards.east", cards: @eastCards
+        @game.handle "passCards.north", cards: @northCards
+        @game.handle "passCards.west", cards: @westCards
 
-        @game.handle "passCards.south", @westAction #invalid
+        @game.handle "passCards.south", cards: @westCards #invalid
 
         expect(@game.engine.state).to.equal("aborted")
 
       it "notifies the culprit of an invalid action", (done) ->
-        @game.handle "passCards.east", @eastAction
-        @game.handle "passCards.north", @northAction
-        @game.handle "passCards.west", @westAction
+        @game.handle "passCards.east", cards: @eastCards
+        @game.handle "passCards.north", cards: @northCards
+        @game.handle "passCards.west", cards: @westCards
 
         @game.on "south.error", (error) ->
           expect(error.type).to.equal("invalidMove")
           done()
 
-        @game.handle "passCards.south", @westAction #invalid
+        @game.handle "passCards.south", cards: @westCards #invalid
 
       it "notifies others of an invalid action", (done) ->
-        @game.handle "passCards.east", @eastAction
-        @game.handle "passCards.north", @northAction
-        @game.handle "passCards.west", @westAction
+        @game.handle "passCards.east", cards: @eastCards
+        @game.handle "passCards.north", cards: @northCards
+        @game.handle "passCards.west", cards: @westCards
 
         @game.on "north.error", (error) ->
           expect(error.type).to.equal("gameAborted")
           done()
 
-        @game.handle "passCards.south", @westAction #invalid
+        @game.handle "passCards.south", cards: @westCards #invalid
 
     describe "startingTrick", ->
       beforeEach ->
@@ -378,20 +378,17 @@ describe "Game", ->
         expect(@game.engine.state).to.equal("waitingForCardFromNorth")
 
       it "applies the card to the player", ->
-        action = new actions.PlayCard(@northCard)
-        @game.handle "playCard.north", action
+        @game.handle "playCard.north", card: @northCard.toJSON()
 
         expect(@game.currentRound().currentTrick().played.cards[0]).to.equal(@northCard)
 
       it "waits for the next player", ->
-        action = new actions.PlayCard(@northCard)
-        @game.handle "playCard.north", action
+        @game.handle "playCard.north", card: @northCard.toJSON()
 
         expect(@game.engine.state).to.equal("waitingForCardFromEast")
 
       it "aborts if playing an invalid card", ->
-        action = new actions.PlayCard(@southCard)
-        @game.handle "playCard.north", action
+        @game.handle "playCard.north", card: @southCard.toJSON()
 
         expect(@game.engine.state).to.equal("aborted")
 
@@ -400,8 +397,7 @@ describe "Game", ->
           expect(error.type).to.equal("invalidMove")
           done()
 
-        action = new actions.PlayCard(@southCard)
-        @game.handle "playCard.north", action
+        @game.handle "playCard.north", card: @southCard.toJSON()
 
     describe "endingRound", ->
       it "moves on after all have checked in", ->

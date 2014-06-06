@@ -1,6 +1,47 @@
-thrift = require('thrift')
-Hearts = require('./lib/Hearts')
-types = require('./lib/hearts_types')
+log = (args...) ->
+  process.stderr.write(args.toString())
+
+class Client
+  listen: ->
+    @inputs = []
+    buffer = ''
+
+    process.stdin.resume()
+    process.stdin.setEncoding('utf8')
+
+    process.stdin.on 'data', (data) =>
+      lines = data.toString().split("\n")
+      lines[0] = buffer + lines[0]
+      buffer = ''
+      if lines[lines.length - 1] != ""
+        buffer = lines[lines.length - 1]
+        lines.splice(lines.length - 1, 1)
+
+      for line in lines
+        if line != ''
+          @inputs.push JSON.parse(line.toString())
+
+      if @inputs.length > 0 && @waiting
+        waiting = @waiting
+        @waiting = null
+        waiting @inputs.shift()
+
+  read: (callback) ->
+    if @inputs.length > 0
+      callback @inputs.shift()
+    else
+      @waiting = callback
+
+  sendCommand: (command) ->
+    process.stdout.write(JSON.stringify(command) + "\n")
+
+  sendAndReceive: (message, data, callback) ->
+    @sendCommand {message: message, data: data}
+    @read callback
+
+$client = new Client()
+$client.listen()
+
 
 class Trick
   constructor: (@number, @round, @options) ->
@@ -41,8 +82,9 @@ class Round
 
   run: (callback) ->
     @log "Starting round"
-    @options.client.get_hand @options.ticket, (err, hand) =>
-      throw err if err
+    $client.sendAndReceive "readyForRound", {}, (response) =>
+      throw response if response.message != "dealt"
+      hand = response.data.cards
       @log "You were dealt:", hand
       @dealt = hand.slice(0)
       @held = hand.slice(0)
@@ -60,8 +102,9 @@ class Round
       for cardToPass in @passed
         @held.splice(@held.indexOf(cardToPass), 1)
 
-      @options.client.pass_cards @options.ticket, @passed, (err, receivedCards) =>
-        throw err if err
+      $client.sendAndReceive "passCards", cards: @passed, (response) =>
+        throw response if response.message != "received"
+        receivedCards = response.data.cards
         @received = receivedCards
         @log "Received cards:", @received
         @held = @held.concat(@received)
@@ -104,43 +147,34 @@ class Game
           @run(callback)
 
   log: (args...) ->
-    console.log "P:#{@info.position}", args...
+    log "P:#{@info.position}", args...
 
-exports.play = (passCardsFn, playCardFn) ->
-  host = process.env.AVA_HOST || '127.0.0.1'
-  port = process.env.AVA_PORT || 4001
-  transport = thrift.TFramedTransport
-  connection = thrift.createConnection(host, port, {transport: transport})
-  client = thrift.createClient(Hearts, connection)
+  @play: (passCardsFn, playCardFn) ->
+    log "playing"
 
-  request = new types.EntryRequest()
-  console.log "Entering arena", request
-  client.enter_arena request, (err, response) =>
-    throw err if err
-    ticket = response.ticket
-    if ticket
-      console.log "playing"
-      client.get_game_info ticket, (err, gameInfo) =>
-        throw err if err
-        console.log "game info:", gameInfo
+    $client.read (response) ->
+      throw response if response.message != "roundStarted"
+      gameInfo = response.data
+      log "game info:", gameInfo
 
-        game = new Game gameInfo,
-          ticket: ticket
-          client: client
-          passCardsFn: passCardsFn
-          playCardFn: playCardFn
+      game = new Game gameInfo,
+        passCardsFn: passCardsFn
+        playCardFn: playCardFn
 
-        game.run =>
-          console.log "Game is over"
-          client.get_game_result ticket, (err, gameResult) ->
-            throw err if err
-            console.log "game result:", gameResult
-            connection.end()
-    else
-      console.log "No ticket"
-      connection.end()
+      game.run ->
+        log "Game is over"
+        client.get_game_result ticket, (err, gameResult) ->
+          throw err if err
+          log "game result:", gameResult
+          connection.end()
 
-exports.Suit = types.Suit
-exports.Rank = types.Rank
-exports.Card = types.Card
+  @Suit:
+    SPADES: "spades"
+    HEARTS: "hearts"
+    DIAMONDS: "diamonds"
+    CLUBS: "clubs"
+  @Rank:
+    TWO: "two"
+    QUEEN: "queen"
 
+exports.Game = Game

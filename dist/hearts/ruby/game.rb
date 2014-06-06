@@ -1,6 +1,58 @@
-require 'thrift'
-$:.unshift File.dirname(__FILE__) + '/lib'
-require 'hearts'
+require 'json'
+def puts(*args)
+  $stderr.puts *args
+end
+
+def p(*args)
+  args.map!{|arg| arg.inspect}
+  puts args
+end
+
+def print(*args)
+  $stderr.print *args
+end
+
+class Client
+  def send_command(command)
+    $stdout << JSON.generate(command)
+    $stdout << "\n"
+    $stdout.flush
+  end
+
+  def read
+    JSON.parse($stdin.gets.strip)
+  end
+
+  def send_and_receive(message, data={})
+    send_command({message: message, data: data})
+    read
+  end
+end
+
+$client = Client.new
+
+class Card
+  attr_reader :suit, :rank
+
+  def initialize(json)
+    @json = json
+    @suit = json["suit"]
+    @rank = json["rank"]
+  end
+
+  def to_json(options={})
+    JSON.generate(@json)
+  end
+
+  def to_s
+    "#{@rank} of #{@suit}"
+  end
+
+  def ==(other)
+    @rank == other.rank && @suit == other.suit
+  end
+  alias_method :eql?, :==
+end
 
 class Trick
   attr_reader :number, :round, :leader, :played
@@ -14,15 +66,15 @@ class Trick
 
   def run
     log "Starting trick"
-    trick = @options[:client].get_trick @options[:ticket]
-    @leader = trick.leader
-    @played = trick.played
+    trick = $client.send_and_receive("readyForTrick")["data"]["trick"]
+    @leader = trick["leader"]
+    @played = trick["played"]["cards"].map{|c| Card.new(c)}
 
     card_to_play = @options[:play_card_fn].(self)
     @round.held.delete(card_to_play)
-    trick_result = @options[:client].play_card @options[:ticket], card_to_play
+    trick_result = $client.send_and_receive("playCard", card: card_to_play)["data"]
     log "trick: result #{trick_result.inspect}"
-    @played = trick_result.played
+    @played = trick_result["trick"]["played"]["cards"].map{|c| Card.new(c)}
   end
 
   def log(message)
@@ -54,10 +106,10 @@ class Round
   def run
     log "Starting round"
 
-    hand = @options[:client].get_hand @options[:ticket]
+    hand = $client.send_and_receive("readyForRound")["data"]["cards"]
     log "You were dealt: #{hand.inspect}"
-    @dealt = hand.dup
-    @held = hand.dup
+    @dealt = hand.dup.map{|c| Card.new(c)}
+    @held = hand.dup.map{|c| Card.new(c)}
 
     pass_cards
     play_trick
@@ -71,11 +123,11 @@ class Round
       cards_to_pass = @options[:pass_cards_fn].(self)
 
       @passed = cards_to_pass
-      @held = @held - @passed
+      @held = @held.reject{|c| @passed.include?(c)}
 
-      received_cards = @options[:client].pass_cards @options[:ticket], cards_to_pass
+      received_cards = $client.send_and_receive("passCards", cards: cards_to_pass)["data"]["cards"]
       log "Received cards: #{received_cards.inspect}"
-      @received = received_cards
+      @received = received_cards.map{|c| Card.new(c)}
       @held = @held + @received
     end
   end
@@ -114,9 +166,9 @@ class Game
 
       round.run
 
-      round_result = @options[:client].get_round_result @options[:ticket]
+      round_result = $client.send_and_receive("finishedRound")["data"]
       log "round result: #{round_result.inspect}"
-      break if round_result.status != AgentVsAgent::GameStatus::NEXT_ROUND
+      break if round_result["status"] != "nextRound"
     end
   end
 
@@ -133,43 +185,33 @@ class Game
   end
 
   def self.play
-    host = ENV["AVA_HOST"] || "127.0.0.1"
-    port = ENV["AVA_PORT"] || 4001
-    socket = Thrift::Socket.new(host, port)
-    transport = Thrift::FramedTransport.new(socket)
-    protocol = Thrift::BinaryProtocol.new(transport)
-    client = AgentVsAgent::Hearts::Client.new(protocol)
-    transport.open
+    puts "playing"
 
-    request = AgentVsAgent::EntryRequest.new
-    puts "Entering arena #{request.inspect}"
-    response = client.enter_arena request
-    ticket = response.ticket
-    if ticket
-      puts "playing"
-      game_info = client.get_game_info ticket
-      puts "game info: #{@game_info.inspect}"
+    response = $client.read
+    game_info = OpenStruct.new(response["data"])
+    puts "game info: #{game_info.inspect}"
 
-      game = Game.new game_info, {
-        ticket: ticket,
-        client: client,
-        pass_cards_fn: @pass_cards_fn,
-        play_card_fn: @play_card_fn
-      }
+    game = Game.new game_info, {
+      pass_cards_fn: @pass_cards_fn,
+      play_card_fn: @play_card_fn
+    }
 
-      game.run
-      puts "Game is over"
-      game_result = client.get_game_result ticket
-      puts "game result: #{game_result.inspect}"
-    else
-      puts "No ticket"
-    end
-    transport.close
-  rescue ::Thrift::Exception => e
-    puts "Game ended in an exception"
-    puts e.message
+    game.run
+    puts "Game is over"
+    game_result = $client.send_and_receive("finishedGame")["data"]
+    puts "game result: #{game_result.inspect}"
   end
 
-  include AgentVsAgent
+  module Suit
+    SPADES = "spades"
+    HEARTS = "hearts"
+    DIAMONDS = "diamonds"
+    CLUBS = "clubs"
+  end
+
+  module Rank
+    TWO = "two"
+    QUEEN = "queen"
+  end
 end
 
