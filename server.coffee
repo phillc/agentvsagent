@@ -74,7 +74,6 @@ exports.start = (options) ->
   if options.debug
     app.use express.logger(format: 'dev')
     loggerOptions.level = 'verbose'
-    require('q').longStackSupport = true
   else
     loggerOptions.level = 'info'
   logger.add winston.transports.Console, loggerOptions
