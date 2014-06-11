@@ -68,13 +68,13 @@ class Trick
     log "Starting trick"
     trick = $client.send_and_receive("readyForTrick")["data"]["trick"]
     @leader = trick["leader"]
-    @played = trick["played"]["cards"].map{|c| Card.new(c)}
+    @played = trick["played"].map{|c| Card.new(c)}
 
     card_to_play = @options[:play_card_fn].(self)
     @round.held.delete(card_to_play)
     trick_result = $client.send_and_receive("playCard", card: card_to_play)["data"]
     log "trick: result #{trick_result.inspect}"
-    @played = trick_result["trick"]["played"]["cards"].map{|c| Card.new(c)}
+    @played = trick_result["trick"]["played"].map{|c| Card.new(c)}
   end
 
   def log(message)

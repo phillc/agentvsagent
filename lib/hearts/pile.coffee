@@ -53,3 +53,6 @@ module.exports = class Pile
 
   isEmpty: ->
     @cards.length == 0
+
+  toJSON: ->
+    @cards

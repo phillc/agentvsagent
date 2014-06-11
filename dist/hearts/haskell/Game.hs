@@ -1,25 +1,24 @@
 module Game where
 
-import Network
-import Hearts_Types
-import Hearts_Client
-import Thrift.Transport.Handle
-import Thrift.Transport.Framed
-import Thrift.Protocol.Binary
-
 import qualified Data.Vector as V
 import Data.List
 import Data.Maybe (fromJust) -- , isNothing, isJust, fromMaybe)
 
 import System.Environment
+import System.IO
 
-suit :: Card -> Suit
-suit = fromJust . f_Card_suit
-rank :: Card -> Rank
-rank = fromJust . f_Card_rank
+clientRead = getLine
+clientSendAndReceive = getLine
 
-played :: Trick -> [Card]
-played = V.toList . fromJust . f_Trick_played
+data Card = Card
+  { suit :: String
+  , rank :: String
+  } deriving (Show)
+
+data Trick = Trick
+  { leader :: String
+  , played :: [Card]
+  } deriving (Show)
 
 data Round = Round
   { number :: Int
@@ -54,34 +53,34 @@ createRound gs =
   in gs{ rounds = newRound : rounds gs
      }
 
-runTrick :: (Transport t, Transport a, Protocol a2, Protocol a1) => (GameState -> Card) -> (a2 t, a1 a) -> Ticket -> GameState -> IO GameState
-runTrick playCardFn handler ticket gs = do
+runTrick :: (GameState -> Card) -> GameState -> IO GameState
+runTrick playCardFn gs = do
   logit "Starting trick"
 
-  trick <- get_trick handler ticket
+  trick <- clientSendAndReceive "readyForTrick"
 
   let gsStartingTrick = gs{ rounds = (currentRound gs){ tricks = trick : tricks (currentRound gs) } : tail (rounds gs) }
   logit $ "Current trick:" ++ (show . currentTrick . currentRound) gsStartingTrick
   let cardToPlay = playCardFn gsStartingTrick
   logit $ "Playing card:" ++ (show cardToPlay)
 
-  resultingTrick <- play_card handler ticket $ cardToPlay
+  resultingTrick <- clientSendAndReceive "playCard" "card" cardToPlay
   logit $ "trick: result" ++ (show resultingTrick)
   let gsResultingTrick = gs{ rounds = (currentRound gs){ held = (delete cardToPlay (held (currentRound gs))), tricks = resultingTrick : tricks (currentRound gs) } : tail (rounds gs) }
   return gsResultingTrick
 
-runRound :: (Transport t, Transport a, Protocol a2, Protocol a1) => (GameState -> [Card]) -> (GameState -> Card) -> (a2 t, a1 a) -> Ticket -> GameState -> IO GameState
-runRound passCardsFn playCardFn handler ticket gs = do
+runRound :: (GameState -> [Card]) -> (GameState -> Card) -> GameState -> IO GameState
+runRound passCardsFn playCardFn gs = do
   logit "Starting round"
-  receivedCards <- get_hand handler ticket
+  receivedCards <- clientSendAndReceive "readyForRound"
   let receivedCards' = V.toList receivedCards
       ags = gs{ rounds = (currentRound gs){ dealt = receivedCards', held = receivedCards' } : tail (rounds gs) }
   logit $ "You were dealt:" ++ (show . dealt . currentRound) ags
-  newgs <- passCards passCardsFn handler ticket ags
-  playTrick playCardFn handler ticket newgs
+  newgs <- passCards passCardsFn ags
+  playTrick playCardFn newgs
 
-passCards :: (Transport t, Transport a, Protocol a2, Protocol a1) => (GameState -> [Card]) -> (a2 t, a1 a) -> Ticket -> GameState -> IO GameState
-passCards passCardsFn handler ticket gs = do
+passCards :: (GameState -> [Card]) -> GameState -> IO GameState
+passCards passCardsFn gs = do
   case number (currentRound gs) `rem` 4 of
     0 -> do
       logit "Not passing cards"
@@ -89,7 +88,7 @@ passCards passCardsFn handler ticket gs = do
     otherwise -> do
       logit "About to pass cards"
       let cardsToPass = passCardsFn gs
-      received <- pass_cards handler ticket $ V.fromList cardsToPass
+      received <- clientSendAndReceive "passCards" $ V.fromList cardsToPass
       let holding = (held (currentRound gs) \\ cardsToPass) ++ V.toList received
           ags = gs{ rounds = (currentRound gs){ held = holding, received = (V.toList received), passed = cardsToPass } : tail (rounds gs) }
 
@@ -97,8 +96,8 @@ passCards passCardsFn handler ticket gs = do
       logit $ "Received cards:" ++ show received
       return ags
 
-playTrick :: (Transport t, Transport a, Protocol a2, Protocol a1) => (GameState -> Card) -> (a2 t, a1 a) -> Ticket -> GameState -> IO GameState
-playTrick playCardFn handler ticket gs = do
+playTrick :: (GameState -> Card) -> GameState -> IO GameState
+playTrick playCardFn gs = do
   loop 1 gs
   where
     loop :: Integer -> GameState -> IO GameState
@@ -106,10 +105,10 @@ playTrick playCardFn handler ticket gs = do
                  newgs <- runTrick' gs
                  loop (i + 1) newgs
               | otherwise = return gs
-    runTrick' = runTrick playCardFn handler ticket
+    runTrick' = runTrick playCardFn
 
-runGame :: (Transport t, Transport a, Protocol a2, Protocol a1) => (GameState -> [Card]) -> (GameState -> Card) -> (a2 t, a1 a) -> Ticket -> IO ()
-runGame passCardsFn playCardFn handler ticket = do
+runGame :: (GameState -> [Card]) -> (GameState -> Card) -> IO ()
+runGame passCardsFn playCardFn = do
   logit "Starting game"
 
   loop (GameState [])
@@ -119,48 +118,35 @@ runGame passCardsFn playCardFn handler ticket = do
   where
     loop :: GameState -> IO GameState
     loop gs = do
-      newgs <- runRound passCardsFn playCardFn handler ticket (createRound gs)
-      roundResult <- get_round_result handler ticket
+      newgs <- runRound passCardsFn playCardFn (createRound gs)
+      roundResult <- clientSendAndReceive "finishedRound"
       logit $ "round result:" ++ show roundResult
-      case f_RoundResult_status roundResult of
-        Just NEXT_ROUND -> loop newgs
-        Just END_GAME -> return newgs
+      case roundResult of
+        "nextRound" -> loop newgs
+        "endGame" -> return newgs
 
 play :: (GameState -> [Card]) -> (GameState -> Card) -> IO ()
 play passCardsFn playCardFn = do
-  env <- getEnvironment
-  logit "done"
-  let host = "127.0.0.1"
-      port = 4001
+  hSetBuffering stdin NoBuffering
   logit "Starting"
-  handle <- hOpen (host, PortNumber port)
-  transport <- openFramedTransport handle
-  let handler = (BinaryProtocol transport, BinaryProtocol transport)
-  entryResponse <- enter_arena handler (EntryRequest Nothing)
-  let ticket = f_EntryResponse_ticket entryResponse
 
-  case ticket of
-    Just ticket -> do
-      logit "playing"
-      gameInfo <- get_game_info handler ticket
-      logit $ "game info:" ++ show gameInfo
+  logit "playing"
+  gameInfo <- clientRead
+  logit $ "game info:" ++ show gameInfo
 
-      runGame passCardsFn playCardFn handler ticket
+  runGame passCardsFn playCardFn
 
-      logit "Game is over"
-      gameResult <- get_game_result handler ticket
-      logit $ "game result:" ++ show gameResult
-    Nothing ->
-      logit "no ticket"
-  tClose handle
+  logit "Game is over"
+  gameResult <- clientSendAndReceive "finishedGame"
+  logit $ "game result:" ++ show gameResult
 
 
 
 
--- 
+--
 -- finishGame handler ticket = do
 --   print "Game result:"
 --   gameResult <- get_game_result handler ticket
 --   print gameResult
 --   print "DONE"
--- 
+--

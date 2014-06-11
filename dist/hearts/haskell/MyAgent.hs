@@ -1,7 +1,6 @@
 module Main where
 
 import Game
-import Hearts_Types
 
 noPoints :: [Card] -> [Card]
 noPoints cards = filter (\card -> suit card /= SPADES && rank card /= QUEEN) $ noHearts cards

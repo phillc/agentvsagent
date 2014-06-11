@@ -6,9 +6,6 @@ class Client
     @inputs = []
     buffer = ''
 
-    process.stdin.resume()
-    process.stdin.setEncoding('utf8')
-
     process.stdin.on 'data', (data) =>
       lines = data.toString().split("\n")
       lines[0] = buffer + lines[0]
@@ -42,7 +39,6 @@ class Client
 $client = new Client()
 $client.listen()
 
-
 class Trick
   constructor: (@number, @round, @options) ->
     @leader = null
@@ -50,15 +46,17 @@ class Trick
 
   run: (callback) ->
     @log "Starting trick"
-    @options.client.get_trick @options.ticket, (err, trick) =>
-      throw err if err
+    $client.sendAndReceive "readyForTrick", {}, (response) =>
+      throw response if response.message != "turn"
+      trick = response.data.trick
       @leader = trick.leader
       @played = trick.played
 
       cardToPlay = @options.playCardFn this
       @round.held.splice(@round.held.indexOf(cardToPlay), 1)
-      @options.client.play_card @options.ticket, cardToPlay, (err, trickResult) =>
-        throw err if err
+      $client.sendAndReceive "playCard", {card: cardToPlay}, (response) =>
+        throw response if response.message != "finishedTrick"
+        trickResult = response.data.trick
         @log "trick: result", trickResult
         @played = trickResult.played
         callback()
@@ -138,10 +136,10 @@ class Game
     round = @createRound()
 
     round.run =>
-      @options.client.get_round_result @options.ticket, (err, roundResult) =>
-        throw err if err
-        @log "round result:", roundResult
-        if roundResult.status != types.GameStatus.NEXT_ROUND
+      $client.sendAndReceive "finishedRound", {}, (response) =>
+        throw response if response.message != "roundFinished"
+        @log "round result:", response
+        if response.data.status != "nextRound"
           callback()
         else
           @run(callback)
@@ -163,10 +161,10 @@ class Game
 
       game.run ->
         log "Game is over"
-        client.get_game_result ticket, (err, gameResult) ->
-          throw err if err
-          log "game result:", gameResult
-          connection.end()
+        $client.sendAndReceive "finishedGame", {}, (response) =>
+          throw response if response.message != "end"
+          log "game result:", response
+          process.exit()
 
   @Suit:
     SPADES: "spades"
