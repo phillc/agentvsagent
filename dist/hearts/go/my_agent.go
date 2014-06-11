@@ -1,9 +1,5 @@
 package main
 
-import (
-	"./lib/AgentVsAgent"
-)
-
 func isLeadingTrick(trick *Trick) bool {
 	return len(trick.played) == 0
 }
@@ -13,7 +9,7 @@ func isHeartsBroken(trick *Trick) bool {
 	for _, roundTrick := range trick.round.tricks {
 		cards := roundTrick.played
 		for _, card := range cards {
-			if card.Suit == AgentVsAgent.Suit_HEARTS {
+			if card.suit == HEARTS {
 				broken = true
 			}
 		}
@@ -21,42 +17,42 @@ func isHeartsBroken(trick *Trick) bool {
 	return broken
 }
 
-func onlyTwoClubs(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
-	var matchedCards []*AgentVsAgent.Card
+func onlyTwoClubs(cards []*Card) []*Card {
+	var matchedCards []*Card
 	for _, card := range cards {
-		if card.Suit == AgentVsAgent.Suit_CLUBS && card.Rank == AgentVsAgent.Rank_TWO {
+		if card.suit == CLUBS && card.Rank == TWO {
 			matchedCards = append(matchedCards, card)
 		}
 	}
 	return matchedCards
 }
 
-func noHearts(cards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
-	var matchedCards []*AgentVsAgent.Card
+func noHearts(cards []*Card) []*Card {
+	var matchedCards []*Card
 	for _, card := range cards {
-		if card.Suit != AgentVsAgent.Suit_HEARTS {
+		if card.suit != HEARTS {
 			matchedCards = append(matchedCards, card)
 		}
 	}
 	return matchedCards
 }
 
-func noPoints(allCards []*AgentVsAgent.Card) []*AgentVsAgent.Card {
-	var matchedCards []*AgentVsAgent.Card
+func noPoints(allCards []*Card) []*Card {
+	var matchedCards []*Card
 	cards := noHearts(allCards)
 	for _, card := range cards {
-		if !(card.Suit == AgentVsAgent.Suit_SPADES && card.Rank == AgentVsAgent.Rank_QUEEN) {
+		if !(card.suit == SPADES && card.Rank == QUEEN) {
 			matchedCards = append(matchedCards, card)
 		}
 	}
 	return matchedCards
 }
 
-func followSuit(cards []*AgentVsAgent.Card, trick *Trick) []*AgentVsAgent.Card {
-	var matchedCards []*AgentVsAgent.Card
-	suit := trick.played[0].Suit
+func followSuit(cards []*Card, trick *Trick) []*Card {
+	var matchedCards []*Card
+	suit := trick.played[0].suit
 	for _, card := range cards {
-		if card.Suit == suit {
+		if card.suit == suit {
 			matchedCards = append(matchedCards, card)
 		}
 	}
@@ -66,7 +62,7 @@ func followSuit(cards []*AgentVsAgent.Card, trick *Trick) []*AgentVsAgent.Card {
 	return matchedCards
 }
 
-func playableCards(trick *Trick) []*AgentVsAgent.Card {
+func playableCards(trick *Trick) []*Card {
 	validCards := trick.round.held
 
 	if trick.number == 1 && isLeadingTrick(trick) {
@@ -89,14 +85,14 @@ func playableCards(trick *Trick) []*AgentVsAgent.Card {
 	return validCards
 }
 
-func doPassCards(round Round) []*AgentVsAgent.Card {
+func doPassCards(round Round) []*Card {
 	cardsToPass := round.dealt[0:3]
 	round.log("Passing cards", cardsToPass)
 
 	return cardsToPass
 }
 
-func doPlayCard(trick Trick) *AgentVsAgent.Card {
+func doPlayCard(trick Trick) *Card {
 	trick.log("Current trick:", trick)
 	cardToPlay := playableCards(&trick)[0]
 	trick.log("Playing card:", cardToPlay)

@@ -2,40 +2,58 @@ package main
 
 import (
   "fmt"
-	"syscall"
-	"git.apache.org/thrift.git/lib/go/thrift"
-	"./lib/AgentVsAgent"
 	"errors"
+	"encoding/json"
+	"bufio"
+	"os"
 )
 
-type passCardFn func(Round) []*AgentVsAgent.Card
-type playCardFn func(Trick) *AgentVsAgent.Card
+type Json map[string]interface{}
+
+var stdin = bufio.NewReader(os.Stdin)
+
+func clientRead() Json {
+	line, err := stdin.ReadString('\n')
+	line = line[:len(line)-1] //remove the delimiter
+
+	res := &Json{}
+	response := json.Unmarshal([]byte(line), &res)
+	return *res
+}
+
+func clientSendAndReceive(whatever string) Json {
+	return clientRead()
+}
+
+type passCardFn func(Round) []*Card
+type playCardFn func(Trick) *Card
 
 type options struct {
-	ticket *AgentVsAgent.Ticket
-	client *AgentVsAgent.HeartsClient
 	doPassCards *passCardFn
 	doPlayCard *playCardFn
+}
+
+type Card struct {
+	suit string
+	rank string
 }
 
 type Trick struct {
 	number int
 	round *Round
 	leader string
-	played []*AgentVsAgent.Card
+	played []*Card
 }
 
 func (trick *Trick) run(opts *options) (err error) {
 	trick.log("Starting trick")
-	currentTrick, ex, err := opts.client.GetTrick(opts.ticket)
-	if err != nil { return err }
-	if ex != nil { return errors.New((*ex).String()) }
-	trick.leader = string(currentTrick.Leader)
-	trick.played = currentTrick.Played
+	currentTrick := clientSendAndReceive("readyForTrick")
+	trick.leader = string(currentTrick["Leader"])
+	trick.played = currentTrick["Played"]
 
 	cardToPlay := (*opts.doPlayCard)(*trick)
 
-	var remainingCards []*AgentVsAgent.Card
+	var remainingCards []*Card
 	for _, heldCard := range trick.round.held {
 		if !(heldCard.Suit == cardToPlay.Suit && heldCard.Rank == cardToPlay.Rank) {
 			remainingCards = append(remainingCards, heldCard)
@@ -43,12 +61,10 @@ func (trick *Trick) run(opts *options) (err error) {
 	}
 	trick.round.held = remainingCards
 
-	trickResult, ex, err := opts.client.PlayCard(opts.ticket, cardToPlay)
-	if err != nil { return err }
-	if ex != nil { return errors.New((*ex).String()) }
+	trickResult := clientSendAndReceive("playCard", cardToPlay)
 
 	trick.log("trick: result", trickResult)
-	trick.played = trickResult.Played
+	trick.played = trickResult["Played"]
 	return
 }
 
@@ -60,10 +76,10 @@ func (trick *Trick) log(message ...interface{}) {
 type Round struct {
 	number int
 	tricks []*Trick
-	dealt []*AgentVsAgent.Card
-	passed []*AgentVsAgent.Card
-	received []*AgentVsAgent.Card
-	held []*AgentVsAgent.Card
+	dealt []*Card
+	passed []*Card
+	received []*Card
+	held []*Card
 	game *Game
 }
 
@@ -74,9 +90,7 @@ func (round *Round) createTrick() *Trick {
 }
 
 func (round *Round) run(opts *options) (err error) {
-	hand, ex, err := opts.client.GetHand(opts.ticket)
-	if err != nil { return err }
-	if ex != nil { return errors.New((*ex).String()) }
+	hand := clientSendAndReceive("readyForRound")
 	round.log("You were dealt:", hand)
 	round.dealt = hand
 	round.held = hand
@@ -93,7 +107,7 @@ func (round *Round) passCards(opts *options) (err error) {
 		round.log("About to pass cards")
 		cardsToPass := (*opts.doPassCards)(*round)
 
-		var newHeld []*AgentVsAgent.Card
+		var newHeld []*Card
 		for _, heldCard := range round.held {
 			toRemove := false
 
@@ -137,7 +151,7 @@ func (round *Round) log(message ...interface{}) {
 
 type Game struct {
 	rounds []*Round
-	info *AgentVsAgent.GameInfo
+	info *string
 }
 
 func (game *Game) createRound() *Round {
@@ -159,7 +173,7 @@ func (game *Game) run(opts *options) (err error) {
 	if ex != nil { return errors.New((*ex).String()) }
 
 	game.log("round result:", roundResult)
-	if roundResult.Status == AgentVsAgent.GameStatus_NEXT_ROUND {
+	if roundResult.Status == "nextRound" {
 		err = game.run(opts)
 	}
 	// get round result
@@ -173,57 +187,17 @@ func (game Game) log(message ...interface{}) {
 }
 
 func play(doPassCards passCardFn, doPlayCard playCardFn) {
-	host, hostFound := syscall.Getenv("AVA_HOST")
-	port, portFound := syscall.Getenv("AVA_PORT")
-	if !hostFound { host = "localhost" }
-	if !portFound { port = "4001" }
-	var addr string = host + ":" + port
+	fmt.Println("playing")
+	gameInfo := clientRead()
+	fmt.Println("game info:", gameInfo)
 
-	var transportFactory thrift.TTransportFactory
-	var protocolFactory thrift.TProtocolFactory
-	protocolFactory = thrift.NewTBinaryProtocolFactoryDefault()
-	transportFactory = thrift.NewTTransportFactory()
-	transportFactory = thrift.NewTFramedTransportFactory(transportFactory)
-
-	var transport thrift.TTransport
-	transport, err := thrift.NewTSocket(addr)
+	game := Game{info: gameInfo}
+	err = game.run(&options{doPassCards: &doPassCards, doPlayCard: &doPlayCard})
 	if err != nil {
-		fmt.Println("Error opening socket:", err)
+		fmt.Println("ERROR:", err)
 		return
 	}
-	transport = transportFactory.GetTransport(transport)
-	defer transport.Close()
-	if err := transport.Open(); err != nil {
-		fmt.Println("Error opening transport:", err)
-		return
-	}
-
-	client := AgentVsAgent.NewHeartsClientFactory(transport, protocolFactory)
-
-	request := AgentVsAgent.NewEntryRequest()
-	fmt.Println("Entering arena", request)
-	response, err := client.EnterArena(request)
-	if err != nil {
-		fmt.Println("Error", err)
-		return
-	}
-	ticket := response.Ticket
-	if ticket != nil {
-		fmt.Println("playing")
-		gameInfo, _, _ := client.GetGameInfo(ticket)
-		fmt.Println("game info:", gameInfo)
-
-		game := Game{info: gameInfo}
-		err = game.run(&options{ticket: ticket, client: client, doPassCards: &doPassCards, doPlayCard: &doPlayCard})
-		if err != nil {
-			fmt.Println("ERROR:", err)
-			return
-		}
-		fmt.Println("Game is over")
-		gameResult, _, _ := client.GetGameResult(ticket)
-		fmt.Println("game result:", gameResult)
-	} else {
-		fmt.Println("No ticket")
-		return
-	}
+	fmt.Println("Game is over")
+	gameResult, _, _ := client.GetGameResult(ticket)
+	fmt.Println("game result:", gameResult)
 }
