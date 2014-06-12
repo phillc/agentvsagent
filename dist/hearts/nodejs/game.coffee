@@ -48,7 +48,7 @@ class Trick
     @log "Starting trick"
     $client.sendAndReceive "readyForTrick", {}, (response) =>
       throw response if response.message != "turn"
-      trick = response.data.trick
+      trick = response.data
       @leader = trick.leader
       @played = trick.played
 
@@ -56,7 +56,7 @@ class Trick
       @round.held.splice(@round.held.indexOf(cardToPlay), 1)
       $client.sendAndReceive "playCard", {card: cardToPlay}, (response) =>
         throw response if response.message != "finishedTrick"
-        trickResult = response.data.trick
+        trickResult = response.data
         @log "trick: result", trickResult
         @played = trickResult.played
         callback()

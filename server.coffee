@@ -41,8 +41,14 @@ createTcpGameServer = (tcpServer, entrance) ->
 
     processLine = (line) ->
       console.log "PROCESSLINE", line
-      parsed = JSON.parse(line)
-      agent.forward(parsed.message, parsed.data)
+      try
+        #TODO: yuck
+        parsed = JSON.parse(line)
+      catch e
+        agent.forward("errored", "bad json")
+
+      if parsed
+        agent.forward(parsed.message, parsed.data)
 
     buffer = ''
     socket.on 'data', (data) ->

@@ -89,11 +89,11 @@ module.exports = class Game
     @waitingForCardFrom(trick.positionsMissing()[0])
 
   waitingForCardFrom: (position) ->
-    @emitPosition position, "turn", trick: @currentRound().currentTrick()
+    @emitPosition position, "turn", @currentRound().currentTrick()
     @engine.transition("waitingForCardFrom" + position.charAt(0).toUpperCase() + position.slice(1))
 
   finishTrick: ->
-    @emitAll "finishedTrick", trick: @currentRound().currentTrick()
+    @emitAll "finishedTrick", @currentRound().currentTrick()
 
     if @currentRound().tricks.length < 13
       @engine.transition("startingTrick")

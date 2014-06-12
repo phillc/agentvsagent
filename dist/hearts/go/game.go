@@ -2,27 +2,32 @@ package main
 
 import (
   "fmt"
-	"errors"
 	"encoding/json"
 	"bufio"
 	"os"
 )
 
-type Json map[string]interface{}
+func log(message ...interface{}) {
+	fmt.Fprintln(os.Stderr, message...)
+}
 
 var stdin = bufio.NewReader(os.Stdin)
 
-func clientRead() Json {
-	line, err := stdin.ReadString('\n')
+func clientRead() (string, map[string]interface{}) {
+	line, _ := stdin.ReadString('\n')
 	line = line[:len(line)-1] //remove the delimiter
 
-	res := &Json{}
-	response := json.Unmarshal([]byte(line), &res)
-	return *res
+	res := &map[string]interface{}{}
+	json.Unmarshal([]byte(line), res)
+	data := (*res)["data"].(map[string]interface{})
+	return (*res)["message"].(string), data
 }
 
-func clientSendAndReceive(whatever string) Json {
-	return clientRead()
+func clientSendAndReceive(message string, data map[string]interface{}) (string, map[string]interface{}) {
+	req, _ := json.Marshal(map[string]interface{}{ "message": message, "data": data})
+	fmt.Fprintln(os.Stdout, string(req))
+	responseMessage, responseData := clientRead()
+	return responseMessage, responseData
 }
 
 type passCardFn func(Round) []*Card
@@ -34,8 +39,24 @@ type options struct {
 }
 
 type Card struct {
-	suit string
-	rank string
+	Suit string `json:"suit"`
+	Rank string `json:"rank"`
+}
+
+func responseToCards(response interface{}) []*Card {
+	/*round.log("lets see:", responseToCard(hand.([]interface{})[0]))*/
+	var cards []*Card
+	for _, res := range response.([]interface{}) {
+		newCard := responseToCard(res)
+		cards = append(cards, &newCard)
+	}
+
+	return cards
+}
+
+func responseToCard(response interface{}) Card {
+	card := response.(map[string]interface{})
+	return Card{ Suit: card["suit"].(string), Rank: card["rank"].(string)}
 }
 
 type Trick struct {
@@ -47,9 +68,9 @@ type Trick struct {
 
 func (trick *Trick) run(opts *options) (err error) {
 	trick.log("Starting trick")
-	currentTrick := clientSendAndReceive("readyForTrick")
-	trick.leader = string(currentTrick["Leader"])
-	trick.played = currentTrick["Played"]
+	_, currentTrick := clientSendAndReceive("readyForTrick", nil)
+	trick.leader = currentTrick["leader"].(string)
+	trick.played = responseToCards(currentTrick["played"])
 
 	cardToPlay := (*opts.doPlayCard)(*trick)
 
@@ -61,10 +82,10 @@ func (trick *Trick) run(opts *options) (err error) {
 	}
 	trick.round.held = remainingCards
 
-	trickResult := clientSendAndReceive("playCard", cardToPlay)
+	_, trickResult := clientSendAndReceive("playCard", map[string]interface{}{ "card": cardToPlay })
 
 	trick.log("trick: result", trickResult)
-	trick.played = trickResult["Played"]
+	trick.played = responseToCards(trickResult["played"])
 	return
 }
 
@@ -90,7 +111,8 @@ func (round *Round) createTrick() *Trick {
 }
 
 func (round *Round) run(opts *options) (err error) {
-	hand := clientSendAndReceive("readyForRound")
+	_, response := clientSendAndReceive("readyForRound", nil)
+	hand := responseToCards(response["cards"])
 	round.log("You were dealt:", hand)
 	round.dealt = hand
 	round.held = hand
@@ -122,9 +144,8 @@ func (round *Round) passCards(opts *options) (err error) {
 			}
 		}
 
-		receivedCards, ex, err := opts.client.PassCards(opts.ticket, cardsToPass)
-		if err != nil { return err }
-		if ex != nil { return errors.New((*ex).String()) }
+		_, response := clientSendAndReceive("passCards", map[string]interface{}{ "cards": cardsToPass})
+		receivedCards := responseToCards(response["cards"])
 		round.log("Received cards:", receivedCards)
 		round.held = append(newHeld, receivedCards...)
 		round.passed = cardsToPass
@@ -151,7 +172,7 @@ func (round *Round) log(message ...interface{}) {
 
 type Game struct {
 	rounds []*Round
-	info *string
+	info map[string]interface{}
 }
 
 func (game *Game) createRound() *Round {
@@ -168,12 +189,10 @@ func (game *Game) run(opts *options) (err error) {
 	err = round.run(opts)
 	if err != nil { return err }
 
-	roundResult, ex, err := opts.client.GetRoundResult(opts.ticket)
-	if err != nil { return err }
-	if ex != nil { return errors.New((*ex).String()) }
+	_, roundResult := clientSendAndReceive("finishedRound", nil)
 
 	game.log("round result:", roundResult)
-	if roundResult.Status == "nextRound" {
+	if roundResult["status"] == "nextRound" {
 		err = game.run(opts)
 	}
 	// get round result
@@ -182,22 +201,37 @@ func (game *Game) run(opts *options) (err error) {
 }
 
 func (game Game) log(message ...interface{}) {
-	newMessage := append([]interface{}{"P:", game.info.Position}, message...)
-	fmt.Println(newMessage...)
+	newMessage := append([]interface{}{"P:", game.info["position"]}, message...)
+	log(newMessage...)
 }
 
 func play(doPassCards passCardFn, doPlayCard playCardFn) {
-	fmt.Println("playing")
-	gameInfo := clientRead()
-	fmt.Println("game info:", gameInfo)
+	log("playing")
+	_, gameInfo := clientRead()
+	log("game info:", gameInfo)
 
 	game := Game{info: gameInfo}
-	err = game.run(&options{doPassCards: &doPassCards, doPlayCard: &doPlayCard})
-	if err != nil {
-		fmt.Println("ERROR:", err)
-		return
-	}
-	fmt.Println("Game is over")
-	gameResult, _, _ := client.GetGameResult(ticket)
-	fmt.Println("game result:", gameResult)
+	game.run(&options{doPassCards: &doPassCards, doPlayCard: &doPlayCard})
+	log("Game is over")
+  _, gameResult := clientSendAndReceive("finishedGame", nil)
+	log("game result:", gameResult)
 }
+
+const HEARTS = "hearts"
+const CLUBS = "clubs"
+const SPADES = "spades"
+const DIAMONDS = "diamonds"
+const TWO = "two"
+const THREE = "three"
+const FOUR = "four"
+const FIVE = "five"
+const SIX = "six"
+const SEVEN = "seven"
+const EIGHT = "eight"
+const NINE = "nine"
+const TEN = "ten"
+const JACK = "jack"
+const QUEEN = "queen"
+const KING = "king"
+const ACE = "ace"
+

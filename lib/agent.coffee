@@ -18,6 +18,7 @@ ConnectionState = machina.Fsm.extend
         else
           @transition("waitingForClient")
 
+        #TODO: yuck
         if message == "error"
           @agent.out.emit('failure', message: message, data: data || {})
         else

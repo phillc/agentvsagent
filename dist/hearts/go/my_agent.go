@@ -9,7 +9,7 @@ func isHeartsBroken(trick *Trick) bool {
 	for _, roundTrick := range trick.round.tricks {
 		cards := roundTrick.played
 		for _, card := range cards {
-			if card.suit == HEARTS {
+			if card.Suit == HEARTS {
 				broken = true
 			}
 		}
@@ -20,7 +20,7 @@ func isHeartsBroken(trick *Trick) bool {
 func onlyTwoClubs(cards []*Card) []*Card {
 	var matchedCards []*Card
 	for _, card := range cards {
-		if card.suit == CLUBS && card.Rank == TWO {
+		if card.Suit == CLUBS && card.Rank == TWO {
 			matchedCards = append(matchedCards, card)
 		}
 	}
@@ -30,7 +30,7 @@ func onlyTwoClubs(cards []*Card) []*Card {
 func noHearts(cards []*Card) []*Card {
 	var matchedCards []*Card
 	for _, card := range cards {
-		if card.suit != HEARTS {
+		if card.Suit != HEARTS {
 			matchedCards = append(matchedCards, card)
 		}
 	}
@@ -41,7 +41,7 @@ func noPoints(allCards []*Card) []*Card {
 	var matchedCards []*Card
 	cards := noHearts(allCards)
 	for _, card := range cards {
-		if !(card.suit == SPADES && card.Rank == QUEEN) {
+		if !(card.Suit == SPADES && card.Rank == QUEEN) {
 			matchedCards = append(matchedCards, card)
 		}
 	}
@@ -50,9 +50,9 @@ func noPoints(allCards []*Card) []*Card {
 
 func followSuit(cards []*Card, trick *Trick) []*Card {
 	var matchedCards []*Card
-	suit := trick.played[0].suit
+	suit := trick.played[0].Suit
 	for _, card := range cards {
-		if card.suit == suit {
+		if card.Suit == suit {
 			matchedCards = append(matchedCards, card)
 		}
 	}
