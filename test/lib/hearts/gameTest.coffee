@@ -190,7 +190,7 @@ describe "Game", ->
 
     it "emits the trick", (done) ->
       @game.on "north.finishedTrick", (data) =>
-        expect(data.trick).to.equal(@game.currentRound().currentTrick())
+        expect(data).to.equal(@game.currentRound().currentTrick())
         done()
 
       @game.finishTrick()
@@ -261,7 +261,7 @@ describe "Game", ->
 
     it "emits turn for that player", (done) ->
       @game.on "north.turn", (data) =>
-        expect(data.trick).to.equal(@game.currentRound().currentTrick())
+        expect(data).to.equal(@game.currentRound().currentTrick())
         done()
       @game.waitingForCardFrom("north")
 
