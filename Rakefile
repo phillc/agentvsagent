@@ -30,6 +30,12 @@ class HeartsAgent < Agent
   end
 end
 
+class FireworksAgent < Agent
+  def game
+    "fireworks"
+  end
+end
+
 desc "run ruby random agents"
 task :agents, :number, :langs, :game, :sleep do |t, args|
   args.with_defaults number: 4, sleep: 0.1, langs: "ruby:coffee", game: "hearts"
@@ -42,7 +48,7 @@ task :agents, :number, :langs, :game, :sleep do |t, args|
       "go" => HeartsAgent.new(directory: 'dist/hearts/go', compile: 'make', command: 'bin/my_agent')
     },
     "fireworks" => {
-      "ruby" => Agent.new(directory: 'dist/fireworks/ruby', command: 'ruby my_agent.rb'),
+      "ruby" => FireworksAgent.new(directory: 'dist/fireworks/ruby', command: 'ruby my_agent.rb'),
     }
   }
 

@@ -38,7 +38,7 @@ module.exports = class Game
     @state.rounds[@state.rounds.length - 1]
 
   start: ->
-    logger.info "Starting a #{@maxPenalty} point game"
+    logger.info "Starting a #{@maxPenalty} point game of hearts"
     for position in @positions()
       @emitPosition position, "roundStarted", position: position
     @engine.transition("startingRound")

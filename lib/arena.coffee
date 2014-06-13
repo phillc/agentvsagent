@@ -23,6 +23,8 @@ module.exports = class Arena extends EventEmitter
 
     game = @builder.createGame()
     availablePositions = @builder.positions()
+
+    # CHANGE
     for agent in und.shuffle(agents)
       position = availablePositions.shift()
       do (game, position, agent) =>

@@ -1,4 +1,5 @@
 require 'json'
+
 def puts(*args)
   $stderr.puts *args
 end

@@ -69,7 +69,7 @@ createTcpGameServer = (tcpServer, entrance) ->
 buildArena = (builderClass, options) ->
   builder = new builderClass(options)
   arena = new Arena(builder)
-  matchMaker = new MatchMaker(arena, 10000)
+  matchMaker = new MatchMaker(arena, 1000) #10000) #TODO: parameterize
   matchMaker.start()
   arena
 

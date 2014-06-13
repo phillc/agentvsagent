@@ -1,3 +1,5 @@
+require 'json'
+
 def puts(*args)
   $stderr.puts *args
 end
@@ -11,6 +13,25 @@ def print(*args)
   $stderr.print *args
 end
 
+class Client
+  def send_command(command)
+    $stdout << JSON.generate(command)
+    $stdout << "\n"
+    $stdout.flush
+  end
+
+  def read
+    JSON.parse($stdin.gets.strip)
+  end
+
+  def send_and_receive(message, data={})
+    send_command({message: message, data: data})
+    read
+  end
+end
+
+$client = Client.new
+
 class Game
   def initialize(info, options)
     @info = info
@@ -19,16 +40,6 @@ class Game
 
   def run
     log "Starting game"
-
-    loop do
-      round = create_round
-
-      round.run
-
-      round_result = @options[:client].get_round_result @options[:ticket]
-      log "round result: #{round_result.inspect}"
-      break if round_result.status != AgentVsAgent::GameStatus::NEXT_ROUND
-    end
   end
 
   def log(message)
@@ -40,39 +51,22 @@ class Game
   end
 
   def self.play
-    puts "Entering arena"
-    send_command "FOO"
-    # response = client.enter_arena request
-    # ticket = response.ticket
-    # if ticket
-    #   puts "playing"
-    #   game_info = client.get_game_info ticket
-    #   puts "game info: #{@game_info.inspect}"
+    puts "playing"
 
-    #   game = Game.new game_info, {
-    #     ticket: ticket,
-    #     client: client,
-    #     pass_cards_fn: @pass_cards_fn,
-    #     play_card_fn: @play_card_fn
-    #   }
+    response = $client.read
+    game_info = OpenStruct.new(response["data"])
+    puts "game info: #{game_info.inspect}"
 
-    #   game.run
-    #   puts "Game is over"
-    #   game_result = client.get_game_result ticket
-    #   puts "game result: #{game_result.inspect}"
-    # else
-    #   puts "No ticket"
-    # end
-    # transport.close
-  # rescue ::Thrift::Exception => e
-  #   puts "Game ended in an exception"
-  #   puts e.message
-  end
+    game = Game.new game_info, {
+      pass_cards_fn: @pass_cards_fn,
+      play_card_fn: @play_card_fn
+    }
 
-  def self.send_command(command)
-    $stdout << command
-    $stdout << "\n"
-    $stdout.flush
+    game.run
+
+    puts "Game is over"
+    game_result = $client.send_and_receive("finishedGame")["data"]
+    puts "game result: #{game_result.inspect}"
   end
 end
 
