@@ -8,9 +8,9 @@ module.exports = class FireworksBuilder
 
   constructor: (@gameOptions={}) ->
 
-  positions: ->
-    FireworksGame.positions()
+  positions: (number) ->
+    FireworksGame.positions().slice(0, number)
 
-  createGame: ->
+  createGame: (positions) ->
     new FireworksGame({})
 

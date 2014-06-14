@@ -21,10 +21,9 @@ module.exports = class Arena extends EventEmitter
     for agent in agents
       @removeAgent(agent)
 
-    game = @builder.createGame()
-    availablePositions = @builder.positions()
+    availablePositions = @builder.positions(agents.length)
+    game = @builder.createGame(availablePositions)
 
-    # CHANGE
     for agent in und.shuffle(agents)
       position = availablePositions.shift()
       do (game, position, agent) =>

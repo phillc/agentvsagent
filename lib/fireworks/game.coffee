@@ -2,9 +2,9 @@
 logger = require '../logger'
 
 module.exports = class Game
-  @positions = -> ["player 1", "player 2", "player 3", "player 4", "player 5"]
+  @positions = -> ["player1", "player2", "player3", "player4", "player5"]
 
-  constructor: (options={}) ->
+  constructor: ({@positions}) ->
     @emitter = new EventEmitter()
 
   on: (args...) ->

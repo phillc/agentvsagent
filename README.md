@@ -67,7 +67,7 @@ From there, you should be able to code against other scenarios as you observe th
 * run `npm install`
 * run tests via `make test`
 
-The command `make setup` has a more complete setup, including thrift
+The command `make setup` has a more complete setup.
 
 ## In need of
 
