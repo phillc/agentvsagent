@@ -26,7 +26,7 @@ exports.run = (game, command, {port, host}) ->
   client.connect port, host, ->
     console.log('CONNECTED TO: ' + host + ':' + port)
     client.write(JSON.stringify({
-      message: "enter"
+      message: "requestingEntry"
       data:
         name: "anonymous"
         game: game
@@ -58,7 +58,7 @@ State = machina.Fsm.extend
       line: (line) ->
         console.log("entering line:", line)
         @client.write(JSON.stringify({
-          message: "ready"
+          message: "requestingGame"
         }))
         @client.write("\n")
         @transition("playing")

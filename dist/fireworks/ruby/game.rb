@@ -33,17 +33,21 @@ end
 $client = Client.new
 
 class Game
-  def initialize(info, options)
-    @info = info
-    @options = options
+  def initialize(info, move_fn)
+    @position = info.position
+    @move_fn = move_fn
+    @hands = info.hands
+    @moves = []
   end
 
   def run
     log "Starting game"
+    moves = $client.send_and_receive("ready")["data"]["moves"]
+    @moves = @moves + moves
   end
 
   def log(message)
-    puts "P:#{@info.position} #{message}"
+    puts "P:#{@position} #{message}"
   end
 
   def self.do_move(&blk)
@@ -57,16 +61,13 @@ class Game
     game_info = OpenStruct.new(response["data"])
     puts "game info: #{game_info.inspect}"
 
-    game = Game.new game_info, {
-      pass_cards_fn: @pass_cards_fn,
-      play_card_fn: @play_card_fn
-    }
+    game = Game.new game_info, @move_fn
 
     game.run
 
-    puts "Game is over"
-    game_result = $client.send_and_receive("finishedGame")["data"]
-    puts "game result: #{game_result.inspect}"
+    # puts "Game is over"
+    # game_result = $client.send_and_receive("finishedGame")["data"]
+    # puts "game result: #{game_result.inspect}"
   end
 end
 

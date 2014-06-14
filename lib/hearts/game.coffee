@@ -7,7 +7,7 @@ actions = require './actions'
 
 module.exports = class Game
   #TODO: rename to availablePositions to distinguish between what can be filled, vs instance level is what IS filled.
-  @positions = -> ["north", "east", "south", "west"]
+  @availablePositions = -> ["north", "east", "south", "west"]
 
   constructor: (options={}) ->
     @maxPenalty = options.heartsMaxPoints || 100
@@ -32,7 +32,7 @@ module.exports = class Game
       logger.error "no one was listening to #{message}"
 
   positions: ->
-    Game.positions()
+    Game.availablePositions()
 
   currentRound: ->
     @state.rounds[@state.rounds.length - 1]

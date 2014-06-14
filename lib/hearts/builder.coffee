@@ -9,7 +9,7 @@ module.exports = class HeartsBuilder
   constructor: (@gameOptions={}) ->
 
   positions: ->
-    HeartsGame.positions()
+    HeartsGame.availablePositions()
 
   createGame: ->
     new HeartsGame({heartsMaxPoints: @gameOptions.heartsMaxPoints})
