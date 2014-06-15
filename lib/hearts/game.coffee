@@ -6,7 +6,6 @@ Round = require './round'
 actions = require './actions'
 
 module.exports = class Game
-  #TODO: rename to availablePositions to distinguish between what can be filled, vs instance level is what IS filled.
   @availablePositions = -> ["north", "east", "south", "west"]
 
   constructor: (options={}) ->

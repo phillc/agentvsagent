@@ -1,6 +1,8 @@
 {EventEmitter} = require 'events'
 logger = require '../logger'
 machina = require('machina')()
+und = require 'underscore'
+Pile = require './pile'
 
 module.exports = class Game
   @availablePositions = -> ["player1", "player2", "player3", "player4", "player5"]
@@ -8,6 +10,13 @@ module.exports = class Game
   constructor: ({@positions}) ->
     @engine = new Engine(game: this)
     @emitter = new EventEmitter()
+    @seats = und.reduce @positions, (memo, position) ->
+      memo[position] = new Pile()
+      memo
+    , {}
+    @deck = Pile.createDeck()
+    # @hints = 0
+    # @lives = 0
 
   on: (args...) ->
     @emitter.on(args...)
@@ -26,10 +35,17 @@ module.exports = class Game
   handle: (args...) ->
     @engine.handle(args...)
 
+  deal: ->
+    @deck.shuffle()
+    handSize = if (@positions.length >= 4) then 4 else 5
+    for position in @positions
+      @deck.moveCardsTo(handSize, @seats[position])
+
   start: ->
     logger.info "Starting a game of fireworks", @positions
+    @deal()
     for position in @positions
-      @emitPosition position, "starting", position: position
+      @emitPosition position, "starting", position: position, cards: und.omit(@seats, position)
     @engine.transition("starting")
 
   waitingFor: (position) ->

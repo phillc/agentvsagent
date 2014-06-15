@@ -8,6 +8,9 @@ describe "Game", ->
     it "emits p1 starting", (done) ->
       @game.on "player1.starting", (data) ->
         expect(data.position).to.equal("player1")
+        expect(data.cards["player1"]).to.not.exist
+        expect(data.cards["player2"].cards).to.have.length(5)
+        expect(data.cards["player3"].cards).to.have.length(5)
         done()
 
       @game.start()
@@ -15,6 +18,9 @@ describe "Game", ->
     it "emits p2 starting", (done) ->
       @game.on "player2.starting", (data) ->
         expect(data.position).to.equal("player2")
+        expect(data.cards["player1"].cards).to.have.length(5)
+        expect(data.cards["player2"]).to.not.exist
+        expect(data.cards["player3"].cards).to.have.length(5)
         done()
 
       @game.start()
@@ -22,9 +28,27 @@ describe "Game", ->
     it "emits p3 starting", (done) ->
       @game.on "player3.starting", (data) ->
         expect(data.position).to.equal("player3")
+        expect(data.cards["player1"].cards).to.have.length(5)
+        expect(data.cards["player2"].cards).to.have.length(5)
+        expect(data.cards["player3"]).to.not.exist
         done()
 
       @game.start()
+
+    it "deals", ->
+      @game.start()
+      expect(@game.seats["player1"].cards).to.have.length(5)
+      expect(@game.seats["player2"].cards).to.have.length(5)
+      expect(@game.seats["player3"].cards).to.have.length(5)
+
+    it "deals 4 cards in a 4 player game", ->
+      game = new Game(positions: ["player1", "player2", "player3", "player4"])
+      game.start()
+      expect(game.seats["player1"].cards).to.have.length(4)
+      expect(game.seats["player2"].cards).to.have.length(4)
+      expect(game.seats["player3"].cards).to.have.length(4)
+      expect(game.seats["player4"].cards).to.have.length(4)
+
 
   describe "#waitingFor", ->
     it "emits turn for that player", (done) ->
@@ -42,7 +66,7 @@ describe "Game", ->
         @game.handle "ready.player2"
         expect(@game.engine.state).to.equal("starting")
         @game.handle "ready.player3"
-        expect(@game.engine.state).to.equal("dealing")
+        expect(@game.engine.state).to.equal("waitingForPlayer1")
 
     describe "waitingFor...", ->
       it "does something", ->
