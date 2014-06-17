@@ -7,7 +7,7 @@ ConnectionState = machina.Fsm.extend
     @agent = options.agent
     @timeout = options.timeout
   "*": ->
-    logger.error "Agent received unexpected message", @state, arguments
+    logger.error "Agent received unexpected message (#{@state})", arguments
 
   initialState: "waitingForClient"
   states:
@@ -18,7 +18,6 @@ ConnectionState = machina.Fsm.extend
         else
           @transition("waitingForClient")
 
-        #TODO: yuck
         if message == "error"
           @agent.out.emit('failure', message: message, data: data || {})
         else
@@ -49,6 +48,13 @@ ConnectionState = machina.Fsm.extend
       _onEnter: ->
         logger.error "agent timeout"
         @agent.in.emit "timeout"
+
+      forward: (message, data) ->
+        logger.verbose "Discarded message #{message}", data
+
+      send: (message, data) ->
+        @transition("finished")
+        @agent.out.emit('failure', message: message, data: data || {})
 
     finished: {}
 

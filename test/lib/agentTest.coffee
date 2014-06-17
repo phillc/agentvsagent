@@ -95,17 +95,27 @@ describe "Agent", ->
       it "sends and transitions to finished on error", (done) ->
         @agent.out.on "failure", (message) ->
           expect(message.message).to.equal("error")
-
           done()
 
         @agent.send("error")
         expect(@agent.connectionState.state).to.equal("finished")
 
 
-    describe "timedout", ->
+    describe "timedOut", ->
       it "emits timeout", (done) ->
         @agent.in.on "timeout", ->
           done()
         @agent.connectionState.transition("timedOut")
 
+      it "responds and finishes", (done) ->
+        @agent.connectionState.transition("timedOut")
+
+        @agent.out.on "failure", (message) =>
+          expect(message.message).to.equal("error")
+          expect(message.data).to.equal("foo")
+          done()
+
+        @agent.forward("something")
+        @agent.send("error", "foo")
+        expect(@agent.connectionState.state).to.equal("finished")
 

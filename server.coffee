@@ -30,14 +30,21 @@ createHttp = ->
 createIoGameServer = (httpServer, entrance) ->
   io = require('socket.io')(httpServer)
 
-createTcpGameServer = (tcpServer, entrance) ->
+createTcpGameServer = (tcpServer, entrance, options) ->
   tcpServer.on 'connection', (socket) ->
-    agent = new Agent()
+    agent = new Agent(timeout: options.turnTime || 1000)
     entrance.addAgent(agent)
 
     agent.out.on 'success', (data) ->
       socket.write(JSON.stringify(data))
       socket.write("\n")
+      if data.message == "end"
+        socket.end()
+
+    agent.out.on 'failure', (data) ->
+      socket.write(JSON.stringify(data))
+      socket.write("\n")
+      socket.end()
 
     processLine = (line) ->
       console.log "PROCESSLINE", line
@@ -100,5 +107,5 @@ exports.start = (options) ->
     hearts: heartsArena
     fireworks: fireworksArena
   createIoGameServer(httpServer, entrance)
-  createTcpGameServer(tcpServer, entrance)
+  createTcpGameServer(tcpServer, entrance, options)
 

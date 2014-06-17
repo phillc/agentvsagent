@@ -38,6 +38,7 @@ end
 
 guard :process, :name => 'ava server', :command => './bin/ava server --hearts-max-points=60 --debug' do
   watch(%r{^lib/(.+)\.coffee$})
+  watch('server.coffee')
 end
 
 guard :mocha do
