@@ -38,17 +38,24 @@ end
 $client = Client.new
 
 class Game
+  attr_reader :moves, :hands, :piles
+
   def initialize(info, move_fn)
     @position = info.position
     @move_fn = move_fn
     @hands = info.hands
     @moves = []
+    @piles = %w(white blue green yellow red).each.with_object({}) do |suit, acc|
+      acc[suit] = 0
+    end
   end
 
   def run
     log "Starting game"
     moves = $client.send_and_receive("ready")["data"]["moves"]
     @moves = @moves + moves
+    move = @move_fn.(self)
+    puts $client.send_and_receive("move", move)
   end
 
   def log(message)

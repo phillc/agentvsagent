@@ -1,6 +1,6 @@
 module.exports = class Card
   @suits: ['red', 'yellow', 'green', 'blue', 'white']
-  @ranks: [1, 2, 3, 4, 5]
+  @ranks: [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
   @all: ->
     cards = []
     for suit in @suits

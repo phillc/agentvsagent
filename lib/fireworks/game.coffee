@@ -45,7 +45,7 @@ module.exports = class Game
     logger.info "Starting a game of fireworks", @positions
     @deal()
     for position in @positions
-      @emitPosition position, "starting", position: position, cards: und.omit(@seats, position)
+      @emitPosition position, "starting", position: position, hands: und.omit(@seats, position)
     @engine.transition("starting")
 
   waitingFor: (position) ->

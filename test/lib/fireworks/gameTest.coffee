@@ -8,9 +8,9 @@ describe "Game", ->
     it "emits p1 starting", (done) ->
       @game.on "player1.starting", (data) ->
         expect(data.position).to.equal("player1")
-        expect(data.cards["player1"]).to.not.exist
-        expect(data.cards["player2"].cards).to.have.length(5)
-        expect(data.cards["player3"].cards).to.have.length(5)
+        expect(data.hands["player1"]).to.not.exist
+        expect(data.hands["player2"].cards).to.have.length(5)
+        expect(data.hands["player3"].cards).to.have.length(5)
         done()
 
       @game.start()
@@ -18,9 +18,9 @@ describe "Game", ->
     it "emits p2 starting", (done) ->
       @game.on "player2.starting", (data) ->
         expect(data.position).to.equal("player2")
-        expect(data.cards["player1"].cards).to.have.length(5)
-        expect(data.cards["player2"]).to.not.exist
-        expect(data.cards["player3"].cards).to.have.length(5)
+        expect(data.hands["player1"].cards).to.have.length(5)
+        expect(data.hands["player2"]).to.not.exist
+        expect(data.hands["player3"].cards).to.have.length(5)
         done()
 
       @game.start()
@@ -28,9 +28,9 @@ describe "Game", ->
     it "emits p3 starting", (done) ->
       @game.on "player3.starting", (data) ->
         expect(data.position).to.equal("player3")
-        expect(data.cards["player1"].cards).to.have.length(5)
-        expect(data.cards["player2"].cards).to.have.length(5)
-        expect(data.cards["player3"]).to.not.exist
+        expect(data.hands["player1"].cards).to.have.length(5)
+        expect(data.hands["player2"].cards).to.have.length(5)
+        expect(data.hands["player3"]).to.not.exist
         done()
 
       @game.start()
