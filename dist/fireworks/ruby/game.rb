@@ -21,7 +21,12 @@ class Client
   end
 
   def read
-    JSON.parse($stdin.gets.strip)
+    response = JSON.parse($stdin.gets.strip)
+    if response["message"] == "error"
+      puts "ERROR:", response
+      exit
+    end
+    response
   end
 
   def send_and_receive(message, data={})

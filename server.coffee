@@ -31,20 +31,23 @@ createIoGameServer = (httpServer, entrance) ->
   io = require('socket.io')(httpServer)
 
 createTcpGameServer = (tcpServer, entrance, options) ->
+  #TODO: Yuck
   tcpServer.on 'connection', (socket) ->
     agent = new Agent(timeout: options.turnTime || 1000)
     entrance.addAgent(agent)
 
-    agent.out.on 'success', (data) ->
+    agentOnSuccess = (data) ->
       socket.write(JSON.stringify(data))
       socket.write("\n")
       if data.message == "end"
         socket.end()
+    agent.out.on 'success', agentOnSuccess
 
-    agent.out.on 'failure', (data) ->
+    agentOnFailure = (data) ->
       socket.write(JSON.stringify(data))
       socket.write("\n")
       socket.end()
+    agent.out.on 'failure', agentOnFailure
 
     processLine = (line) ->
       console.log "PROCESSLINE", line
@@ -72,6 +75,8 @@ createTcpGameServer = (tcpServer, entrance, options) ->
 
     socket.on 'end', ->
       console.log 'disconnected'
+      agent.out.removeListener 'success', agentOnSuccess
+      agent.out.removeListener 'failure', agentOnFailure
 
 buildArena = (builderClass, options) ->
   builder = new builderClass(options)
