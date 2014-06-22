@@ -8,6 +8,7 @@ describe "Arena", ->
         start: ->
         on: ->
       Game: {}
+      validator: -> null
     @arena = new Arena(builder, [])
 
   describe "#addAgent", ->

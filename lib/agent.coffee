@@ -72,11 +72,21 @@ module.exports = class Agent
 
   forward: (message, data) ->
     logger.verbose "<<<<<forwarding", message, " - ", data
-    @connectionState.handle "forward", message, data
+    if @validator
+      @validator.validate message, data, (err, d) =>
+        if !err
+          @connectionState.handle "forward", message, d
+        else
+          #TODO: Broadcast error
+          logger.error "EERRRRRORRORORRR", err.toString()
+    else
+      @connectionState.handle "forward", message, data
 
   send: (message, data) ->
     logger.verbose ">>>>>>>sending", message, " - ", data
     @connectionState.handle "send", message, data
+
+  validateWith: (@validator) ->
 
   # end: (message, data)
 

@@ -23,9 +23,11 @@ module.exports = class Arena extends EventEmitter
 
     availablePositions = @builder.positions(agents.length)
     game = @builder.createGame(availablePositions.slice(0))
+    messageValidator = @builder.validator()
 
     for agent in und.shuffle(agents)
       position = availablePositions.shift()
+      agent.validateWith(messageValidator)
       do (game, position, agent) =>
         logger.info "wiring up #{agent} to #{position}"
 

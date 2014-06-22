@@ -51,4 +51,4 @@ module.exports = class CardPile
     @cards.length == 0
 
   toJSON: ->
-    @cards
+    @cards.map (card) -> card.toJSON()

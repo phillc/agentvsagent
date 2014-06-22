@@ -1,4 +1,5 @@
 HeartsGame = require './game'
+Validator = require './validator'
 
 module.exports = class HeartsBuilder
   minAgents: 4
@@ -14,3 +15,5 @@ module.exports = class HeartsBuilder
   createGame: ->
     new HeartsGame({heartsMaxPoints: @gameOptions.heartsMaxPoints})
 
+  validator: ->
+    new Validator()

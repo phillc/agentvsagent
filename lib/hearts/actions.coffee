@@ -4,10 +4,6 @@ Rank = require './rank'
 Suit = require './suit'
 logger = require '../logger'
 
-# I'm happy with the way this logic is separated, but I am not happy with
-# the fact that messages to the agents are in this async callback world,
-# but messages from the agent to the game are going through the handleAction path
-
 exports.PassCards = class PassCards
   @build: (data) ->
     new PassCards(data.cards.map (jsonCard) -> Card.fromJSON(jsonCard))

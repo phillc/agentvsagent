@@ -14,3 +14,4 @@ module.exports = class FireworksBuilder
   createGame: (positions) ->
     new FireworksGame(positions: positions)
 
+  validator: ->
