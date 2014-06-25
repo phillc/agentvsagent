@@ -24,7 +24,7 @@ Agent vs. Agent is intended to be a collection of simple games that can be playe
 
 ## Installation
 
-* Install node: [via package manager](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
+* Install node: [via package manager](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) (Version 0.10 or higher)
 * npm install -g agentvsagent
 * run `ava` for command options
 
