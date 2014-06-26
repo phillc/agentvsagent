@@ -9,3 +9,9 @@ module.exports = class Card
     cards
 
   constructor: (@suit, @rank) ->
+
+  toJSON: ->
+    suit: @suit, rank: @rank
+
+  inspect: ->
+    "#{@rank.name} of #{@suit.name}"

@@ -3,6 +3,7 @@ logger = require '../logger'
 machina = require('machina')()
 und = require 'underscore'
 Pile = require './pile'
+actions = require './actions'
 
 module.exports = class Game
   @availablePositions = -> ["player1", "player2", "player3", "player4", "player5"]
@@ -39,6 +40,7 @@ module.exports = class Game
     @deck.shuffle()
     handSize = if (@positions.length >= 4) then 4 else 5
     for position in @positions
+      # TODO: track original hand? (make seat into an object?)
       @deck.moveCardsTo(handSize, @seats[position])
 
   start: ->
@@ -49,7 +51,7 @@ module.exports = class Game
     @engine.transition("starting")
 
   waitingFor: (position) ->
-    @emitPosition position, "turn", moves: []
+    @emitPosition position, "turn", moves: [], status: "continue"
     @engine.transition("waitingFor" + position.charAt(0).toUpperCase() + position.slice(1))
 
   abort: (culprit, error) ->
@@ -70,6 +72,19 @@ Engine = machina.Fsm.extend
     if @startingReady.length == @game.positions.length
       @game.waitingFor(@game.positions[0])
 
+  handleMove: (position, data) ->
+    action = if und.has(data, "hint")
+      actions.Hint.build(data)
+    else if und.has(data, "discard")
+      actions.Discard.build(data)
+
+    error = action.validate(@game, position)
+    if !error
+      action.execute(@game, position)
+      @game.waitingFor("player2")
+    else
+      @game.abort(position, error)
+
   "*": (message, args...) ->
     [event, position] = message.split(".")
     if event == "timeout"
@@ -89,5 +104,8 @@ Engine = machina.Fsm.extend
       "ready.player1": -> @handleStartingReady("player1")
       "ready.player2": -> @handleStartingReady("player2")
       "ready.player3": -> @handleStartingReady("player3")
-    waitingForPlayer1: {}
+    waitingForPlayer1:
+      "move.player1": (data) -> @handleMove("player1", data)
+    waitingForPlayer2:
+      "move.player2": (data) -> @handleMove("player2", data)
 

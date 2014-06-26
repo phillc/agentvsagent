@@ -68,7 +68,10 @@ describe "Game", ->
         @game.handle "ready.player3"
         expect(@game.engine.state).to.equal("waitingForPlayer1")
 
-    describe "waitingFor...", ->
-      it "does something", ->
+    describe "waitingForPlayer#", ->
+      it "allows a discard", ->
         @game.engine.transition("waitingForPlayer1")
 
+        @game.handle "move.player1", discard: 0
+
+        expect(@game.engine.state).to.equal("waitingForPlayer2")

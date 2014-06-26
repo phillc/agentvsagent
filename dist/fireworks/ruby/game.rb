@@ -54,8 +54,13 @@ class Game
     log "Starting game"
     moves = $client.send_and_receive("ready")["data"]["moves"]
     @moves = @moves + moves
-    move = @move_fn.(self)
-    puts $client.send_and_receive("move", move)
+    loop do
+      move = @move_fn.(self)
+      data = $client.send_and_receive("move", move)["data"]
+      moves = data["moves"]
+      @moves = @moves = moves
+      break if data["status"] != "continue"
+    end
   end
 
   def log(message)

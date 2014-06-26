@@ -1,9 +1,10 @@
 FireworksGame = require './game'
+Validator = require './validator'
 
 module.exports = class FireworksBuilder
   minAgents: 2
   maxAgents: 5
-  agentEvents: ["ready"]
+  agentEvents: ["ready", "move"]
   events: ["starting", "turn"]
 
   constructor: (@gameOptions={}) ->
@@ -15,3 +16,4 @@ module.exports = class FireworksBuilder
     new FireworksGame(positions: positions)
 
   validator: ->
+    new Validator()

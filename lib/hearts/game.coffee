@@ -137,7 +137,7 @@ Engine = machina.Fsm.extend
     if @readyForRound.length == 4
       @game.startRound()
 
-  handlePassCards: (data, position) ->
+  handlePassCards: (position, data) ->
     action = actions.PassCards.build(data)
     @passedCards[position] = action
     if und.size(@passedCards) == 4
@@ -156,7 +156,7 @@ Engine = machina.Fsm.extend
         errorPosition = Object.keys(errors)[0]
         @game.abort(errorPosition, errors[errorPosition])
 
-  handlePlayCard: (data, position) ->
+  handlePlayCard: (position, data) ->
     action = actions.PlayCard.build(data)
     error = action.validate(@game, position)
     if !error
@@ -208,13 +208,13 @@ Engine = machina.Fsm.extend
       _onEnter: ->
         @passedCards = {}
       "passCards.north": (data) ->
-        @handlePassCards(data, "north")
+        @handlePassCards("north", data)
       "passCards.east": (data) ->
-        @handlePassCards(data, "east")
+        @handlePassCards("east", data)
       "passCards.south": (data) ->
-        @handlePassCards(data, "south")
+        @handlePassCards("south", data)
       "passCards.west": (data) ->
-        @handlePassCards(data, "west")
+        @handlePassCards("west", data)
 
     startingTrick:
       _onEnter: ->
@@ -230,19 +230,19 @@ Engine = machina.Fsm.extend
 
     waitingForCardFromNorth:
       "playCard.north": (data) ->
-        @handlePlayCard(data, "north")
+        @handlePlayCard("north", data)
 
     waitingForCardFromEast:
       "playCard.east": (data) ->
-        @handlePlayCard(data, "east")
+        @handlePlayCard("east", data)
 
     waitingForCardFromSouth:
       "playCard.south": (data) ->
-        @handlePlayCard(data, "south")
+        @handlePlayCard("south", data)
 
     waitingForCardFromWest:
       "playCard.west": (data) ->
-        @handlePlayCard(data, "west")
+        @handlePlayCard("west", data)
 
     endingRound:
       _onEnter: ->
