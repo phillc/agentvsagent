@@ -57,6 +57,23 @@ describe "Game", ->
         done()
       @game.waitingFor("player1")
 
+  describe "#finishMove", ->
+    it "moves to player 2", ->
+      @game.engine.transition("waitingForPlayer1")
+
+      @game.finishMove()
+
+      expect(@game.engine.state).to.equal("waitingForPlayer2")
+
+    it.skip "ends the game when every one plays one last turn"
+    it "ends the game when the deck is empty", ->
+      @game.deck.cards = []
+      @game.engine.transition("waitingForPlayer1")
+
+      @game.finishMove()
+
+      expect(@game.engine.state).to.equal("endingGame")
+
   describe "states", ->
     describe "starting", ->
       it "moves to the next state once all have checked in", ->

@@ -54,6 +54,16 @@ module.exports = class Game
     @emitPosition position, "turn", moves: [], status: "continue"
     @engine.transition("waitingFor" + position.charAt(0).toUpperCase() + position.slice(1))
 
+  finishMove: ->
+    #TODO: everyone still gets a move after deck is empty
+    if @hasReachedGameEnd()
+      @engine.transition("endingGame")
+    else
+      @waitingFor("player2")
+
+  hasReachedGameEnd: ->
+    @deck.cards.length == 0
+
   abort: (culprit, error) ->
     logger.warn "Game has been aborted: #{error.type} :: #{error.message}."
     @emitPosition(culprit, "error", error)
@@ -81,7 +91,7 @@ Engine = machina.Fsm.extend
     error = action.validate(@game, position)
     if !error
       action.execute(@game, position)
-      @game.waitingFor("player2")
+      @game.finishMove()
     else
       @game.abort(position, error)
 
@@ -108,4 +118,5 @@ Engine = machina.Fsm.extend
       "move.player1": (data) -> @handleMove("player1", data)
     waitingForPlayer2:
       "move.player2": (data) -> @handleMove("player2", data)
+    endingGame: {}
 
