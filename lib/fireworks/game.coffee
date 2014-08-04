@@ -16,7 +16,8 @@ module.exports = class Game
       memo
     , {}
     @deck = Pile.createDeck()
-    # @hints = 0
+    @maxHints = 8
+    @hints = @maxHints
     # @lives = 0
 
   on: (args...) ->
@@ -93,6 +94,7 @@ Engine = machina.Fsm.extend
       action.execute(@game, position)
       @game.finishMove()
     else
+      console.log "OK... error?"
       @game.abort(position, error)
 
   "*": (message, args...) ->

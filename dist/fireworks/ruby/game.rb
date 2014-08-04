@@ -38,7 +38,7 @@ end
 $client = Client.new
 
 class Game
-  attr_reader :moves, :hands, :piles
+  attr_reader :moves, :hands, :piles, :available_hints
 
   def initialize(info, move_fn)
     @position = info.position
@@ -48,6 +48,8 @@ class Game
     @piles = %w(white blue green yellow red).each.with_object({}) do |suit, acc|
       acc[suit] = 0
     end
+
+    @available_hints = 8
   end
 
   def run

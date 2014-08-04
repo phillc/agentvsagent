@@ -32,7 +32,7 @@ Game.do_move do |game|
   puts clear_hints.inspect
   puts "---"
 
-  if clear_hints.any?
+  if clear_hints.any? && game.available_hints > 0
     hint = clear_hints.shuffle.first
 
     puts "hint>>>"

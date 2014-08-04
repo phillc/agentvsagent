@@ -28,6 +28,37 @@ describe "actions", ->
 
         expect(@game.seats["player1"].cards[1]).to.equal(nextCard)
 
+      it "increases the number of available hints", ->
+        @game.hints = 6
+        new actions.Discard(1).execute(@game, "player1")
+        expect(@game.hints).to.equal(7)
+
     describe "#validate", ->
       # it "requires that a card is still in that slot"
       # it "requires that there are still cards to draw"
+      # it "requires that the maximum hints has not been reached"
+
+  describe "Hint", ->
+    beforeEach ->
+      # @game.startRound()
+
+    describe "#execute", ->
+      it "reduces the number of available hints", ->
+        expect(@game.hints).to.equal(8)
+        new actions.SuitHint("hearts").execute(@game, "player1")
+        expect(@game.hints).to.equal(7)
+
+    describe "#validate", ->
+      it "returns null for valid actions", ->
+        action = new actions.SuitHint("hearts")
+
+        expect(action.validate(@game, "player1")).to.not.exist
+
+      it "requires that there are still hints to give", ->
+        action = new actions.SuitHint("hearts")
+        @game.hints = 0
+
+        error = action.validate(@game, "player1")
+        expect(error.type).to.equal "invalidMove"
+        expect(error.message).to.equal "Out of hints."
+
