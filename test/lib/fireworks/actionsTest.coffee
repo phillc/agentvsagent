@@ -34,9 +34,33 @@ describe "actions", ->
         expect(@game.hints).to.equal(7)
 
     describe "#validate", ->
+      beforeEach ->
+        @game.hints = 4
+
+      it "returns null for valid actions", ->
+        action = new actions.Discard(2)
+
+        expect(action.validate(@game, "player1")).to.not.exist
+
       # it "requires that a card is still in that slot"
-      # it "requires that there are still cards to draw"
-      # it "requires that the maximum hints has not been reached"
+
+      it "requires that there are still cards to draw", ->
+        @game.deck.cards = []
+
+        action = new actions.Discard(2)
+
+        error = action.validate(@game, "player1")
+        expect(error.type).to.equal "invalidMove"
+        expect(error.message).to.equal "Out of cards to draw."
+
+      it "requires that the maximum hints has not been reached", ->
+        @game.hints = 8
+
+        action = new actions.Discard(2)
+
+        error = action.validate(@game, "player1")
+        expect(error.type).to.equal "invalidMove"
+        expect(error.message).to.equal "Out of hints to receive."
 
   describe "Hint", ->
     beforeEach ->

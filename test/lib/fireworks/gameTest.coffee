@@ -87,6 +87,7 @@ describe "Game", ->
 
     describe "waitingForPlayer#", ->
       it "allows a discard", ->
+        @game.hints = 4
         @game.engine.transition("waitingForPlayer1")
 
         @game.handle "move.player1", discard: 0

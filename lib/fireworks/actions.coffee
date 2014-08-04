@@ -5,7 +5,12 @@ exports.Discard = class Discard
   constructor: (@slot) ->
 
   validate: (game, position) ->
-    null
+    if game.deck.isEmpty()
+      return {type: "invalidMove", message: "Out of cards to draw."}
+    else if game.hints >= game.maxHints
+      return {type: "invalidMove", message: "Out of hints to receive."}
+    else
+      return null
 
   execute: (game, position) ->
     game.deck.moveFirstCardToSlot(@slot, game.seats[position])
@@ -27,7 +32,7 @@ exports.Hint = class Hint
     if game.hints <= 0
       return {type: "invalidMove", message: "Out of hints."}
     else
-      null
+      return null
 
 exports.SuitHint = class SuitHint extends Hint
   constructor: (position, suit) ->
