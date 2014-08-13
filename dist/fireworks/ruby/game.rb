@@ -38,13 +38,13 @@ end
 $client = Client.new
 
 class Game
-  attr_reader :moves, :hands, :piles, :available_hints
+  attr_reader :all_moves, :recent_moves, :hands, :piles, :available_hints
 
   def initialize(info, move_fn)
     @position = info.position
     @move_fn = move_fn
     @hands = info.hands
-    @moves = []
+    @all_moves = []
     @piles = %w(white blue green yellow red).each.with_object({}) do |suit, acc|
       acc[suit] = 0
     end
@@ -55,13 +55,27 @@ class Game
   def run
     log "Starting game"
     moves = $client.send_and_receive("ready")["data"]["moves"]
-    @moves = @moves + moves
+    @recent_moves = moves
     loop do
+      process_moves(@recent_moves)
+      @all_moves = @all_moves + @recent_moves
       move = @move_fn.(self)
       data = $client.send_and_receive("move", move)["data"]
       moves = data["moves"]
-      @moves = @moves = moves
+      @recent_moves = moves
       break if data["status"] != "continue"
+    end
+  end
+
+  def process_moves(moves)
+    moves.each do |move|
+      if move["hint"]
+        @available_hints = @available_hints - 1
+      elsif move["discard"]
+        @available_hints = @available_hints + 1
+      else
+        raise "Unexpected move"
+      end
     end
   end
 

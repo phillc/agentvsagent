@@ -13,7 +13,7 @@ exports.Discard = class Discard
       return null
 
   execute: (game, position) ->
-    game.deck.moveFirstCardToSlot(@slot, game.seats[position])
+    game.deck.moveFirstCardToSlot(@slot, game.seats[position].held)
     game.hints = game.hints + 1
     #Adds it to the messages stack for each player?
     # or adds to a general move set, interpreted

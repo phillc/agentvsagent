@@ -14,4 +14,4 @@ module.exports = class Card
     suit: @suit, rank: @rank
 
   inspect: ->
-    "#{@rank.name} of #{@suit.name}"
+    "#{@rank} of #{@suit}"

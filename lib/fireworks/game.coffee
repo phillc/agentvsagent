@@ -3,6 +3,7 @@ logger = require '../logger'
 machina = require('machina')()
 und = require 'underscore'
 Pile = require './pile'
+Seat = require './seat'
 actions = require './actions'
 
 module.exports = class Game
@@ -12,7 +13,7 @@ module.exports = class Game
     @engine = new Engine(game: this)
     @emitter = new EventEmitter()
     @seats = und.reduce @positions, (memo, position) ->
-      memo[position] = new Pile()
+      memo[position] = new Seat()
       memo
     , {}
     @deck = Pile.createDeck()
@@ -41,14 +42,19 @@ module.exports = class Game
     @deck.shuffle()
     handSize = if (@positions.length >= 4) then 4 else 5
     for position in @positions
-      # TODO: track original hand? (make seat into an object?)
-      @deck.moveCardsTo(handSize, @seats[position])
+      # TODO: track original hand?
+      @deck.moveCardsTo(handSize, @seats[position].held)
 
   start: ->
     logger.info "Starting a game of fireworks", @positions
     @deal()
     for position in @positions
-      @emitPosition position, "starting", position: position, hands: und.omit(@seats, position)
+      otherSeats = und.omit(@seats, position)
+      hands = und.reduce otherSeats, (memo, seat, position) ->
+        memo[position] = seat.held; memo
+      , {}
+
+      @emitPosition position, "starting", position: position, hands: hands
     @engine.transition("starting")
 
   waitingFor: (position) ->

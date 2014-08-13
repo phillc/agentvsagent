@@ -37,17 +37,17 @@ describe "Game", ->
 
     it "deals", ->
       @game.start()
-      expect(@game.seats["player1"].cards).to.have.length(5)
-      expect(@game.seats["player2"].cards).to.have.length(5)
-      expect(@game.seats["player3"].cards).to.have.length(5)
+      expect(@game.seats["player1"].held.cards).to.have.length(5)
+      expect(@game.seats["player2"].held.cards).to.have.length(5)
+      expect(@game.seats["player3"].held.cards).to.have.length(5)
 
     it "deals 4 cards in a 4 player game", ->
       game = new Game(positions: ["player1", "player2", "player3", "player4"])
       game.start()
-      expect(game.seats["player1"].cards).to.have.length(4)
-      expect(game.seats["player2"].cards).to.have.length(4)
-      expect(game.seats["player3"].cards).to.have.length(4)
-      expect(game.seats["player4"].cards).to.have.length(4)
+      expect(game.seats["player1"].held.cards).to.have.length(4)
+      expect(game.seats["player2"].held.cards).to.have.length(4)
+      expect(game.seats["player3"].held.cards).to.have.length(4)
+      expect(game.seats["player4"].held.cards).to.have.length(4)
 
 
   describe "#waitingFor", ->
