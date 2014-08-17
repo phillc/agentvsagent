@@ -108,6 +108,10 @@ exports.start = (options) ->
   heartsArena = buildArena(HeartsBuilder, options)
   fireworksArena = buildArena(FireworksBuilder, options)
 
+  ["hearts", "fireworks"].forEach (name) ->
+    app.use "/game/#{name}/play", (req, res) ->
+      res.render "#{name}/play"
+
   entrance = new Entrance
     hearts: heartsArena
     fireworks: fireworksArena
