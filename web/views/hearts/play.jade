@@ -8,9 +8,7 @@ block head
     link(rel="stylesheet", type="text/css", href="/cards/cards-ie9.css", media="screen")
   != css('style')
 
-  script(src='/javascripts/thrift.js')
-  script(src='/types/hearts/hearts_types.js')
-  script(src='/types/hearts/Hearts.js')
+block javascripts
   != js('hearts/controllers')
   != js('hearts/services')
   != js('hearts/filters')

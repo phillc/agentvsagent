@@ -1,5 +1,11 @@
 !!! 5
-html
+html(class="no-js", lang="en")
   include header
   body
     block content
+    script(src='/javascripts/jquery-2.1.1.js')
+    script(src='/javascripts/foundation.min.js')
+    script(src='/javascripts/react.js')
+    script
+      $(document).foundation();
+    block javascripts
