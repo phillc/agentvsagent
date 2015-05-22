@@ -24,7 +24,11 @@ func clientRead() (string, map[string]interface{}) {
 }
 
 func clientSendAndReceive(message string, data map[string]interface{}) (string, map[string]interface{}) {
-	req, _ := json.Marshal(map[string]interface{}{ "message": message, "data": data})
+	sending := make(map[string]interface{})
+	if data != nil {
+		sending = data
+	}
+	req, _ := json.Marshal(map[string]interface{}{ "message": message, "data": sending})
 	fmt.Fprintln(os.Stdout, string(req))
 	responseMessage, responseData := clientRead()
 	return responseMessage, responseData
