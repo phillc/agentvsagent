@@ -10,8 +10,6 @@ MatchMaker = require './lib/matchMaker'
 
 HeartsBuilder = require './lib/hearts/builder'
 
-FireworksBuilder = require './lib/fireworks/builder'
-
 createHttp = ->
   app = express()
   app.enable('strict routing')
@@ -24,7 +22,11 @@ createHttp = ->
       res.locals.pretty = true
       next()
 
-  app.get '/', (req, res) -> res.send("<a href='/game/hearts/play'>Hearts</a><br /><a href='/game/fireworks/play'>Fireworks</a>")
+  app.get '/', (req, res) ->
+    res.send """
+      <a href='/game/hearts/play'>Hearts</a>
+      <br />
+    """
   return app
 
 createIoGameServer = (httpServer, entrance) ->
@@ -106,15 +108,13 @@ exports.start = (options) ->
   logger.info "TCP Server listening on", tcpServer.address()
 
   heartsArena = buildArena(HeartsBuilder, options)
-  fireworksArena = buildArena(FireworksBuilder, options)
 
-  ["hearts", "fireworks"].forEach (name) ->
+  ["hearts"].forEach (name) ->
     app.use "/game/#{name}/play", (req, res) ->
       res.render "#{name}/play"
 
   entrance = new Entrance
     hearts: heartsArena
-    fireworks: fireworksArena
   createIoGameServer(httpServer, entrance)
   createTcpGameServer(tcpServer, entrance, options)
 
