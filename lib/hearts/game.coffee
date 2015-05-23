@@ -1,11 +1,12 @@
 {EventEmitter} = require 'events'
+AbstractGame = require '../abstractGame'
 logger = require '../logger'
 machina = require('machina')()
 und = require 'underscore'
 Round = require './round'
 actions = require './actions'
 
-module.exports = class Game
+module.exports = class Game extends AbstractGame
   @availablePositions = -> ["north", "east", "south", "west"]
 
   constructor: (options={}) ->
@@ -15,20 +16,6 @@ module.exports = class Game
 
     @state =
       rounds: []
-
-  on: (args...) ->
-    @emitter.on(args...)
-
-  emitAll: (message, data) ->
-    for position in @positions()
-      do (position, message, data) =>
-        @emitPosition(position, message, data)
-
-  emitPosition: (position, message, data) ->
-    logger.verbose "GAME emitting to #{position} - #{message} with #{data}"
-    heard = @emitter.emit([position, message].join("."), data)
-    if !heard
-      logger.error "no one was listening to #{message}"
 
   positions: ->
     Game.availablePositions()
@@ -41,9 +28,6 @@ module.exports = class Game
     for position in @positions()
       @emitPosition position, "roundStarted", position: position
     @engine.transition("startingRound")
-
-  handle: (args...) ->
-    @engine.handle(args...)
 
   scores: ->
     @state.rounds.map((round) -> round.scores()).reduce (memo, scores) ->
@@ -125,6 +109,8 @@ module.exports = class Game
       @emitPosition(position, "error", type: "gameAborted", message: "Game ended due to an invalid action by another agent.")
     @engine.transition("aborted")
 
+
+
 Engine = machina.Fsm.extend
   initialize: (options) ->
     @game = options.game
@@ -197,36 +183,22 @@ Engine = machina.Fsm.extend
   states:
     initialized: {}
     startingRound:
-      _onEnter: ->
-        @readyForRound = []
-      "readyForRound.north": -> @handleReadyForRound("north")
-      "readyForRound.east": -> @handleReadyForRound("east")
-      "readyForRound.south": -> @handleReadyForRound("south")
-      "readyForRound.west": -> @handleReadyForRound("west")
+      Game.buildPositionHandlers "readyForRound",
+        (position) -> @handleReadyForRound(position)
+        _onEnter: ->
+          @readyForRound = []
 
     passing:
-      _onEnter: ->
-        @passedCards = {}
-      "passCards.north": (data) ->
-        @handlePassCards("north", data)
-      "passCards.east": (data) ->
-        @handlePassCards("east", data)
-      "passCards.south": (data) ->
-        @handlePassCards("south", data)
-      "passCards.west": (data) ->
-        @handlePassCards("west", data)
+      Game.buildPositionHandlers "passCards",
+        (position, data) -> @handlePassCards(position, data)
+        _onEnter: ->
+          @passedCards = {}
 
     startingTrick:
-      _onEnter: ->
-        @readyForTrick = []
-      "readyForTrick.north": ->
-        @handleReadyForTrick("north")
-      "readyForTrick.east": ->
-        @handleReadyForTrick("east")
-      "readyForTrick.south": ->
-        @handleReadyForTrick("south")
-      "readyForTrick.west": ->
-        @handleReadyForTrick("west")
+      Game.buildPositionHandlers "readyForTrick",
+        (position, data) -> @handleReadyForTrick(position, data)
+        _onEnter: ->
+          @readyForTrick = []
 
     waitingForCardFromNorth:
       "playCard.north": (data) ->
@@ -245,28 +217,16 @@ Engine = machina.Fsm.extend
         @handlePlayCard("west", data)
 
     endingRound:
-      _onEnter: ->
-        @finishedRound = []
-      "finishedRound.north": ->
-        @handleFinishedRound("north")
-      "finishedRound.east": ->
-        @handleFinishedRound("east")
-      "finishedRound.south": ->
-        @handleFinishedRound("south")
-      "finishedRound.west": ->
-        @handleFinishedRound("west")
+      Game.buildPositionHandlers "finishedRound",
+        (position, data) -> @handleFinishedRound(position, data)
+        _onEnter: ->
+          @finishedRound = []
 
     endingGame:
-      _onEnter: ->
-        @finishedGame = []
-      "finishedGame.north": ->
-        @handleFinishedGame("north")
-      "finishedGame.east": ->
-        @handleFinishedGame("east")
-      "finishedGame.south": ->
-        @handleFinishedGame("south")
-      "finishedGame.west": ->
-        @handleFinishedGame("west")
+      Game.buildPositionHandlers "finishedGame",
+        (position, data) -> @handleFinishedGame(position, data)
+        _onEnter: ->
+          @finishedGame = []
     aborted: {}
     finished: {}
 
