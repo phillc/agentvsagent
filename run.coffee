@@ -1,6 +1,6 @@
 spawn = require('child_process').spawn
 net = require('net')
-machina = require('machina')()
+machina = require('machina')
 
 exports.run = (game, command, {port, host}) ->
   console.log "command: ", command

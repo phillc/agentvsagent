@@ -1,7 +1,7 @@
 {EventEmitter} = require 'events'
 AbstractGame = require '../abstractGame'
 logger = require '../logger'
-machina = require('machina')()
+machina = require('machina')
 und = require 'underscore'
 actions = require './actions'
 

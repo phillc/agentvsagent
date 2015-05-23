@@ -18,7 +18,8 @@ createHttp = ->
   app.set 'views', __dirname + '/web/views'
   app.use '/', express.static(__dirname + '/web/public')
   app.use require("connect-assets")(src: __dirname + "/web/assets")
-  app.configure 'development', ->
+
+  if app.get('env') == 'development'
     app.use (req, res, next) ->
       res.locals.pretty = true
       next()
@@ -94,7 +95,7 @@ exports.start = (options) ->
 
   loggerOptions = timestamp: true, colorize: true
   if options.debug
-    app.use express.logger(format: 'dev')
+    app.use require('morgan')('dev')
     loggerOptions.level = 'verbose'
   else
     loggerOptions.level = 'info'

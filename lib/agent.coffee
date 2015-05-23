@@ -1,4 +1,4 @@
-machina = require('machina')()
+machina = require('machina')
 logger = require '../lib/logger'
 {EventEmitter} = require 'events'
 
