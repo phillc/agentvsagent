@@ -30,9 +30,9 @@ class HeartsAgent < Agent
   end
 end
 
-class FireworksAgent < Agent
+class SkullAgent < Agent
   def game
-    "fireworks"
+    "skull"
   end
 end
 
@@ -47,8 +47,8 @@ task :agents, :number, :langs, :game, :sleep do |t, args|
       "haskell" => HeartsAgent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent'),
       "go" => HeartsAgent.new(directory: 'dist/hearts/go', compile: 'make', command: 'bin/my_agent')
     },
-    "fireworks" => {
-      "ruby" => FireworksAgent.new(directory: 'dist/fireworks/ruby', command: 'ruby my_agent.rb'),
+    "skull" => {
+      "ruby" => SkullAgent.new(directory: 'dist/skull/ruby', command: 'ruby my_agent.rb'),
     }
   }
 

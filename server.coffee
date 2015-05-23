@@ -9,6 +9,7 @@ Arena = require './lib/arena'
 MatchMaker = require './lib/matchMaker'
 
 HeartsBuilder = require './lib/hearts/builder'
+SkullBuilder = require './lib/skull/builder'
 
 createHttp = ->
   app = express()
@@ -26,6 +27,7 @@ createHttp = ->
     res.send """
       <a href='/game/hearts/play'>Hearts</a>
       <br />
+      <a href='/game/skull/play'>Skull</a>
     """
   return app
 
@@ -108,6 +110,7 @@ exports.start = (options) ->
   logger.info "TCP Server listening on", tcpServer.address()
 
   heartsArena = buildArena(HeartsBuilder, options)
+  skullArena = buildArena(SkullBuilder, options)
 
   ["hearts"].forEach (name) ->
     app.use "/game/#{name}/play", (req, res) ->
@@ -115,6 +118,8 @@ exports.start = (options) ->
 
   entrance = new Entrance
     hearts: heartsArena
+    skull: skullArena
+
   createIoGameServer(httpServer, entrance)
   createTcpGameServer(tcpServer, entrance, options)
 
