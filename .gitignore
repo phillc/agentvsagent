@@ -3,3 +3,16 @@ gen
 .DS_Store
 .listen_test
 
+# compiled from cljs
+web/public/javascripts/app.js
+
+# cljs stuff
+pom.xml
+*jar
+/lib/
+/classes/
+/out/
+/target/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
