@@ -445,4 +445,3 @@ describe "Game", ->
 
       #   @game.handle "something.west"
       it "moves to finished after everyone has checked in"
-

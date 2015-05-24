@@ -169,8 +169,8 @@ Engine = machina.Fsm.extend
     if @finishedGame.length == 4
       @game.finish()
 
-  "*": (message, args...) ->
-    [event, position] = message.split(".")
+  "*": (payload) ->
+    [event, position] = payload.inputType.split(".")
     if event == "timeout"
       logger.error "timeout received", position
       @game.abort(position, {type: "timeout", message: "Your action took longer than allowed"})
@@ -229,6 +229,3 @@ Engine = machina.Fsm.extend
           @finishedGame = []
     aborted: {}
     finished: {}
-
-
-
