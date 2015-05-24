@@ -1,6 +1,7 @@
 net = require 'net'
 express = require 'express'
 winston = require 'winston'
+und = require 'underscore'
 logger = require './lib/logger'
 
 Agent = require './lib/agent'
@@ -17,7 +18,8 @@ createHttp = ->
   app.set 'view engine', 'jade'
   app.set 'views', __dirname + '/web/views'
   app.use '/', express.static(__dirname + '/web/public')
-  app.use require("connect-assets")(src: __dirname + "/web/assets")
+  paths = und(["assets/css", "assets/js"]).map (dir) -> __dirname + "/web/" + dir
+  app.use require("connect-assets")(paths: paths)
 
   if app.get('env') == 'development'
     app.use (req, res, next) ->
@@ -123,4 +125,3 @@ exports.start = (options) ->
 
   createIoGameServer(httpServer, entrance)
   createTcpGameServer(tcpServer, entrance, options)
-
