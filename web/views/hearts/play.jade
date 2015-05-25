@@ -9,10 +9,11 @@ block head
   != css('style')
 
 block javascripts
-  != js('hearts/controllers')
-  != js('hearts/services')
-  != js('hearts/filters')
-  != js('hearts/app')
+  //- != js('hearts/controllers')
+  //- != js('hearts/services')
+  //- != js('hearts/filters')
+  //- != js('hearts/app')
+  script(src="/javascripts/app.js")
 
 mixin cardBody
   span.rank {{card.rank | rankName | uppercase}}
