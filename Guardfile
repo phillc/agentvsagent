@@ -45,3 +45,7 @@ guard :mocha do
   watch(%r{^test/.+\.coffee$})
   watch(%r{^lib/(.+)Test\.coffee$}) { |m| "spec/lib/#{m[1]}_spec.rb" }
 end
+
+guard :process, :name => 'lein cljsbuild auto', :command => 'lein cljsbuild auto' do
+
+end

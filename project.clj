@@ -1,6 +1,7 @@
 (defproject agent-vs-agent "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2173"]]
+                 [org.clojure/clojurescript "0.0-2173"]
+                 [org.omcljs/om "0.8.8"]]
   :plugins [[lein-cljsbuild "1.0.2"]]
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
