@@ -24,7 +24,14 @@
                          :asset-path "javascripts/out"
                          :output-to "web/public/javascripts/app.js"
                          :output-dir "web/public/javascripts/out"
-                         :source-map-timestamp true }}]}
+                         :source-map-timestamp true }}
+             {:id "min"
+              :source-paths ["src"]
+              :compiler {:output-to "web/public/javascripts/app.js"
+                         :main agent-vs-agent.core
+                         :optimizations :advanced
+                         :pretty-print false}}]}
+
 
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources"

@@ -1,3 +1,8 @@
+#############################
+## MAKE SURE TO KEEP IN SYNC
+## WITH .npmignore
+#############################
+
 node_modules
 gen
 .DS_Store
@@ -9,7 +14,6 @@ web/public/javascripts/app.js
 figwheel_server.log
 pom.xml
 *jar
-/lib/
 /classes/
 /web/public/javascripts/out
 /target/
@@ -18,3 +22,4 @@ pom.xml
 .lein-plugins/
 .repl
 .nrepl-port
+
