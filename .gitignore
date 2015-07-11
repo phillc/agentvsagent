@@ -6,13 +6,15 @@ gen
 # compiled from cljs
 web/public/javascripts/app.js
 
-# cljs stuff
+figwheel_server.log
 pom.xml
 *jar
 /lib/
 /classes/
-/out/
+/web/public/javascripts/out
 /target/
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
+.repl
+.nrepl-port

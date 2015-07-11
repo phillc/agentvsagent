@@ -27,11 +27,7 @@ createHttp = ->
       next()
 
   app.get '/', (req, res) ->
-    res.send """
-      <a href='/game/hearts/play'>Hearts</a>
-      <br />
-      <a href='/game/skull/play'>Skull</a>
-    """
+    res.sendfile(__dirname + '/web/views/index.html')
   return app
 
 createIoGameServer = (httpServer, entrance) ->
