@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var program = require('commander')
+var program = require('commander');
 
 var ran = false;
 program
-  .version(require('../package.json').version)
+  .version(require('../package.json').version);
 
 program
   .command('server')
@@ -35,12 +35,12 @@ program
 
 program
   .on('*', function() {
-    program.outputHelp()
+    program.outputHelp();
   });
 
-program.parse(process.argv)
+program.parse(process.argv);
 
 if (program.args.length < 1 ) {
-  program.outputHelp()
-  console.log(program.args)
+  program.outputHelp();
+  console.log(program.args);
 }
