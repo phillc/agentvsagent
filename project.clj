@@ -11,13 +11,13 @@
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-figwheel "0.3.5"]]
 
-  :source-paths ["src/cljs"]
+  :source-paths ["src/client"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {
     :builds [{:id "dev"
-              :source-paths ["src/cljs"]
+              :source-paths ["src/client"]
 
               :figwheel { :on-jsload "agent-vs-agent.core/on-js-reload" }
 
@@ -27,7 +27,7 @@
                          :output-dir "resources/public/js/compiled/out"
                          :source-map-timestamp true }}
              {:id "min"
-              :source-paths ["src/cljs"]
+              :source-paths ["src/client"]
               :compiler {:output-to "resources/public/js/compiled/agent_vs_agent.js"
                          :main agent-vs-agent.core
                          :optimizations :advanced
