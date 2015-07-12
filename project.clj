@@ -11,35 +11,34 @@
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-figwheel "0.3.5"]]
 
-  :source-paths ["src"]
+  :source-paths ["src/cljs"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {
     :builds [{:id "dev"
-              :source-paths ["src"]
+              :source-paths ["src/cljs"]
 
               :figwheel { :on-jsload "agent-vs-agent.core/on-js-reload" }
 
               :compiler {:main agent-vs-agent.core
-                         :asset-path "javascripts/out"
-                         :output-to "web/public/javascripts/app.js"
-                         :output-dir "web/public/javascripts/out"
+                         :asset-path "js/compiled/out"
+                         :output-to "resources/public/js/compiled/agent_vs_agent.js"
+                         :output-dir "resources/public/js/compiled/out"
                          :source-map-timestamp true }}
              {:id "min"
-              :source-paths ["src"]
-              :compiler {:output-to "web/public/javascripts/app.js"
+              :source-paths ["src/cljs"]
+              :compiler {:output-to "resources/public/js/compiled/agent_vs_agent.js"
                          :main agent-vs-agent.core
                          :optimizations :advanced
                          :pretty-print false}}]}
 
-
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources"
-             :server-port 3450 ;; default
+             :server-port 3450
              ;; :server-ip "127.0.0.1"
 
-             ;; :css-dirs ["web/assets/css"] ;; watch and update CSS
+             :css-dirs ["resources/public/css"] ;; watch and update CSS
 
              ;; Start an nREPL server into the running figwheel process
              ;; :nrepl-port 7888

@@ -8,14 +8,14 @@ gen
 .DS_Store
 .listen_test
 
-# compiled from cljs
-web/public/javascripts/app.js
+###
 
+/resources/public/js/compiled/**
 figwheel_server.log
 pom.xml
 *jar
 /classes/
-/web/public/javascripts/out
+/out
 /target/
 .lein-deps-sum
 .lein-repl-history
