@@ -1,8 +1,8 @@
-Game = require "../../../lib/hearts/game"
-Card = require "../../../lib/hearts/card"
-Suit = require "../../../lib/hearts/suit"
-Rank = require "../../../lib/hearts/rank"
-actions = require "../../../lib/hearts/actions"
+Game = require "../../../src/server/hearts/game"
+Card = require "../../../src/server/hearts/card"
+Suit = require "../../../src/server/hearts/suit"
+Rank = require "../../../src/server/hearts/rank"
+actions = require "../../../src/server/hearts/actions"
 
 describe "Game", ->
   beforeEach ->

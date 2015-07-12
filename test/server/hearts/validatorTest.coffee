@@ -1,6 +1,6 @@
-Validator = require "../../../lib/hearts/validator"
-Pile = require "../../../lib/hearts/pile"
-Builder = require "../../../lib/hearts/builder"
+Validator = require "../../../src/server/hearts/validator"
+Pile = require "../../../src/server/hearts/pile"
+Builder = require "../../../src/server/hearts/builder"
 
 describe "Validator", ->
   beforeEach ->
@@ -23,4 +23,3 @@ describe "Validator", ->
         @validator.validate "passCards", cards: cards.toJSON(), (err) ->
           expect(err).to.be.null
           done()
-

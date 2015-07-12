@@ -1,5 +1,5 @@
-Game = require "../../../lib/skull/game"
-actions = require "../../../lib/skull/actions"
+Game = require "../../../src/server/skull/game"
+actions = require "../../../src/server/skull/actions"
 
 describe "Game", ->
   beforeEach ->
@@ -38,4 +38,3 @@ describe "Game", ->
 
   #       @game.handle "passCards.north"
   #       expect(@game.engine.state).to.equal("aborted")
-

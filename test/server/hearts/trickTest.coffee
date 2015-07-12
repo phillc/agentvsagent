@@ -1,7 +1,7 @@
-Trick = require "../../../lib/hearts/trick"
-Card = require "../../../lib/hearts/card"
-Suit = require "../../../lib/hearts/suit"
-Rank = require "../../../lib/hearts/rank"
+Trick = require "../../../src/server/hearts/trick"
+Card = require "../../../src/server/hearts/card"
+Suit = require "../../../src/server/hearts/suit"
+Rank = require "../../../src/server/hearts/rank"
 
 describe "Trick", ->
   describe "#winner", ->
@@ -83,5 +83,3 @@ describe "Trick", ->
       trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
       trick.played.addCard(new Card(Suit.HEARTS, Rank.THREE))
       expect(trick.positionsMissing()).to.eql([])
-
-

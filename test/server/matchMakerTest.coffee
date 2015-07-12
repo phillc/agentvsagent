@@ -1,4 +1,4 @@
-MatchMaker = require '../../lib/matchMaker'
+MatchMaker = require '../../src/server/matchMaker'
 
 describe "MatchMaker", ->
   beforeEach ->
@@ -75,5 +75,3 @@ describe "MatchMaker", ->
       @arena.addAgent(Factory.createAgent())
       @arena.addAgent(Factory.createAgent())
       expect(Object.keys(@arena.runningMatches)).to.have.length(1)
-
-

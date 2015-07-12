@@ -1,4 +1,4 @@
-Agent = require "../../lib/agent"
+Agent = require "../../src/server/agent"
 
 describe "Agent", ->
   beforeEach ->
@@ -118,4 +118,3 @@ describe "Agent", ->
         @agent.forward("something")
         @agent.send("error", "foo")
         expect(@agent.connectionState.state).to.equal("finished")
-

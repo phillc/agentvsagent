@@ -1,4 +1,4 @@
-Rank = require "../../../lib/hearts/rank"
+Rank = require "../../../src/server/hearts/rank"
 
 describe "Rank", ->
   beforeEach ->
@@ -24,4 +24,3 @@ describe "Rank", ->
     it "orders the ace the highest", ->
       expect(@ranks[12].name).to.equal('ace')
       expect(@ranks[12].order).to.equal(13)
-

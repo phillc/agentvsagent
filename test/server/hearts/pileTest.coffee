@@ -1,7 +1,7 @@
-Pile = require "../../../lib/hearts/pile"
-Card = require "../../../lib/hearts/card"
-Suit = require "../../../lib/hearts/suit"
-Rank = require "../../../lib/hearts/rank"
+Pile = require "../../../src/server/hearts/pile"
+Card = require "../../../src/server/hearts/card"
+Suit = require "../../../src/server/hearts/suit"
+Rank = require "../../../src/server/hearts/rank"
 
 describe "Pile", ->
   beforeEach ->
@@ -124,4 +124,3 @@ describe "Pile", ->
 
     it "returns null if card not in the pile", ->
       expect(@pile.findCard(Suit.CLUBS, Rank.THREE)).to.not.exist
-

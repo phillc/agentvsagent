@@ -1,9 +1,9 @@
-Round = require "../../../lib/hearts/round"
-Pile = require "../../../lib/hearts/pile"
-Card = require "../../../lib/hearts/card"
-Suit = require "../../../lib/hearts/suit"
-Rank = require "../../../lib/hearts/rank"
-Trick = require "../../../lib/hearts/trick"
+Round = require "../../../src/server/hearts/round"
+Pile = require "../../../src/server/hearts/pile"
+Card = require "../../../src/server/hearts/card"
+Suit = require "../../../src/server/hearts/suit"
+Rank = require "../../../src/server/hearts/rank"
+Trick = require "../../../src/server/hearts/trick"
 
 describe "Round", ->
   beforeEach ->

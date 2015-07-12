@@ -1,4 +1,4 @@
-Suit = require "../../../lib/hearts/suit"
+Suit = require "../../../src/server/hearts/suit"
 
 describe "Suit", ->
   beforeEach ->

@@ -1,5 +1,5 @@
 machina = require('machina')
-logger = require '../lib/logger'
+logger = require './logger'
 {EventEmitter} = require 'events'
 
 ConnectionState = machina.Fsm.extend
@@ -89,4 +89,3 @@ module.exports = class Agent
   validateWith: (@validator) ->
 
   # end: (message, data)
-

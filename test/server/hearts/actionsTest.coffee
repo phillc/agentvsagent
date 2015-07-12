@@ -1,7 +1,7 @@
-actions = require "../../../lib/hearts/actions"
-Card = require "../../../lib/hearts/card"
-Suit = require "../../../lib/hearts/suit"
-Rank = require "../../../lib/hearts/rank"
+actions = require "../../../src/server/hearts/actions"
+Card = require "../../../src/server/hearts/card"
+Suit = require "../../../src/server/hearts/suit"
+Rank = require "../../../src/server/hearts/rank"
 
 describe "actions", ->
   beforeEach ->

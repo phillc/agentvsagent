@@ -1,4 +1,4 @@
-Arena = require '../../lib/arena'
+Arena = require '../../src/server/arena'
 
 describe "Arena", ->
   beforeEach ->
@@ -95,4 +95,3 @@ describe "Arena", ->
 
   #   it "returns nothing if there is no game", ->
   #     should.not.exist(@arena.getGame("foo"))
-

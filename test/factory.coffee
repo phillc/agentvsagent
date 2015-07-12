@@ -1,6 +1,6 @@
-Arena = require "../lib/arena"
-HeartsBuilder = require "../lib/hearts/builder"
-Agent = require "../lib/agent"
+Arena = require "../src/server/arena"
+HeartsBuilder = require "../src/server/hearts/builder"
+Agent = require "../src/server/agent"
 und = require 'underscore'
 
 exports.createArena = createArena = (options={}) ->

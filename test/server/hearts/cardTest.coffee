@@ -1,6 +1,6 @@
-Card = require "../../../lib/hearts/card"
-Suit = require "../../../lib/hearts/suit"
-Rank = require "../../../lib/hearts/rank"
+Card = require "../../../src/server/hearts/card"
+Suit = require "../../../src/server/hearts/suit"
+Rank = require "../../../src/server/hearts/rank"
 
 describe "Card", ->
   beforeEach ->
@@ -59,4 +59,3 @@ describe "Card", ->
       expect(new Card(Suit.SPADES, Rank.QUEEN).score()).to.equal(13)
       expect(new Card(Suit.SPADES, Rank.THREE).score()).to.equal(0)
       expect(new Card(Suit.CLUBS, Rank.TWO).score()).to.equal(0)
-
