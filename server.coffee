@@ -2,22 +2,22 @@ net = require 'net'
 express = require 'express'
 winston = require 'winston'
 und = require 'underscore'
-logger = require './lib/logger'
+logger = require './src/server/logger'
 
-Agent = require './lib/agent'
-Entrance = require './lib/entrance'
-Arena = require './lib/arena'
-MatchMaker = require './lib/matchMaker'
+Agent = require './src/server/agent'
+Entrance = require './src/server/entrance'
+Arena = require './src/server/arena'
+MatchMaker = require './src/server/matchMaker'
 
-HeartsBuilder = require './lib/hearts/builder'
-SkullBuilder = require './lib/skull/builder'
+HeartsBuilder = require './src/server/hearts/builder'
+SkullBuilder = require './src/server/skull/builder'
 
 createHttp = ->
   app = express()
   app.enable('strict routing')
   app.set 'view engine', 'jade'
   app.set 'views', __dirname + '/web/views'
-  app.use '/', express.static(__dirname + '/web/public')
+  app.use '/', express.static(__dirname + '/resources/public')
   paths = und(["assets/css", "assets/js"]).map (dir) -> __dirname + "/web/" + dir
   app.use require("connect-assets")(paths: paths)
 
@@ -26,8 +26,6 @@ createHttp = ->
       res.locals.pretty = true
       next()
 
-  app.get '/', (req, res) ->
-    res.sendfile(__dirname + '/web/views/index.html')
   return app
 
 createIoGameServer = (httpServer, entrance) ->
@@ -111,9 +109,9 @@ exports.start = (options) ->
   heartsArena = buildArena(HeartsBuilder, options)
   skullArena = buildArena(SkullBuilder, options)
 
-  ["hearts"].forEach (name) ->
-    app.use "/game/#{name}/play", (req, res) ->
-      res.render "#{name}/play"
+  # ["hearts"].forEach (name) ->
+    # app.use "/game/#{name}/play", (req, res) ->
+      # res.render "#{name}/play"
 
   entrance = new Entrance
     hearts: heartsArena
