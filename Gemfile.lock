@@ -1,40 +1,70 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    coderay (1.0.9)
-    ffi (1.9.3)
-    guard (1.6.2)
-      listen (>= 0.6.0)
-      lumberjack (>= 1.0.2)
-      pry (>= 0.9.10)
-      terminal-table (>= 1.4.3)
-      thor (>= 0.14.6)
-    guard-process (1.0.6)
-      guard (>= 0.4.2)
+    coderay (1.1.0)
+    commonjs (0.2.7)
+    ffi (1.9.10)
+    formatador (0.2.5)
+    guard (2.12.8)
+      formatador (>= 0.2.4)
+      listen (>= 2.7, <= 4.0)
+      lumberjack (~> 1.0)
+      nenv (~> 0.1)
+      notiffany (~> 0.0)
+      pry (>= 0.9.12)
+      shellany (~> 0.0)
+      thor (>= 0.18.1)
+    guard-compat (1.2.1)
+    guard-less (2.0.0)
+      guard (~> 2.0)
+      guard-compat (~> 1.2)
+      less (~> 2.3)
+    guard-process (1.2.1)
+      guard-compat (~> 1.2, >= 1.2.1)
       spoon (~> 0.0.1)
     guard-shell (0.5.1)
       guard (>= 1.1.0)
-    listen (0.7.3)
-    lumberjack (1.0.2)
-    method_source (0.8.1)
-    pry (0.9.12)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
+    less (2.6.0)
+      commonjs (~> 0.2.7)
+    libv8 (3.16.14.11)
+    listen (3.0.2)
+      rb-fsevent (>= 0.9.3)
+      rb-inotify (>= 0.9)
+    lumberjack (1.0.9)
+    method_source (0.8.2)
+    nenv (0.2.0)
+    notiffany (0.0.6)
+      nenv (~> 0.1)
+      shellany (~> 0.0)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
       slop (~> 3.4)
     rake (10.0.3)
-    rb-fsevent (0.9.3)
-    slop (3.4.3)
+    rb-fsevent (0.9.5)
+    rb-inotify (0.9.5)
+      ffi (>= 0.5.0)
+    ref (2.0.0)
+    shellany (0.0.1)
+    slop (3.6.0)
     spoon (0.0.4)
       ffi
-    terminal-table (1.4.5)
-    thor (0.17.0)
+    therubyracer (0.12.2)
+      libv8 (~> 3.16.14.0)
+      ref
+    thor (0.19.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   guard
+  guard-less
   guard-process
   guard-shell
   rake
   rb-fsevent
+  therubyracer
+
+BUNDLED WITH
+   1.10.5

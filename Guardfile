@@ -1,12 +1,8 @@
 require "guard"
-require "guard/guard"
+require 'guard/compat/plugin'
 
 module ::Guard
-  class Mocha < ::Guard::Guard
-    def initialize(watchers=[], options={})
-      super(watchers, options)
-    end
-
+  class Mocha < Plugin
     def start
       ::Guard::UI.info 'Guard::Mocha is starting'
       run_all if options[:all_on_start]
@@ -46,3 +42,14 @@ guard :mocha do
   watch(%r{^lib/(.+)Test\.coffee$}) { |m| "spec/lib/#{m[1]}_spec.rb" }
 end
 
+
+less_options = {
+  all_on_start: true,
+  all_after_change: true,
+  patterns: [%r{^src/less/(.+\.less)$}],
+  output: "resources/public/css"
+}
+
+guard :less, less_options do
+  less_options[:patterns].each { |pattern| watch(pattern) }
+end

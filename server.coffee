@@ -15,11 +15,18 @@ SkullBuilder = require './src/server/skull/builder'
 createHttp = ->
   app = express()
   app.enable('strict routing')
-  app.set 'view engine', 'jade'
-  app.set 'views', __dirname + '/web/views'
+  # app.set 'view engine', 'jade'
+  # app.set 'views', __dirname + '/web/views'
+
+  # paths = und(["assets/css"]).map (dir) -> __dirname + "/resources/public/" + dir
+  # app.use require("connect-assets")(paths: paths)
+
+  app.use require("connect-assets")(
+    paths: [__dirname + "/resources/public"]
+    servePath: "/"
+  )
+
   app.use '/', express.static(__dirname + '/resources/public')
-  paths = und(["assets/css", "assets/js"]).map (dir) -> __dirname + "/web/" + dir
-  app.use require("connect-assets")(paths: paths)
 
   if app.get('env') == 'development'
     app.use (req, res, next) ->

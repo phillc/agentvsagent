@@ -11,6 +11,7 @@ gen
 ###
 
 /resources/public/js/compiled/**
+/resources/public/css/style.css
 figwheel_server.log
 pom.xml
 *jar
