@@ -43,7 +43,7 @@ task :agents, :number, :langs, :game, :sleep do |t, args|
   agent_commands = {
     "hearts" => {
       "ruby" => HeartsAgent.new(directory: 'dist/hearts/ruby', command: 'ruby my_agent.rb'),
-      "coffee" => HeartsAgent.new(directory: 'dist/hearts/nodejs', command: 'coffee myAgent.coffee'),
+      "coffee" => HeartsAgent.new(directory: 'dist/hearts/nodejs', command: './node_modules/coffee-script/bin/coffee myAgent.coffee'),
       "haskell" => HeartsAgent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent'),
       "go" => HeartsAgent.new(directory: 'dist/hearts/go', compile: 'make', command: 'bin/my_agent')
     },
