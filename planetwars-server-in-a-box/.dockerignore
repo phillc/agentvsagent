@@ -1,0 +1,5 @@
+server/*.o
+server/*.tmp
+server/expire
+server/server
+

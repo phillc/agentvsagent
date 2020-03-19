@@ -5,6 +5,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <set>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
