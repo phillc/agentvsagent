@@ -20,7 +20,7 @@ class Agent
   end
 
   def command
-    %{#{cd} && ../../../bin/ava play #{game} --run="#{@command}"}
+    %{#{cd} && ../../../cards-server-in-a-box/bin/ava play #{game} --run="#{@command}"}
   end
 end
 
@@ -42,13 +42,13 @@ task :agents, :number, :langs, :game, :sleep do |t, args|
 
   agent_commands = {
     "hearts" => {
-      "ruby" => HeartsAgent.new(directory: 'dist/hearts/ruby', command: 'ruby my_agent.rb'),
-      "coffee" => HeartsAgent.new(directory: 'dist/hearts/nodejs', command: './node_modules/coffee-script/bin/coffee myAgent.coffee'),
-      "haskell" => HeartsAgent.new(directory: 'dist/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent'),
-      "go" => HeartsAgent.new(directory: 'dist/hearts/go', compile: 'make', command: 'bin/my_agent')
+      "ruby" => HeartsAgent.new(directory: 'cards-agents-in-a-box/hearts/ruby', command: 'ruby my_agent.rb'),
+      "coffee" => HeartsAgent.new(directory: 'cards-agents-in-a-box/hearts/nodejs', command: './node_modules/coffee-script/bin/coffee myAgent.coffee'),
+      "haskell" => HeartsAgent.new(directory: 'cards-agents-in-a-box/hearts/haskell', compile: 'cabal configure && cabal build', command: 'dist/build/myAgent/myAgent'),
+      "go" => HeartsAgent.new(directory: 'cards-agents-in-a-box/hearts/go', compile: 'make', command: 'bin/my_agent')
     },
     "skull" => {
-      "ruby" => SkullAgent.new(directory: 'dist/skull/ruby', command: 'ruby my_agent.rb'),
+      "ruby" => SkullAgent.new(directory: 'cards-agents-in-a-box/skull/ruby', command: 'ruby my_agent.rb'),
     }
   }
 
