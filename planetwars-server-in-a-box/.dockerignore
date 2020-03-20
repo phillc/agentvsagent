@@ -2,4 +2,5 @@ server/*.o
 server/*.tmp
 server/expire
 server/server
+.DS_Store
 
