@@ -95,7 +95,7 @@ struct Conn {
 
 struct Game {
 	Game(Conn *p1, Conn *p2, const Board &board) : p1(p1), p2(p2),
-	    board(board), timeout(0), id(++gameid), turns(0) { }
+		board(board), timeout(0), id(++gameid), turns(0) { }
 	Conn		*p1;
 	Conn		*p2;
 	Board		 board;
@@ -138,7 +138,7 @@ readBoards(const char *dn)
 		return;
 	lastscan = time(NULL);
 	log("%u connections, %u games%s%s", (unsigned)conns.size(),
-	    (unsigned)games.size(), kick ? " KICK" : "", shut ? " SHUT" : "");
+		(unsigned)games.size(), kick ? " KICK" : "", shut ? " SHUT" : "");
 	boards.clear();
 	fts = fts_open(path_argv, FTS_NOSTAT, 0);
 	if (fts == NULL) {
@@ -164,7 +164,7 @@ dropIdle()
 	for (list<Conn *>::iterator c = conns.begin(); c != conns.end(); ++c) {
 		if ((*c)->state == STATE_CONNECTED && (*c)->timeout < usec()) {
 			log("dropping idle connection from %s",
-			    (*c)->user.c_str());
+				(*c)->user.c_str());
 			(*c)->state = STATE_CLOSED;
 		}
 	}
@@ -189,13 +189,13 @@ startNewGame()
 
 	if (shut) {
 		for (list<Conn *>::iterator c = conns.begin();
-		    c != conns.end(); ++c) {
+			c != conns.end(); ++c) {
 			if ((*c)->state == STATE_CONNECTED ||
-			    (*c)->state == STATE_LOGGEDIN) {
+				(*c)->state == STATE_LOGGEDIN) {
 				snprintf(n, sizeof(n), "INFO Server is "
-				    "shutting down, waiting for %u games to "
-				    "complete. Try again in a couple of "
-				    "seconds.\n", (unsigned)games.size());
+					"shutting down, waiting for %u games to "
+					"complete. Try again in a couple of "
+					"seconds.\n", (unsigned)games.size());
 				write_buf(*c, n, strlen(n));
 				(*c)->state = STATE_CLOSED;
 			}
@@ -205,7 +205,7 @@ startNewGame()
 	/* pick the first player among those that waited */
 	for (list<Conn *>::iterator c = conns.begin(); c != conns.end(); ++c)
 		if ((*c)->state == STATE_LOGGEDIN &&
-		    (*c)->timeout < usec())
+			(*c)->timeout < usec())
 			v.insert(v.end(), *c);
 	if (v.size() < 1)
 		return;
@@ -216,7 +216,7 @@ startNewGame()
 	v.clear();
 	for (list<Conn *>::iterator c = conns.begin(); c != conns.end(); ++c)
 		if ((*c)->state == STATE_LOGGEDIN &&
-		    (*c)->user != p1->user)
+			(*c)->user != p1->user)
 			v.insert(v.end(), *c);
 	if (v.size() < 1)
 		return;
@@ -228,7 +228,7 @@ startNewGame()
 		if (absdiff(p1->elo, v[i]->elo) == absdiff(p1->elo, p2->elo))
 			w.insert(w.end(), v[i]);
 		else if (absdiff(p1->elo, v[i]->elo) <
-		    absdiff(p1->elo, p2->elo)) {
+			absdiff(p1->elo, p2->elo)) {
 			w.clear();
 			w.insert(w.end(), v[i]);
 			p2 = v[i];
@@ -241,19 +241,19 @@ startNewGame()
 	p1->state = p2->state = STATE_PLAYING;
 	p1->game = p2->game = g;
 	snprintf(n, sizeof(n), "%u\n%u\n%s\n",
-	    (unsigned)time(NULL), g->id, g->board.getFn().c_str());
+		(unsigned)time(NULL), g->id, g->board.getFn().c_str());
 	g->s = n;
 	g->d = p1->user + "\n" + p2->user + "\n" + g->board.getFn() + "\n";
 	games.insert(games.end(), g);
 	snprintf(n, sizeof(n), "INFO Your map is %s\n",
-	    g->board.getFn().c_str());
+		g->board.getFn().c_str());
 	write_buf(p1, n, strlen(n));
 	write_buf(p2, n, strlen(n));
 	snprintf(n, sizeof(n), "INFO Your opponent is %s with %d Elo\n",
-	    p2->user.c_str(), p2->elo);
+		p2->user.c_str(), p2->elo);
 	write_buf(p1, n, strlen(n));
 	snprintf(n, sizeof(n), "INFO Your opponent is %s with %d Elo\n",
-	    p1->user.c_str(), p1->elo);
+		p1->user.c_str(), p1->elo);
 	write_buf(p2, n, strlen(n));
 	snprintf(n, sizeof(n), "INFO This is game_id=%u\n", g->id);
 	write_buf(p1, n, strlen(n));
@@ -267,7 +267,7 @@ startNewGame()
 	p1->move = p2->move = 0;
 	g->timeout = usec() + 10000000;
 	log("started new game between %s and %s on map %s",
-	    p1->user.c_str(), p2->user.c_str(), g->board.getFn().c_str());
+		p1->user.c_str(), p2->user.c_str(), g->board.getFn().c_str());
 }
 
 /* WIN=p1 wins, LOSS=p2 wins */
@@ -298,7 +298,7 @@ endGame(Game *g, RESULT r, string s = "")
 		fprintf(f, "[White \"%s\"]\n", g->p1->user.c_str());
 		fprintf(f, "[Black \"%s\"]\n", g->p2->user.c_str());
 		fprintf(f, "[Result \"%s\"]\n",
-		    (r == DRAW ? "1/2-1/2" : (r == WIN ? "1-0" : "0-1")));
+			(r == DRAW ? "1/2-1/2" : (r == WIN ? "1-0" : "0-1")));
 		fprintf(f, "%s\n", g->s.c_str());
 		fflush(f);
 		fclose(f);
@@ -306,32 +306,32 @@ endGame(Game *g, RESULT r, string s = "")
 		log("ERROR: fopen: %s: %s", resultsfn, strerror(errno));
 	if (r == DRAW)
 		log("game between %s and %s ends: draw",
-		    g->p1->user.c_str(), g->p2->user.c_str());
+			g->p1->user.c_str(), g->p2->user.c_str());
 	else
 		log("game between %s and %s ends after %u turns: %s wins%s%s%s",
-		    g->p1->user.c_str(), g->p2->user.c_str(), g->turns,
-		    r == WIN ? g->p1->user.c_str() : g->p2->user.c_str(),
-		    s.empty() ? "" : " (", s.c_str(), s.empty() ? "" : ")");
+			g->p1->user.c_str(), g->p2->user.c_str(), g->turns,
+			r == WIN ? g->p1->user.c_str() : g->p2->user.c_str(),
+			s.empty() ? "" : " (", s.c_str(), s.empty() ? "" : ")");
 	if (r == WIN)
 		snprintf(n, sizeof(n), "INFO You WIN against %s\n",
-		    g->p2->user.c_str());
+			g->p2->user.c_str());
 	else if (r == LOSS)
 		snprintf(n, sizeof(n), "INFO You LOSE against %s\n",
-		    g->p2->user.c_str());
+			g->p2->user.c_str());
 	else
 		snprintf(n, sizeof(n), "INFO You DRAW with %s\n",
-		    g->p2->user.c_str());
+			g->p2->user.c_str());
 	if (g->p1->state == STATE_PLAYING)
 		write_buf(g->p1, n, strlen(n));
 	if (r == WIN)
 		snprintf(n, sizeof(n), "INFO You LOSE against %s\n",
-		    g->p1->user.c_str());
+			g->p1->user.c_str());
 	else if (r == LOSS)
 		snprintf(n, sizeof(n), "INFO You WIN against %s\n",
-		    g->p1->user.c_str());
+			g->p1->user.c_str());
 	else
 		snprintf(n, sizeof(n), "INFO You DRAW with %s\n",
-		    g->p1->user.c_str());
+			g->p1->user.c_str());
 	if (g->p2->state == STATE_PLAYING)
 		write_buf(g->p2, n, strlen(n));
 	g->p1->game = g->p2->game = 0;
@@ -349,8 +349,8 @@ checkRunningGames()
 	while (g != games.end()) {
 		if (kick) {
 			snprintf(n, sizeof(n), "INFO Server shutting down "
-			    "immediately, this game is aborted and not "
-			    "counted. Sorry.\n");
+				"immediately, this game is aborted and not "
+				"counted. Sorry.\n");
 			write_buf((*g)->p1, n, strlen(n));
 			write_buf((*g)->p2, n, strlen(n));
 			(*g)->p1->state = STATE_CLOSED;
@@ -388,19 +388,19 @@ checkRunningGames()
 			log("game timed out");
 			if ((*g)->p1->move > 0) {
 				snprintf(n, sizeof(n), "INFO %s timed out\n",
-				    (*g)->p2->user.c_str());
+					(*g)->p2->user.c_str());
 				write_buf((*g)->p1, n, strlen(n));
 				write_buf((*g)->p2, n, strlen(n));
 				endGame(*g, WIN, "TIMEOUT");
 			} else if ((*g)->p2->move > 0) {
 				snprintf(n, sizeof(n), "INFO %s timed out\n",
-				    (*g)->p1->user.c_str());
+					(*g)->p1->user.c_str());
 				write_buf((*g)->p1, n, strlen(n));
 				write_buf((*g)->p2, n, strlen(n));
 				endGame(*g, LOSS, "TIMEOUT");
 			} else {
 				snprintf(n, sizeof(n), "INFO both players "
-				    "timed out\n");
+					"timed out\n");
 				write_buf((*g)->p1, n, strlen(n));
 				write_buf((*g)->p2, n, strlen(n));
 				endGame(*g, DRAW, "TIMEOUT");
@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
 	if (rl.rlim_cur < 1024) {
 		if (rl.rlim_max < 1024) {
 			fprintf(stderr, "main: rl.rlim_max %d < 1024\n",
-			    (int)rl.rlim_max);
+				(int)rl.rlim_max);
 			goto error;
 		}
 		rl.rlim_cur = 1024;
@@ -461,26 +461,26 @@ int main(int argc, char *argv[])
 		goto error;
 	}
 
-        val = 1;
-        if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, (const char *)&val,
-	    sizeof(val))) {
-                perror("main: setsockopt");
+	val = 1;
+	if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, (const char *)&val,
+		sizeof(val))) {
+		perror("main: setsockopt");
 		goto error;
-        }
+	}
 
 	memset(&sa, 0, sizeof(sa));
 	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = inet_addr(listen_addr);
 	sa.sin_port = htons(listen_port);
-        if (bind(listen_fd, (const struct sockaddr *)&sa, sizeof(sa))) {
-                perror("main: bind");
+	if (bind(listen_fd, (const struct sockaddr *)&sa, sizeof(sa))) {
+		perror("main: bind");
 		goto error;
-        }
+	}
 
-        if (listen(listen_fd, 1024)) {
-                perror("main: listen");
+	if (listen(listen_fd, 1024)) {
+		perror("main: listen");
 		goto error;
-        }
+	}
 
 	log("ready, accepting connections");
 
@@ -496,7 +496,7 @@ int main(int argc, char *argv[])
 		fds[nfds++].events = POLLIN;
 
 		for (list<Conn *>::iterator c = conns.begin();
-		    c != conns.end(); ++c) {
+		c != conns.end(); ++c) {
 			fds[nfds].fd = (*c)->fd;
 			fds[nfds].revents = 0;
 			fds[nfds].events = 0;
@@ -534,11 +534,11 @@ int main(int argc, char *argv[])
 				handle_write(*c);
 			if ((*c)->state == STATE_CLOSED) {
 				log("player %s disconnected",
-				    (*c)->user.c_str());
+					(*c)->user.c_str());
 				if ((*c)->game) {
 					char n[512];
 					list<Game *>::iterator g =
-					    games.begin();
+						games.begin();
 					while (g != games.end()) {
 						if (*g == (*c)->game) {
 							games.erase(g);
@@ -547,23 +547,23 @@ int main(int argc, char *argv[])
 						++g;
 					}
 					snprintf(n, sizeof(n), "INFO Opponent "
-					    "disconnected\n");
+						"disconnected\n");
 					if (*c == (*c)->game->p1) {
 						if ((*c)->game->p2->state ==
-						    STATE_PLAYING)
+							STATE_PLAYING)
 							write_buf(
-							    (*c)->game->p2, n,
-							    strlen(n));
+								(*c)->game->p2, n,
+								strlen(n));
 						endGame((*c)->game, LOSS,
-						    "DISCONNECT");
+							"DISCONNECT");
 					} else {
 						if ((*c)->game->p1->state ==
-						    STATE_PLAYING)
+							STATE_PLAYING)
 							write_buf(
-							    (*c)->game->p1, n,
-							    strlen(n));
+								(*c)->game->p1, n,
+								strlen(n));
 						endGame((*c)->game, WIN,
-						    "DISCONNECT");
+							"DISCONNECT");
 					}
 				}
 				close((*c)->fd);
@@ -609,7 +609,7 @@ handle_connect(int listen_fd)
 	}
 
 	log("connection from %s:%i", inet_ntoa(sa.sin_addr),
-	    ntohs(sa.sin_port));
+		ntohs(sa.sin_port));
 
 	conn->src.sin_family = AF_INET;
 	conn->src.sin_addr.s_addr = sa.sin_addr.s_addr;
@@ -638,8 +638,8 @@ write_buf(Conn *conn, const void *data, unsigned len)
 {
 	if (len > sizeof(conn->out.buf) - conn->out.off - conn->out.len) {
 		log("write_buf: len %u > sizeof %u - off %u - len %u",
-		    len, (unsigned)sizeof(conn->out.buf), conn->out.off,
-		    conn->out.len);
+			len, (unsigned)sizeof(conn->out.buf), conn->out.off,
+			conn->out.len);
 		return;
 	}
 	memcpy(conn->out.buf + conn->out.off + conn->out.len, data, len);
@@ -702,7 +702,7 @@ check_login(const char *user, const char *password)
 		// new user sets a password
 		if ((f = fopen(usersfn, "a")) == NULL) {
 			log("check_login: fopen: %s: %s",
-			    usersfn, strerror(errno));
+				usersfn, strerror(errno));
 		} else {
 			fprintf(f, "%s %s\n", user, password);
 			fflush(f);
@@ -735,28 +735,28 @@ handle_line(Conn *conn, const char *s)
 			if (check_login(u, p)) {
 				if (p[0]) {
 					log("login failed for user '%s' with "
-					    "password '%s'", u, p);
+						"password '%s'", u, p);
 					snprintf(u, sizeof(u),
-					    "INFO Password rejected\n");
+						"INFO Password rejected\n");
 				} else {
 					log("login failed for user '%s' "
-					    "without password", u);
+						"without password", u);
 					snprintf(u, sizeof(u),
-					    "INFO Password required\n");
+						"INFO Password required\n");
 				}
 				write_buf(conn, u, strlen(u));
 				break;
 			}
 			log("connection %s identified as %s",
-			    conn->user.c_str(), u);
+				conn->user.c_str(), u);
 			conn->user = u;
 			conn->elo = read_elo(u);
 			snprintf(u, sizeof(u), "INFO You currently have "
-			    "%d Elo\n", conn->elo);
+				"%d Elo\n", conn->elo);
 			write_buf(conn, u, strlen(u));
 			snprintf(u, sizeof(u), "INFO There are currently "
-			    "%u connections and %u games running\n",
-			    (unsigned)conns.size(), (unsigned)games.size());
+				"%u connections and %u games running\n",
+				(unsigned)conns.size(), (unsigned)games.size());
 			write_buf(conn, u, strlen(u));
 			conn->state = STATE_LOGGEDIN;
 			conn->timeout = usec() + 5000000;
@@ -777,12 +777,12 @@ handle_line(Conn *conn, const char *s)
 		}
 		if (conn->move) {
 			log("handle_line: player %s: already moving: '%s'",
-			    conn->user.c_str(), s);
+				conn->user.c_str(), s);
 			snprintf(n, sizeof(n), "INFO You sent before I said "
-			    "go: '%s'\n", s);
+				"go: '%s'\n", s);
 			write_buf(conn, n, strlen(n));
 			endGame(conn->game, player == 1 ? LOSS : WIN,
-			    "INVALID");
+				"INVALID");
 			games.erase(game);
 			return false;
 		}
@@ -792,33 +792,33 @@ handle_line(Conn *conn, const char *s)
 		}
 		if (sscanf(s, "%d %d %d", &src, &dst, &ships) != 3) {
 			log("handle_line: player %s: sscanf: '%s'",
-			    conn->user.c_str(), s);
+				conn->user.c_str(), s);
 			snprintf(n, sizeof(n), "INFO You sent an invalid "
-			    "line: '%s'\n", s);
+				"line: '%s'\n", s);
 			write_buf(conn, n, strlen(n));
 			endGame(conn->game, player == 1 ? LOSS : WIN,
-			    "INVALID");
+				"INVALID");
 			games.erase(game);
 			return false;
 		}
 		if (!conn->game || (conn != conn->game->p1 &&
-		    conn != conn->game->p2)) {
+			conn != conn->game->p2)) {
 			log("handle_line: player %s: !conn->game",
-			    conn->user.c_str());
+				conn->user.c_str());
 			break;
 		}
 		string err;
 		if (conn->game->board.issueOrder(player, src, dst, ships,
-		    err)) {
+			err)) {
 			log("handle_line: player %s: issueOrder(src %d, "
-			    "dst %d, ships %d) failed: %s", conn->user.c_str(),
-			    src, dst, ships, err.c_str());
+				"dst %d, ships %d) failed: %s", conn->user.c_str(),
+				src, dst, ships, err.c_str());
 			snprintf(n, sizeof(n), "INFO You issued an invalid "
-			    "order: src %d, dst %d, ships %d: %s\n",
-			    src, dst, ships, err.c_str());
+				"order: src %d, dst %d, ships %d: %s\n",
+				src, dst, ships, err.c_str());
 			write_buf(conn, n, strlen(n));
 			endGame(conn->game, player == 1 ? LOSS : WIN,
-			    "INVALID");
+				"INVALID");
 			games.erase(game);
 			return false;
 		}
@@ -826,7 +826,7 @@ handle_line(Conn *conn, const char *s)
 	}
 	default:
 		log("handle_line: player %s: unexpected line '%s'",
-		    conn->user.c_str(), s);
+			conn->user.c_str(), s);
 	}
 	return true;
 }
@@ -839,8 +839,8 @@ handle_read(Conn *conn)
 	if (conn->in.off + conn->in.len + 1 >= sizeof(conn->in.buf))
 		return;
 	len = read(conn->fd, conn->in.buf + conn->in.off +
-	    conn->in.len, sizeof(conn->in.buf) - conn->in.off -
-	    conn->in.len - 1);
+		conn->in.len, sizeof(conn->in.buf) - conn->in.off -
+		conn->in.len - 1);
 	if (len < 0) {
 		if (errno != EINTR) {
 			if (errno != ECONNRESET)
@@ -880,7 +880,7 @@ handle_write(Conn *conn)
 		return;
 	}
 	len = write(conn->fd, conn->out.buf + conn->out.off,
-	    conn->out.len);
+		conn->out.len);
 	if (len < 0) {
 		if (errno != EINTR) {
 			if (errno != EPIPE)
@@ -926,8 +926,8 @@ log(const char *format, ...)
 	tm = localtime(&t);
 	if (tm)
 		fprintf(stderr, "%4.4i.%2.2i.%2.2i %2.2i:%2.2i:%2.2i ",
-		    tm->tm_year+1900, tm->tm_mon+1, tm->tm_mday,
-		    tm->tm_hour, tm->tm_min, tm->tm_sec);
+			tm->tm_year+1900, tm->tm_mon+1, tm->tm_mday,
+			tm->tm_hour, tm->tm_min, tm->tm_sec);
 	va_start(ap, format);
 	vfprintf(stderr, format, ap);
 	va_end(ap);
