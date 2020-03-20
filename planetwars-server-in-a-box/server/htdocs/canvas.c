@@ -13,7 +13,7 @@ const char *path = "/games";
 static gzFile gz = NULL;
 
 static void
-dprintf(const char *fmt, ...)
+odprintf(const char *fmt, ...)
 {
 	static char s[65536];
 	va_list ap;
@@ -48,28 +48,28 @@ int main()
 		printf("\n");
 
 	if (game_id == NULL || !game_id[0]) {
-		dprintf("Error: missing parameter game_id");
+		odprintf("Error: missing parameter game_id");
 		return 0;
 	}
 	if (sscanf(game_id, "%u", &id) != 1 || !id) {
-		dprintf("Error: malformed parameter game_id");
+		odprintf("Error: malformed parameter game_id");
 		return 0;
 	}
 
 	if ((fh = fopen("canvas.html", "r")) == NULL) {
-		dprintf("Error: fopen: canvas.html: %s\n", strerror(errno));
+		odprintf("Error: fopen: canvas.html: %s\n", strerror(errno));
 		return 0;
 	}
 	while (fgets(s, sizeof(s), fh) != NULL) {
 		if (!strncmp(s, "%%SCRIPT%%", 8))
 			break;
-		dprintf("%s", s);
+		odprintf("%s", s);
 	}
 
 	int turns = 0;
 	snprintf(s, sizeof(s), "%s/%u", path, id);
 	if ((f = fopen(s, "r")) == NULL) {
-		dprintf("Error: fopen: %s: %s", s, strerror(errno));
+		odprintf("Error: fopen: %s: %s", s, strerror(errno));
 		return 0;
 	}
 	fgets(s, sizeof(s), f);
@@ -80,14 +80,14 @@ int main()
 	s[strlen(s) - 1] = 0;
 
 	if ((fm = fopen(s, "r")) == NULL) {
-		dprintf("Error: fopen: %s: %s",
+		odprintf("Error: fopen: %s: %s",
 		    fm, strerror(errno));
 		goto done;
 	}
-	dprintf("var data = \"");
-	dprintf("map_id=%s\\n", s);
-	dprintf("player_one=%s\\nplayer_two=%s\\n", p1, p2);
-	dprintf("playback_string=");
+	odprintf("var data = \"");
+	odprintf("map_id=%s\\n", s);
+	odprintf("player_one=%s\\nplayer_two=%s\\n", p1, p2);
+	odprintf("playback_string=");
 	int planets = 0;
 	while (fgets(s, sizeof(s), fm)) {
 		double x, y;
@@ -95,12 +95,12 @@ int main()
 		if (s[0] != 'P' || s[1]!= ' ' ||
 		    sscanf(s + 2, "%lf %lf %d %d %d", &x, &y,
 		    &owner, &ships, &growth) != 5) {
-			dprintf("Error: sscanf: %s: %s", fm, s);
+			odprintf("Error: sscanf: %s: %s", fm, s);
 			goto done;
 		}
 		if (planets++)
-			dprintf(":");
-		dprintf("%f,%f,%d,%d,%d", x, y, owner, ships,
+			odprintf(":");
+		odprintf("%f,%f,%d,%d,%d", x, y, owner, ships,
 		    growth);
 	}
 	fclose(fm);
@@ -109,14 +109,14 @@ int main()
 		s[strlen(s) - 1] = 0;
 		if (!s[0])
 			break;
-		dprintf("%c%s", turns++ ? ':' : '|', s);
+		odprintf("%c%s", turns++ ? ':' : '|', s);
 	}
-	dprintf("\"\n");
+	odprintf("\"\n");
 
 	fclose(f);
 
 	while (fgets(s, sizeof(s), fh) != NULL)
-		dprintf("%s", s);
+		odprintf("%s", s);
 	fclose(fh);
 done:
 	if (gz != NULL)
