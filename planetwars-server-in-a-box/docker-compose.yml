@@ -5,4 +5,6 @@ services:
     build:
       context: .
     command: "./server"
+    ports:
+      - "8888:80"
 

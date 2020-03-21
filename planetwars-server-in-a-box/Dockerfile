@@ -13,3 +13,5 @@ RUN make all
 RUN cd htdocs && make clean && make all
 
 RUN ls /var/www
+
+EXPOSE 80
