@@ -1,17 +1,19 @@
 FROM ubuntu:latest
 
 RUN apt-get update
-RUN apt-get install build-essential -y
-RUN apt-get install libz-dev -y
+RUN apt-get install -y build-essential libz-dev
+RUN apt-get install -y supervisor nginx
 
-WORKDIR /var/www
-COPY server /var/www
-COPY maps /var/www/maps
+WORKDIR /home
 
-RUN make clean
-RUN make all
-RUN cd htdocs && make clean && make all
+COPY supervisord.conf /var/www/supervisord.conf
 
-RUN ls /var/www
+COPY server server
+COPY maps maps
+
+RUN cd server && make all
+RUN cd server/htdocs && make all && make install
 
 EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/var/www/supervisord.conf"]
