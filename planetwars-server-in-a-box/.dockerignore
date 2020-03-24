@@ -1,10 +1,10 @@
-*.o
-*.tmp
+**/*.o
+**/*.tmp
+**/.DS_Store
+
 server/expire
 server/server
 server/htdocs/canvas
 server/htdocs/getplayer
 server/htdocs/getratings
 server/htdocs/getmaps
-.DS_Store
-
