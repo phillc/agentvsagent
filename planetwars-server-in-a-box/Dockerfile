@@ -18,5 +18,6 @@ RUN cd server && make all
 RUN cd server/htdocs && make all && make install
 
 EXPOSE 80
+EXPOSE 995
 
 CMD ["/usr/bin/supervisord", "-c", "/var/www/supervisord.conf"]

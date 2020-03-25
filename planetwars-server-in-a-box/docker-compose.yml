@@ -6,4 +6,5 @@ services:
       context: .
     ports:
       - "8888:80"
+      - "8995:995"
 
