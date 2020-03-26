@@ -52,7 +52,7 @@ def DoTurn(pw):
 def main():
   map_data = ''
   while(True):
-    current_line = raw_input()
+    current_line = input()
     if len(current_line) >= 2 and current_line.startswith("go"):
       pw = PlanetWars(map_data)
       DoTurn(pw)
@@ -71,4 +71,4 @@ if __name__ == '__main__':
   try:
     main()
   except KeyboardInterrupt:
-    print 'ctrl-c, leaving ...'
+    print('ctrl-c, leaving ...')
