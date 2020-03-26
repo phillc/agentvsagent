@@ -64,7 +64,6 @@ int main()
 
 	dprintf("<html><body>\n");
 	dprintf("<h2>Map statistics</h2>\n");
-	dprintf("You can download the <a href=\"/maps.tar.gz\">complete map set</a> (360 kB).<p>\n");
 	f = fopen(fn, "r");
 	while (fgets(s, sizeof(s), f)) {
 		if (!strncmp(s, "[White \"", 8)) {

@@ -56,11 +56,12 @@ using namespace std;
 
 enum { STATE_CONNECTED=1, STATE_LOGGEDIN=2, STATE_PLAYING=3, STATE_CLOSED=4 };
 
-const char	*bdn = "maps";
-const char	*gameidfn = "gameid";
+const char	*bdn = "/var/www/maps";
+const char	*gameidfn = "data/gameid";
 const char	*gamespath = "/var/www/games";
-const char	*resultsfn = "results.pgn";
-const char	*usersfn = "users.txt";
+const char	*resultsfn = "data/results.pgn";
+const char	*usersfn = "data/users.txt";
+const char	*ratingsfn = "data/ratings.txt";
 const char	*listen_addr = "0.0.0.0";
 const unsigned	 listen_port = 995;
 static int	 quit = 0;
@@ -654,8 +655,8 @@ read_elo(const char *user)
 	int rank, elo;
 	bool skip = true;
 
-	if (!(f = fopen("ratings.txt", "r"))) {
-		log("read_elo: fopen: ratings.txt: %s", strerror(errno));
+	if (!(f = fopen(ratingsfn, "r"))) {
+		log("read_elo: fopen: %s: %s", ratingsfn, strerror(errno));
 		return -999999;
 	}
 	while (fgets(s, sizeof(s), f)) {

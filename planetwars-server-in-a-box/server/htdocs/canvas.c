@@ -9,7 +9,7 @@
 
 #include "cgi.h"
 
-const char *path = "/games";
+const char *path = "games";
 static gzFile gz = NULL;
 
 static void
@@ -69,7 +69,7 @@ int main()
 	int turns = 0;
 	snprintf(s, sizeof(s), "%s/%u", path, id);
 	if ((f = fopen(s, "r")) == NULL) {
-		odprintf("Error: fopen: %s: %s", s, strerror(errno));
+		odprintf("Error: fopen game file: %s: %s", s, strerror(errno));
 		return 0;
 	}
 	fgets(s, sizeof(s), f);
