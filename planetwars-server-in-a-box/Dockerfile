@@ -3,8 +3,9 @@ FROM ubuntu:latest
 RUN apt-get update
 RUN apt-get install -y build-essential libz-dev
 RUN apt-get install -y supervisor
-RUN apt-get install -y apache2
+RUN apt-get install -y cron
 
+RUN apt-get install -y apache2
 RUN a2enmod cgi # enable apache cgi module
 RUN a2enmod headers
 
@@ -28,6 +29,10 @@ RUN touch data/results.pgn
 RUN mkdir /var/www/games
 RUN mkdir /var/www/tmp
 RUN touch /var/www/results.pgn
+
+RUN echo "* * * * * /home/server/rate.sh" > /etc/cron.d/rate
+RUN chmod 0644 /etc/cron.d/rate
+RUN crontab /etc/cron.d/rate
 
 EXPOSE 80
 EXPOSE 995

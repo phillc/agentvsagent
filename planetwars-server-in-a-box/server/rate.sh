@@ -12,7 +12,7 @@ if [ -f rate.lock ]; then
 fi
 touch rate.lock
 
-../server/expire 24
+../server/expire 168
 chgrp -R www-data ${WWW}/games
 chmod -R 0640 ${WWW}/games
 chmod 0750 ${WWW}/games
