@@ -1,12 +1,10 @@
-CC=g++
-RUNCMD = "./MyBot"
-
 all: MyBot
 
 clean:
-	rm -rf *.o MyBot
+	rm *.o MyBot
 
-MyBot: MyBot.o PlanetWars.o
+MyBot:
+	g++ MyBot.cc Planetwars.cc -o MyBot
 
 run:
-	java -jar ../common/tools/PlayGame.jar ../common/maps/map1.txt 1000 200 log.txt ${RUNCMD} "java -jar ../common/examples/DualBot.jar" | java -jar ../common/tools/ShowGame.jar
+	java -jar ../common/tools/PlayGame.jar ../common/maps/map1.txt 1000 200 log.txt "./MyBot" "java -jar ../common/examples/DualBot.jar" | java -jar ../common/tools/ShowGame.jar

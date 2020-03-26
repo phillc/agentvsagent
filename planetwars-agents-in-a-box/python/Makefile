@@ -1,12 +1,10 @@
-RUNCMD = "python MyBot.py"
-
 all: MyBot
 
 clean:
-	rm -rf *.pyc
+	@echo 'Nothing to clean'
 
 MyBot:
-	@echo "No compilation required"
+	@echo 'Nothing to compile'
 
 run:
-	java -jar ../common/tools/PlayGame.jar ../common/maps/map1.txt 1000 200 log.txt ${RUNCMD} "java -jar ../common/examples/DualBot.jar" | java -jar ../common/tools/ShowGame.jar
+	java -jar ../common/tools/PlayGame.jar ../common/maps/map1.txt 1000 200 log.txt "python MyBot.py" "java -jar ../common/examples/DualBot.jar" | java -jar ../common/tools/ShowGame.jar

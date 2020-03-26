@@ -1,0 +1,50 @@
+require 'erb'
+
+StarterPackage = Struct.new(:dir, :compile_cmd, :run, :clean_cmd) do
+  def compile
+    compile_cmd || "@echo 'Nothing to compile'"
+  end
+
+  def clean
+    clean_cmd || "@echo 'Nothing to clean'"
+  end
+
+  def template
+    <<-TEMPLATE
+all: MyBot
+
+clean:
+	<%= clean %>
+
+MyBot:
+	<%= compile %>
+
+run:
+	java -jar ../common/tools/PlayGame.jar ../common/maps/map1.txt 1000 200 log.txt "<%= run %>" "java -jar ../common/examples/DualBot.jar" | java -jar ../common/tools/ShowGame.jar
+TEMPLATE
+  end
+
+  def render
+    ERB.new(template).result(binding)
+  end
+end
+
+STARTER_PACKAGES = [
+  StarterPackage.new("python", nil, "python MyBot.py", nil),
+  StarterPackage.new("ruby", nil, "ruby MyBot.rb", nil),
+  StarterPackage.new("csharp", "mcs MyBot.cs Fleet.cs Planet.cs PlanetWars.cs -main:MyBot", "mono MyBot.exe", "rm *.exe"),
+  StarterPackage.new("cpp", "g++ MyBot.cc Planetwars.cc -o MyBot", "./MyBot", "rm *.o MyBot"),
+  StarterPackage.new("java", "javac MyBot.java", "java MyBot", "rm *.class")
+]
+
+
+desc "generate Makefiles"
+task :makefiles do 
+  STARTER_PACKAGES.each do |starter_package|
+    body = starter_package.render
+    file = File.join(starter_package.dir, "Makefile")
+    puts "Writing #{file}"
+    File.write(file, body)
+  end
+
+end
