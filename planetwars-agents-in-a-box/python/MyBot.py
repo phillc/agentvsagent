@@ -52,7 +52,10 @@ def DoTurn(pw):
 def main():
   map_data = ''
   while(True):
-    current_line = input()
+    try:
+      current_line = input()
+    except EOFError:
+      return
     if len(current_line) >= 2 and current_line.startswith("go"):
       pw = PlanetWars(map_data)
       DoTurn(pw)

@@ -1,25 +1,64 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: planetwars-deployment
+  name: planetwars-service
   labels:
     app: planetwars-server
 spec:
-  replicas: 1
+  ports:
+  - port: 80
+    name: web
+  - port: 995
+    name: game
+  clusterIP: None
+  selector:
+    app: planetwars-server
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: planetwars
+spec:
   selector:
     matchLabels:
       app: planetwars-server
+  serviceName: planetwars
+  replicas: 1
   template:
     metadata:
       labels:
         app: planetwars-server
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
       - name: agent-vs-agent-planetwars-server
         image: mrphillc/agent-vs-agent-planetwars-server:latest
         ports:
-        - containerPort: 80
-        - containerPort: 995
+        - name: web
+          containerPort: 80
+        - name: game
+          containerPort: 995
+        volumeMounts:
+        - name: planetwars-games
+          mountPath: /var/www/games
+        - name: planetwars-data
+          mountPath: /home/data
+  volumeClaimTemplates:
+  - metadata:
+      name: planetwars-games
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: planetwars-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
           
 apiVersion: v1
 kind: Service
