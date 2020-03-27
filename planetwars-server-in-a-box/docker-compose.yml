@@ -9,6 +9,8 @@ services:
       - "8995:995"
     volumes:
       - data-volume:/home/data
+      - games-volume:/var/www/games
 
 volumes:
   data-volume:
+  games-volume:
