@@ -11,6 +11,8 @@ RUN a2enmod headers
 
 
 WORKDIR /home
+COPY web /var/www
+
 COPY server server
 
 COPY supervisord.conf /home/supervisord.conf
