@@ -15,6 +15,7 @@ COPY server server
 
 COPY supervisord.conf /home/supervisord.conf
 COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+COPY maps maps
 COPY maps /var/www/maps
 
 RUN cd server && make all

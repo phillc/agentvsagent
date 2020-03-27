@@ -56,7 +56,7 @@ using namespace std;
 
 enum { STATE_CONNECTED=1, STATE_LOGGEDIN=2, STATE_PLAYING=3, STATE_CLOSED=4 };
 
-const char	*bdn = "/var/www/maps";
+const char	*bdn = "maps";
 const char	*gameidfn = "data/gameid";
 const char	*gamespath = "/var/www/games";
 const char	*resultsfn = "data/results.pgn";
