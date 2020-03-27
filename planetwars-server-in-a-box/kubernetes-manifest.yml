@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planetwars-deployment
+  labels:
+    app: planetwars-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planetwars-server
+  template:
+    metadata:
+      labels:
+        app: planetwars-server
+    spec:
+      containers:
+      - name: agent-vs-agent-planetwars-server
+        image: mrphillc/agent-vs-agent-planetwars-server:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 995
+          
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb
+spec:
+  selector:
+    app: planetwars-server
+  ports:
+    - name: web
+      port: 80
+      targetPort: 80
+    - name: game
+      port: 995
+      targetPort: 995
+  type: LoadBalancer
